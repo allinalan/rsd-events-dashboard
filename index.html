@@ -1,0 +1,1556 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Rep Dashboard — RSD Rising Sun</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #FAFAF7;
+    --ink: #1A1A1A;
+    --ink-soft: #555;
+    --ink-faint: #888;
+    --rule: #E5E2DA;
+    --rule-soft: #EFECE4;
+    --amber: #B45309;
+    --amber-bg: #FDF6EC;
+    --green: #15803D;
+    --red: #B91C1C;
+    --serif: 'Fraunces', Georgia, serif;
+    --sans: 'Geist', -apple-system, BlinkMacSystemFont, sans-serif;
+    --mono: 'Geist Mono', 'SF Mono', Menlo, monospace;
+  }
+  /* 7-bucket color palette */
+  :root {
+    --bk-trad:     #B45309;
+    --bk-service:  #D97706;
+    --bk-industry: #92400E;
+    --bk-rlt:      #451A03;
+    --bk-mall:     #78350F;
+    --bk-federal:  #1F2937;
+    --bk-nonevent: #A8A29E;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 14px;
+    line-height: 1.5;
+    padding: 32px 48px 64px;
+    max-width: 1280px;
+    margin: 0 auto;
+  }
+  h1 { font-family: var(--serif); font-weight: 500; font-size: 32px; letter-spacing: -0.02em; line-height: 1; }
+  h1 .sub { font-family: var(--sans); font-size: 13px; color: var(--ink-faint); font-weight: 400; letter-spacing: 0; margin-left: 12px; }
+  h2 { font-family: var(--serif); font-weight: 500; font-size: 20px; letter-spacing: -0.01em; margin-bottom: 14px; color: var(--ink); }
+  h2 .scope-tag {
+    font-family: var(--mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em;
+    color: var(--amber); background: var(--amber-bg); padding: 3px 8px; border-radius: 3px; margin-left: 10px;
+    vertical-align: middle; font-weight: 500;
+    white-space: nowrap;   /* keep the scope chip on one line, never wrap mid-string */
+    display: inline-block;
+  }
+
+  /* Top header */
+  .top {
+    display: flex; justify-content: space-between; align-items: flex-end;
+    padding-bottom: 16px; border-bottom: 1px solid var(--rule); margin-bottom: 24px;
+  }
+  .campaign-picker {
+    font-family: var(--mono); font-size: 12px; color: var(--ink-soft);
+    text-transform: uppercase; letter-spacing: 0.06em;
+    text-align: right;
+  }
+  .campaign-picker .yr { color: var(--amber); }
+  .campaign-picker .cp-meta { margin-top: 4px; font-size: 10px; color: var(--ink-faint); text-transform: none; letter-spacing: 0.02em; }
+
+  /* Tab toggle */
+  .toggle {
+    display: inline-flex; gap: 0;
+    border: 1px solid var(--rule); background: white;
+    border-radius: 4px; margin-bottom: 32px; overflow: hidden;
+  }
+  .toggle button {
+    border: 0; background: transparent;
+    padding: 10px 22px;
+    font-family: var(--sans); font-size: 13px; color: var(--ink-faint);
+    cursor: pointer; transition: all 0.15s; font-weight: 500;
+  }
+  .toggle button.active { background: var(--ink); color: var(--paper); }
+  .toggle button:not(.active):hover { background: var(--rule-soft); color: var(--ink); }
+
+  .view { display: none; }
+  .view.active { display: block; }
+  .section { margin-bottom: 40px; }
+
+  /* KPI grid */
+  .kpi-grid {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    gap: 16px; margin-bottom: 32px;
+  }
+  .kpi { background: white; border: 1px solid var(--rule); padding: 18px 18px 16px; border-radius: 4px; }
+  .kpi .label {
+    font-family: var(--mono); font-size: 11px; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 0.09em;
+    color: var(--ink); margin-bottom: 10px;
+  }
+  .kpi .val { font-family: var(--serif); font-weight: 500; font-size: 28px; letter-spacing: -0.02em; line-height: 1; margin-bottom: 6px; }
+  .kpi .delta { font-family: var(--mono); font-size: 11px; color: var(--ink-soft); }
+  .up { color: var(--green); }
+  .down { color: var(--red); }
+  .neutral { color: var(--ink-faint); }
+
+  /* Two-col layout */
+  .twocol {
+    display: grid; grid-template-columns: 1.5fr 1fr; gap: 32px;
+  }
+
+  /* Leaderboard */
+  table.leaderboard { width: 100%; border-collapse: collapse; font-size: 13px; }
+  table.leaderboard th {
+    text-align: left; font-family: var(--mono); font-weight: 500;
+    font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em;
+    color: var(--ink-faint); padding: 6px 10px; border-bottom: 1px solid var(--rule);
+  }
+  table.leaderboard th.num { text-align: right; }
+  table.leaderboard td { padding: 9px 10px; border-bottom: 1px solid var(--rule-soft); }
+  table.leaderboard td.num { text-align: right; font-family: var(--mono); font-size: 12px; }
+  table.leaderboard td.rank { font-family: var(--mono); color: var(--ink-faint); width: 30px; }
+  table.leaderboard td.name { font-weight: 500; }
+  table.leaderboard tr.is-self { background: var(--amber-bg); }
+  .yoy-pos { color: var(--green); }
+  .yoy-neg { color: var(--red); }
+  .em-dash { color: var(--ink-faint); }
+
+  .lb-header {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 14px; gap: 16px 24px; flex-wrap: wrap;
+  }
+  .lb-header h2 { margin-bottom: 0; line-height: 1.2; }
+  .lb-control {
+    font-family: var(--mono); font-size: 11px; color: var(--ink-soft);
+    text-transform: uppercase; letter-spacing: 0.06em;
+    display: inline-flex; align-items: center; gap: 6px; flex-wrap: wrap; row-gap: 8px;
+  }
+  .lb-control select {
+    font-family: var(--mono); font-size: 11px; color: var(--amber);
+    border: 0; border-bottom: 1px dashed var(--amber); background: transparent;
+    padding: 2px 18px 2px 4px; cursor: pointer; text-transform: uppercase; letter-spacing: 0.06em;
+    max-width: 240px;
+  }
+  .lb-control .sep { color: var(--ink-faint); margin: 0 4px; }
+  .lb-placeholder {
+    background: var(--amber-bg); border: 1px dashed var(--amber); color: var(--amber);
+    padding: 24px; border-radius: 4px; font-size: 13px; font-style: italic; text-align: center;
+  }
+
+  /* Category Mix */
+  .cat-mix .bar-track { height: 8px; background: var(--rule-soft); border-radius: 4px; overflow: hidden; display: flex; margin-bottom: 16px; }
+  .cat-mix .bar-fill { height: 100%; }
+  .cat-mix .item { display: flex; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--rule-soft); font-size: 13px; }
+  .cat-mix .item:last-child { border-bottom: 0; }
+  .cat-mix .swatch { width: 10px; height: 10px; border-radius: 2px; margin-right: 10px; flex-shrink: 0; }
+  .cat-mix .cat-name { flex: 1; }
+  .cat-mix .cat-pct { font-family: var(--mono); font-size: 12px; color: var(--ink-soft); width: 50px; text-align: right; }
+  .cat-mix .cat-amt { font-family: var(--mono); font-size: 12px; width: 80px; text-align: right; }
+
+  /* Rep picker */
+  .rep-picker { margin-bottom: 24px; }
+  .rep-picker label {
+    font-family: var(--mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em;
+    color: var(--ink-faint); margin-right: 12px;
+  }
+  .rep-picker select {
+    font-family: var(--serif); font-size: 18px; border: 0;
+    border-bottom: 1px solid var(--ink); background: transparent;
+    padding: 4px 24px 4px 0; cursor: pointer; color: var(--ink);
+  }
+  .rep-picker .meta {
+    font-family: var(--mono); font-size: 11px; color: var(--ink-faint);
+    margin-left: 16px; text-transform: uppercase; letter-spacing: 0.06em;
+  }
+
+  /* Rep hero */
+  .rep-hero { display: grid; grid-template-columns: 1.7fr 1fr 1fr 1fr; gap: 16px; margin-bottom: 32px; }
+  .hero-big { background: white; border: 1px solid var(--rule); border-radius: 4px; padding: 22px; }
+  .hero-big .label, .hero-mini .label {
+    font-family: var(--mono); font-size: 11px; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 0.09em;
+    color: var(--ink); margin-bottom: 10px;
+  }
+  .hero-big .big-val { font-family: var(--serif); font-weight: 500; font-size: 44px; letter-spacing: -0.02em; line-height: 1; margin-bottom: 10px; }
+  .hero-big .compare-row { display: flex; gap: 24px; margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--rule-soft); font-size: 12px; }
+  .hero-big .compare-item .compare-label { color: var(--ink-faint); font-family: var(--mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 3px; }
+  .hero-big .compare-item .compare-val { font-family: var(--mono); font-size: 13px; }
+  .hero-mini { background: white; border: 1px solid var(--rule); border-radius: 4px; padding: 18px; display: flex; flex-direction: column; justify-content: center; }
+  .hero-mini .mini-val { font-family: var(--serif); font-size: 26px; font-weight: 500; letter-spacing: -0.01em; line-height: 1; }
+  .hero-mini .mini-sub { font-family: var(--mono); font-size: 11px; color: var(--ink-soft); margin-top: 6px; }
+
+  /* Summary callouts */
+  .summary-section {
+    background: white; border: 1px solid var(--rule); border-left: 3px solid var(--amber);
+    border-radius: 4px; padding: 22px 28px; margin-bottom: 32px;
+  }
+  .summary-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 18px; }
+  .summary-section h2 { margin-bottom: 0; }
+  .summary-subtitle { font-family: var(--mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-faint); }
+  .summary-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px 36px; }
+  .summary-item { display: flex; align-items: flex-start; gap: 12px; }
+  .summary-item .icon {
+    flex-shrink: 0; font-size: 13px; margin-top: 2px; width: 18px; height: 18px;
+    border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    font-weight: 700; color: white;
+  }
+  .summary-item .icon.good { background: var(--green); }
+  .summary-item .icon.watch { background: var(--amber); }
+  .summary-item .icon.opportunity { background: var(--ink); color: white; }
+  .summary-item.opportunity {
+    grid-column: 1 / -1;  /* span full width — make it the prominent callout */
+    background: var(--amber-bg);
+    border: 1px solid var(--amber);
+    border-radius: 4px;
+    padding: 14px 16px;
+    margin-top: 6px;
+  }
+  .summary-item.opportunity .body strong { color: var(--amber); }
+  .summary-item .body strong { display: block; font-family: var(--serif); font-weight: 500; font-size: 15px; margin-bottom: 3px; color: var(--ink); }
+  .summary-item .body p { margin: 0; color: var(--ink-soft); font-size: 12.5px; line-height: 1.5; }
+
+  /* Pie charts (CPO composition) */
+  .pie-pair {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 32px;
+  }
+  .pie-card {
+    background: white; border: 1px solid var(--rule); border-radius: 4px;
+    padding: 22px 24px;
+  }
+  .pie-card h3 {
+    font-family: var(--serif); font-weight: 500; font-size: 16px;
+    margin-bottom: 6px;
+  }
+  .pie-card .pie-meta {
+    font-family: var(--mono); font-size: 10px; text-transform: uppercase;
+    letter-spacing: 0.08em; color: var(--ink-faint); margin-bottom: 16px;
+  }
+  .pie-body { display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
+  .pie-body svg { flex-shrink: 0; }
+  .pie-legend { flex: 1; min-width: 180px; font-size: 12px; }
+  .pie-legend-item {
+    display: flex; align-items: center; padding: 5px 0; gap: 8px;
+    border-bottom: 1px solid var(--rule-soft);
+  }
+  .pie-legend-item:last-child { border-bottom: 0; }
+  .pie-swatch { width: 10px; height: 10px; border-radius: 2px; flex-shrink: 0; }
+  .pie-legend-item .pl-name { flex: 1; }
+  .pie-legend-item .pl-pct { font-family: var(--mono); font-size: 11px; color: var(--ink-soft); width: 46px; text-align: right; }
+  .pie-legend-item .pl-val { font-family: var(--mono); font-size: 11px; width: 64px; text-align: right; }
+  .pie-empty {
+    background: var(--amber-bg); border: 1px dashed var(--amber); color: var(--amber);
+    padding: 24px 12px; border-radius: 4px; font-size: 12px; font-style: italic; text-align: center;
+  }
+
+  /* Performance chart */
+  .rep-chart-section { background: white; border: 1px solid var(--rule); padding: 24px 28px; margin-bottom: 32px; border-radius: 4px; }
+  .rc-header { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; margin-bottom: 18px; flex-wrap: wrap; }
+  .rc-header h2 { margin-bottom: 0; }
+  .rc-control { display: flex; align-items: center; gap: 8px; }
+  .rc-control label { font-family: var(--mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-faint); }
+  .rc-control select { font-family: var(--mono); font-size: 12px; color: var(--ink); background: var(--paper); border: 1px solid var(--rule); padding: 5px 10px; cursor: pointer; border-radius: 3px; }
+  .rc-canvas svg { width: 100%; height: auto; display: block; }
+  .chart-y-label, .chart-x-label { font-family: var(--mono); fill: var(--ink-faint); }
+  .chart-y-label { font-size: 10px; }
+  .chart-x-label { font-size: 11px; }
+  .chart-point-label { font-family: var(--mono); font-size: 11px; fill: var(--amber); font-weight: 600; }
+  .rc-legend { display: flex; align-items: center; gap: 24px; margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--rule-soft); font-family: var(--mono); font-size: 11px; color: var(--ink-soft); flex-wrap: wrap; }
+
+  /* Bucket grid */
+  .bucket-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 32px; }
+  .bucket-grid.col3 { grid-template-columns: repeat(3, 1fr); }
+  /* Top row: 2 prominent "headline" cards (Total Event + Non-Event) */
+  .bucket-grid.bucket-tops { grid-template-columns: 1fr 1fr; margin-bottom: 8px; }
+  .bucket-grid.bucket-tops .bucket { padding: 22px; background: white; border-width: 1px; }
+  .bucket-grid.bucket-tops .bucket .bucket-name { font-size: 20px; }
+  .bucket-grid.bucket-tops .bucket .headline-val {
+    font-family: var(--serif); font-weight: 500; font-size: 32px;
+    letter-spacing: -0.02em; line-height: 1; margin: 6px 0 12px;
+  }
+  .bucket { background: white; border: 1px solid var(--rule); border-radius: 4px; padding: 16px; }
+  .bucket.has-swatch { border-top: 3px solid var(--bk-trad); }
+  .bucket .bucket-name { font-family: var(--serif); font-size: 16px; font-weight: 500; margin-bottom: 12px; display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+  .bucket .bucket-subtitle {
+    font-family: var(--mono); font-size: 10px; color: var(--ink-faint);
+    font-weight: 400; text-transform: uppercase; letter-spacing: 0.06em;
+  }
+  .bucket .bucket-name .new-tag { font-family: var(--mono); font-size: 9px; color: var(--ink-faint); font-weight: 400; font-style: italic; text-transform: lowercase; }
+  .bucket .bucket-row { display: flex; justify-content: space-between; padding: 5px 0; font-size: 12px; border-bottom: 1px solid var(--rule-soft); }
+  .bucket .bucket-row:last-child { border-bottom: 0; }
+  .bucket .bucket-row .bk-label { font-family: var(--mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink-faint); }
+  .bucket .bucket-row .bk-val { font-family: var(--mono); font-size: 12px; }
+  .bucket .vs-team { border-top: 1px solid var(--rule); margin-top: 6px; padding-top: 8px; }
+
+  /* Pacing strip */
+  .pacing-strip {
+    background: white; border: 1px solid var(--rule); border-radius: 4px;
+    padding: 22px 24px; margin-bottom: 32px;
+  }
+  .pacing-strip .pacing-row {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; margin-top: 14px;
+  }
+  .pacing-strip .pacing-item .label {
+    font-family: var(--mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em;
+    color: var(--ink-faint); margin-bottom: 6px;
+  }
+  .pacing-strip .pacing-item .val {
+    font-family: var(--serif); font-size: 22px; font-weight: 500; letter-spacing: -0.01em;
+  }
+  .pacing-strip .pacing-item .sub {
+    font-family: var(--mono); font-size: 11px; color: var(--ink-soft); margin-top: 4px;
+  }
+  .pacing-strip .pace-summary {
+    font-family: var(--serif); font-size: 14px; color: var(--ink-soft);
+    margin-top: 18px; padding-top: 14px; border-top: 1px solid var(--rule-soft);
+    font-style: italic;
+  }
+
+  /* Placeholder cards */
+  .placeholder {
+    background: var(--amber-bg); border: 1px dashed var(--amber); color: var(--amber);
+    padding: 24px; border-radius: 4px; font-size: 13px; font-style: italic;
+    text-align: center; margin-top: 16px;
+  }
+  .placeholder strong { font-style: normal; font-weight: 600; }
+
+  .footnote {
+    margin-top: 48px; padding-top: 16px; border-top: 1px solid var(--rule);
+    font-family: var(--mono); font-size: 11px; color: var(--ink-faint); line-height: 1.6;
+  }
+</style>
+</head>
+<body>
+
+<div class="top">
+  <h1>Rep Dashboard <span class="sub">RSD · Rising Sun</span></h1>
+  <div class="campaign-picker">
+    <span class="yr">Campaign I · 2026 vs 2025</span>
+    <div class="cp-meta" id="meta-line">Loading…</div>
+  </div>
+</div>
+
+<div class="toggle">
+  <button data-view="team" class="active">Team View</button>
+  <button data-view="rep">Rep View</button>
+  <button data-view="product">Product Growth</button>
+</div>
+
+<!-- ============================== TEAM VIEW ============================== -->
+<div id="team-view" class="view active">
+  <div class="kpi-grid" id="team-kpis"></div>
+  <div class="twocol">
+    <div class="section">
+      <div class="lb-header">
+        <h2>Leaderboard <span class="scope-tag">C1 2026 vs 2025</span></h2>
+        <div class="lb-control">
+          Metric:
+          <select id="rank-by">
+            <optgroup label="By CPO">
+              <option value="total_cpo">Total CPO</option>
+              <option value="total_event">Total Event CPO</option>
+              <option value="bucket:Event (Traditional)">Event (Traditional) CPO</option>
+              <option value="bucket:Service Event">Service Event CPO</option>
+              <option value="bucket:Industry Event">Industry Event CPO</option>
+              <option value="bucket:Realtor">Realtor CPO</option>
+              <option value="bucket:Mall">Mall CPO</option>
+              <option value="bucket:Federal">Federal CPO</option>
+              <option value="bucket:Non-Event CPO">Non-Event CPO</option>
+            </optgroup>
+            <optgroup label="By Productivity (Annual)">
+              <option value="shift_avg">Shift Average (FY)</option>
+              <option value="orders_per_shift">Orders / Shift (FY)</option>
+            </optgroup>
+            <optgroup label="By Average Order">
+              <option value="total_avg_order">Total Avg Order</option>
+              <option value="bucket_avg:Event (Traditional)">Event (Traditional) Avg Order</option>
+              <option value="bucket_avg:Service Event">Service Event Avg Order</option>
+              <option value="bucket_avg:Industry Event">Industry Event Avg Order</option>
+              <option value="bucket_avg:Realtor">Realtor Avg Order</option>
+              <option value="bucket_avg:Mall">Mall Avg Order</option>
+              <option value="bucket_avg:Federal">Federal Avg Order</option>
+            </optgroup>
+          </select>
+          <span class="sep">·</span>
+          Sort:
+          <select id="sort-by">
+            <option value="value">By value</option>
+            <option value="growth">By biggest growth</option>
+          </select>
+        </div>
+      </div>
+      <div id="lb-body"></div>
+    </div>
+    <div class="section">
+      <h2>Category Mix <span class="scope-tag">C1 2026</span></h2>
+      <div class="cat-mix" id="cat-mix"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================== REP VIEW ============================== -->
+<div id="rep-view" class="view">
+  <div class="rep-picker">
+    <label>Viewing:</label>
+    <select id="rep-select"></select>
+    <span class="meta" id="rep-meta"></span>
+  </div>
+  <div class="rep-hero" id="rep-hero"></div>
+  <div class="summary-section" id="rep-summary"></div>
+
+  <h2 style="margin-bottom:14px;">CPO Composition <span class="scope-tag">C1 2026</span></h2>
+  <div class="pie-pair" id="rep-pies"></div>
+
+  <div class="rep-chart-section">
+    <div class="rc-header">
+      <h2>Performance Over Time <span class="scope-tag">3-year C1</span></h2>
+      <div class="rc-control">
+        <label for="rep-chart-metric">Show:</label>
+        <select id="rep-chart-metric">
+          <option value="total_sales">Total Sales (C1)</option>
+          <option value="total_event">Total Event CPO (C1)</option>
+          <option value="bucket:Event (Traditional)">Event (Traditional)</option>
+          <option value="bucket:Service Event">Service Event</option>
+          <option value="bucket:Industry Event">Industry Event</option>
+          <option value="bucket:Non-Event CPO">Non-Event CPO</option>
+          <option value="avg_order">Avg Order</option>
+        </select>
+      </div>
+    </div>
+    <div class="rc-canvas"><svg id="rep-chart-svg" viewBox="0 0 800 320" preserveAspectRatio="xMidYMid meet"></svg></div>
+    <div class="rc-legend">
+      <span><svg width="28" height="6" style="vertical-align:middle"><line x1="0" y1="3" x2="28" y2="3" stroke="#B45309" stroke-width="2"/></svg> You</span>
+      <span><svg width="28" height="6" style="vertical-align:middle"><line x1="0" y1="3" x2="28" y2="3" stroke="#888" stroke-width="2" stroke-dasharray="4,2"/></svg> Team average (full universe)</span>
+    </div>
+  </div>
+
+  <h2 style="margin-bottom:14px;">By Category <span class="scope-tag">C1 2026 vs 2025</span></h2>
+  <div class="bucket-grid bucket-tops" id="rep-buckets-top"></div>
+  <div style="font-family:var(--mono); font-size:10px; color:var(--ink-faint); text-transform:uppercase; letter-spacing:0.08em; margin: 8px 0 14px;">
+    ↓ The six categories below add up to Total Event CPO
+  </div>
+  <div class="bucket-grid" id="rep-buckets-sub"></div>
+
+  <h2 style="margin-top:32px;margin-bottom:14px;">Shifts Breakdown <span class="scope-tag">Full Year</span></h2>
+  <div class="bucket-grid" id="rep-shifts"></div>
+
+  <h2 style="margin-top:32px;margin-bottom:14px;">2026 Pacing</h2>
+  <div class="pacing-strip" id="rep-pacing"></div>
+</div>
+
+<!-- ============================== PRODUCT GROWTH VIEW ============================== -->
+<div id="product-view" class="view">
+  <h2>Product Growth <span class="scope-tag">Annual</span></h2>
+  <div class="placeholder">
+    <strong>Product Growth data not yet uploaded.</strong><br><br>
+    Once you have the 2024 / 2025 / 2026 YTD Product Growth CSVs ready, this tab will show
+    per-rep Year-over-Year growth in: Ultimate Sets, Signature Sets, Homemaker Sets,
+    Ultimate Blocks, Signature Blocks, Flatware Sets, Cookware Sets, Galley+6 Sets,
+    Business Gift (cross-channel), and Realtor (cross-channel) — with growth-first framing
+    ("You sold X this year, +Y% vs last") and a 3-year trend mini-chart per product.
+  </div>
+</div>
+
+<div class="footnote">
+  C1 = Campaign I (Jan–Apr). All event metrics compare same-window C1 across years.
+  Shift and pacing metrics are annual scope. Team averages computed across full RSD stats universe (269 reps).
+  Leaderboard ranks 21-rep Master List only. Non-Event CPO bucket for Jeremy Katen, Rob Lord, and Roman Earhart
+  renders as em-dash pending individual Total Sales uploads.
+</div>
+
+<script src="data.js"></script>
+<script>
+// ==========================================================================
+// Data + state
+// ==========================================================================
+const D = window.DASHBOARD_DATA;
+const META = D.meta;
+const REPS = D.reps;
+const MASTER = META.master_list;       // 21 active reps
+const BUCKETS = META.buckets;          // 8-bucket taxonomy
+const YEARS = META.years;              // [2024, 2025, 2026]
+const PENDING = META.pending_individual_total_sales || [];
+
+// Default scope: most recent C1 year vs prior
+const STATE = {
+  view: 'team',
+  curYear: 2026,
+  priorYear: 2025,
+  refYear: 2024,
+  selectedRep: 'Alan Hernandez',  // mockup archetype
+  rankBy: 'total_cpo',
+  sortBy: 'value',   // 'value' or 'growth'
+  chartMetric: 'total_sales',
+};
+
+// Update meta line
+document.getElementById('meta-line').textContent =
+  'Latest data: ' + (META.generated_at || '').slice(0, 10) + ' · ' +
+  'Master List: ' + MASTER.length + ' active · ' +
+  'Stats universe: ' + Object.keys(REPS).length + ' reps';
+
+// ==========================================================================
+// Formatters
+// ==========================================================================
+function fmtCurrency(n) {
+  if (n === null || n === undefined || isNaN(n)) return '<span class="em-dash">—</span>';
+  if (n === 0) return '$0';
+  return '$' + Math.round(n).toLocaleString();
+}
+function fmtCurrencyShort(n) {
+  if (n === null || n === undefined || isNaN(n)) return '—';
+  if (Math.abs(n) >= 1000000) return '$' + (n / 1000000).toFixed(2) + 'M';
+  if (Math.abs(n) >= 1000) return '$' + Math.round(n / 1000) + 'K';
+  return '$' + Math.round(n);
+}
+function fmtInt(n) {
+  if (n === null || n === undefined || isNaN(n)) return '<span class="em-dash">—</span>';
+  return Math.round(n).toLocaleString();
+}
+function fmtNumber(n, decimals = 1) {
+  if (n === null || n === undefined || isNaN(n)) return '<span class="em-dash">—</span>';
+  return n.toFixed(decimals);
+}
+function fmtYoY(cur, prior) {
+  if (cur === null || prior === null || cur === undefined || prior === undefined || prior === 0) {
+    return '<span class="em-dash">—</span>';
+  }
+  const pct = ((cur - prior) / prior) * 100;
+  const cls = pct >= 0 ? 'yoy-pos' : 'yoy-neg';
+  const sign = pct >= 0 ? '▲ +' : '▼ ';
+  return `<span class="${cls}">${sign}${Math.abs(pct).toFixed(1)}%</span>`;
+}
+
+// ==========================================================================
+// Data accessors (handle em-dash safely)
+// ==========================================================================
+function repBucket(rep, year, bucket) {
+  if (!rep || !rep.c1 || !rep.c1[year]) return null;
+  const b = rep.c1[year][bucket];
+  return (b && b.cpo !== null) ? b : null;
+}
+function repTotalEvent(rep, year) {
+  const t = rep && rep.c1_total_event && rep.c1_total_event[year];
+  return (t && t.cpo !== null) ? t : null;
+}
+function repTotalSales(rep, year) {
+  const t = rep && rep.c1_total_sales && rep.c1_total_sales[year];
+  return (t && t.cpo !== null) ? t : null;
+}
+function repFYSales(rep, year) {
+  const t = rep && rep.fy_total_sales && rep.fy_total_sales[year];
+  return (t && t.cpo !== null) ? t : null;
+}
+function repShifts(rep, year) {
+  return (rep && rep.shifts && rep.shifts[year]) || null;
+}
+function avgOrder(stats) {
+  if (!stats || !stats.orders || stats.orders === 0) return null;
+  return stats.cpo / stats.orders;
+}
+
+// Get a comparable scalar for a rep for a given metric & scope. null = em-dash.
+function getMetric(rep, year, metric) {
+  if (metric === 'total_cpo' || metric === 'total_sales') {
+    const t = repTotalSales(rep, year);
+    return t ? t.cpo : null;
+  }
+  if (metric === 'total_event') {
+    const t = repTotalEvent(rep, year);
+    return t ? t.cpo : null;
+  }
+  if (metric === 'total_avg_order' || metric === 'avg_order') {
+    const t = repTotalSales(rep, year);
+    return avgOrder(t);
+  }
+  if (metric === 'shift_avg') {
+    const s = repShifts(rep, year);
+    return s && s.combined ? s.combined.avg : null;
+  }
+  if (metric === 'orders_per_shift') {
+    const s = repShifts(rep, year);
+    if (!s || !s.combined || !s.combined.shifts) return null;
+    return s.combined.orders / s.combined.shifts;
+  }
+  if (metric.startsWith('bucket:')) {
+    const b = repBucket(rep, year, metric.slice(7));
+    return b ? b.cpo : null;
+  }
+  if (metric.startsWith('bucket_avg:')) {
+    // Per-bucket average order = bucket CPO / bucket orders.
+    // Threshold: require >15 orders in that bucket to qualify (a single $1200 order
+    // shouldn't put someone atop the bucket avg-order ranking).
+    const b = repBucket(rep, year, metric.slice(11));
+    if (!b || !b.orders || b.orders <= MIN_ORDERS_FOR_AVG_RANK) return null;
+    return avgOrder(b);
+  }
+  return null;
+}
+
+// Minimum orders needed for a rep to qualify for an Avg-Order ranking in a category.
+// Prevents 1-order outliers from dominating bucket avg-order leaderboards.
+const MIN_ORDERS_FOR_AVG_RANK = 15;
+
+// ==========================================================================
+// Team aggregates
+// ==========================================================================
+// Master List rep objects (filtered to those present in data)
+function masterListReps() {
+  return MASTER.map(n => REPS[n]).filter(Boolean);
+}
+// Full stats universe (everyone in data.json)
+function statsUniverse() {
+  return Object.values(REPS);
+}
+
+// Team total (sum across Master List) for a given metric & year
+function teamTotal(metric, year) {
+  let sum = 0, anyPresent = false;
+  for (const rep of masterListReps()) {
+    const v = getMetric(rep, year, metric);
+    if (v !== null) { sum += v; anyPresent = true; }
+  }
+  return anyPresent ? sum : null;
+}
+// Team total orders (for Avg Order denominator) across Master List
+function teamTotalOrders(year) {
+  let sum = 0;
+  for (const rep of masterListReps()) {
+    const t = repTotalSales(rep, year);
+    if (t && t.orders !== null) sum += t.orders;
+  }
+  return sum;
+}
+// Team average for a metric (mean across full stats universe with present data)
+function teamAvg(metric, year) {
+  let sum = 0, count = 0;
+  for (const rep of statsUniverse()) {
+    const v = getMetric(rep, year, metric);
+    if (v !== null && v > 0) { sum += v; count++; }
+  }
+  return count > 0 ? sum / count : null;
+}
+// Active reps for current year (Master List who have C1 Total Sales > 0)
+function activeRepCount(year) {
+  return masterListReps().filter(r => {
+    const t = repTotalSales(r, year);
+    return t && t.cpo > 0;
+  }).length;
+}
+
+// Rank reps (Master List) by a metric for current year
+function rankMasterByMetric(metric, year) {
+  return masterListReps()
+    .map(r => ({ rep: r, value: getMetric(r, year, metric) }))
+    .filter(x => x.value !== null)
+    .sort((a, b) => b.value - a.value);
+}
+// What's a rep's rank?
+function repRank(repName, metric, year) {
+  const ranked = rankMasterByMetric(metric, year);
+  const idx = ranked.findIndex(x => x.rep.name === repName);
+  return idx < 0 ? null : { rank: idx + 1, total: ranked.length };
+}
+
+// ==========================================================================
+// TEAM VIEW renderers
+// ==========================================================================
+function renderTeamKPIs() {
+  const y = STATE.curYear, yp = STATE.priorYear;
+  const totalCpoCur = teamTotal('total_sales', y);
+  const totalCpoPrior = teamTotal('total_sales', yp);
+  const totalOrdersCur = teamTotalOrders(y);
+  const totalOrdersPrior = teamTotalOrders(yp);
+  const avgOrderCur = totalOrdersCur ? totalCpoCur / totalOrdersCur : null;
+  const avgOrderPrior = totalOrdersPrior ? totalCpoPrior / totalOrdersPrior : null;
+  const activeCur = activeRepCount(y);
+  const activePrior = activeRepCount(yp);
+  const activeDelta = activeCur - activePrior;
+
+  document.getElementById('team-kpis').innerHTML = `
+    <div class="kpi">
+      <div class="label">Team Total CPO · C1 ${y}</div>
+      <div class="val">${fmtCurrencyShort(totalCpoCur)}</div>
+      <div class="delta">${fmtYoY(totalCpoCur, totalCpoPrior)} vs C1 ${yp} (${fmtCurrencyShort(totalCpoPrior)})</div>
+    </div>
+    <div class="kpi">
+      <div class="label">Team Total Orders · C1 ${y}</div>
+      <div class="val">${fmtInt(totalOrdersCur)}</div>
+      <div class="delta">${fmtYoY(totalOrdersCur, totalOrdersPrior)} vs C1 ${yp} (${fmtInt(totalOrdersPrior)})</div>
+    </div>
+    <div class="kpi">
+      <div class="label">Team Avg Order · C1 ${y}</div>
+      <div class="val">${fmtCurrency(avgOrderCur)}</div>
+      <div class="delta">${fmtYoY(avgOrderCur, avgOrderPrior)} vs C1 ${yp} (${fmtCurrency(avgOrderPrior)})</div>
+    </div>
+    <div class="kpi">
+      <div class="label">Active Reps · C1 ${y}</div>
+      <div class="val">${activeCur}</div>
+      <div class="delta">${activeDelta >= 0 ? '+' : ''}${activeDelta} vs C1 ${yp} (${activePrior})</div>
+    </div>
+  `;
+}
+
+function renderLeaderboard() {
+  const y = STATE.curYear, yp = STATE.priorYear;
+  const isOrdersPerShift = STATE.rankBy === 'orders_per_shift';
+  const isRatio = STATE.rankBy === 'total_avg_order' || STATE.rankBy === 'shift_avg' || isOrdersPerShift;
+  const fmt = isOrdersPerShift ? (v => fmtNumber(v, 2)) : fmtCurrency;
+
+  // Annual metrics (shift_avg, orders_per_shift) live on the FY scope, not C1
+  const isAnnual = STATE.rankBy === 'shift_avg' || isOrdersPerShift;
+  const curLabel = isAnnual ? `FY ${y}` : `C1 ${y}`;
+  const priorLabel = isAnnual ? `FY ${yp}` : `C1 ${yp}`;
+
+  // Build candidate list with computed growth
+  let candidates = masterListReps().map(r => {
+    const cur = getMetric(r, y, STATE.rankBy);
+    const prior = getMetric(r, yp, STATE.rankBy);
+    const growth = (cur !== null && prior !== null && prior > 0)
+      ? ((cur - prior) / prior) * 100
+      : null;
+    return { rep: r, cur, prior, growth };
+  }).filter(x => x.cur !== null);
+
+  // Sort
+  if (STATE.sortBy === 'growth') {
+    candidates = candidates.filter(x => x.growth !== null);
+    candidates.sort((a, b) => b.growth - a.growth);
+  } else {
+    candidates.sort((a, b) => b.cur - a.cur);
+  }
+  const ranked = candidates.slice(0, 10);
+
+  if (ranked.length === 0) {
+    document.getElementById('lb-body').innerHTML =
+      '<div class="lb-placeholder">No reps with data for this metric and sort yet.</div>';
+    return;
+  }
+
+  let html = `<table class="leaderboard"><thead><tr>
+    <th>#</th><th>Rep</th>
+    <th class="num">${curLabel}</th>
+    <th class="num">${priorLabel}</th>
+    <th class="num">Growth</th>
+  </tr></thead><tbody>`;
+  ranked.forEach((x, i) => {
+    const selfCls = x.rep.name === STATE.selectedRep ? 'is-self' : '';
+    html += `<tr class="${selfCls}">
+      <td class="rank">${i + 1}</td>
+      <td class="name">${x.rep.name}</td>
+      <td class="num">${fmt(x.cur)}</td>
+      <td class="num">${fmt(x.prior)}</td>
+      <td class="num">${fmtYoY(x.cur, x.prior)}</td>
+    </tr>`;
+  });
+  html += '</tbody></table>';
+  document.getElementById('lb-body').innerHTML = html;
+}
+
+const BUCKET_COLORS = {
+  'Event (Traditional)': 'var(--bk-trad)',
+  'Service Event':       'var(--bk-service)',
+  'Industry Event':      'var(--bk-industry)',
+  'Realtor':             'var(--bk-rlt)',
+  'Mall':                'var(--bk-mall)',
+  'Federal':             'var(--bk-federal)',
+  'Non-Event CPO':       'var(--bk-nonevent)',
+};
+
+// The 6 event sub-buckets (everything except Non-Event CPO) — these sum to Total Event
+const EVENT_SUB_BUCKETS = ['Event (Traditional)', 'Service Event', 'Industry Event', 'Realtor', 'Mall', 'Federal'];
+
+function renderCategoryMix() {
+  const y = STATE.curYear;
+  // Sum each bucket across Master List
+  const totals = {};
+  let grand = 0;
+  for (const b of BUCKETS) {
+    let sum = 0;
+    for (const rep of masterListReps()) {
+      const stats = repBucket(rep, y, b);
+      if (stats) sum += stats.cpo;
+    }
+    totals[b] = sum;
+    grand += sum;
+  }
+  // Bar
+  let barHtml = '<div class="bar-track">';
+  for (const b of BUCKETS) {
+    const pct = grand > 0 ? (totals[b] / grand) * 100 : 0;
+    if (pct > 0) {
+      barHtml += `<div class="bar-fill" style="background:${BUCKET_COLORS[b]}; width:${pct}%;" title="${b}: ${pct.toFixed(1)}%"></div>`;
+    }
+  }
+  barHtml += '</div>';
+  // Items
+  let itemsHtml = '';
+  for (const b of BUCKETS) {
+    const v = totals[b];
+    const pct = grand > 0 ? (v / grand) * 100 : 0;
+    itemsHtml += `
+      <div class="item">
+        <span class="swatch" style="background:${BUCKET_COLORS[b]}"></span>
+        <span class="cat-name">${b}</span>
+        <span class="cat-amt">${v > 0 ? fmtCurrencyShort(v) : '<span class="em-dash">—</span>'}</span>
+        <span class="cat-pct">${v > 0 ? pct.toFixed(0) + '%' : ''}</span>
+      </div>`;
+  }
+  document.getElementById('cat-mix').innerHTML = barHtml + itemsHtml;
+}
+
+// ==========================================================================
+// REP VIEW renderers
+// ==========================================================================
+function renderRepPicker() {
+  const sel = document.getElementById('rep-select');
+  sel.innerHTML = MASTER.map(n => `<option value="${n}"${n === STATE.selectedRep ? ' selected' : ''}>${n}</option>`).join('');
+  sel.onchange = e => { STATE.selectedRep = e.target.value; renderRepView(); };
+}
+
+function renderRepMeta() {
+  const r = REPS[STATE.selectedRep];
+  const meta = [];
+  if (r.title) meta.push(r.title);
+  if (r.office) meta.push(r.office);
+  if (r.career_cpo) meta.push('Career: ' + fmtCurrencyShort(r.career_cpo));
+  if (r.contract_date) meta.push('Since ' + r.contract_date.slice(0, 7));
+  document.getElementById('rep-meta').textContent = meta.join(' · ');
+}
+
+function renderRepHero() {
+  const r = REPS[STATE.selectedRep];
+  const y = STATE.curYear, yp = STATE.priorYear;
+  const tsCur = repTotalSales(r, y);
+  const tsPrior = repTotalSales(r, yp);
+  const aoCur = avgOrder(tsCur);
+  const aoPrior = avgOrder(tsPrior);
+  const shiftCur = repShifts(r, y);
+  const shiftPrior = repShifts(r, yp);
+  const shAvgCur = shiftCur && shiftCur.combined ? shiftCur.combined.avg : null;
+  const shAvgPrior = shiftPrior && shiftPrior.combined ? shiftPrior.combined.avg : null;
+
+  const rank = repRank(STATE.selectedRep, 'total_cpo', y);
+  const teamAvg_ = teamAvg('total_sales', y);
+  const vsTeamPct = (tsCur && teamAvg_) ? ((tsCur.cpo - teamAvg_) / teamAvg_ * 100) : null;
+  const vsTeamStr = vsTeamPct === null ? '—' :
+    `<span class="${vsTeamPct >= 0 ? 'up' : 'down'}">${vsTeamPct >= 0 ? '+' : ''}${vsTeamPct.toFixed(0)}% ${vsTeamPct >= 0 ? 'above' : 'below'}</span>`;
+
+  document.getElementById('rep-hero').innerHTML = `
+    <div class="hero-big">
+      <div class="label">Total CPO · C1 ${y}</div>
+      <div class="big-val">${tsCur ? fmtCurrency(tsCur.cpo) : '<span class="em-dash">—</span>'}</div>
+      <div class="delta">${fmtYoY(tsCur && tsCur.cpo, tsPrior && tsPrior.cpo)} vs C1 ${yp} (${tsPrior ? fmtCurrency(tsPrior.cpo) : '—'})</div>
+      <div class="compare-row">
+        <div class="compare-item">
+          <div class="compare-label">Rank</div>
+          <div class="compare-val">${rank ? `#${rank.rank} of ${rank.total}` : '—'}</div>
+        </div>
+        <div class="compare-item">
+          <div class="compare-label">Team Avg</div>
+          <div class="compare-val">${fmtCurrency(teamAvg_)}</div>
+        </div>
+        <div class="compare-item">
+          <div class="compare-label">vs Team Avg</div>
+          <div class="compare-val">${vsTeamStr}</div>
+        </div>
+      </div>
+    </div>
+    <div class="hero-mini">
+      <div class="label">C1 ${y} Orders</div>
+      <div class="mini-val">${tsCur ? fmtInt(tsCur.orders) : '<span class="em-dash">—</span>'}</div>
+      <div class="mini-sub">${fmtYoY(tsCur && tsCur.orders, tsPrior && tsPrior.orders)} vs C1 ${yp} (${tsPrior ? fmtInt(tsPrior.orders) : '—'})</div>
+    </div>
+    <div class="hero-mini">
+      <div class="label">C1 ${y} Avg Order</div>
+      <div class="mini-val">${fmtCurrency(aoCur)}</div>
+      <div class="mini-sub">${fmtYoY(aoCur, aoPrior)} vs C1 ${yp} (${fmtCurrency(aoPrior)})</div>
+    </div>
+    <div class="hero-mini">
+      <div class="label">${y} Shift Avg (FY)</div>
+      <div class="mini-val">${fmtCurrency(shAvgCur)}</div>
+      <div class="mini-sub">${fmtYoY(shAvgCur, shAvgPrior)} vs ${yp} (${fmtCurrency(shAvgPrior)})</div>
+    </div>
+  `;
+}
+
+// ===== Opportunity analysis =====
+// Compute Master-List peer averages (more meaningful than full universe for opportunity benchmarking).
+function masterAvgBucketAvgOrder(bucket, year) {
+  let sum = 0, count = 0;
+  for (const rep of masterListReps()) {
+    const b = repBucket(rep, year, bucket);
+    if (b && b.orders > MIN_ORDERS_FOR_AVG_RANK) { sum += b.cpo / b.orders; count++; }
+  }
+  return count > 0 ? sum / count : null;
+}
+function masterAvgBucketCpo(bucket, year) {
+  let sum = 0, count = 0;
+  for (const rep of masterListReps()) {
+    const b = repBucket(rep, year, bucket);
+    if (b && b.cpo > 0) { sum += b.cpo; count++; }
+  }
+  return count > 0 ? sum / count : null;
+}
+function masterAvgOrdersPerShift(year) {
+  let sum = 0, count = 0;
+  for (const rep of masterListReps()) {
+    const s = repShifts(rep, year);
+    if (s && s.combined && s.combined.shifts > 0) {
+      sum += s.combined.orders / s.combined.shifts;
+      count++;
+    }
+  }
+  return count > 0 ? sum / count : null;
+}
+
+// For a given rep, score multiple opportunity types and return the one with biggest absolute uplift.
+function findBiggestOpportunity(rep) {
+  const y = STATE.curYear;
+  const opps = [];
+
+  // ----- Type 1: Lift avg order in a bucket they actually work -----
+  for (const bucket of EVENT_SUB_BUCKETS) {
+    const b = repBucket(rep, y, bucket);
+    if (!b || !b.orders || b.orders < MIN_ORDERS_FOR_AVG_RANK) continue;
+    const repAvg = b.cpo / b.orders;
+    const peerAvg = masterAvgBucketAvgOrder(bucket, y);
+    if (!peerAvg || peerAvg <= repAvg) continue;
+    const uplift = (peerAvg - repAvg) * b.orders;
+    if (uplift < 1000) continue;  // ignore tiny opportunities (<$1K)
+    opps.push({
+      type: 'avg_order',
+      uplift,
+      title: `Lift Avg Order in ${bucket}`,
+      body: `You're closing ${bucket} at $${Math.round(repAvg).toLocaleString()} per order across ${b.orders} orders. Master List peers average $${Math.round(peerAvg).toLocaleString()}. Matching peer avg-order on your current volume would add ~$${Math.round(uplift).toLocaleString()} this campaign. This is your biggest dollar lever — sizing, not volume.`
+    });
+  }
+
+  // ----- Type 2: Productivity (orders per shift) -----
+  const shifts = repShifts(rep, y);
+  if (shifts && shifts.combined && shifts.combined.shifts >= 5) {
+    const repOpS = shifts.combined.orders / shifts.combined.shifts;
+    const peerOpS = masterAvgOrdersPerShift(y);
+    if (peerOpS && peerOpS > repOpS) {
+      const repAvgOrder = shifts.combined.cpo / shifts.combined.orders;
+      const extraOrders = (peerOpS - repOpS) * shifts.combined.shifts;
+      const uplift = extraOrders * repAvgOrder;
+      if (uplift >= 1000) {
+        opps.push({
+          type: 'orders_per_shift',
+          uplift,
+          title: 'Increase Orders per Shift',
+          body: `Averaging ${repOpS.toFixed(2)} orders/shift across ${shifts.combined.shifts} shifts vs Master List peers at ${peerOpS.toFixed(2)}. At your typical avg order ($${Math.round(repAvgOrder)}), closing that productivity gap could mean ~$${Math.round(uplift).toLocaleString()} more. Look at your booth approach — same shifts, more orders per shift.`
+        });
+      }
+    }
+  }
+
+  // ----- Type 3: Combined Shift Average gap (full-year productivity) -----
+  // Shift avg = CPO / shifts, which is orders/shift × avg-order combined. This is
+  // the broadest productivity lever — closing the gap can come from more orders
+  // per shift, bigger avg order, or both.
+  const shiftsForAvg = repShifts(rep, y);
+  if (shiftsForAvg && shiftsForAvg.combined && shiftsForAvg.combined.shifts >= 5) {
+    const repShiftAvg = shiftsForAvg.combined.avg;
+    let sum = 0, count = 0;
+    for (const r of masterListReps()) {
+      const s = repShifts(r, y);
+      if (s && s.combined && s.combined.shifts > 0) { sum += s.combined.avg; count++; }
+    }
+    const peerShiftAvg = count > 0 ? sum / count : null;
+    if (peerShiftAvg && peerShiftAvg > repShiftAvg) {
+      const uplift = (peerShiftAvg - repShiftAvg) * shiftsForAvg.combined.shifts;
+      if (uplift >= 1000) {
+        opps.push({
+          type: 'shift_avg',
+          uplift,
+          title: 'Lift Combined Shift Average',
+          body: `Your shift avg is $${Math.round(repShiftAvg).toLocaleString()}/shift vs Master List peers at $${Math.round(peerShiftAvg).toLocaleString()}. Across your ${shiftsForAvg.combined.shifts} shifts ${y === 2026 ? 'YTD' : `this year`}, closing that gap means ~$${Math.round(uplift).toLocaleString()} more. Two ways to get there: more orders per shift, bigger avg order, or both.`
+        });
+      }
+    }
+  }
+
+  // ----- Type 4: Non-Event Sales gap (what they're doing OUTSIDE events) -----
+  const nonEvt = repBucket(rep, y, 'Non-Event CPO');
+  if (nonEvt && nonEvt.cpo !== null) {
+    const peerNonEvt = masterAvgBucketCpo('Non-Event CPO', y);
+    if (peerNonEvt && peerNonEvt > nonEvt.cpo) {
+      const uplift = peerNonEvt - nonEvt.cpo;
+      if (uplift >= 2000) {
+        opps.push({
+          type: 'non_event',
+          uplift,
+          title: 'Grow Non-Event Sales',
+          body: `Your C1 ${y} Non-Event CPO (SC's / Marketing) is $${Math.round(nonEvt.cpo).toLocaleString()} vs Master List peers at $${Math.round(peerNonEvt).toLocaleString()}. There's ~$${Math.round(uplift).toLocaleString()} of room in what you're doing OUTSIDE the event work — in-home customers, service calls, marketing follow-up.`
+        });
+      }
+    }
+  }
+
+  if (opps.length === 0) return null;
+
+  // Scale-relative threshold: opportunity must be at least 5% of rep's current C1 book
+  // (with a $2K floor for very small reps). Prevents "$2K uplift on a $320K book" from
+  // being surfaced as the "biggest" opportunity — that's a rounding error, not a needle mover.
+  const ts = repTotalSales(rep, y);
+  const bookSize = ts ? ts.cpo : 0;
+  const minMeaningfulUplift = Math.max(2000, bookSize * 0.05);
+  const meaningful = opps.filter(o => o.uplift >= minMeaningfulUplift);
+  if (meaningful.length === 0) return null;
+
+  meaningful.sort((a, b) => b.uplift - a.uplift);
+  const top = meaningful[0];
+  // Annotate relative magnitude so the display can show % of book context
+  top.upliftPct = bookSize > 0 ? (top.uplift / bookSize * 100) : null;
+  return top;
+}
+
+function renderRepSummary() {
+  const r = REPS[STATE.selectedRep];
+  const y = STATE.curYear, yp = STATE.priorYear;
+  const callouts = [];
+
+  // Total CPO YoY growth?
+  const tsCur = repTotalSales(r, y);
+  const tsPrior = repTotalSales(r, yp);
+  if (tsCur && tsPrior && tsPrior.cpo > 0) {
+    const yoy = ((tsCur.cpo - tsPrior.cpo) / tsPrior.cpo) * 100;
+    if (yoy > 15) {
+      callouts.push({ type: 'good', title: 'Strong campaign-over-campaign growth', body: `Total CPO up ${yoy.toFixed(1)}% vs C1 ${yp}. You're scaling.` });
+    } else if (yoy < -15) {
+      callouts.push({ type: 'watch', title: 'Total CPO declining', body: `Down ${Math.abs(yoy).toFixed(1)}% vs C1 ${yp} — worth examining what's shifted.` });
+    }
+  }
+
+  // Top-5 ranking?
+  const rank = repRank(STATE.selectedRep, 'total_cpo', y);
+  if (rank && rank.rank <= 5) {
+    callouts.push({ type: 'good', title: 'Top-5 producer', body: `Total CPO ranks #${rank.rank} of ${rank.total} on the team's C1 ${y} leaderboard.` });
+  }
+
+  // Far above team average?
+  const teamAvg_ = teamAvg('total_sales', y);
+  if (tsCur && teamAvg_ && tsCur.cpo > teamAvg_ * 1.5) {
+    const pct = ((tsCur.cpo - teamAvg_) / teamAvg_ * 100).toFixed(0);
+    callouts.push({ type: 'good', title: 'Well above team average', body: `Total CPO is ${pct}% above team average.` });
+  }
+
+  // Avg order trending up?
+  const aoCur = avgOrder(tsCur);
+  const aoPrior = avgOrder(tsPrior);
+  if (aoCur && aoPrior && aoPrior > 0) {
+    const yoy = ((aoCur - aoPrior) / aoPrior) * 100;
+    if (yoy > 10) {
+      callouts.push({ type: 'good', title: 'Avg order climbing', body: `Avg order up ${yoy.toFixed(1)}% — you're closing bigger.` });
+    } else if (yoy < -10) {
+      callouts.push({ type: 'watch', title: 'Avg order slipping', body: `Avg order down ${Math.abs(yoy).toFixed(1)}% vs ${yp} — sizing or product mix may have shifted.` });
+    }
+  }
+
+  // Shift avg trend
+  const shiftCur = repShifts(r, y);
+  const shiftPrior = repShifts(r, yp);
+  const shAvgCur = shiftCur && shiftCur.combined ? shiftCur.combined.avg : null;
+  const shAvgPrior = shiftPrior && shiftPrior.combined ? shiftPrior.combined.avg : null;
+  if (shAvgCur && shAvgPrior && shAvgPrior > 0) {
+    const yoy = ((shAvgCur - shAvgPrior) / shAvgPrior) * 100;
+    if (yoy > 10) {
+      callouts.push({ type: 'good', title: 'Shift average growing', body: `Combined shift avg up ${yoy.toFixed(1)}% vs ${yp}. You're making each shift count more.` });
+    } else if (yoy < -10) {
+      callouts.push({ type: 'watch', title: 'Shift quality dipping', body: `Combined shift avg down ${Math.abs(yoy).toFixed(1)}% vs ${yp}.` });
+    }
+  }
+
+  // Pending uploads note
+  if (PENDING.includes(STATE.selectedRep)) {
+    callouts.push({ type: 'watch', title: 'Total Sales pending', body: `Your full-CPO report is pending individual upload. Non-Event/Other bucket will render once it arrives.` });
+  }
+
+  // Cap to 4 strengths + 1 watch + 1 opportunity (the big one)
+  const strengths = callouts.filter(c => c.type === 'good').slice(0, 4);
+  const watches = callouts.filter(c => c.type === 'watch').slice(0, 1);
+  const final = [...strengths, ...watches];
+  if (final.length === 0) {
+    final.push({ type: 'good', title: 'Steady state', body: 'No major movement up or down vs prior C1. Performance is consistent.' });
+  }
+
+  // Biggest area of opportunity (always last, full-width)
+  const opp = findBiggestOpportunity(REPS[STATE.selectedRep]);
+  if (opp) {
+    final.push({ type: 'opportunity', title: opp.title, body: opp.body, uplift: opp.uplift, upliftPct: opp.upliftPct });
+  }
+
+  const iconFor = t => t === 'good' ? '✓' : (t === 'watch' ? '→' : '↑');
+
+  document.getElementById('rep-summary').innerHTML = `
+    <div class="summary-header">
+      <h2>Performance Summary</h2>
+      <span class="summary-subtitle">C1 ${y} vs C1 ${yp}</span>
+    </div>
+    <div class="summary-grid">
+      ${final.map(c => `
+        <div class="summary-item ${c.type === 'opportunity' ? 'opportunity' : ''}">
+          <span class="icon ${c.type}">${iconFor(c.type)}</span>
+          <div class="body">
+            ${c.type === 'opportunity'
+              ? `<span style="font-family:var(--mono);font-size:9px;letter-spacing:0.1em;text-transform:uppercase;color:var(--amber);font-weight:600;">Biggest Area of Opportunity · ~+$${Math.round(c.uplift).toLocaleString()} potential${c.upliftPct ? ` (≈${Math.round(c.upliftPct)}% lift on current C1 book)` : ''}</span>`
+              : ''}
+            <strong>${c.title}</strong><p>${c.body}</p>
+          </div>
+        </div>
+      `).join('')}
+    </div>
+  `;
+}
+
+// ----- Pie chart helpers -----
+function pieSvg(slices, size = 180) {
+  const valid = slices.filter(s => s.value > 0);
+  const total = valid.reduce((acc, s) => acc + s.value, 0);
+  if (total === 0) return `<div class="pie-empty" style="width:${size}px;height:${size}px;display:flex;align-items:center;justify-content:center;">No data</div>`;
+  const cx = size / 2, cy = size / 2, r = size / 2 - 4;
+  let angle = -Math.PI / 2; // start at 12 o'clock
+  let html = `<svg viewBox="0 0 ${size} ${size}" width="${size}" height="${size}" xmlns="http://www.w3.org/2000/svg">`;
+
+  // Special case: single slice covering 100% (arc draws nothing in that case)
+  if (valid.length === 1) {
+    html += `<circle cx="${cx}" cy="${cy}" r="${r}" fill="${valid[0].color}"/>`;
+  } else {
+    for (const slice of valid) {
+      const proportion = slice.value / total;
+      const sliceAngle = proportion * Math.PI * 2;
+      const x1 = cx + r * Math.cos(angle);
+      const y1 = cy + r * Math.sin(angle);
+      angle += sliceAngle;
+      const x2 = cx + r * Math.cos(angle);
+      const y2 = cy + r * Math.sin(angle);
+      const largeArc = sliceAngle > Math.PI ? 1 : 0;
+      html += `<path d="M ${cx} ${cy} L ${x1.toFixed(2)} ${y1.toFixed(2)} A ${r} ${r} 0 ${largeArc} 1 ${x2.toFixed(2)} ${y2.toFixed(2)} Z" fill="${slice.color}" stroke="white" stroke-width="2"/>`;
+    }
+  }
+  html += '</svg>';
+  return html;
+}
+
+function pieLegend(slices) {
+  const valid = slices.filter(s => s.value > 0);
+  const total = valid.reduce((acc, s) => acc + s.value, 0);
+  if (total === 0) return '';
+  let html = '<div class="pie-legend">';
+  for (const s of valid) {
+    const pct = (s.value / total * 100).toFixed(1) + '%';
+    html += `<div class="pie-legend-item">
+      <span class="pie-swatch" style="background:${s.color}"></span>
+      <span class="pl-name">${s.label}</span>
+      <span class="pl-pct">${pct}</span>
+      <span class="pl-val">${fmtCurrencyShort(s.value)}</span>
+    </div>`;
+  }
+  html += '</div>';
+  return html;
+}
+
+function renderRepPies() {
+  const r = REPS[STATE.selectedRep];
+  const y = STATE.curYear;
+
+  // Pie 1: Event vs Non-Event
+  const totEvt = repTotalEvent(r, y);
+  const nonEvt = repBucket(r, y, 'Non-Event CPO');
+  const pie1 = [
+    { label: 'Event CPO', value: (totEvt && totEvt.cpo) || 0, color: 'var(--ink)' },
+    { label: "Non-Event CPO (SC's / Marketing)", value: (nonEvt && nonEvt.cpo) || 0, color: BUCKET_COLORS['Non-Event CPO'] },
+  ];
+
+  // Pie 2: Event sub-bucket breakdown
+  // (Future: append "Event Service Calls" slice once that data is wired in)
+  const pie2 = EVENT_SUB_BUCKETS.map(b => {
+    const stats = repBucket(r, y, b);
+    return { label: b, value: (stats && stats.cpo) || 0, color: BUCKET_COLORS[b] };
+  });
+
+  document.getElementById('rep-pies').innerHTML = `
+    <div class="pie-card">
+      <h3>Event vs Non-Event</h3>
+      <div class="pie-meta">How your C1 ${y} book splits</div>
+      <div class="pie-body">${pieSvg(pie1)}${pieLegend(pie1)}</div>
+    </div>
+    <div class="pie-card">
+      <h3>Event CPO Breakdown</h3>
+      <div class="pie-meta">Where your event work landed · C1 ${y}</div>
+      <div class="pie-body">${pieSvg(pie2)}${pieLegend(pie2)}</div>
+    </div>
+  `;
+}
+
+function renderRepBuckets() {
+  const r = REPS[STATE.selectedRep];
+  const y = STATE.curYear, yp = STATE.priorYear;
+
+  // === TOP ROW: Total Event CPO + Non-Event CPO ===
+  const totEvtCur = repTotalEvent(r, y);
+  const totEvtPrior = repTotalEvent(r, yp);
+  const teamAvgTotEvt = teamAvg('total_event', y);
+  const totEvtAvgOrd = avgOrder(totEvtCur);
+  const vsTeamTotEvt = (totEvtCur && teamAvgTotEvt) ? ((totEvtCur.cpo - teamAvgTotEvt) / teamAvgTotEvt * 100) : null;
+
+  const nonEvtCur = repBucket(r, y, 'Non-Event CPO');
+  const nonEvtPrior = repBucket(r, yp, 'Non-Event CPO');
+  const teamAvgNonEvt = teamAvg('bucket:Non-Event CPO', y);
+  const nonEvtAvgOrd = avgOrder(nonEvtCur);
+  const vsTeamNonEvt = (nonEvtCur && teamAvgNonEvt) ? ((nonEvtCur.cpo - teamAvgNonEvt) / teamAvgNonEvt * 100) : null;
+
+  const topCard = (name, subtitle, color, cur, prior, avgOrd, teamAv, vsTeam) => `
+    <div class="bucket" style="border-top:4px solid ${color};">
+      <div class="bucket-name">${name}${subtitle ? ` <span class="bucket-subtitle">${subtitle}</span>` : ''}</div>
+      <div class="headline-val">${cur ? fmtCurrency(cur.cpo) : '<span class="em-dash">—</span>'}</div>
+      <div class="bucket-row"><span class="bk-label">C1 ${yp}</span><span class="bk-val">${prior ? fmtCurrency(prior.cpo) : '<span class="em-dash">—</span>'}</span></div>
+      <div class="bucket-row"><span class="bk-label">Growth</span><span class="bk-val">${fmtYoY(cur && cur.cpo, prior && prior.cpo)}</span></div>
+      <div class="bucket-row"><span class="bk-label">Avg Order</span><span class="bk-val">${fmtCurrency(avgOrd)}</span></div>
+      <div class="bucket-row vs-team"><span class="bk-label">Team Avg</span><span class="bk-val">${fmtCurrency(teamAv)}</span></div>
+      <div class="bucket-row"><span class="bk-label">vs Team</span><span class="bk-val">${
+        vsTeam === null ? '<span class="em-dash">—</span>' :
+        `<span class="${vsTeam >= 0 ? 'yoy-pos' : 'yoy-neg'}">${vsTeam >= 0 ? '+' : ''}${vsTeam.toFixed(0)}% ${vsTeam >= 0 ? 'above' : 'below'}</span>`
+      }</span></div>
+    </div>`;
+
+  document.getElementById('rep-buckets-top').innerHTML =
+    topCard('Total Event CPO', '', 'var(--ink)', totEvtCur, totEvtPrior, totEvtAvgOrd, teamAvgTotEvt, vsTeamTotEvt) +
+    topCard('Non-Event CPO', "SC's / Marketing", BUCKET_COLORS['Non-Event CPO'], nonEvtCur, nonEvtPrior, nonEvtAvgOrd, teamAvgNonEvt, vsTeamNonEvt);
+
+  // === SUB-BUCKETS: the 6 event categories that add up to Total Event ===
+  let subHtml = '';
+  for (const b of EVENT_SUB_BUCKETS) {
+    const cur = repBucket(r, y, b);
+    const prior = repBucket(r, yp, b);
+    const teamAv = teamAvg('bucket:' + b, y);
+    const vsTeam = (cur && teamAv) ? ((cur.cpo - teamAv) / teamAv * 100) : null;
+    const avgOrd = avgOrder(cur);
+    const swatchStyle = `border-top:3px solid ${BUCKET_COLORS[b]};`;
+
+    subHtml += `<div class="bucket" style="${swatchStyle}">
+      <div class="bucket-name">${b}</div>
+      <div class="bucket-row"><span class="bk-label">C1 ${y}</span><span class="bk-val">${cur ? fmtCurrency(cur.cpo) : '<span class="em-dash">—</span>'}</span></div>
+      <div class="bucket-row"><span class="bk-label">C1 ${yp}</span><span class="bk-val">${prior ? fmtCurrency(prior.cpo) : '<span class="em-dash">—</span>'}</span></div>
+      <div class="bucket-row"><span class="bk-label">Growth</span><span class="bk-val">${fmtYoY(cur && cur.cpo, prior && prior.cpo)}</span></div>
+      <div class="bucket-row"><span class="bk-label">Avg Order</span><span class="bk-val">${fmtCurrency(avgOrd)}</span></div>
+      <div class="bucket-row vs-team"><span class="bk-label">Team Avg</span><span class="bk-val">${fmtCurrency(teamAv)}</span></div>
+      <div class="bucket-row"><span class="bk-label">vs Team</span><span class="bk-val">${
+        vsTeam === null ? '<span class="em-dash">—</span>' :
+        `<span class="${vsTeam >= 0 ? 'yoy-pos' : 'yoy-neg'}">${vsTeam >= 0 ? '+' : ''}${vsTeam.toFixed(0)}% ${vsTeam >= 0 ? 'above' : 'below'}</span>`
+      }</span></div>
+    </div>`;
+  }
+  document.getElementById('rep-buckets-sub').innerHTML = subHtml;
+}
+
+function renderRepShifts() {
+  const r = REPS[STATE.selectedRep];
+  const y = STATE.curYear, yp = STATE.priorYear;
+  const cur = repShifts(r, y);
+  const prior = repShifts(r, yp);
+
+  const totalCur = cur && cur.combined ? cur.combined.shifts : null;
+  const totalPrior = prior && prior.combined ? prior.combined.shifts : null;
+  const keyCur = cur && cur.key ? cur.key : null;
+  const keyPrior = prior && prior.key ? prior.key : null;
+  const tradCur = cur && cur.traditional ? cur.traditional : null;
+  const tradPrior = prior && prior.traditional ? prior.traditional : null;
+  const opsCur = cur && cur.combined && cur.combined.shifts ? cur.combined.orders / cur.combined.shifts : null;
+  const opsPrior = prior && prior.combined && prior.combined.shifts ? prior.combined.orders / prior.combined.shifts : null;
+
+  // Annual scope tag — 2026 is YTD/in-progress
+  const scopeTag = y === 2026 ? '2026 YTD' : `FY ${y}`;
+  const priorTag = yp === 2026 ? '2026 YTD' : `FY ${yp}`;
+
+  document.getElementById('rep-shifts').innerHTML = `
+    <div class="bucket">
+      <div class="bucket-name" style="font-size:14px;">Total Shifts <span class="new-tag">${scopeTag}</span></div>
+      <div class="bucket-row"><span class="bk-label">${scopeTag}</span><span class="bk-val">${totalCur === null ? '<span class="em-dash">—</span>' : totalCur}</span></div>
+      <div class="bucket-row"><span class="bk-label">${priorTag}</span><span class="bk-val">${totalPrior === null ? '<span class="em-dash">—</span>' : totalPrior}</span></div>
+      <div class="bucket-row"><span class="bk-label">Growth</span><span class="bk-val">${fmtYoY(totalCur, totalPrior)}</span></div>
+    </div>
+    <div class="bucket">
+      <div class="bucket-name" style="font-size:14px;">Key Shifts <span class="new-tag">${scopeTag}</span></div>
+      <div class="bucket-row"><span class="bk-label">Shifts</span><span class="bk-val">${keyCur ? keyCur.shifts : '<span class="em-dash">—</span>'}</span></div>
+      <div class="bucket-row"><span class="bk-label">Avg</span><span class="bk-val">${keyCur ? fmtCurrency(keyCur.avg) : '<span class="em-dash">—</span>'}</span></div>
+      <div class="bucket-row"><span class="bk-label">Growth (avg)</span><span class="bk-val">${fmtYoY(keyCur && keyCur.avg, keyPrior && keyPrior.avg)}</span></div>
+      <div class="bucket-row"><span class="bk-label">Prior Avg</span><span class="bk-val">${keyPrior ? fmtCurrency(keyPrior.avg) : '<span class="em-dash">—</span>'}</span></div>
+    </div>
+    <div class="bucket">
+      <div class="bucket-name" style="font-size:14px;">Traditional Shifts <span class="new-tag">${scopeTag}</span></div>
+      <div class="bucket-row"><span class="bk-label">Shifts</span><span class="bk-val">${tradCur ? tradCur.shifts : '<span class="em-dash">—</span>'}</span></div>
+      <div class="bucket-row"><span class="bk-label">Avg</span><span class="bk-val">${tradCur ? fmtCurrency(tradCur.avg) : '<span class="em-dash">—</span>'}</span></div>
+      <div class="bucket-row"><span class="bk-label">Growth (avg)</span><span class="bk-val">${fmtYoY(tradCur && tradCur.avg, tradPrior && tradPrior.avg)}</span></div>
+      <div class="bucket-row"><span class="bk-label">Prior Avg</span><span class="bk-val">${tradPrior ? fmtCurrency(tradPrior.avg) : '<span class="em-dash">—</span>'}</span></div>
+    </div>
+    <div class="bucket">
+      <div class="bucket-name" style="font-size:14px;">Orders / Shift <span class="new-tag">${scopeTag}</span></div>
+      <div class="bucket-row"><span class="bk-label">${scopeTag}</span><span class="bk-val">${fmtNumber(opsCur, 2)}</span></div>
+      <div class="bucket-row"><span class="bk-label">${priorTag}</span><span class="bk-val">${fmtNumber(opsPrior, 2)}</span></div>
+      <div class="bucket-row"><span class="bk-label">Growth</span><span class="bk-val">${fmtYoY(opsCur, opsPrior)}</span></div>
+    </div>
+  `;
+}
+
+// Compute the team-wide empirical C1-share-of-full-year ratio across 2024/2025.
+// Cached after first computation.
+let _cachedTeamShare = null;
+function teamC1Share() {
+  if (_cachedTeamShare !== null) return _cachedTeamShare;
+  let totC1 = 0, totFY = 0;
+  for (const rep of masterListReps()) {
+    for (const y of [2024, 2025]) {
+      const c1 = repTotalSales(rep, y);
+      const fy = repFYSales(rep, y);
+      if (c1 && fy && fy.cpo > 0) { totC1 += c1.cpo; totFY += fy.cpo; }
+    }
+  }
+  _cachedTeamShare = totFY > 0 ? totC1 / totFY : (1 / 3);
+  return _cachedTeamShare;
+}
+
+// Multiplier safety bounds — prevents extreme projections from noisy one-year-history
+// reps (like JP whose 2024 C1 wasn't in the file) or unusual seasonality.
+const MULT_CAP_LOW = 2.0;
+const MULT_CAP_HIGH = 4.5;
+
+// Compute this rep's empirical C1-share. Requires TWO years of (C1 + FY) data to
+// produce a personalized share; otherwise falls back to team average (more stable
+// than a single-year ratio which can be wildly off).
+function repC1Share(rep) {
+  const shares = [];
+  for (const y of [2024, 2025]) {
+    const c1 = repTotalSales(rep, y);
+    const fy = repFYSales(rep, y);
+    if (c1 && fy && fy.cpo > 0) shares.push(c1.cpo / fy.cpo);
+  }
+  if (shares.length < 2) return teamC1Share();
+  return shares.reduce((a, b) => a + b, 0) / shares.length;
+}
+
+// Return the multiplier with safety caps applied. Returns { multiplier, isPersonal, isCapped }.
+function repMultiplierInfo(rep) {
+  const personalShares = [];
+  for (const y of [2024, 2025]) {
+    const c1 = repTotalSales(rep, y);
+    const fy = repFYSales(rep, y);
+    if (c1 && fy && fy.cpo > 0) personalShares.push(c1.cpo / fy.cpo);
+  }
+  const isPersonal = personalShares.length >= 2;
+  const share = isPersonal
+    ? personalShares.reduce((a, b) => a + b, 0) / personalShares.length
+    : teamC1Share();
+  let mult = share > 0 ? 1 / share : 1 / Math.max(0.001, teamC1Share());
+  const rawMult = mult;
+  mult = Math.max(MULT_CAP_LOW, Math.min(MULT_CAP_HIGH, mult));
+  return { multiplier: mult, share, isPersonal, isCapped: Math.abs(rawMult - mult) > 0.01, rawMult };
+}
+
+function renderRepPacing() {
+  const r = REPS[STATE.selectedRep];
+  const c1_26 = repTotalSales(r, 2026);
+  const fy_25 = repFYSales(r, 2025);
+  const fy_24 = repFYSales(r, 2024);
+
+  // Empirical multiplier: 1 / (C1's typical share of full year), capped to safe range.
+  // Personal multiplier requires 2 years of history; otherwise team-average fallback.
+  const minfo = repMultiplierInfo(r);
+  const multiplier = minfo.multiplier;
+  const projected = c1_26 ? c1_26.cpo * multiplier : null;
+
+  let basisLabel;
+  if (minfo.isPersonal) {
+    basisLabel = `Based on YOUR 2024–2025 C1-share of full year (${(minfo.share * 100).toFixed(1)}%, multiplier ×${multiplier.toFixed(2)})`;
+    if (minfo.isCapped) basisLabel += ` — capped from raw ×${minfo.rawMult.toFixed(2)} for realism`;
+  } else {
+    basisLabel = `Based on team-average ratio (multiplier ×${multiplier.toFixed(2)}) — your personal C1 history is too limited for a stable projection`;
+  }
+
+  let summary = '';
+  if (!c1_26) {
+    summary = 'No C1 2026 Total Sales data yet for this rep.';
+  } else if (fy_25 && fy_24) {
+    const vs25 = projected - fy_25.cpo;
+    const vs24 = projected - fy_24.cpo;
+    if (vs25 > 0 && vs24 > 0) {
+      summary = `On your current C1 pace, you'd project above both 2024 (${fmtCurrencyShort(fy_24.cpo)}) and 2025 (${fmtCurrencyShort(fy_25.cpo)}). Strong start.`;
+    } else if (vs25 > 0) {
+      summary = `Projected above 2024 but behind 2025 (${fmtCurrencyShort(fy_25.cpo)}). To beat 2025 you'd need to outperform your typical C2+C3.`;
+    } else if (vs24 > 0) {
+      summary = `Tracking ahead of 2024 (${fmtCurrencyShort(fy_24.cpo)}) but short of 2025. Your fall has time to close the gap.`;
+    } else {
+      summary = `Projected below both prior years. Fall is your biggest campaign historically — plenty of room to recover.`;
+    }
+  } else if (fy_25) {
+    summary = `Comparison vs 2025 finish only — 2024 data unavailable.`;
+  } else {
+    summary = `Pacing baseline pending FY uploads.`;
+  }
+
+  document.getElementById('rep-pacing').innerHTML = `
+    <div style="font-family:var(--mono); font-size:10px; color:var(--ink-faint); text-transform:uppercase; letter-spacing:0.08em;">
+      ${basisLabel}
+    </div>
+    <div class="pacing-row">
+      <div class="pacing-item">
+        <div class="label">C1 2026 (actual)</div>
+        <div class="val">${c1_26 ? fmtCurrencyShort(c1_26.cpo) : '—'}</div>
+        <div class="sub">${c1_26 ? c1_26.orders + ' orders' : ''}</div>
+      </div>
+      <div class="pacing-item">
+        <div class="label">Projected 2026</div>
+        <div class="val">${projected ? fmtCurrencyShort(projected) : '—'}</div>
+        <div class="sub">×${multiplier.toFixed(2)} (fall-weighted)</div>
+      </div>
+      <div class="pacing-item">
+        <div class="label">FY 2025 (actual)</div>
+        <div class="val">${fy_25 ? fmtCurrencyShort(fy_25.cpo) : '—'}</div>
+        <div class="sub">${fy_25 ? fy_25.orders + ' orders' : ''}</div>
+      </div>
+      <div class="pacing-item">
+        <div class="label">FY 2024 (actual)</div>
+        <div class="val">${fy_24 ? fmtCurrencyShort(fy_24.cpo) : '—'}</div>
+        <div class="sub">${fy_24 ? fy_24.orders + ' orders' : ''}</div>
+      </div>
+    </div>
+    <div class="pace-summary">${summary}</div>
+  `;
+}
+
+// ==========================================================================
+// Performance Over Time chart (3-year C1)
+// ==========================================================================
+function renderRepChart() {
+  const r = REPS[STATE.selectedRep];
+  const metric = STATE.chartMetric;
+  const youVals = YEARS.map(y => getMetric(r, y, metric));
+  const teamVals = YEARS.map(y => teamAvg(metric === 'total_sales' ? 'total_sales' : metric, y));
+
+  const isCurrency = metric !== 'orders_per_shift';
+  const fmt = isCurrency ? fmtCurrencyShort : (v => fmtNumber(v, 2));
+
+  const allVals = [...youVals, ...teamVals].filter(v => v !== null && !isNaN(v));
+  const maxV = Math.max(...allVals, 1);
+  // Round up to a nice maxY
+  const yMax = roundUp(maxV * 1.15);
+  const yStep = roundUp(yMax / 5);
+
+  const W = 800, H = 320;
+  const padL = 70, padR = 30, padT = 30, padB = 60;
+  const plotW = W - padL - padR;
+  const plotH = H - padT - padB;
+  const n = YEARS.length;
+  const stepX = plotW / (n - 1);
+  const xFn = i => padL + i * stepX;
+  const yFn = v => padT + plotH - (v / yMax * plotH);
+
+  let html = '';
+  // Y-axis gridlines
+  const steps = Math.round(yMax / yStep);
+  for (let i = 0; i <= steps; i++) {
+    const v = i * yStep;
+    const y = yFn(v);
+    const isBase = i === 0;
+    html += `<line x1="${padL}" y1="${y}" x2="${W - padR}" y2="${y}" stroke="${isBase ? '#C9C5BC' : '#EFECE4'}" stroke-width="1" ${isBase ? '' : 'stroke-dasharray="2,3"'}/>`;
+    html += `<text x="${padL - 10}" y="${y + 3}" text-anchor="end" class="chart-y-label">${fmt(v)}</text>`;
+  }
+  // X-axis year labels
+  YEARS.forEach((y, i) => {
+    html += `<text x="${xFn(i)}" y="${H - padB + 18}" text-anchor="middle" class="chart-x-label">C1 ${y}</text>`;
+  });
+  // Team average line (drawn first)
+  const teamPoints = teamVals.map((v, i) => v !== null && !isNaN(v) ? `${xFn(i)},${yFn(v)}` : null).filter(Boolean);
+  if (teamPoints.length > 1) {
+    html += `<polyline points="${teamPoints.join(' ')}" fill="none" stroke="#888" stroke-width="1.5" stroke-dasharray="4,2"/>`;
+    teamVals.forEach((v, i) => {
+      if (v !== null && !isNaN(v)) html += `<circle cx="${xFn(i)}" cy="${yFn(v)}" r="2.5" fill="#888"/>`;
+    });
+  }
+  // Rep line
+  const youPoints = youVals.map((v, i) => v !== null && !isNaN(v) ? `${xFn(i)},${yFn(v)}` : null).filter(Boolean);
+  if (youPoints.length > 1) {
+    html += `<polyline points="${youPoints.join(' ')}" fill="none" stroke="#B45309" stroke-width="2.25"/>`;
+  }
+  youVals.forEach((v, i) => {
+    if (v !== null && !isNaN(v)) {
+      const cx = xFn(i), cy = yFn(v);
+      html += `<circle cx="${cx}" cy="${cy}" r="4" fill="white" stroke="#B45309" stroke-width="2"/>`;
+      html += `<text x="${cx}" y="${cy - 12}" text-anchor="middle" class="chart-point-label">${fmt(v)}</text>`;
+    }
+  });
+
+  document.getElementById('rep-chart-svg').innerHTML = html;
+}
+
+function roundUp(v) {
+  if (v <= 0) return 1;
+  const magnitude = Math.pow(10, Math.floor(Math.log10(v)));
+  return Math.ceil(v / magnitude) * magnitude;
+}
+
+// ==========================================================================
+// View orchestration
+// ==========================================================================
+function renderTeamView() {
+  renderTeamKPIs();
+  renderLeaderboard();
+  renderCategoryMix();
+}
+
+function renderRepView() {
+  renderRepPicker();
+  renderRepMeta();
+  renderRepHero();
+  renderRepSummary();
+  renderRepPies();
+  renderRepChart();
+  renderRepBuckets();
+  renderRepShifts();
+  renderRepPacing();
+}
+
+// Tab switching
+document.querySelectorAll('.toggle button').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const view = btn.dataset.view;
+    document.querySelectorAll('.toggle button').forEach(b => b.classList.toggle('active', b === btn));
+    document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+    document.getElementById(view + '-view').classList.add('active');
+    STATE.view = view;
+  });
+});
+
+// Wire up controls
+document.getElementById('rank-by').addEventListener('change', e => {
+  STATE.rankBy = e.target.value;
+  renderLeaderboard();
+});
+document.getElementById('sort-by').addEventListener('change', e => {
+  STATE.sortBy = e.target.value;
+  renderLeaderboard();
+});
+document.getElementById('rep-chart-metric').addEventListener('change', e => {
+  STATE.chartMetric = e.target.value;
+  renderRepChart();
+});
+
+// Initial render
+renderTeamView();
+renderRepView();
+</script>
+
+</body>
+</html>
