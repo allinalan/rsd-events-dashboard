@@ -108,6 +108,9 @@
   .twocol {
     display: grid; grid-template-columns: 1.5fr 1fr; gap: 32px;
   }
+  /* Allow grid children to shrink below their content width so the
+     leaderboard's horizontal scroll contains itself instead of widening the page */
+  .twocol > .section { min-width: 0; }
 
   /* Leaderboard */
   table.leaderboard { width: 100%; border-collapse: collapse; font-size: 13px; }
@@ -118,7 +121,8 @@
   }
   table.leaderboard th.num { text-align: right; }
   table.leaderboard td { padding: 9px 10px; border-bottom: 1px solid var(--rule-soft); }
-  table.leaderboard td.num { text-align: right; font-family: var(--mono); font-size: 12px; }
+  table.leaderboard td.num { text-align: right; font-family: var(--mono); font-size: 12px; white-space: nowrap; }
+  table.leaderboard th.num { white-space: nowrap; }
   table.leaderboard td.rank { font-family: var(--mono); color: var(--ink-faint); width: 30px; }
   table.leaderboard td.name { font-weight: 500; }
   table.leaderboard tr.is-self { background: var(--amber-bg); }
@@ -327,6 +331,47 @@
   .footnote {
     margin-top: 48px; padding-top: 16px; border-top: 1px solid var(--rule);
     font-family: var(--mono); font-size: 11px; color: var(--ink-faint); line-height: 1.6;
+  }
+
+  /* ============================== RESPONSIVE ============================== */
+  /* Tablet — drop dense 4-up grids to 2-up, stack the two-column section */
+  @media (max-width: 900px) {
+    body { padding: 28px 28px 56px; }
+    .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+    .twocol { grid-template-columns: 1fr; gap: 36px; }
+    .rep-hero { grid-template-columns: repeat(2, 1fr); }
+    .bucket-grid, .bucket-grid.col3 { grid-template-columns: repeat(2, 1fr); }
+    .pacing-strip .pacing-row { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  /* Phone — single column, stacked header, scrollable leaderboard */
+  @media (max-width: 680px) {
+    body { padding: 22px 18px 48px; }
+    /* Header stacks instead of clipping off the right edge */
+    .top { flex-direction: column; align-items: flex-start; gap: 10px; }
+    h1 { font-size: 28px; }
+    h1 .sub { display: block; margin-left: 0; margin-top: 4px; }
+    .campaign-picker { text-align: left; }
+    /* Segmented control spans the width, even thirds */
+    .toggle { display: flex; width: 100%; margin-bottom: 28px; }
+    .toggle button { flex: 1; padding: 10px 8px; font-size: 12px; text-align: center; }
+    /* Collapse remaining multi-column layouts */
+    .summary-grid { grid-template-columns: 1fr; }
+    .pie-pair { grid-template-columns: 1fr; }
+    .rep-hero { grid-template-columns: 1fr; }
+    .bucket-grid.bucket-tops { grid-template-columns: 1fr; }
+    /* Let the leaderboard controls wrap under their heading */
+    .lb-header { flex-direction: column; align-items: flex-start; gap: 10px; }
+    /* Leaderboard scrolls horizontally rather than clipping the page */
+    #lb-body { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    table.leaderboard { min-width: 460px; }
+  }
+
+  /* Small phone — one-up everywhere that's still tight */
+  @media (max-width: 440px) {
+    .kpi-grid { grid-template-columns: 1fr; }
+    .bucket-grid, .bucket-grid.col3 { grid-template-columns: 1fr; }
+    .pacing-strip .pacing-row { grid-template-columns: 1fr 1fr; }
   }
 </style>
 </head>
