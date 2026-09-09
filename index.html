@@ -906,15 +906,21 @@ const STATE = {
 };
 
 const UNIVERSE_N = Object.keys(REPS).length;
+// Universe = core team when data.js carries only the Master List (roster.universe = "master-list",
+// decided 2026-09-09); the division-wide wording returns only if the intake publishes everyone again.
+const CORE_ONLY = UNIVERSE_N <= MASTER.length;
 document.getElementById('meta-line').textContent =
   'Data through ' + (META.generated_at || '').slice(0, 10) + ' · ' +
-  MASTER.length + ' on Master List · ' + UNIVERSE_N + '-rep universe';
-document.getElementById('fn-universe').textContent =
-  'Team averages use the full ' + UNIVERSE_N + '-rep RSD division stats universe — not just the ' +
-  MASTER.length + '-rep Events Team Master List. The leaderboard ranks only the Master List.';
+  (CORE_ONLY ? MASTER.length + '-rep Events Team core roster' : MASTER.length + ' on Master List · ' + UNIVERSE_N + '-rep universe');
+document.getElementById('fn-universe').textContent = CORE_ONLY
+  ? 'Team averages are computed across the ' + MASTER.length + '-rep Events Team core roster only. The leaderboard ranks the same reps.'
+  : 'Team averages use the full ' + UNIVERSE_N + '-rep RSD division stats universe — not just the ' +
+    MASTER.length + '-rep Events Team Master List. The leaderboard ranks only the Master List.';
 
-const UNIVERSE_TIP = 'Team averages are computed across the full ' + UNIVERSE_N +
-  '-rep RSD division stats universe, not just the ' + MASTER.length + '-rep Events Team Master List.';
+const UNIVERSE_TIP = CORE_ONLY
+  ? 'Team averages are computed across the ' + MASTER.length + '-rep Events Team core roster.'
+  : 'Team averages are computed across the full ' + UNIVERSE_N +
+    '-rep RSD division stats universe, not just the ' + MASTER.length + '-rep Events Team Master List.';
 
 // ==========================================================================
 // Formatters
