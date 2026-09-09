@@ -179,7 +179,7 @@
   }
 
   /* Stat cards */
-  .stat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+  .stat-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; }
   .stat {
     background: var(--card); border: 1px solid var(--line);
     border-radius: var(--radius); padding: 16px 18px 15px;
@@ -194,6 +194,7 @@
     margin-bottom: 8px; font-feature-settings: 'tnum';
   }
   .stat .delta-row { display: flex; align-items: center; gap: 7px; flex-wrap: wrap; }
+  .stat .delta-row .ctx { white-space: normal; }
 
   /* Custom select control */
   .ctl {
@@ -611,7 +612,7 @@
   @media (max-width: 1000px) {
     .page { padding: 24px 24px 56px; }
     .masthead-inner { padding: 0 24px; }
-    .stat-grid { grid-template-columns: repeat(2, 1fr); }
+    .stat-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     .team-grid { grid-template-columns: 1fr; }
     .scorecard { grid-template-columns: 1fr; gap: 20px; padding: 22px 24px 20px; }
     .sc-hero { text-align: left; align-items: flex-start; border-top: 1px solid var(--ivory-line); padding-top: 18px; }
@@ -625,7 +626,12 @@
   @media (max-width: 680px) {
     .page { padding: 18px 16px 48px; }
     .masthead-inner { padding: 0 14px; }
-    .brand-row { padding: 12px 0 8px; }
+    .brand-row { padding: 12px 0 8px; flex-wrap: wrap; row-gap: 8px; }
+    .campaign { width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 10px; text-align: left; }
+    .campaign .cp-line { font-size: 10px; white-space: normal; }
+    .cp-select { margin-top: 0; flex-shrink: 0; }
+    .cp-select button .w { display: none; }
+    .cp-select button { padding: 6px 10px; }
     .brand-text .wordsub { display: none; }
     .campaign .cp-meta { display: none; }
     .campaign .cp-line { font-size: 10px; }
@@ -633,7 +639,7 @@
     .nav button { flex: 1; text-align: center; padding: 9px 4px 11px; font-size: 12.5px; }
     .nav button.active::after { left: 8px; right: 8px; }
     .sec-head h2, .lb-title h2, .mix-card h2, .trend-head h2, .summary-head h2 { font-size: 17px; }
-    .stat-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+    .stat-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
     .stat { padding: 13px 14px 12px; }
     .stat .val { font-size: 23px; }
     .mini-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
@@ -1197,7 +1203,7 @@ function renderTeamKPIs() {
   // A prior period with no Total Sales loaded at all (history before the intake's workbooks) is
   // "not loaded", not zero.
   const priorMissing = totalCpoPrior === null;
-  const vsPrior = v => priorMissing ? `${P(yp)} Total Sales not loaded yet` : `vs ${P(yp)} · ${v}`;
+  const vsPrior = v => priorMissing ? `${P(yp)} · not loaded yet` : `vs ${P(yp)} · ${v}`;
 
   const stat = (label, val, chip, ctx) => `
     <div class="stat">
