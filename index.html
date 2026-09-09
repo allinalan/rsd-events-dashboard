@@ -97,6 +97,20 @@
     font-family: var(--mono); font-size: 9.5px; color: var(--ivory-dim);
     margin-top: 3px; letter-spacing: 0.03em; white-space: nowrap;
   }
+  /* Campaign selector (Phase 2, 2026-09-09) */
+  .cp-select { display: flex; gap: 4px; justify-content: flex-end; margin-top: 7px; }
+  .cp-select button {
+    font-family: var(--mono); font-size: 11px; font-weight: 600; letter-spacing: 0.06em;
+    padding: 5px 9px; border-radius: 6px; border: 1px solid rgba(244,241,234,0.22);
+    background: transparent; color: var(--ivory-dim); cursor: pointer; line-height: 1;
+  }
+  .cp-select button .w { display: block; font-size: 8.5px; font-weight: 500; opacity: .75; margin-top: 3px; letter-spacing: 0.04em; }
+  .cp-select button:hover:not(:disabled) { color: var(--ivory); border-color: rgba(244,241,234,0.5); }
+  .cp-select button.active { background: var(--ivory); color: #26221C; border-color: var(--ivory); }
+  .cp-select button:disabled { opacity: .35; cursor: default; }
+  .sc-badge .b-sub { font-family: var(--mono); font-size: 9.5px; opacity: .6; margin-top: 3px; white-space: nowrap; }
+  .cat-best { font-family: var(--mono); font-size: 10.5px; color: var(--ink-faint); margin: 6px 0 10px; letter-spacing: 0.02em; }
+  .cat-best strong { color: var(--ink); }
 
   /* Nav tabs */
   .nav { display: flex; gap: 4px; }
@@ -680,8 +694,9 @@
         </div>
       </div>
       <div class="campaign">
-        <div class="cp-line">Campaign I · 2026 vs 2025</div>
+        <div class="cp-line" id="cp-line">Campaign I · 2026 vs 2025</div>
         <div class="cp-meta" id="meta-line">Loading…</div>
+        <div class="cp-select" id="campaign-select" role="tablist" aria-label="Campaign"></div>
       </div>
     </div>
     <nav class="nav" role="tablist">
@@ -700,7 +715,7 @@
     <div class="sec-head">
       <div><span class="kicker">Team Pulse</span>
         <h2>Where the Team Stands</h2></div>
-      <span class="scope">C1 2026 vs C1 2025 · Master List</span>
+      <span class="scope" id="team-scope">C1 2026 vs C1 2025 · Master List</span>
     </div>
     <div class="stat-grid" id="team-kpis"></div>
   </div>
@@ -720,7 +735,7 @@
               <option value="bucket:Event (Traditional)">Event (Traditional) CPO</option>
               <option value="bucket:Service Event">Service Event CPO</option>
               <option value="bucket:Industry Event">Industry Event CPO</option>
-              <option value="bucket:Realtor">Realtor CPO</option>
+              <option value="bucket:Realtor">Realtor / Team Mtg CPO</option>
               <option value="bucket:Mall">Mall CPO</option>
               <option value="bucket:Federal">Federal CPO</option>
               <option value="bucket:Non-Event CPO">Non-Event CPO</option>
@@ -734,7 +749,7 @@
               <option value="bucket_avg:Event (Traditional)">Event (Traditional) Avg Order</option>
               <option value="bucket_avg:Service Event">Service Event Avg Order</option>
               <option value="bucket_avg:Industry Event">Industry Event Avg Order</option>
-              <option value="bucket_avg:Realtor">Realtor Avg Order</option>
+              <option value="bucket_avg:Realtor">Realtor / Team Mtg Avg Order</option>
               <option value="bucket_avg:Mall">Mall Avg Order</option>
               <option value="bucket_avg:Federal">Federal Avg Order</option>
             </optgroup>
@@ -752,7 +767,7 @@
       <div class="lb-top" style="margin-bottom:0;">
         <div class="lb-title">
           <h2>Category Mix</h2>
-          <div class="lb-context">C1 2026 production by category · Master List</div>
+          <div class="lb-context" id="mix-context">C1 2026 production by category · Master List</div>
         </div>
       </div>
       <div id="cat-mix"></div>
@@ -779,7 +794,7 @@
     <div class="sec-head">
       <div><span class="kicker">How the business is built</span>
         <h2>CPO Composition</h2></div>
-      <span class="scope">C1 2026</span>
+      <span class="scope" id="comp-scope">C1 2026</span>
     </div>
     <div class="card comp-card" id="rep-comp"></div>
   </div>
@@ -790,8 +805,8 @@
         <div><span class="kicker">How I'm trending</span>
           <h2>Performance Over Time</h2></div>
         <select class="ctl" id="rep-chart-metric" aria-label="Chart metric">
-          <option value="total_sales">Total Sales (C1)</option>
-          <option value="total_event">Total Event CPO (C1)</option>
+          <option value="total_sales" id="opt-total-sales">Total Sales (C1)</option>
+          <option value="total_event" id="opt-total-event">Total Event CPO (C1)</option>
           <option value="bucket:Event (Traditional)">Event (Traditional)</option>
           <option value="bucket:Service Event">Service Event</option>
           <option value="bucket:Industry Event">Industry Event</option>
@@ -802,8 +817,8 @@
       <div class="trend-canvas"><svg id="rep-chart-svg" viewBox="0 0 800 300" preserveAspectRatio="xMidYMid meet"></svg></div>
       <div class="trend-foot">
         <div class="trend-legend">
-          <span class="li"><svg width="26" height="6"><line x1="0" y1="3" x2="26" y2="3" stroke="#C2410C" stroke-width="2.5"/></svg> You (3-year C1)</span>
-          <span class="li"><svg width="26" height="6"><line x1="0" y1="3" x2="26" y2="3" stroke="#8B857C" stroke-width="1.5" stroke-dasharray="4,3"/></svg> Team average<i class="info-i" title="Averages computed across the full RSD division stats universe — not just the 21-rep Events Team Master List. Broader universe, more honest benchmark.">i</i></span>
+          <span class="li"><svg width="26" height="6"><line x1="0" y1="3" x2="26" y2="3" stroke="#C2410C" stroke-width="2.5"/></svg> <span id="legend-you">You (3-year C1)</span></span>
+          <span class="li"><svg width="26" height="6"><line x1="0" y1="3" x2="26" y2="3" stroke="#8B857C" stroke-width="1.5" stroke-dasharray="4,3"/></svg> Team average<i class="info-i" id="legend-team-tip" title="">i</i></span>
         </div>
         <div class="trend-insight" id="trend-insight"></div>
       </div>
@@ -814,7 +829,7 @@
     <div class="sec-head">
       <div><span class="kicker">Where I win · what needs work</span>
         <h2>By Category</h2></div>
-      <span class="scope">C1 2026 vs C1 2025</span>
+      <span class="scope" id="cats-scope">C1 2026 vs C1 2025</span>
     </div>
     <div class="headline-duo" id="rep-buckets-top"></div>
     <div class="cat-table-wrap" id="rep-buckets-sub"></div>
@@ -833,7 +848,7 @@
   <div class="section o-pacing">
     <div class="sec-head">
       <div><span class="kicker">Where I'm heading</span>
-        <h2>2026 Trajectory</h2></div>
+        <h2 id="pace-title">2026 Trajectory</h2></div>
       <span class="scope">Projection · not a result</span>
     </div>
     <div class="card pace-card" id="rep-pacing"></div>
@@ -863,8 +878,9 @@
 <div class="footnote">
   <div class="fn-block">
     <div class="fn-title">Scope</div>
-    <p>C1 = Campaign I (Jan–Apr). All event metrics compare same-window C1 across years.
-    Shift and pacing metrics are annual scope. 2026 is mid-year data; 2024–2025 are full-year.</p>
+    <p id="fn-scope">C1 = Campaign I (Jan–Apr) · C2 = Campaign II (May–Aug) · C3 = Campaign III (Sep–Dec). Event metrics compare the
+    same campaign across years; use the selector in the header to switch. Shift and pacing metrics are annual scope.</p>
+    <p id="fn-refresh"></p>
   </div>
   <div class="fn-block">
     <div class="fn-title">Team averages vs rankings</div>
@@ -873,8 +889,7 @@
   </div>
   <div class="fn-block">
     <div class="fn-title">Missing data</div>
-    <p>An em-dash (—) means no data captured or not applicable — it is not $0.
-    Non-Event CPO for Jeremy Katen, Rob Lord, and Roman Earhart is pending individual Total Sales uploads.</p>
+    <p id="fn-missing">An em-dash (—) means no data captured or not applicable — it is not $0.</p>
   </div>
 </div>
 
@@ -893,17 +908,37 @@ const BUCKETS = META.buckets;          // 7-bucket taxonomy
 const YEARS = META.years;              // [2024, 2025, 2026]
 const PENDING = META.pending_individual_total_sales || [];
 
-// Default scope: most recent C1 year vs prior
+// Campaigns present in data.js (written by the intake), e.g. ["2024-C1", …, "2026-C2"].
+const CAMPAIGNS_AVAILABLE = (META.campaigns_available || YEARS.map(y => `${y}-C1`)).map(s => {
+  const m = /^(\d{4})-C([123])$/.exec(s); return m ? { year: +m[1], n: +m[2] } : null;
+}).filter(Boolean);
+const LATEST = META.latest_campaign || { year: Math.max(...YEARS), campaign: 1 };
+const CAMP_NAMES = { 1: 'Campaign I', 2: 'Campaign II', 3: 'Campaign III' };
+const CAMP_WINDOWS = { 1: 'Jan–Apr', 2: 'May–Aug', 3: 'Sep–Dec' };
+const MIN_GROWTH_ORDERS = 16;   // growth sort / chips need this many prior-period orders to mean anything
+
+// Default scope: the latest campaign in the file, this year vs prior. STATE.campaign is the selector.
 const STATE = {
   view: 'team',
-  curYear: 2026,
-  priorYear: 2025,
-  refYear: 2024,
+  campaign: LATEST.campaign,
+  curYear: LATEST.year,
+  priorYear: LATEST.year - 1,
+  refYear: LATEST.year - 2,
   selectedRep: 'Alan Hernandez',
   rankBy: 'total_cpo',
   sortBy: 'value',   // 'value' or 'growth'
   chartMetric: 'total_sales',
 };
+
+if (!REPS[STATE.selectedRep]) STATE.selectedRep = MASTER[0];
+function campaignsForYear(y) { return CAMPAIGNS_AVAILABLE.filter(c => c.year === y).map(c => c.n); }
+// Period label for a year under the selected campaign: "C2 2026"
+function P(y) { return `C${STATE.campaign} ${y}`; }
+// The campaign right before the selected one (C2 2026 -> C1 2026; C1 2026 -> C3 2025)
+function prevCampaign() { return STATE.campaign > 1 ? { year: STATE.curYear, n: STATE.campaign - 1 } : { year: STATE.curYear - 1, n: 3 }; }
+// Display labels for buckets (data keys stay as they are)
+const BUCKET_LABELS = { 'Realtor': 'Realtor / Team Mtg' };
+const bLabel = b => BUCKET_LABELS[b] || b;
 
 const UNIVERSE_N = Object.keys(REPS).length;
 // Universe = core team when data.js carries only the Master List (roster.universe = "master-list",
@@ -912,6 +947,16 @@ const CORE_ONLY = UNIVERSE_N <= MASTER.length;
 document.getElementById('meta-line').textContent =
   'Data through ' + (META.generated_at || '').slice(0, 10) + ' · ' +
   (CORE_ONLY ? MASTER.length + '-rep Events Team core roster' : MASTER.length + ' on Master List · ' + UNIVERSE_N + '-rep universe');
+// Last refresh (intake meta): prior campaigns are re-pulled every run and can restate.
+(function () {
+  const it = META.intake || {};
+  const when = (it.pulled_at || META.generated_at || '').slice(0, 10);
+  const txt = it.last_run
+    ? `Last refresh: ${it.last_run.replace('-', ' ')} intake on ${when}. Every run re-pulls prior campaigns from VectorConnect, so closed-campaign figures and ranks can restate between visits.` +
+      (it.total_sales_through ? ` Total Sales loaded through ${it.total_sales_through.replace('-', ' ')}.` : '')
+    : '';
+  const el = document.getElementById('fn-refresh'); if (el) el.textContent = txt;
+})();
 document.getElementById('fn-universe').textContent = CORE_ONLY
   ? 'Team averages are computed across the ' + MASTER.length + '-rep Events Team core roster only. The leaderboard ranks the same reps.'
   : 'Team averages use the full ' + UNIVERSE_N + '-rep RSD division stats universe — not just the ' +
@@ -921,6 +966,10 @@ const UNIVERSE_TIP = CORE_ONLY
   ? 'Team averages are computed across the ' + MASTER.length + '-rep Events Team core roster.'
   : 'Team averages are computed across the full ' + UNIVERSE_N +
     '-rep RSD division stats universe, not just the ' + MASTER.length + '-rep Events Team Master List.';
+document.getElementById('legend-team-tip').title = UNIVERSE_TIP;
+document.getElementById('fn-missing').textContent =
+  'An em-dash (—) means no data captured or not applicable — it is not $0.' +
+  (PENDING.length ? ' Non-Event CPO for ' + PENDING.join(', ') + ' is pending an individual Total Sales figure.' : '');
 
 // ==========================================================================
 // Formatters
@@ -972,17 +1021,31 @@ function fmtYoY(cur, prior) {
 // ==========================================================================
 // Data accessors (handle em-dash safely)
 // ==========================================================================
-function repBucket(rep, year, bucket) {
-  if (!rep || !rep.c1 || !rep.c1[year]) return null;
-  const b = rep.c1[year][bucket];
+// A rep's block for one campaign (defaults to the selected campaign). Falls back to the
+// legacy c1 keys for a data.js written before the campaigns block existed.
+function repCampaign(rep, year, n) {
+  n = n || STATE.campaign;
+  if (!rep) return null;
+  if (rep.campaigns && rep.campaigns[year] && rep.campaigns[year][n]) return rep.campaigns[year][n];
+  if (n === 1 && rep.c1 && rep.c1[year]) {
+    return { buckets: rep.c1[year], total_event: (rep.c1_total_event && rep.c1_total_event[year]) || null,
+      total_sales: (rep.c1_total_sales && rep.c1_total_sales[year]) || null };
+  }
+  return null;
+}
+function repBucket(rep, year, bucket, n) {
+  const c = repCampaign(rep, year, n);
+  const b = c && c.buckets && c.buckets[bucket];
   return (b && b.cpo !== null) ? b : null;
 }
-function repTotalEvent(rep, year) {
-  const t = rep && rep.c1_total_event && rep.c1_total_event[year];
+function repTotalEvent(rep, year, n) {
+  const c = repCampaign(rep, year, n);
+  const t = c && c.total_event;
   return (t && t.cpo !== null) ? t : null;
 }
-function repTotalSales(rep, year) {
-  const t = rep && rep.c1_total_sales && rep.c1_total_sales[year];
+function repTotalSales(rep, year, n) {
+  const c = repCampaign(rep, year, n);
+  const t = c && c.total_sales;
   return (t && t.cpo !== null) ? t : null;
 }
 function repFYSales(rep, year) {
@@ -998,17 +1061,17 @@ function avgOrder(stats) {
 }
 
 // Get a comparable scalar for a rep for a given metric & scope. null = em-dash.
-function getMetric(rep, year, metric) {
+function getMetric(rep, year, metric, n) {
   if (metric === 'total_cpo' || metric === 'total_sales') {
-    const t = repTotalSales(rep, year);
+    const t = repTotalSales(rep, year, n);
     return t ? t.cpo : null;
   }
   if (metric === 'total_event') {
-    const t = repTotalEvent(rep, year);
+    const t = repTotalEvent(rep, year, n);
     return t ? t.cpo : null;
   }
   if (metric === 'total_avg_order' || metric === 'avg_order') {
-    const t = repTotalSales(rep, year);
+    const t = repTotalSales(rep, year, n);
     return avgOrder(t);
   }
   if (metric === 'shift_avg') {
@@ -1021,17 +1084,28 @@ function getMetric(rep, year, metric) {
     return s.combined.orders / s.combined.shifts;
   }
   if (metric.startsWith('bucket:')) {
-    const b = repBucket(rep, year, metric.slice(7));
+    const b = repBucket(rep, year, metric.slice(7), n);
     return b ? b.cpo : null;
   }
   if (metric.startsWith('bucket_avg:')) {
     // Per-bucket average order = bucket CPO / bucket orders.
     // Threshold: require >15 orders in that bucket to qualify (a single $1200 order
     // shouldn't put someone atop the bucket avg-order ranking).
-    const b = repBucket(rep, year, metric.slice(11));
+    const b = repBucket(rep, year, metric.slice(11), n);
     if (!b || !b.orders || b.orders <= MIN_ORDERS_FOR_AVG_RANK) return null;
     return avgOrder(b);
   }
+  return null;
+}
+
+// Orders behind a CPO metric for a period (null when the metric has no order count).
+function metricOrders(rep, year, metric, n) {
+  if (metric === 'total_cpo' || metric === 'total_sales' || metric === 'total_avg_order' || metric === 'avg_order') {
+    const t = repTotalSales(rep, year, n); return t ? t.orders : null;
+  }
+  if (metric === 'total_event') { const t = repTotalEvent(rep, year, n); return t ? t.orders : null; }
+  if (metric.startsWith('bucket:')) { const b = repBucket(rep, year, metric.slice(7), n); return b ? b.orders : null; }
+  if (metric.startsWith('bucket_avg:')) { const b = repBucket(rep, year, metric.slice(11), n); return b ? b.orders : null; }
   return null;
 }
 
@@ -1059,12 +1133,12 @@ function teamTotal(metric, year) {
 }
 // Team total orders (for Avg Order denominator) across Master List
 function teamTotalOrders(year) {
-  let sum = 0;
+  let sum = 0, any = false;
   for (const rep of masterListReps()) {
     const t = repTotalSales(rep, year);
-    if (t && t.orders !== null) sum += t.orders;
+    if (t && t.orders !== null) { sum += t.orders; any = true; }
   }
-  return sum;
+  return any ? sum : null;
 }
 // Team average for a metric (mean across full stats universe with present data)
 function teamAvg(metric, year) {
@@ -1077,20 +1151,19 @@ function teamAvg(metric, year) {
 }
 // Active reps for current year (Master List who have C1 Total Sales > 0)
 function activeRepCount(year) {
-  return masterListReps().filter(r => {
-    const t = repTotalSales(r, year);
-    return t && t.cpo > 0;
-  }).length;
+  const reps = masterListReps();
+  if (!reps.some(r => repTotalSales(r, year))) return null;   // nothing loaded for that period
+  return reps.filter(r => { const t = repTotalSales(r, year); return t && t.cpo > 0; }).length;
 }
 // Rank reps (Master List) by a metric for current year
-function rankMasterByMetric(metric, year) {
+function rankMasterByMetric(metric, year, n) {
   return masterListReps()
-    .map(r => ({ rep: r, value: getMetric(r, year, metric) }))
+    .map(r => ({ rep: r, value: getMetric(r, year, metric, n) }))
     .filter(x => x.value !== null)
     .sort((a, b) => b.value - a.value);
 }
-function repRank(repName, metric, year) {
-  const ranked = rankMasterByMetric(metric, year);
+function repRank(repName, metric, year, n) {
+  const ranked = rankMasterByMetric(metric, year, n);
   const idx = ranked.findIndex(x => x.rep.name === repName);
   return idx < 0 ? null : { rank: idx + 1, total: ranked.length };
 }
@@ -1120,7 +1193,11 @@ function renderTeamKPIs() {
   const avgOrderPrior = totalOrdersPrior ? totalCpoPrior / totalOrdersPrior : null;
   const activeCur = activeRepCount(y);
   const activePrior = activeRepCount(yp);
-  const activeDelta = activeCur - activePrior;
+  const activeDelta = (activeCur !== null && activePrior !== null) ? activeCur - activePrior : null;
+  // A prior period with no Total Sales loaded at all (history before the intake's workbooks) is
+  // "not loaded", not zero.
+  const priorMissing = totalCpoPrior === null;
+  const vsPrior = v => priorMissing ? `${P(yp)} Total Sales not loaded yet` : `vs ${P(yp)} · ${v}`;
 
   const stat = (label, val, chip, ctx) => `
     <div class="stat">
@@ -1131,14 +1208,14 @@ function renderTeamKPIs() {
 
   document.getElementById('team-kpis').innerHTML =
     stat(`Team Total CPO`, fmtCurrencyShort(totalCpoCur),
-      chipYoY(totalCpoCur, totalCpoPrior), `vs C1 ${yp} · ${fmtCurrencyShort(totalCpoPrior)}`) +
+      chipYoY(totalCpoCur, totalCpoPrior), vsPrior(fmtCurrencyShort(totalCpoPrior))) +
     stat(`Team Total Orders`, fmtInt(totalOrdersCur),
-      chipYoY(totalOrdersCur, totalOrdersPrior), `vs C1 ${yp} · ${fmtInt(totalOrdersPrior)}`) +
+      chipYoY(totalOrdersCur, totalOrdersPrior), vsPrior(fmtInt(totalOrdersPrior))) +
     stat(`Team Avg Order`, fmtCurrency(avgOrderCur),
-      chipYoY(avgOrderCur, avgOrderPrior), `vs C1 ${yp} · ${fmtCurrency(avgOrderPrior)}`) +
-    stat(`Active Reps`, activeCur,
-      `<span class="chip ${activeDelta >= 0 ? 'pos' : 'neg'}">${activeDelta >= 0 ? '▲ +' : '▼ −'}${Math.abs(activeDelta)}</span>`,
-      `vs C1 ${yp} · ${activePrior}`);
+      chipYoY(avgOrderCur, avgOrderPrior), vsPrior(fmtCurrency(avgOrderPrior))) +
+    // Headcount is a count, not performance: no coloured chip (review B2).
+    stat(`Active Reps`, activeCur === null ? naSpan : activeCur, '',
+      vsPrior(`${activePrior === null ? '—' : activePrior}${activeDelta ? ` (${activeDelta > 0 ? '+' : '−'}${Math.abs(activeDelta)})` : ''}`));
 }
 
 function metricLabel(value) {
@@ -1153,8 +1230,8 @@ function renderLeaderboard() {
 
   // Annual metrics (shift_avg, orders_per_shift) live on the FY scope, not C1
   const isAnnual = STATE.rankBy === 'shift_avg' || isOrdersPerShift;
-  const curLabel = isAnnual ? `FY ${y}` : `C1 ${y}`;
-  const priorLabel = isAnnual ? `FY ${yp}` : `C1 ${yp}`;
+  const curLabel = isAnnual ? `FY ${y}` : P(y);
+  const priorLabel = isAnnual ? `FY ${yp}` : P(yp);
   const isGrowthSort = STATE.sortBy === 'growth';
 
   // Build candidate list with computed growth
@@ -1164,11 +1241,13 @@ function renderLeaderboard() {
     const growth = (cur !== null && prior !== null && prior > 0)
       ? ((cur - prior) / prior) * 100
       : null;
-    return { rep: r, cur, prior, growth };
+    const base = isAnnual ? null : metricOrders(r, yp, STATE.rankBy);
+    return { rep: r, cur, prior, growth, base };
   }).filter(x => x.cur !== null);
 
   if (isGrowthSort) {
-    candidates = candidates.filter(x => x.growth !== null);
+    // Growth on a tiny base is noise (review B3): same floor the opportunity engine uses.
+    candidates = candidates.filter(x => x.growth !== null && (x.base === null || x.base >= MIN_GROWTH_ORDERS));
     candidates.sort((a, b) => b.growth - a.growth);
   } else {
     candidates.sort((a, b) => b.cur - a.cur);
@@ -1205,11 +1284,11 @@ function renderLeaderboard() {
       <td class="bar-cell"><div class="lb-track"><div class="lb-fill" style="width:${barPct.toFixed(1)}%"></div></div></td>
       <td class="num cur">${fmt(x.cur)}</td>
       <td class="num prior">${fmt(x.prior)}</td>
-      <td class="growth-cell">${fmtYoY(x.cur, x.prior)}</td>
+      <td class="growth-cell" title="${x.base !== null ? `base: ${x.base} orders in ${priorLabel}` : ''}">${x.base !== null && x.base < MIN_GROWTH_ORDERS && x.growth !== null ? `<span class="chip na" title="Base under ${MIN_GROWTH_ORDERS} orders (${x.base}) — growth not meaningful">—</span>` : fmtYoY(x.cur, x.prior)}</td>
     </tr>`;
   });
   html += `</tbody></table></div>
-    <div class="lb-foot">Rankings: Events Team Master List only. Tap a row to open that rep. Bars scale to the ${isGrowthSort ? 'value column (growth order can differ)' : 'top value'}.</div>`;
+    <div class="lb-foot">Rankings: Events Team Master List only. Tap a row to open that rep. Bars scale to the ${isGrowthSort ? 'value column (growth order can differ)' : 'top value'}.${isGrowthSort ? ` Growth needs at least ${MIN_GROWTH_ORDERS} ${priorLabel} orders.` : ''}</div>`;
   document.getElementById('lb-body').innerHTML = html;
 
   // Row click → open rep view for that rep
@@ -1252,7 +1331,7 @@ function renderCategoryMix() {
     itemsHtml += `
       <div class="mix-row">
         <span class="swatch" style="background:${BUCKET_COLORS[b]}"></span>
-        <span class="m-name">${b}</span>
+        <span class="m-name">${bLabel(b)}</span>
         <span class="m-growth">${v > 0 && priorTotals[b] > 0 ? chipYoY(v, priorTotals[b]) : ''}</span>
         <span class="m-amt">${v > 0 ? fmtCurrencyShort(v) : naSpan}</span>
         <span class="m-pct">${v > 0 ? pct.toFixed(0) + '%' : ''}</span>
@@ -1271,6 +1350,9 @@ function renderRepScorecard() {
   const tsCur = repTotalSales(r, y);
   const tsPrior = repTotalSales(r, yp);
   const rank = repRank(STATE.selectedRep, 'total_cpo', y);
+  const pc = prevCampaign();
+  const prevRank = repRank(STATE.selectedRep, 'total_cpo', pc.year, pc.n);
+  const tsPrevC = repTotalSales(r, pc.year, pc.n);
   const teamAvg_ = teamAvg('total_sales', y);
   const vsTeamPct = (tsCur && teamAvg_) ? ((tsCur.cpo - teamAvg_) / teamAvg_ * 100) : null;
 
@@ -1285,15 +1367,19 @@ function renderRepScorecard() {
 
   const dollarDelta = (tsCur && tsPrior) ? tsCur.cpo - tsPrior.cpo : null;
   const deltaCtx = tsPrior
-    ? `${dollarDelta !== null ? (dollarDelta >= 0 ? '+' : '−') + '$' + Math.abs(Math.round(dollarDelta)).toLocaleString() : ''} vs C1 ${yp} (${fmtCurrencyShort(tsPrior.cpo)})`
-    : `no C1 ${yp} baseline`;
+    ? `${dollarDelta !== null ? (dollarDelta >= 0 ? '+' : '−') + '$' + Math.abs(Math.round(dollarDelta)).toLocaleString() : ''} vs ${P(yp)} (${fmtCurrencyShort(tsPrior.cpo)})`
+    : `no ${P(yp)} baseline`;
+  // "vs last campaign" (review D1): C2 vs C1 is what the rep just lived through.
+  const prevCampHtml = tsPrevC && tsCur
+    ? `<div class="h-delta">${chipYoY(tsCur.cpo, tsPrevC.cpo, true)}<span class="h-ctx">vs last campaign · C${pc.n} ${pc.year} (${fmtCurrencyShort(tsPrevC.cpo)})</span></div>`
+    : '';
 
   const vsTeamStr = vsTeamPct === null ? '—' :
     `<span class="${vsTeamPct >= 0 ? 'up' : 'down'}">${vsTeamPct >= 0 ? '+' : '−'}${Math.abs(vsTeamPct).toFixed(0)}% ${vsTeamPct >= 0 ? 'above' : 'below'}</span>`;
 
   document.getElementById('rep-scorecard').innerHTML = `
     <div class="sc-id">
-      <div class="sc-kicker">Rep Dashboard · C1 ${y}</div>
+      <div class="sc-kicker">Rep Dashboard · ${P(y)}</div>
       <div class="name-select-wrap">
         <select class="name-select" id="rep-select" aria-label="Select rep">${opts}</select>
         <button class="rep-step" id="rep-prev" aria-label="Previous rep" title="Previous rep">‹</button>
@@ -1304,6 +1390,7 @@ function renderRepScorecard() {
         <div class="sc-badge">
           <div class="b-label">Rank · Total CPO</div>
           <div class="b-val">${rank ? `#${rank.rank} <span style="opacity:.55;">of ${rank.total}</span>` : naSpan}</div>
+          ${prevRank ? `<div class="b-sub">was #${prevRank.rank} in C${pc.n} ${pc.year}</div>` : ''}
         </div>
         <div class="sc-badge">
           <div class="b-label">Team Avg<i class="info-i" title="${UNIVERSE_TIP}">i</i></div>
@@ -1316,12 +1403,13 @@ function renderRepScorecard() {
       </div>
     </div>
     <div class="sc-hero">
-      <div class="h-label">Total CPO · C1 ${y}</div>
+      <div class="h-label">Total CPO · ${P(y)}</div>
       <div class="h-val">${tsCur ? fmtCurrency(tsCur.cpo) : naSpan}</div>
       <div class="h-delta">
         ${chipYoY(tsCur && tsCur.cpo, tsPrior && tsPrior.cpo, true)}
         <span class="h-ctx">${deltaCtx}</span>
       </div>
+      ${prevCampHtml}
     </div>
   `;
 
@@ -1357,13 +1445,15 @@ function renderRepMinis() {
     </div>`;
 
   document.getElementById('rep-minis').innerHTML =
-    mini(`Orders · C1 ${y}`, tsCur ? fmtInt(tsCur.orders) : naSpan,
+    mini(`Orders · ${P(y)}`, tsCur ? fmtInt(tsCur.orders) : naSpan,
       chipYoY(tsCur && tsCur.orders, tsPrior && tsPrior.orders),
-      `vs C1 ${yp} · ${tsPrior ? fmtInt(tsPrior.orders) : '—'}`) +
-    mini(`Avg Order · C1 ${y}`, fmtCurrency(aoCur),
-      chipYoY(aoCur, aoPrior), `vs C1 ${yp} · ${fmtCurrency(aoPrior)}`) +
-    mini(`Shift Avg · FY ${y}`, fmtCurrency(shAvgCur),
-      chipYoY(shAvgCur, shAvgPrior), `vs FY ${yp} · ${fmtCurrency(shAvgPrior)}`);
+      `vs ${P(yp)} · ${tsPrior ? fmtInt(tsPrior.orders) : '—'}`) +
+    mini(`Avg Order · ${P(y)}`, fmtCurrency(aoCur),
+      chipYoY(aoCur, aoPrior), `vs ${P(yp)} · ${fmtCurrency(aoPrior)}`) +
+    // Shift avg is an average, so FY vs YTD is comparable; hide the chip on a base under 5 shifts (review B1).
+    mini(`Shift Avg · ${y === LATEST.year ? y + ' YTD' : 'FY ' + y}`, fmtCurrency(shAvgCur),
+      (shiftCur && shiftCur.combined && shiftCur.combined.shifts >= 5) ? chipYoY(shAvgCur, shAvgPrior) : `<span class="chip na" title="Fewer than 5 shifts — growth not meaningful">—</span>`,
+      `vs FY ${yp} · ${fmtCurrency(shAvgPrior)}`);
 }
 
 // ===== Opportunity analysis =====
@@ -1413,8 +1503,8 @@ function findBiggestOpportunity(rep) {
     opps.push({
       type: 'avg_order',
       uplift,
-      title: `Lift Avg Order in ${bucket}`,
-      body: `You're closing ${bucket} at $${Math.round(repAvg).toLocaleString()} per order across ${b.orders} orders. Master List peers average $${Math.round(peerAvg).toLocaleString()}. Matching peer avg-order on your current volume would add ~$${Math.round(uplift).toLocaleString()} this campaign. This is your biggest dollar lever — sizing, not volume.`
+      title: `Lift Avg Order in ${bLabel(bucket)}`,
+      body: `You're closing ${bLabel(bucket)} at $${Math.round(repAvg).toLocaleString()} per order across ${b.orders} orders. Master List peers average $${Math.round(peerAvg).toLocaleString()}. Matching peer avg-order on your current volume would add ~$${Math.round(uplift).toLocaleString()} this campaign. This is your biggest dollar lever — sizing, not volume.`
     });
   }
 
@@ -1458,7 +1548,7 @@ function findBiggestOpportunity(rep) {
           type: 'shift_avg',
           uplift,
           title: 'Lift Combined Shift Average',
-          body: `Your shift avg is $${Math.round(repShiftAvg).toLocaleString()}/shift vs Master List peers at $${Math.round(peerShiftAvg).toLocaleString()}. Across your ${shiftsForAvg.combined.shifts} shifts ${y === 2026 ? 'YTD' : `this year`}, closing that gap means ~$${Math.round(uplift).toLocaleString()} more. Two ways to get there: more orders per shift, bigger avg order, or both.`
+          body: `Your shift avg is $${Math.round(repShiftAvg).toLocaleString()}/shift vs Master List peers at $${Math.round(peerShiftAvg).toLocaleString()}. Across your ${shiftsForAvg.combined.shifts} shifts ${y === LATEST.year ? 'YTD' : `this year`}, closing that gap means ~$${Math.round(uplift).toLocaleString()} more. Two ways to get there: more orders per shift, bigger avg order, or both.`
         });
       }
     }
@@ -1475,7 +1565,7 @@ function findBiggestOpportunity(rep) {
           type: 'non_event',
           uplift,
           title: 'Grow Non-Event Sales',
-          body: `Your C1 ${y} Non-Event CPO (SC's / Marketing) is $${Math.round(nonEvt.cpo).toLocaleString()} vs Master List peers at $${Math.round(peerNonEvt).toLocaleString()}. There's ~$${Math.round(uplift).toLocaleString()} of room in what you're doing OUTSIDE the event work — in-home customers, service calls, marketing follow-up.`
+          body: `Your ${P(y)} Non-Event CPO (SC's / Marketing) is $${Math.round(nonEvt.cpo).toLocaleString()} vs Master List peers at $${Math.round(peerNonEvt).toLocaleString()}. There's ~$${Math.round(uplift).toLocaleString()} of room in what you're doing OUTSIDE the event work — in-home customers, service calls, marketing follow-up.`
       });
       }
     }
@@ -1509,16 +1599,16 @@ function renderRepSummary() {
   if (tsCur && tsPrior && tsPrior.cpo > 0) {
     const yoy = ((tsCur.cpo - tsPrior.cpo) / tsPrior.cpo) * 100;
     if (yoy > 15) {
-      callouts.push({ type: 'good', title: 'Strong campaign-over-campaign growth', body: `Total CPO up ${yoy.toFixed(1)}% vs C1 ${yp}. You're scaling.` });
+      callouts.push({ type: 'good', title: 'Strong campaign-over-campaign growth', body: `Total CPO up ${yoy.toFixed(1)}% vs ${P(yp)}. You're scaling.` });
     } else if (yoy < -15) {
-      callouts.push({ type: 'watch', title: 'Total CPO declining', body: `Down ${Math.abs(yoy).toFixed(1)}% vs C1 ${yp} — worth examining what's shifted.` });
+      callouts.push({ type: 'watch', title: 'Total CPO declining', body: `Down ${Math.abs(yoy).toFixed(1)}% vs ${P(yp)} — worth examining what's shifted.` });
     }
   }
 
   // Top-5 ranking?
   const rank = repRank(STATE.selectedRep, 'total_cpo', y);
   if (rank && rank.rank <= 5) {
-    callouts.push({ type: 'good', title: 'Top-5 producer', body: `Total CPO ranks #${rank.rank} of ${rank.total} on the team's C1 ${y} leaderboard.` });
+    callouts.push({ type: 'good', title: 'Top-5 producer', body: `Total CPO ranks #${rank.rank} of ${rank.total} on the team's ${P(y)} leaderboard.` });
   }
 
   // Far above team average?
@@ -1564,7 +1654,7 @@ function renderRepSummary() {
   const watches = callouts.filter(c => c.type === 'watch').slice(0, 1);
   const final = [...strengths, ...watches];
   if (final.length === 0) {
-    final.push({ type: 'good', title: 'Steady state', body: 'No major movement up or down vs prior C1. Performance is consistent.' });
+    final.push({ type: 'good', title: 'Steady state', body: `No major movement up or down vs ${P(yp)}. Performance is consistent.` });
   }
 
   const iconFor = t => t === 'good' ? '✓' : '→';
@@ -1577,7 +1667,7 @@ function renderRepSummary() {
         <div class="opp-figure">
           <div class="opp-kicker">Biggest Area of Opportunity</div>
           <div class="opp-uplift">+$${Math.round(opp.uplift).toLocaleString()}</div>
-          <div class="opp-uplift-sub">potential${opp.upliftPct ? ` · ≈${Math.round(opp.upliftPct)}% lift on current C1 book` : ''}</div>
+          <div class="opp-uplift-sub">potential${opp.upliftPct ? ` · ≈${Math.round(opp.upliftPct)}% lift on current ${P(STATE.curYear)} book` : ''}</div>
         </div>
         <div class="opp-body">
           <strong>${opp.title}</strong>
@@ -1586,7 +1676,7 @@ function renderRepSummary() {
       </div>`;
   } else {
     oppHtml = `
-      <div class="opp-none" title="The opportunity engine only surfaces a callout when the uplift clears at least 5% of the current C1 book (or $2K).">
+      <div class="opp-none" title="The opportunity engine only surfaces a callout when the uplift clears at least 5% of the current campaign book (or $2K).">
         No opportunity callout this campaign — nothing crossed the meaningful-uplift threshold vs Master List peers.
       </div>`;
   }
@@ -1595,7 +1685,7 @@ function renderRepSummary() {
     <div class="summary-head">
       <div><span class="kicker">Coach's read</span>
         <h2>Performance Summary</h2></div>
-      <span class="scope">C1 ${y} vs C1 ${yp}</span>
+      <span class="scope">${P(y)} vs ${P(yp)}</span>
     </div>
     <div class="callout-grid">
       ${final.map(c => `
@@ -1621,7 +1711,7 @@ function renderRepComposition() {
 
   let splitHtml;
   if (splitTotal <= 0) {
-    splitHtml = `<div class="lb-empty">No C1 ${y} composition data yet.</div>`;
+    splitHtml = `<div class="lb-empty">No ${P(y)} composition data yet.</div>`;
   } else {
     const evtPct = evtV / splitTotal * 100;
     const nonPct = nonV / splitTotal * 100;
@@ -1652,7 +1742,7 @@ function renderRepComposition() {
   const rows = cats.map(c => {
     if (c.v <= 0) {
       return `<div class="cat-bar-row empty">
-        <span class="cb-name"><span class="swatch" style="background:${BUCKET_COLORS[c.b]}; opacity:.35;"></span><span class="t">${c.b}</span></span>
+        <span class="cb-name"><span class="swatch" style="background:${BUCKET_COLORS[c.b]}; opacity:.35;"></span><span class="t">${bLabel(c.b)}</span></span>
         <span></span>
         <span class="cb-val">${c.has && c.v === 0 ? '$0' : naSpan}</span>
         <span class="cb-pct"></span>
@@ -1662,7 +1752,7 @@ function renderRepComposition() {
     const w = (c.v / maxCat * 100).toFixed(1);
     const share = evtTotal > 0 ? (c.v / evtTotal * 100) : 0;
     return `<div class="cat-bar-row">
-      <span class="cb-name"><span class="swatch" style="background:${BUCKET_COLORS[c.b]}"></span><span class="t">${c.b}</span></span>
+      <span class="cb-name"><span class="swatch" style="background:${BUCKET_COLORS[c.b]}"></span><span class="t">${bLabel(c.b)}</span></span>
       <span class="cb-track"><span class="cb-fill" style="width:${w}%; background:${BUCKET_COLORS[c.b]}; display:block;"></span></span>
       <span class="cb-val">${fmtCurrencyShort(c.v)}</span>
       <span class="cb-pct">${share.toFixed(0)}%</span>
@@ -1671,7 +1761,7 @@ function renderRepComposition() {
   }).join('');
 
   document.getElementById('rep-comp').innerHTML = splitHtml + `
-    <div class="comp-cats-label">Event CPO by category · ranked · share of Event CPO · growth vs C1 ${yp}</div>
+    <div class="comp-cats-label">Event CPO by category · ranked · share of Event CPO · growth vs ${P(yp)}</div>
     ${rows}`;
 }
 
@@ -1704,7 +1794,7 @@ function renderRepBuckets() {
       <div class="hc-val">${cur ? fmtCurrency(cur.cpo) : naSpan}</div>
       <div class="hc-delta">
         ${chipYoY(cur && cur.cpo, prior && prior.cpo)}
-        <span class="ctx">vs C1 ${yp} · ${prior ? fmtCurrency(prior.cpo) : '—'}</span>
+        <span class="ctx">vs ${P(yp)} · ${prior ? fmtCurrency(prior.cpo) : '—'}</span>
       </div>
       <div class="hc-rows">
         <div class="hc-row"><span class="k">Avg Order</span><span class="v">${fmtCurrency(avgOrd)}</span></div>
@@ -1717,28 +1807,38 @@ function renderRepBuckets() {
     headlineCard('Total Event CPO', 'All six categories', 'var(--ink)', totEvtCur, totEvtPrior, totEvtAvgOrd, teamAvgTotEvt, vsTeamTotEvt) +
     headlineCard('Non-Event CPO', "SC's / Marketing", 'var(--bk-nonevent)', nonEvtCur, nonEvtPrior, nonEvtAvgOrd, teamAvgNonEvt, vsTeamNonEvt);
 
+  // Per-event productivity (review D3): the intake delivers events per bucket, so CPO / event
+  // and orders / event are available for the first time. Best CPO / event gets a callout.
   let rows = '';
+  let best = null;
   for (const b of EVENT_SUB_BUCKETS) {
     const cur = repBucket(r, y, b);
     const prior = repBucket(r, yp, b);
     const teamAv = teamAvg('bucket:' + b, y);
     const vsTeam = (cur && teamAv) ? ((cur.cpo - teamAv) / teamAv * 100) : null;
     const avgOrd = avgOrder(cur);
+    const cpoPerEvent = cur && cur.events ? cur.cpo / cur.events : null;
+    const ordersPerEvent = cur && cur.events && cur.orders !== null ? cur.orders / cur.events : null;
+    if (cpoPerEvent !== null && cur.events >= 2 && (!best || cpoPerEvent > best.v)) best = { b, v: cpoPerEvent, events: cur.events };
     const isEmpty = !cur && !prior;
     rows += `<tr class="${isEmpty ? 'empty' : ''}">
-      <td class="cat-name"><span class="swatch" style="background:${BUCKET_COLORS[b]};${isEmpty ? 'opacity:.35;' : ''}"></span>${b}</td>
+      <td class="cat-name"><span class="swatch" style="background:${BUCKET_COLORS[b]};${isEmpty ? 'opacity:.35;' : ''}"></span>${bLabel(b)}</td>
       <td class="cur">${cur ? fmtCurrency(cur.cpo) : naSpan}</td>
       <td class="prior">${prior ? fmtCurrency(prior.cpo) : naSpan}</td>
       <td>${fmtYoY(cur && cur.cpo, prior && prior.cpo)}</td>
+      <td title="${cur && cur.events ? `${cur.events} event${cur.events === 1 ? '' : 's'}` : ''}">${fmtCurrency(cpoPerEvent)}</td>
+      <td>${fmtNumber(ordersPerEvent, 1)}</td>
       <td>${fmtCurrency(avgOrd)}</td>
       <td class="prior">${fmtCurrency(teamAv)}</td>
       <td>${vsTeam === null ? naSpan : `<span class="chip ${vsTeam >= 0 ? 'pos' : 'neg'}" style="font-size:10px;padding:1px 6px;">${vsTeam >= 0 ? '+' : '−'}${Math.abs(vsTeam).toFixed(0)}%</span>`}</td>
     </tr>`;
   }
   document.getElementById('rep-buckets-sub').innerHTML = `
+    ${best ? `<div class="cat-best">Best CPO per event: <strong>${bLabel(best.b)}</strong> at ${fmtCurrency(best.v)} per event across ${best.events} events in ${P(y)}.</div>` : ''}
     <table class="cat-table">
       <thead><tr>
-        <th>Category</th><th>C1 ${y}</th><th>C1 ${yp}</th><th>Growth</th>
+        <th>Category</th><th>${P(y)}</th><th>${P(yp)}</th><th>Growth</th>
+        <th>CPO / Event</th><th>Orders / Event</th>
         <th>Avg Order</th><th>Team Avg<i class="info-i" title="${UNIVERSE_TIP}">i</i></th><th>vs Team</th>
       </tr></thead>
       <tbody>${rows}</tbody>
@@ -1760,8 +1860,14 @@ function renderRepShifts() {
   const opsCur = cur && cur.combined && cur.combined.shifts ? cur.combined.orders / cur.combined.shifts : null;
   const opsPrior = prior && prior.combined && prior.combined.shifts ? prior.combined.orders / prior.combined.shifts : null;
 
-  const scopeTag = y === 2026 ? '2026 YTD' : `FY ${y}`;
-  const priorTag = yp === 2026 ? '2026 YTD' : `FY ${yp}`;
+  const ytd = y === LATEST.year;                 // the current year's shift file is year-to-date
+  const scopeTag = ytd ? `${y} YTD` : `FY ${y}`;
+  const priorTag = yp === LATEST.year ? `${yp} YTD` : `FY ${yp}`;
+  // YTD counts against a full prior year are not a decline (review B1): no growth chip on
+  // counts while the year is open, and none on an average with fewer than 5 shifts behind it.
+  const noChip = t => `<span class="chip na" title="${t}">—</span>`;
+  const countGrowth = (a, b) => ytd ? noChip('Year-to-date vs a full year — not comparable until the year closes') : fmtYoY(a, b);
+  const avgGrowth = (curS, priorS) => (curS && curS.shifts >= 5 && priorS) ? fmtYoY(curS.avg, priorS.avg) : noChip('Fewer than 5 shifts — growth not meaningful');
 
   const card = (name, val, rows) => `
     <div class="shift-card">
@@ -1775,129 +1881,147 @@ function renderRepShifts() {
   document.getElementById('rep-shifts').innerHTML =
     card('Total Shifts', totalCur === null ? naSpan : totalCur,
       row(priorTag, totalPrior === null ? naSpan : totalPrior) +
-      row('Growth', fmtYoY(totalCur, totalPrior))) +
+      row('Growth', countGrowth(totalCur, totalPrior))) +
     card('Key Shifts', keyCur ? fmtCurrency(keyCur.avg) : naSpan,
       row('Shifts', keyCur ? keyCur.shifts : naSpan) +
       row('Prior Avg', keyPrior ? fmtCurrency(keyPrior.avg) : naSpan) +
-      row('Growth (avg)', fmtYoY(keyCur && keyCur.avg, keyPrior && keyPrior.avg))) +
+      row('Growth (avg)', avgGrowth(keyCur, keyPrior))) +
     card('Traditional Shifts', tradCur ? fmtCurrency(tradCur.avg) : naSpan,
       row('Shifts', tradCur ? tradCur.shifts : naSpan) +
       row('Prior Avg', tradPrior ? fmtCurrency(tradPrior.avg) : naSpan) +
-      row('Growth (avg)', fmtYoY(tradCur && tradCur.avg, tradPrior && tradPrior.avg))) +
+      row('Growth (avg)', avgGrowth(tradCur, tradPrior))) +
     card('Orders / Shift', fmtNumber(opsCur, 2),
       row(priorTag, fmtNumber(opsPrior, 2)) +
-      row('Growth', fmtYoY(opsCur, opsPrior)));
+      row('Growth', (cur && cur.combined && cur.combined.shifts >= 5) ? fmtYoY(opsCur, opsPrior) : noChip('Fewer than 5 shifts — growth not meaningful')));
 }
 
-// Compute the team-wide empirical C1-share-of-full-year ratio across 2024/2025.
-let _cachedTeamShare = null;
-function teamC1Share() {
-  if (_cachedTeamShare !== null) return _cachedTeamShare;
-  let totC1 = 0, totFY = 0;
-  for (const rep of masterListReps()) {
-    for (const y of [2024, 2025]) {
-      const c1 = repTotalSales(rep, y);
-      const fy = repFYSales(rep, y);
-      if (c1 && fy && fy.cpo > 0) { totC1 += c1.cpo; totFY += fy.cpo; }
-    }
+// ---- Pacing: year-to-date through the selected campaign (review A2) ----
+// YTD = Σ Total Sales over C1..Ck of a year (null if none present; lists campaigns still missing).
+function ytdSales(rep, year, k) {
+  let cpo = 0, orders = 0, have = 0; const missing = [];
+  for (let n = 1; n <= k; n++) {
+    const t = repTotalSales(rep, year, n);
+    if (!t) { missing.push(n); continue; }
+    cpo += t.cpo; orders += t.orders || 0; have++;
   }
-  _cachedTeamShare = totFY > 0 ? totC1 / totFY : (1 / 3);
-  return _cachedTeamShare;
+  return { cpo: have ? cpo : null, orders, missing };
 }
-
-// Multiplier safety bounds — prevents extreme projections from noisy one-year-history
-// reps or unusual seasonality.
-const MULT_CAP_LOW = 2.0;
-const MULT_CAP_HIGH = 4.5;
-
-function repC1Share(rep) {
+function ytdEvent(rep, year, k) {
+  let cpo = 0, have = 0; const missing = [];
+  for (let n = 1; n <= k; n++) {
+    const t = repTotalEvent(rep, year, n);
+    if (!t) { missing.push(n); continue; }
+    cpo += t.cpo; have++;
+  }
+  return { cpo: have ? cpo : null, missing };
+}
+// Share of the year done through campaign k, measured on a prior year. Prefers Total Sales
+// (needs every campaign ≤k plus the full-year figure); otherwise event sales across the
+// year's three campaigns, which the intake always has.
+function ytdShareFor(rep, year, k) {
+  const ts = ytdSales(rep, year, k), fy = repFYSales(rep, year);
+  if (ts.cpo !== null && ts.missing.length === 0 && fy && fy.cpo > 0) return { share: ts.cpo / fy.cpo, basis: 'sales' };
+  const ev = ytdEvent(rep, year, k), fyEv = ytdEvent(rep, year, 3);
+  if (ev.cpo !== null && ev.missing.length === 0 && fyEv.missing.length === 0 && fyEv.cpo > 0) return { share: ev.cpo / fyEv.cpo, basis: 'event' };
+  return null;
+}
+let _teamShareCache = {};
+function teamYtdShare(k) {
+  if (_teamShareCache[k] !== undefined) return _teamShareCache[k];
   const shares = [];
-  for (const y of [2024, 2025]) {
-    const c1 = repTotalSales(rep, y);
-    const fy = repFYSales(rep, y);
-    if (c1 && fy && fy.cpo > 0) shares.push(c1.cpo / fy.cpo);
+  for (const rep of masterListReps()) for (const y of [STATE.curYear - 2, STATE.curYear - 1]) {
+    const s = ytdShareFor(rep, y, k); if (s) shares.push(s.share);
   }
-  if (shares.length < 2) return teamC1Share();
-  return shares.reduce((a, b) => a + b, 0) / shares.length;
+  _teamShareCache[k] = shares.length ? shares.reduce((a, b) => a + b, 0) / shares.length : k / 3;
+  return _teamShareCache[k];
 }
-
-// Return the multiplier with safety caps applied.
+// Multiplier safety bounds scale with how much of the year is done: C1 keeps the original
+// ×2.0–×4.5 band; C2 allows ×1.2–×2.25; after C3 there is nothing to project.
+function multiplierCaps(k) { const nominal = 3 / k; return { low: Math.max(1, nominal * 0.6), high: nominal * 1.5 }; }
 function repMultiplierInfo(rep) {
-  const personalShares = [];
-  for (const y of [2024, 2025]) {
-    const c1 = repTotalSales(rep, y);
-    const fy = repFYSales(rep, y);
-    if (c1 && fy && fy.cpo > 0) personalShares.push(c1.cpo / fy.cpo);
+  const k = STATE.campaign;
+  const personal = []; let basis = 'sales';
+  for (const y of [STATE.curYear - 2, STATE.curYear - 1]) {
+    const s = ytdShareFor(rep, y, k);
+    if (s) { personal.push(s.share); if (s.basis === 'event') basis = 'event'; }
   }
-  const isPersonal = personalShares.length >= 2;
-  const share = isPersonal
-    ? personalShares.reduce((a, b) => a + b, 0) / personalShares.length
-    : teamC1Share();
-  let mult = share > 0 ? 1 / share : 1 / Math.max(0.001, teamC1Share());
-  const rawMult = mult;
-  mult = Math.max(MULT_CAP_LOW, Math.min(MULT_CAP_HIGH, mult));
-  return { multiplier: mult, share, isPersonal, isCapped: Math.abs(rawMult - mult) > 0.01, rawMult };
+  const isPersonal = personal.length >= 2;
+  const share = isPersonal ? personal.reduce((a, b) => a + b, 0) / personal.length : teamYtdShare(k);
+  const rawMult = share > 0 ? 1 / share : 1 / Math.max(0.001, teamYtdShare(k));
+  const caps = multiplierCaps(k);
+  const multiplier = k >= 3 ? 1 : Math.max(caps.low, Math.min(caps.high, rawMult));
+  return { multiplier, share, isPersonal, basis, isCapped: k < 3 && Math.abs(rawMult - multiplier) > 0.01, rawMult };
 }
 
 function renderRepPacing() {
   const r = REPS[STATE.selectedRep];
-  const c1_26 = repTotalSales(r, 2026);
-  const fy_25 = repFYSales(r, 2025);
-  const fy_24 = repFYSales(r, 2024);
+  const k = STATE.campaign, y = STATE.curYear;
+  const ytd = ytdSales(r, y, k);
+  const fy_1 = repFYSales(r, y - 1);
+  const fy_2 = repFYSales(r, y - 2);
+  const done = k >= 3;
+  const remaining = k === 1 ? 'C2 and C3 still to come' : k === 2 ? 'only C3 still to come' : '';
 
   const minfo = repMultiplierInfo(r);
   const multiplier = minfo.multiplier;
-  const projected = c1_26 ? c1_26.cpo * multiplier : null;
+  const projected = ytd.cpo !== null ? ytd.cpo * multiplier : null;
+  document.getElementById('pace-title').textContent = done ? `${y} Final` : `${y} Trajectory`;
 
   let basisLabel;
-  if (minfo.isPersonal) {
-    basisLabel = `Based on YOUR 2024–2025 C1-share of full year (${(minfo.share * 100).toFixed(1)}%, multiplier ×${multiplier.toFixed(2)})`;
+  if (done) {
+    basisLabel = `${y} is complete through C3 — this is the finish, not a projection.`;
+  } else if (minfo.isPersonal) {
+    basisLabel = `Based on YOUR ${y - 2}–${y - 1} share of the year done by the end of C${k} (${(minfo.share * 100).toFixed(1)}%, multiplier ×${multiplier.toFixed(2)})`;
+    if (minfo.basis === 'event') basisLabel += ' · share measured on event sales';
     if (minfo.isCapped) basisLabel += ` — capped from raw ×${minfo.rawMult.toFixed(2)} for realism`;
   } else {
-    basisLabel = `Based on team-average ratio (multiplier ×${multiplier.toFixed(2)}) — your personal C1 history is too limited for a stable projection`;
+    basisLabel = `Based on the team-average share of the year done by the end of C${k} (multiplier ×${multiplier.toFixed(2)}) — your personal history is too limited for a stable projection`;
   }
+  if (ytd.cpo !== null && ytd.missing.length) basisLabel += ` · Total Sales for C${ytd.missing.join(', C')} ${y} not loaded yet, so YTD uses what has arrived`;
 
   let summary = '';
-  if (!c1_26) {
-    summary = 'No C1 2026 Total Sales data yet for this rep.';
-  } else if (fy_25 && fy_24) {
-    const vs25 = projected - fy_25.cpo;
-    const vs24 = projected - fy_24.cpo;
-    if (vs25 > 0 && vs24 > 0) {
-      summary = `On your current C1 pace, you'd project above both 2024 (${fmtCurrencyShort(fy_24.cpo)}) and 2025 (${fmtCurrencyShort(fy_25.cpo)}). <strong>Strong start.</strong>`;
-    } else if (vs25 > 0) {
-      summary = `Projected above 2024 but behind 2025 (${fmtCurrencyShort(fy_25.cpo)}). To beat 2025 you'd need to outperform your typical C2+C3.`;
-    } else if (vs24 > 0) {
-      summary = `Tracking ahead of 2024 (${fmtCurrencyShort(fy_24.cpo)}) but short of 2025. <strong>Your fall has time to close the gap.</strong>`;
+  if (ytd.cpo === null) {
+    summary = `No ${y} Total Sales data yet for this rep.`;
+  } else if (done) {
+    summary = fy_1 ? `${y} finished at ${fmtCurrencyShort(ytd.cpo)}, ${ytd.cpo >= fy_1.cpo ? 'ahead of' : 'behind'} ${y - 1} (${fmtCurrencyShort(fy_1.cpo)}).` : `${y} finished at ${fmtCurrencyShort(ytd.cpo)}.`;
+  } else if (fy_1 && fy_2) {
+    const vs1 = projected - fy_1.cpo;
+    const vs2 = projected - fy_2.cpo;
+    if (vs1 > 0 && vs2 > 0) {
+      summary = `On your pace through C${k}, you'd project above both ${y - 2} (${fmtCurrencyShort(fy_2.cpo)}) and ${y - 1} (${fmtCurrencyShort(fy_1.cpo)}). <strong>Strong ${k === 1 ? 'start' : 'position'}.</strong>`;
+    } else if (vs1 > 0) {
+      summary = `Projected above ${y - 2} but behind ${y - 1} (${fmtCurrencyShort(fy_1.cpo)}). To beat ${y - 1} you'd need to outperform your typical ${k === 1 ? 'C2 + C3' : 'C3'}.`;
+    } else if (vs2 > 0) {
+      summary = `Tracking ahead of ${y - 2} (${fmtCurrencyShort(fy_2.cpo)}) but short of ${y - 1}. <strong>${remaining ? remaining.charAt(0).toUpperCase() + remaining.slice(1) : ''} — time to close the gap.</strong>`;
     } else {
-      summary = `Projected below both prior years. Fall is your biggest campaign historically — plenty of room to recover.`;
+      summary = `Projected below both prior years with ${remaining}. Fall is historically the biggest campaign — room to recover.`;
     }
-  } else if (fy_25) {
-    summary = `Comparison vs 2025 finish only — 2024 data unavailable.`;
+  } else if (fy_1) {
+    summary = `Comparison vs ${y - 1} finish only — ${y - 2} data unavailable.`;
   } else {
-    summary = `Pacing baseline pending FY uploads.`;
+    summary = `Pacing baseline pending full-year uploads.`;
   }
 
-  // Projection scale viz: solid = C1 actual, hatched = projected remainder, ticks = prior FY finishes
+  // Projection scale viz: solid = YTD actual, hatched = projected remainder, ticks = prior FY finishes
   let vizHtml = '';
-  if (c1_26 && projected) {
-    const maxScale = Math.max(projected, fy_25 ? fy_25.cpo : 0, fy_24 ? fy_24.cpo : 0, c1_26.cpo) * 1.06;
+  if (ytd.cpo !== null && projected) {
+    const maxScale = Math.max(projected, fy_1 ? fy_1.cpo : 0, fy_2 ? fy_2.cpo : 0, ytd.cpo) * 1.06;
     const pctOf = v => Math.min(100, v / maxScale * 100);
-    const actualPct = pctOf(c1_26.cpo);
+    const actualPct = pctOf(ytd.cpo);
     const projPct = pctOf(projected);
     const tick = (v, label, faint) => v ? `<div class="pace-tick${faint ? ' faint' : ''}" style="left:${pctOf(v).toFixed(2)}%" title="${label}: ${fmtCurrencyShort(v)}"><span class="t-label">${label}</span></div>` : '';
     vizHtml = `
       <div class="pace-viz">
         <div class="pace-track">
-          <div class="pace-actual" style="width:${actualPct.toFixed(2)}%" title="C1 2026 actual: ${fmtCurrencyShort(c1_26.cpo)}"></div>
-          <div class="pace-proj" style="left:${actualPct.toFixed(2)}%; width:${(projPct - actualPct).toFixed(2)}%" title="Projected remainder to ≈${fmtCurrencyShort(projected)} — a projection, not a result"></div>
-          ${tick(fy_25 && fy_25.cpo, "'25", false)}
-          ${tick(fy_24 && fy_24.cpo, "'24", true)}
+          <div class="pace-actual" style="width:${actualPct.toFixed(2)}%" title="${y} through C${k} actual: ${fmtCurrencyShort(ytd.cpo)}"></div>
+          ${done ? '' : `<div class="pace-proj" style="left:${actualPct.toFixed(2)}%; width:${(projPct - actualPct).toFixed(2)}%" title="Projected remainder to ≈${fmtCurrencyShort(projected)} — a projection, not a result"></div>`}
+          ${tick(fy_1 && fy_1.cpo, "'" + String(y - 1).slice(2), false)}
+          ${tick(fy_2 && fy_2.cpo, "'" + String(y - 2).slice(2), true)}
         </div>
       </div>
       <div class="pace-legend">
-        <span class="li"><span class="sw actual"></span> C1 2026 actual</span>
-        <span class="li"><span class="sw proj"></span> Projected remainder</span>
+        <span class="li"><span class="sw actual"></span> ${y} through C${k} actual</span>
+        ${done ? '' : '<span class="li"><span class="sw proj"></span> Projected remainder</span>'}
         <span class="li"><span class="sw tick"></span> Prior full-year finishes</span>
       </div>`;
   }
@@ -1913,10 +2037,12 @@ function renderRepPacing() {
     <div class="pace-basis">${basisLabel}</div>
     ${vizHtml}
     <div class="pace-stats">
-      ${stat('C1 2026 · Actual', c1_26 ? fmtCurrencyShort(c1_26.cpo) : '—', c1_26 ? c1_26.orders + ' orders' : '')}
-      ${stat('Projected 2026<span class="proj-tag">Projection</span>', projected ? '≈' + fmtCurrencyShort(projected) : '—', `×${multiplier.toFixed(2)} fall-weighted`, 'projected')}
-      ${stat('FY 2025 · Actual', fy_25 ? fmtCurrencyShort(fy_25.cpo) : '—', fy_25 ? fy_25.orders + ' orders' : '')}
-      ${stat('FY 2024 · Actual', fy_24 ? fmtCurrencyShort(fy_24.cpo) : '—', fy_24 ? fy_24.orders + ' orders' : '')}
+      ${stat(`${y} through C${k} · Actual`, ytd.cpo !== null ? fmtCurrencyShort(ytd.cpo) : '—', ytd.cpo !== null ? ytd.orders + ' orders' : '')}
+      ${done
+        ? stat(`FY ${y} · Final`, ytd.cpo !== null ? fmtCurrencyShort(ytd.cpo) : '—', 'complete')
+        : stat(`Projected ${y}<span class="proj-tag">Projection</span>`, projected ? '≈' + fmtCurrencyShort(projected) : '—', `×${multiplier.toFixed(2)} · ${remaining}`, 'projected')}
+      ${stat(`FY ${y - 1} · Actual`, fy_1 ? fmtCurrencyShort(fy_1.cpo) : '—', fy_1 ? fy_1.orders + ' orders' : '')}
+      ${stat(`FY ${y - 2} · Actual`, fy_2 ? fmtCurrencyShort(fy_2.cpo) : '—', fy_2 ? fy_2.orders + ' orders' : '')}
     </div>
     <div class="pace-summary">${summary}</div>
   `;
@@ -1967,7 +2093,7 @@ function renderRepChart() {
   }
   // X-axis year labels
   YEARS.forEach((y, i) => {
-    html += `<text x="${xFn(i)}" y="${H - padB + 22}" text-anchor="middle" class="chart-x-label">C1 ${y}</text>`;
+    html += `<text x="${xFn(i)}" y="${H - padB + 22}" text-anchor="middle" class="chart-x-label">${P(y)}</text>`;
   });
 
   // Area fill under rep line (only across contiguous non-null points)
@@ -1995,7 +2121,7 @@ function renderRepChart() {
     html += `<polyline points="${youPts.map(p => `${p.x},${p.y}`).join(' ')}" fill="none" stroke="#C2410C" stroke-width="2.5" stroke-linecap="round"/>`;
   }
   youPts.forEach(p => {
-    html += `<circle cx="${p.x}" cy="${p.y}" r="4.5" fill="#fff" stroke="#C2410C" stroke-width="2.5"><title>You · C1 ${YEARS[p.i]}: ${fmt(p.v)}</title></circle>`;
+    html += `<circle cx="${p.x}" cy="${p.y}" r="4.5" fill="#fff" stroke="#C2410C" stroke-width="2.5"><title>You · ${P(YEARS[p.i])}: ${fmt(p.v)}</title></circle>`;
     html += `<text x="${p.x}" y="${p.y - 13}" text-anchor="middle" class="chart-pt-label">${fmt(p.v)}</text>`;
   });
 
@@ -2059,6 +2185,35 @@ function renderProductGhosts() {
 // ==========================================================================
 // View orchestration
 // ==========================================================================
+// Every static label that names the period (review A1). Called on load and on campaign change.
+function renderPeriodLabels() {
+  const y = STATE.curYear, yp = STATE.priorYear, k = STATE.campaign;
+  const set = (id, txt) => { const el = document.getElementById(id); if (el) el.textContent = txt; };
+  set('cp-line', `${CAMP_NAMES[k]} · ${y} vs ${yp}`);
+  set('team-scope', `${P(y)} vs ${P(yp)} · Master List`);
+  set('mix-context', `${P(y)} production by category · Master List`);
+  set('comp-scope', P(y));
+  set('cats-scope', `${P(y)} vs ${P(yp)}`);
+  set('opt-total-sales', `Total Sales (C${k})`);
+  set('opt-total-event', `Total Event CPO (C${k})`);
+  set('legend-you', `You (3-year C${k})`);
+}
+function renderCampaignSelector() {
+  const avail = campaignsForYear(STATE.curYear);
+  const el = document.getElementById('campaign-select');
+  el.innerHTML = [1, 2, 3].map(k => `<button type="button" role="tab" data-camp="${k}" class="${k === STATE.campaign ? 'active' : ''}" aria-selected="${k === STATE.campaign}"${avail.includes(k) ? '' : ` disabled title="C${k} ${STATE.curYear} has not closed yet"`}>C${k}<span class="w">${CAMP_WINDOWS[k]}</span></button>`).join('');
+  el.querySelectorAll('button').forEach(b => b.addEventListener('click', () => setCampaign(+b.dataset.camp)));
+}
+function setCampaign(k) {
+  if (k === STATE.campaign) return;
+  STATE.campaign = k;
+  _teamShareCache = {};
+  renderCampaignSelector();
+  renderPeriodLabels();
+  renderTeamView();
+  renderRepView();
+}
+
 function renderTeamView() {
   renderTeamKPIs();
   renderLeaderboard();
@@ -2118,6 +2273,8 @@ document.getElementById('rep-chart-metric').addEventListener('change', e => {
 });
 
 // Initial render
+renderCampaignSelector();
+renderPeriodLabels();
 renderTeamView();
 renderRepView();
 renderProductGhosts();
