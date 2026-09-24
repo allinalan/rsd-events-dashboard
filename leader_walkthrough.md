@@ -16,15 +16,17 @@ Think of it less like a report and more like a coaching mirror — the rep opens
 
 ## How to navigate
 
-**Three top-level tabs:**
+**Three top-level tabs** (restructured 2026-09-24):
 
-1. **Team View** — KPIs, leaderboard, category mix across the team
-2. **Rep View** — pick any rep, see their full story (hero stats, pies, summary, buckets, shifts, pacing)
-3. **Product Growth** — placeholder for now; will populate when product-mix data is in
+1. **Total** — the whole year, every campaign added together. Cards across the top pick the year: 2024, 2025, 2026 so far, or All years. Below them: team Total / Event / Non-Event CPO and avg order, the leaderboard, the category mix, and a **Year by Year** table (Revenue / Avg Order / Orders).
+2. **Campaigns** — pick a year and tap a campaign card (C1 Jan–Apr, C2 May–Aug, C3 Sep–Dec). **Year over Year** shows that campaign in 2024, 2025 and 2026 side by side with the change; the leaderboard and category mix follow the campaign you tapped; **Campaign by Campaign** shows C1 / C2 / C3 / the year inside one year.
+3. **Rep View** — pick any rep, then **Year total** or **By campaign** at the top. Tapping a name on either leaderboard opens that rep in the same scope.
+
+**How years compare:** a closed year against the year before. The year in progress: event numbers against last year at the same point (2026 C1–C2 vs 2025 C1–C2); Total CPO as a share of last year's full year ("70% of 2025"), because 2025 C2 has no Total Sales workbook for a same-point figure.
 
 **Leaderboard** has two controls:
-- **Metric** — what you're ranking by (Total CPO, per-bucket CPO, shift productivity, per-bucket avg order, etc.)
-- **Sort** — *By value* (largest absolute number) or *By biggest growth* (biggest C1-over-C1 % change). The growth sort surfaces the climbers — not the same people as the value-sort top 10.
+- **Metric** — what you're ranking by (Total CPO, per-bucket CPO, shift productivity, per-bucket avg order, etc.). Total ranks by Total CPO; Campaigns by Event CPO, which exists for every campaign.
+- **Sort** — *By value* (largest absolute number) or *By biggest growth* (same campaign last year, or last year at the same point). The growth sort surfaces the climbers — not the same people as the value-sort top 10. It is off where the only comparison is a share of last year.
 
 ---
 
@@ -45,7 +47,7 @@ Non-Event CPO is **derived** as Total Sales − Total Event Sales for each campa
 
 ### Team averages
 
-> Team averages use the **full 269-rep RSD division stats universe**, not just the 21-rep Master List events team.
+> Since 2026-09-09 the page carries only the 21-rep core team, so team averages are core-team averages (the paragraph below describes the earlier division-wide setting).
 
 Why: comparing only against active eventers would inflate the averages (we're all already strong relative to the broader division). Using the full universe gives more honest context. The leaderboard *display*, by contrast, only shows the 21 Master List reps — you won't see in-home-only reps in the rankings.
 
@@ -81,7 +83,7 @@ For each, uplift = **Gap × Volume** = the dollar impact if they matched Master 
 
 ## Known em-dash situations (so you're not surprised)
 
-When something renders as `—` instead of a number, it's intentional. There are 4 cases:
+When something renders as `—` instead of a number, it's intentional. There are 5 cases:
 
 | Rep(s) | What's em-dash | Why |
 |---|---|---|
@@ -89,6 +91,7 @@ When something renders as `—` instead of a number, it's intentional. There are
 | **Sarah Krick** | 2026 Shifts breakdown | She's a District Manager now — no booth shifts in 2026 by design. |
 | **Kendall Gooch** | All 2024 + 2025 data | New rep, only became active in 2026. |
 | **Matthew Aragon** | 2024 C1 data | Contract date 2024-06-14 — wasn't a rep yet during C1 2024. |
+| **Everyone** | Total CPO and Non-Event CPO for 2024 C2/C3 and 2025 C2/C3 | No Total Sales workbook exists for those campaigns. Event sales are complete for every campaign; full-year Total Sales for 2024 and 2025 is there, so the Total page is complete for those years. |
 
 In all cases, em-dash means "no data captured," NOT "$0." (Zero would imply effort with no result; em-dash signals the metric isn't applicable or available yet.)
 
@@ -96,7 +99,7 @@ In all cases, em-dash means "no data captured," NOT "$0." (Zero would imply effo
 
 ## What's still coming (v1.1)
 
-- **Product Growth tab** — Ultimate Sets, Signature Sets, Homemaker Sets, Ultimate Blocks, Signature Blocks, Flatware, Cookware, Galley+6, Business Gift cross-channel, Realtor cross-channel. Three years of annual data per rep. Growth-first framing.
+- **Product growth** (the placeholder tab was removed 2026-09-24; it returns when the data exists) — Ultimate Sets, Signature Sets, Homemaker Sets, Ultimate Blocks, Signature Blocks, Flatware, Cookware, Galley+6, Business Gift cross-channel, Realtor cross-channel. Three years of annual data per rep. Growth-first framing.
 - **Service-Call-per-Event metric** — annual attribution % showing how much of each rep's book comes from event-generated service calls
 - **Jeremy / Rob / Roman Non-Event** — fills in once their individual Total Sales arrive (timed with product data)
 
