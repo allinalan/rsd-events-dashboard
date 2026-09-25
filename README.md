@@ -1,7 +1,7 @@
 # RSD Rep Dashboard
 
 Single-page dashboard for the RSD Events Team (CUTCO Rising Sun Division).
-Three tabs: **Total** (a year, every campaign combined), **Campaigns** (one campaign, compared across years), **Rep View** (either scope).
+Three tabs: **Total** (one season against the earlier years you pick, Event Analyzer layout), **Campaigns** (one campaign compared across years, plus a full-year leaderboard), **Rep View** (year or campaign).
 
 **Live URL:** _(will populate after GitHub Pages is enabled)_
 

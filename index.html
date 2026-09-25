@@ -623,6 +623,85 @@
   }
   table.cat-table th.chg, table.cat-table td.chg { border-left: 1px solid var(--line-soft); }
 
+  /* ===================== TOTAL: season overview (Phase 3b, Event Analyzer layout) ===================== */
+  .ov-head { margin-bottom: 14px; }
+  .ov-title { font-size: 24px; font-weight: 750; letter-spacing: -0.015em; line-height: 1.15; }
+  .ov-sub { font-family: var(--mono); font-size: 11px; color: var(--ink-faint); margin-top: 5px; letter-spacing: 0.02em; }
+  .ctlbar { display: flex; align-items: center; flex-wrap: wrap; gap: 10px 22px; padding: 10px 16px; margin-bottom: 18px; }
+  .cb-group { display: flex; align-items: center; gap: 9px; }
+  .cb-k { font-family: var(--mono); font-size: 9.5px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-faint); white-space: nowrap; }
+  .cb-v { font-family: var(--mono); font-size: 12px; font-weight: 600; white-space: nowrap; }
+  .cb-spacer { flex: 1; }
+  .ctl.ctl-strong { font-weight: 700; color: var(--ember); }
+  .switch {
+    appearance: none; border: 0; background: transparent; cursor: pointer; padding: 0;
+    display: inline-flex; align-items: center; gap: 9px; font-family: var(--mono); font-size: 11px; color: var(--ink-soft);
+  }
+  .switch:disabled { cursor: default; opacity: 0.5; }
+  .sw-track { width: 34px; height: 19px; border-radius: 999px; background: var(--line); position: relative; transition: background 0.15s; flex-shrink: 0; }
+  .sw-knob { position: absolute; top: 2px; left: 2px; width: 15px; height: 15px; border-radius: 50%; background: #fff; box-shadow: 0 1px 2px rgba(0,0,0,0.25); transition: left 0.15s; }
+  .switch.on .sw-track { background: var(--ink); }
+  .switch.on .sw-knob { left: 17px; }
+  .headline { display: flex; align-items: baseline; flex-wrap: wrap; gap: 4px 12px; margin: 0 0 14px; }
+  .hl-main { font-size: 19px; font-weight: 700; letter-spacing: -0.01em; }
+  .hl-delta { font-family: var(--mono); font-size: 15px; font-weight: 600; margin-left: 2px; }
+  .hl-delta.pos { color: var(--pos); }
+  .hl-delta.neg { color: var(--neg); }
+  .hl-sub { font-family: var(--mono); font-size: 11px; color: var(--ink-faint); }
+  .kcards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; margin-bottom: 18px; }
+  .kcard { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 16px 18px 8px; min-width: 0; }
+  .kc-top { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+  .kc-label { font-family: var(--mono); font-size: 10px; font-weight: 600; letter-spacing: 0.11em; text-transform: uppercase; color: var(--ink-soft); }
+  .kc-meta { font-family: var(--mono); font-size: 10px; color: var(--ink-faint); white-space: nowrap; }
+  .kc-val { font-size: 32px; font-weight: 750; letter-spacing: -0.02em; line-height: 1.05; margin-top: 8px; }
+  .kc-sub { font-family: var(--mono); font-size: 10.5px; color: var(--ink-faint); margin: 4px 0 10px; }
+  .kc-rows { border-top: 1px solid var(--line-soft); }
+  .kc-row {
+    display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 10px;
+    padding: 7px 0; border-bottom: 1px solid var(--line-soft); font-family: var(--mono); font-size: 11.5px;
+  }
+  .kc-row:last-child { border-bottom: 0; }
+  .kc-row .k { color: var(--ink-soft); white-space: nowrap; }
+  .kc-row.bench .k { color: var(--ink); font-weight: 600; }
+  .kc-row .v { text-align: right; white-space: nowrap; }
+  .kc-row .need { font-size: 10px; color: var(--ink-faint); text-align: right; }
+  .dpill { display: inline-flex; align-items: center; gap: 6px; font-family: var(--mono); font-size: 10.5px; font-weight: 600; padding: 2px 7px; border-radius: 5px; white-space: nowrap; }
+  .dpill.pos { color: var(--pos); background: var(--pos-tint); }
+  .dpill.neg { color: var(--neg); background: var(--neg-tint); }
+  .dpill .dp-pct { font-weight: 500; opacity: 0.8; }
+  .shape-card { padding: 18px 20px 10px; margin-bottom: 36px; }
+  .shape-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; flex-wrap: wrap; margin-bottom: 6px; }
+  .shape-head h2 { font-size: 19px; font-weight: 700; letter-spacing: -0.01em; }
+  .shape-tools { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+  .shape-legend { display: flex; gap: 12px; font-family: var(--mono); font-size: 10.5px; color: var(--ink-soft); flex-wrap: wrap; }
+  .shape-legend .li { display: inline-flex; align-items: center; gap: 6px; }
+  .shape-legend .sw { width: 10px; height: 10px; border-radius: 2px; display: inline-block; }
+  #t-shape-svg { width: 100%; height: auto; display: block; }
+  .shape-lbl { font-family: var(--mono); font-size: 10px; font-weight: 600; fill: var(--ink-soft); }
+  .shape-lbl.season { fill: var(--ember-deep); }
+  .shape-na { font-family: var(--mono); font-size: 9.5px; fill: var(--ink-faint); }
+  .sharebar, .dbar { display: inline-block; height: 5px; background: var(--line-soft); border-radius: 3px; overflow: hidden; vertical-align: middle; margin-right: 8px; }
+  .sharebar { width: 46px; }
+  .dbar { width: 54px; }
+  .sharebar span, .dbar span { display: block; height: 100%; }
+  .sharebar span { background: var(--ink-faint); }
+  .dbar span.pos { background: var(--pos); }
+  .dbar span.neg { background: var(--neg); }
+  .dtext.pos { color: var(--pos); }
+  .dtext.neg { color: var(--neg); }
+
+  table.leaderboard th .th-sub { display: block; font-weight: 500; font-size: 9px; letter-spacing: 0.04em; text-transform: none; color: var(--ink-faint); margin-top: 2px; }
+  table.leaderboard th.cur-h { color: var(--ember); }
+  table.leaderboard td.ord { color: var(--ink-soft); }
+  table.leaderboard tr.lb-missing td { color: var(--ink-faint); }
+  table.leaderboard tr.lb-missing td.name { font-weight: 500; }
+  .lb-why { display: block; font-family: var(--mono); font-size: 9.5px; font-weight: 400; color: var(--ink-faint); margin-top: 1px; }
+  .lb-controls { align-items: center; }
+  .lb-controls .ctl.active { border-color: var(--ink); color: var(--ink); font-weight: 700; }
+
+  .pills .sm, .sm-only { display: none; }
+  .cat-table-wrap > .cat-best { padding: 12px 16px 0; margin: 0 0 6px; }
+
   /* Footnote / methodology */
   .footnote {
     margin-top: 52px; padding-top: 18px; border-top: 1px solid var(--line);
@@ -650,6 +729,7 @@
     .stat-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     .period-cards.four { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     .team-grid { grid-template-columns: 1fr; }
+    .kcards { grid-template-columns: 1fr; }
     .scorecard { grid-template-columns: 1fr; gap: 20px; padding: 22px 24px 20px; }
     .sc-hero { text-align: left; align-items: flex-start; border-top: 1px solid var(--ivory-line); padding-top: 18px; }
     .sc-hero .h-delta { justify-content: flex-start; }
@@ -673,6 +753,72 @@
     .pc-val { font-size: 23px; }
     .pills button { padding: 5px 9px; font-size: 10.5px; }
     .sec-tools { width: 100%; }
+    .ov-title { font-size: 20px; }
+    .ctlbar { gap: 10px 16px; padding: 10px 12px; }
+    .cb-spacer { display: none; }
+    .kc-val { font-size: 27px; }
+    .hl-main { font-size: 17px; }
+    .shape-card { padding: 14px 14px 8px; }
+    .share-col { display: none; }
+    .dbar { display: none; }
+
+    /* ---- phone review 2026-09-24: thumb-size targets, legible labels, tables that fit ---- */
+    .pills button { padding: 10px 12px; }
+    .lg-only { display: none; }
+    .sm-only { display: inline; }
+    table .share-of { display: none; }
+    table.cat-table.grid th, table.leaderboard th, table.cat-table.rep-cats th { white-space: normal; }
+    table.leaderboard td.rank { width: 20px; }
+    table.cat-table.grid th .th-sub.opt, table.leaderboard th .th-sub.opt { display: none; }
+    table.cat-table.grid th:first-child, table.cat-table.grid td.cat-name { min-width: 84px; }
+    .name-select-wrap { min-width: 0; }
+    /* the ‹ › arrows sit beside the kicker so a long name gets the card's full width */
+    select.name-select { flex: 1 1 auto; min-width: 0; font-size: 22px; padding-right: 24px; background-position: right 6px center; text-overflow: ellipsis; }
+    .name-select-wrap .rep-step { position: absolute; top: 12px; z-index: 1; }
+    #rep-prev { right: 60px; }
+    #rep-next { right: 16px; }
+    .sc-kicker { padding-right: 96px; min-height: 24px; }
+    .info-i { width: 15px; height: 15px; font-size: 10px; }
+    .shift-card .s-scope, .pace-tick .t-label { font-size: 10px; }
+    .proj-tag { font-size: 9.5px; }
+    .ctl { min-height: 36px; font-size: 12px; }
+    .switch { padding: 8px 0; }
+    .rep-step { width: 36px; height: 36px; }
+    .pills .lg { display: none; }
+    .pills .sm { display: inline; }
+    .cb-k, .kc-label, .kc-meta, .pc-name, .pc-tag, .lb-why, .sc-badge .b-label, .s-row .k, .hc-row .k, .hc-sub,
+    .pace-stat .p-label, .pace-legend, .comp-cats-label, .cat-note, .lb-foot,
+    table.leaderboard th, table.cat-table th { font-size: 10px; }
+    table.leaderboard th .th-sub, table.cat-table th .th-sub { font-size: 9.5px; }
+    .ctlbar { display: grid; grid-template-columns: 1fr 1fr; gap: 12px 14px; align-items: end; }
+    .ctlbar .cb-season, .ctlbar .cb-bench { flex-direction: column; align-items: flex-start; gap: 4px; }
+    .ctlbar .cb-season { order: 1; } .ctlbar .cb-bench { order: 2; }
+    .ctlbar .cb-data { order: 3; grid-column: 1 / -1; }
+    .ctlbar .switch { order: 4; } .ctlbar .cb-show { order: 5; justify-self: end; }
+    .kcards { gap: 10px; }
+    .kcard { padding: 12px 14px 6px; }
+    .kc-val { font-size: 25px; margin-top: 6px; }
+    .kc-sub { margin: 2px 0 8px; }
+    .kc-row { padding: 6px 0; }
+    table.leaderboard th, table.leaderboard td { padding-left: 5px; padding-right: 5px; }
+    table.leaderboard td.rank { width: 24px; }
+    table.leaderboard td.name { font-size: 13px; }
+    td.name .viewing-dot { display: none; }   /* the highlighted row already marks the selected rep */
+    table.cat-table.grid th, table.cat-table.grid td { padding-left: 5px; padding-right: 5px; }
+    table.cat-table.grid th:first-child, table.cat-table.grid td.cat-name { min-width: 92px; padding-left: 10px; }
+    table.cat-table.grid .chip, table.leaderboard .chip { font-size: 10px; padding: 1px 5px; }
+    table.cat-table .dlt-abs { display: none; }
+    table.cat-table.rep-cats { min-width: 0; }
+    table.cat-table.rep-cats .xtra { display: none; }
+    table.cat-table.rep-cats th, table.cat-table.rep-cats td { padding-left: 6px; padding-right: 6px; }
+    table.cat-table.rep-cats td.cat-name, table.cat-table.rep-cats th:first-child { padding-left: 12px; white-space: normal; }
+    .pace-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .pace-stat .p-label { white-space: normal; }
+    .proj-tag { display: inline-block; margin: 4px 0 0; vertical-align: 0; }
+    .cat-bar-row { grid-template-columns: 116px 1fr 56px; }
+    .cat-bar-row .cb-name span.t { white-space: normal; line-height: 1.25; }
+    .pcard { padding: 12px 14px 10px; }
+    .pc-val { font-size: 22px; }
     table.cat-table.grid { min-width: 0; }
     table.cat-table.grid th, table.cat-table.grid td { padding-left: 7px; padding-right: 7px; font-size: 11px; }
     table.cat-table.grid th:first-child, table.cat-table.grid td.cat-name {
@@ -707,6 +853,7 @@
     table.leaderboard .bar-cell, table.leaderboard .prior,
     table.leaderboard th.bar-h, table.leaderboard th.prior-h { display: none; }
     table.leaderboard td.name { white-space: normal; }
+    table.leaderboard .yr-old, table.leaderboard .dlt-abs { display: none; }
     .team-grid { gap: 16px; }
 
     /* Mobile narrative order: identity → coach's read → trajectory → supporting */
@@ -719,6 +866,11 @@
     #rep-view .section.o-cats    { order: 7; }
     #rep-view .section.o-shifts  { order: 8; }
     #rep-view > .section { margin-bottom: 24px; }
+  }
+
+  @media (max-width: 380px) {
+    table.leaderboard td.name { font-size: 12.5px; }
+    table.leaderboard th, table.leaderboard td { padding-left: 4px; padding-right: 4px; }
   }
 
   @media (max-width: 420px) {
@@ -760,36 +912,47 @@
 
 <!-- ============================== TOTAL VIEW ============================== -->
 <div id="total-view" class="view active">
-  <div class="section">
-    <div class="sec-head">
-      <div><span class="kicker">Team totals · every campaign combined</span>
-        <h2 id="t-title">Total</h2></div>
-      <span class="scope" id="t-scope"></span>
-    </div>
-    <div class="period-cards four" id="t-years" role="tablist" aria-label="Year"></div>
+  <div class="ov-head">
+    <span class="kicker">Season overview</span>
+    <h2 class="ov-title" id="t-title">Season performance</h2>
+    <div class="ov-sub" id="t-sub"></div>
   </div>
+  <div class="card ctlbar" id="t-ctl"></div>
+  <div class="headline" id="t-headline"></div>
+  <div class="kcards" id="t-kpis"></div>
 
-  <div class="section">
-    <div class="stat-grid" id="t-kpis"></div>
-  </div>
-
-  <div class="team-grid">
-    <div class="card lb-card section" id="t-lb"></div>
-    <div class="card mix-card section">
-      <div class="lb-top" style="margin-bottom:0;">
-        <div class="lb-title">
-          <h2>Category Mix</h2>
-          <div class="lb-context" id="t-mix-context"></div>
-        </div>
+  <div class="card lb-card section" id="t-lb">
+    <div class="lb-top">
+      <div class="lb-title">
+        <h2>Rep Leaderboard</h2>
+        <div class="lb-context" id="t-lb-context"></div>
       </div>
-      <div id="t-mix"></div>
+      <div class="lb-controls">
+        <div class="pills" id="t-lb-metric" aria-label="Category"></div>
+        <select class="ctl" id="t-lb-bucket" aria-label="Event category"></select>
+        <div class="pills" id="t-lb-sort" aria-label="Sort"></div>
+      </div>
     </div>
+    <div id="t-lb-body"></div>
+  </div>
+
+  <div class="card shape-card">
+    <div class="shape-head">
+      <div><span class="kicker">Season shape</span>
+        <h2>CPO by Campaign</h2>
+        <div class="lb-context" id="t-shape-context"></div></div>
+      <div class="shape-tools">
+        <div class="pills" id="t-shape-metric" aria-label="Chart metric"></div>
+        <div class="shape-legend" id="t-shape-legend"></div>
+      </div>
+    </div>
+    <svg id="t-shape-svg" viewBox="0 0 900 280" preserveAspectRatio="xMidYMid meet"></svg>
   </div>
 
   <div class="section">
     <div class="sec-head">
-      <div><span class="kicker">Year over year</span>
-        <h2>Year by Year</h2></div>
+      <div><span class="kicker">Category performance</span>
+        <h2 id="t-table-title">CPO by Category</h2></div>
       <div class="pills" data-grid="t-grid" role="tablist" aria-label="Show"></div>
     </div>
     <div class="cat-table-wrap" id="t-grid"></div>
@@ -929,9 +1092,10 @@
 <div class="footnote">
   <div class="fn-block">
     <div class="fn-title">Scope</div>
-    <p id="fn-scope">Total = every campaign in a year added together: the year-end Total Sales figure for a closed
-    year, C1 onward for the year in progress; All years adds the years up. Campaigns: C1 = Jan–Apr · C2 = May–Aug ·
-    C3 = Sep–Dec, and each campaign is compared with the same campaign in other years. Shift metrics are annual.</p>
+    <p id="fn-scope">Total = one season against the earlier years you pick. While a season is open, "same point"
+    compares earlier years through the same campaign (like for like); off, it compares with their full year.
+    Campaigns: C1 = Jan–Apr · C2 = May–Aug · C3 = Sep–Dec, each compared with the same campaign in other years.
+    Shift metrics are annual.</p>
     <p id="fn-refresh"></p>
   </div>
   <div class="fn-block">
@@ -983,6 +1147,13 @@ const STATE = {
   view: 'total',
   year: LATEST.year,                              // Total page: a year or 'all'
   camp: { year: LATEST.year, n: LATEST.campaign },  // Campaigns page
+  season: LAST_YEAR,                              // Total page: the season shown
+  bench: CAMP_YEARS.includes(LAST_YEAR - 1) ? LAST_YEAR - 1 : null,  // what the headline and Δ compare against
+  compare: new Set(CAMP_YEARS.filter(y => y < LAST_YEAR)),          // earlier years listed next to the season
+  samePoint: true,                                // earlier years through the same campaign while the season is open
+  tRank: 'total_sales',                          // Total page leaderboard: the category it ranks
+  tSort: 'value',
+  shapeMetric: 'total_event',                     // season-shape chart: Event CPO (every campaign has it) or Total CPO
   repMode: 'year',                                // Rep View follows 'year' (STATE.year) or 'camp' (STATE.camp)
   selectedRep: 'Alan Hernandez',
   chartMetric: null,                              // null = follow the mode (Total CPO by year, Event CPO by campaign)
@@ -1064,13 +1235,15 @@ function fmtYoY(cur, prior) {
   const pct = ((cur - prior) / prior) * 100;
   const cls = pct >= 0 ? 'pos' : 'neg';
   const sign = pct >= 0 ? '▲ +' : '▼ ';
-  return `<span class="chip ${cls}">${sign}${Math.abs(pct).toFixed(1)}%</span>`;
+  const digits = window.matchMedia('(max-width: 680px)').matches ? 0 : 1;
+  if (+Math.abs(pct).toFixed(digits) === 0) return `<span class="chip na" title="${pct >= 0 ? '+' : '−'}${Math.abs(pct).toFixed(2)}%">0%</span>`;
+  return `<span class="chip ${cls}">${sign}${Math.abs(pct).toFixed(digits)}%</span>`;
 }
 // Progress through an open year against a full prior year ("70% of 2025"): not growth, so no colour.
 function shareChip(cur, full, year, onDark) {
   const dark = onDark ? ' on-dark' : '';
   if (cur === null || cur === undefined || !full) return `<span class="chip na${dark}" title="${NA_TIP}">—</span>`;
-  return `<span class="chip share${dark}" title="Year to date as a share of ${year}'s full year">${Math.round(cur / full * 100)}% of ${year}</span>`;
+  return `<span class="chip share${dark}" title="Year to date as a share of ${year}'s full year">${Math.round(cur / full * 100)}%<span class="share-of"> of ${year}</span></span>`;
 }
 
 // ==========================================================================
@@ -1365,10 +1538,12 @@ const RANK_GROUPS = [
       ...EVENT_SUB_BUCKETS.map(b => ['bucket_avg:' + b, bLabel(b) + ' Avg Order'])] },
 ];
 const METRIC_LABELS = Object.fromEntries(RANK_GROUPS.flatMap(g => g.items));
-// Total page ranks by Total CPO; the Campaigns page by Event CPO, which every campaign has.
+// The Campaigns leaderboard ranks by Event CPO, which every campaign has. Its own pills pick
+// C1 / C2 / C3 (the page's campaign) or the Full year of the page's year (Phase 3b).
 const LB = {
-  t: { rankBy: 'total_cpo', sortBy: 'value', annual: true, repMode: 'year', period: totalPeriod },
-  c: { rankBy: 'total_event', sortBy: 'value', annual: false, repMode: 'camp', period: campPeriodSel },
+  c: { rankBy: 'total_event', sortBy: 'value', annual: true, scope: 'camp', scopePills: true,
+    get repMode() { return this.scope === 'year' ? 'year' : 'camp'; },
+    period: () => LB.c.scope === 'year' ? periodYear(STATE.camp.year) : campPeriodSel() },
 };
 
 function buildLeaderboard(prefix) {
@@ -1382,6 +1557,7 @@ function buildLeaderboard(prefix) {
         <div class="lb-context" id="${prefix}-lb-context"></div>
       </div>
       <div class="lb-controls">
+        ${L.scopePills ? `<div class="pills" id="${prefix}-lb-scope" role="tablist" aria-label="Period"></div>` : ''}
         <select class="ctl" id="${prefix}-rank-by" aria-label="Ranking metric">${groups}</select>
         <select class="ctl" id="${prefix}-sort-by" aria-label="Sort order">
           <option value="value">By value</option>
@@ -1395,9 +1571,27 @@ function buildLeaderboard(prefix) {
 }
 
 function renderLeaderboard(prefix) {
-  const L = LB[prefix], p = L.period(), metric = L.rankBy, fam = metricFamily(metric);
+  const L = LB[prefix];
+  if (L.scopePills) {
+    const y = STATE.camp.year, ns = campaignsForYear(y), yp = periodYear(y);
+    const el = document.getElementById(prefix + '-lb-scope');
+    el.innerHTML = unwrapSeg(segHtml([
+      ...[1, 2, 3].map(n => ({ value: n, label: `C${n}`, active: L.scope === 'camp' && n === STATE.camp.n, disabled: !ns.includes(n),
+        title: ns.includes(n) ? `${CAMP_NAMES[n]} ${y}` : `C${n} ${y} has not closed yet` })),
+      { value: 'year', label: yp.closed ? 'Full year' : 'Year so far', active: L.scope === 'year', title: yp.long }], 'data-scope'));
+    el.querySelectorAll('button').forEach(b => b.onclick = () => {
+      if (b.dataset.scope === 'year') { L.scope = 'year'; renderAll(); }
+      else { L.scope = 'camp'; setCamp(y, +b.dataset.scope); }
+    });
+    // Shift metrics are annual: only on the full-year ranking.
+    const sel = document.getElementById(prefix + '-rank-by');
+    const annual = new Set(RANK_GROUPS.filter(g => g.annual).flatMap(g => g.items.map(i => i[0])));
+    [...sel.options].forEach(o => { o.disabled = L.scope !== 'year' && annual.has(o.value); });
+    if (L.scope !== 'year' && annual.has(L.rankBy)) { L.rankBy = 'total_event'; sel.value = 'total_event'; }
+  }
+  const p = L.period(), metric = L.rankBy, fam = metricFamily(metric);
   const cmp = compareFor(p, fam);
-  const fmt = metric === 'orders_per_shift' ? (v => fmtNumber(v, 2)) : fmtCurrency;
+  const fmt = metric === 'orders_per_shift' ? (v => fmtNumber(v, 2)) : isAvgMetric(metric) ? fmtCurrency : fmtMoneyFit;
   const curLabel = fam === 'annual' ? annualLabel(p) : p.label;
   const priorLabel = cmp ? cmpLabel(cmp, fam) : null;
   // An average compares fine against a full year; a running total only as a share of it.
@@ -1474,6 +1668,7 @@ function renderLeaderboard(prefix) {
     tr.addEventListener('click', () => {
       STATE.selectedRep = tr.dataset.rep;
       STATE.repMode = L.repMode;
+      if (L.repMode === 'year') STATE.year = STATE.camp.year;
       STATE.chartMetric = null;
       renderAll();
       switchView('rep');
@@ -1536,13 +1731,15 @@ function gridNum(s, mode) {
 }
 // On a phone the grids use short amounts ($477K) so the newest column fits without a swipe.
 const compactGrid = () => window.matchMedia('(max-width: 680px)').matches;
+// Money in narrow columns: $612K on a phone, $611,555 elsewhere (em-dash stays an em-dash).
+const fmtMoneyFit = v => (v === null || v === undefined || isNaN(v)) ? naSpan : compactGrid() ? fmtCurrencyShort(v) : fmtCurrency(v);
 const gridFmt = (v, mode) => mode === 'orders' ? fmtInt(v)
   : (compactGrid() && mode === 'cpo' && v !== null && v !== undefined && !isNaN(v)) ? fmtCurrencyShort(v) : fmtCurrency(v);
 // cols: { head, sub, period, sel } or { head, sub, change: (row, stats, mode) => html }
 function renderGrid(id, cols) {
   const mode = GRID_STATE[id];
   const head = '<th>Category</th>' + cols.map(c =>
-    `<th class="${c.sel ? 'sel' : ''}${c.change ? ' chg' : ''}">${c.head}${c.sub ? `<span class="th-sub">${c.sub}</span>` : ''}</th>`).join('');
+    `<th class="${c.sel ? 'sel' : ''}${c.change ? ' chg' : ''}">${c.head}${c.sub ? `<span class="th-sub${c.subOpt ? ' opt' : ''}">${c.sub}</span>` : ''}</th>`).join('');
   let body = '';
   for (const row of GRID_ROWS) {
     const stats = cols.map(c => c.period ? teamStats(c.period, row.key) : null);
@@ -1573,7 +1770,7 @@ function buildGridToggles() {
     el.innerHTML = GRID_MODES.map(([m, l]) => `<button type="button" role="tab" data-mode="${m}">${l}</button>`).join('');
     el.querySelectorAll('button').forEach(b => b.addEventListener('click', () => {
       GRID_STATE[id] = b.dataset.mode; paint();
-      ({ 't-grid': renderTotalGrid, 'x-grid': renderCompareGrid, 'c-grid': renderCampGrid })[id]();
+      ({ 't-grid': renderTotalTable, 'x-grid': renderCompareGrid, 'c-grid': renderCampGrid })[id]();
     }));
     paint();
   });
@@ -1586,108 +1783,341 @@ function segHtml(items, attr, aria) {
 const unwrapSeg = html => html.replace(/^<div class="pills"[^>]*>/, '').replace(/<\/div>$/, '');
 
 // ==========================================================================
-// TOTAL page
+// TOTAL page (Phase 3b, 2026-09-24): one season against the years you pick, laid out like
+// the Event Analyzer overview. Alan: "we just need to see how we are doing this year".
 // ==========================================================================
-function renderYearCards() {
-  const keys = [...CAMP_YEARS, 'all'];
-  const el = document.getElementById('t-years');
-  el.innerHTML = keys.map(v => {
-    const p = periodFor(v);
-    const sales = teamStats(p, 'total_sales'), ev = teamStats(p, 'total_event');
-    const active = v === STATE.year;
-    const open = p.kind === 'year' && !p.closed;
-    const kS = p.kind === 'year' ? salesK(p) : 3;
-    const tag = p.kind === 'all' ? `${CAMP_YEARS.length} seasons` : !p.closed ? `${p.k === 1 ? 'C1' : 'C1–C' + p.k} · C${p.k + 1} open`
-      : kS === 3 ? 'Full year' : `Total thru C${kS}`;
-    const cmp = compareFor(p, 'sales');
-    const prior = cmp ? teamValue(cmp.period, 'total_sales') : null;
-    let bar = '', foot;
-    if (cmp && cmp.mode === 'share' && sales && prior) {
-      const pct = sales.cpo / prior * 100;
-      bar = `<div class="pc-bar"><span style="width:${Math.min(100, pct).toFixed(1)}%"></span></div>`;
-      const rest = p.closed ? `C${kS + 1} workbook pending` : `C${p.k + 1}${p.k + 1 < 3 ? '–C3' : ''} to go`;
-      foot = `<span>${pct.toFixed(0)}% of ${cmp.period.year}'s ${fmtCurrencyShort(prior)}</span><span>${rest}</span>`;
-    } else if (cmp && sales && prior) {
-      foot = `${chipYoY(sales.cpo, prior)}<span>vs ${cmp.period.label} · ${fmtCurrencyShort(prior)}</span>`;
-    } else if (p.kind === 'all') {
-      foot = `<span>${allYearsText()}</span>`;
-    } else {
-      foot = `<span>first year on file</span>`;
-    }
-    return `<button type="button" class="pcard${active ? ' active' : ''}" data-year="${v}" role="tab" aria-selected="${active}">
-      <div class="pc-top"><span class="pc-name">${p.kind === 'all' ? 'All years' : p.label}</span><span class="pc-tag${open ? ' open' : ''}">${tag}</span></div>
-      <div class="pc-val">${sales ? fmtCurrencyShort(sales.cpo) : '—'}</div>
-      <div class="pc-sub">Total CPO · event <strong>${ev ? fmtCurrencyShort(ev.cpo) : '—'}</strong></div>
-      ${bar}<div class="pc-foot">${foot}</div>
-    </button>`;
-  }).join('');
-  el.querySelectorAll('.pcard').forEach(b => b.addEventListener('click', () => {
-    STATE.year = b.dataset.year === 'all' ? 'all' : +b.dataset.year;
+const seasonP = () => periodYear(STATE.season);
+const earlierYears = () => CAMP_YEARS.filter(y => y < STATE.season);
+// Years on the page, oldest first: the season plus the compare chips that are on.
+const shownYears = () => CAMP_YEARS.filter(y => y === STATE.season || (y < STATE.season && STATE.compare.has(y)));
+const thruText = k => k === 1 ? 'C1' : `C1–C${k}`;
+// The period each year is shown at: the season as it stands; an earlier year at the same point while
+// the season is open and the toggle is on, otherwise its full year.
+function viewPeriod(y) {
+  const s = seasonP();
+  if (y === STATE.season) return s;
+  return (!s.closed && STATE.samePoint) ? periodThru(y, s.k) : periodYear(y);
+}
+// An open season against full prior years is progress ("70% of 2025"), not growth. Averages still compare.
+const shareMode = metric => { const s = seasonP(); return !s.closed && !STATE.samePoint && !isAvgMetric(metric); };
+// Why a Total Sales figure is missing: the campaigns in that period with no workbook.
+function missingWb(p) {
+  if (p.kind === 'year' && p.closed && yearHasFY(p.year)) return '';
+  const miss = p.parts.filter(c => !salesLoaded(c.year, c.n)).map(c => 'C' + c.n);
+  return miss.length ? `needs ${miss.join(' + ')} ${p.year} workbook` : '';
+}
+function setSeason(y) {
+  STATE.season = y;
+  const earlier = earlierYears();
+  STATE.bench = earlier.length ? earlier[earlier.length - 1] : null;
+  STATE.compare = new Set(earlier);
+  STATE.year = y;   // Rep View's Year total follows the season
+  renderAll();
+}
+// "▲ +$110,578 +24.7%" in a tinted pill
+function deltaPill(cur, prior, metric) {
+  if (cur === null || prior === null || cur === undefined || prior === undefined || !prior) return naSpan;
+  const d = cur - prior, pct = d / prior * 100, up = d >= 0;
+  const abs = isAvgMetric(metric) ? '$' + Math.abs(d).toFixed(2) : '$' + Math.abs(Math.round(d)).toLocaleString();
+  return `<span class="dpill ${up ? 'pos' : 'neg'}">${up ? '▲ +' : '▼ −'}${abs} <span class="dp-pct">${up ? '+' : '−'}${Math.abs(pct).toFixed(1)}%</span></span>`;
+}
+
+function renderTotalControls() {
+  const s = seasonP(), earlier = earlierYears();
+  const el = document.getElementById('t-ctl');
+  const opt = (list, sel) => list.map(y => `<option value="${y}"${y === sel ? ' selected' : ''}>${y}</option>`).join('');
+  el.innerHTML = `
+    <div class="cb-group cb-season"><span class="cb-k">Season</span><select class="ctl ctl-strong" id="t-season" aria-label="Season">${opt(CAMP_YEARS, STATE.season)}</select></div>
+    <div class="cb-group cb-data"><span class="cb-k">Data through</span><span class="cb-v">${s.closed ? 'C3 · full year' : `C${s.k} · ${s.k} of 3 campaigns`}</span></div>
+    <div class="cb-group cb-bench"><span class="cb-k">Compare to</span>${earlier.length
+      ? `<select class="ctl" id="t-bench" aria-label="Compare to">${opt(earlier, STATE.bench)}</select>`
+      : '<span class="cb-v" title="Nothing earlier on file">—</span>'}</div>
+    <div class="cb-spacer"></div>
+    <button type="button" class="switch${!s.closed && STATE.samePoint ? ' on' : ''}" id="t-same" role="switch" aria-checked="${!s.closed && STATE.samePoint}"${s.closed || !earlier.length ? ' disabled' : ''}
+      title="${s.closed ? 'A closed season compares full years' : `On: earlier years through ${thruText(s.k)}, like for like. Off: their full year`}">
+      <span>Same point${s.closed ? '' : `<span class="lg-only"> (${thruText(s.k)})</span>`}</span><span class="sw-track"><span class="sw-knob"></span></span></button>
+    ${earlier.length ? `<div class="cb-group cb-show"><span class="cb-k">Show</span><div class="pills" id="t-compare" aria-label="Years shown">${earlier.map(y =>
+      `<button type="button" data-y="${y}" class="${STATE.compare.has(y) ? 'active' : ''}" aria-pressed="${STATE.compare.has(y)}"${y === STATE.bench ? ' title="The comparison year is always shown"' : ''}>${y}</button>`).join('')}</div></div>` : ''}`;
+  document.getElementById('t-season').onchange = e => setSeason(+e.target.value);
+  const bench = document.getElementById('t-bench');
+  if (bench) bench.onchange = e => { STATE.bench = +e.target.value; STATE.compare.add(STATE.bench); renderAll(); };
+  document.getElementById('t-same').onclick = () => { STATE.samePoint = !STATE.samePoint; renderAll(); };
+  el.querySelectorAll('#t-compare button').forEach(b => b.onclick = () => {
+    const y = +b.dataset.y;
+    if (y === STATE.bench) return;
+    STATE.compare.has(y) ? STATE.compare.delete(y) : STATE.compare.add(y);
     renderAll();
-  }));
+  });
+}
+
+function renderTotalHeadline() {
+  const s = seasonP(), b = STATE.bench, el = document.getElementById('t-headline');
+  if (!b) { el.innerHTML = `<span class="hl-main">${STATE.season} season</span><span class="hl-sub">the first season on file: nothing earlier to compare with</span>`; return; }
+  const pb = viewPeriod(b);
+  let metric = 'total_sales', label = 'Total CPO', why = '';
+  let cur = teamValue(s, metric), prior = teamValue(pb, metric);
+  if (cur === null || prior === null) {
+    why = `Total CPO ${cur === null ? 'not loaded for ' + s.label : (missingWb(pb) || 'not loaded')}`;
+    metric = 'total_event'; label = 'Event CPO';
+    cur = teamValue(s, metric); prior = teamValue(pb, metric);
+  }
+  if (cur === null || prior === null) { el.innerHTML = `<span class="hl-main">${s.label}</span><span class="hl-sub">No figure to compare with ${b} yet.</span>`; return; }
+  const scope = s.closed ? 'full years' : STATE.samePoint ? `same point: ${thruText(s.k)}` : `${thruText(s.k)} vs ${b} full year`;
+  let main;
+  if (shareMode(metric)) {
+    const left = 3 - s.k;
+    main = `${s.label} is <span class="hl-delta">${Math.round(cur / prior * 100)}%</span> of ${b} with ${left === 1 ? 'C3' : left + ' campaigns'} to go`;
+  } else {
+    const pct = (cur - prior) / prior * 100;
+    const verb = Math.abs(pct) < 2 ? 'on pace with' : pct > 0 ? 'ahead of' : 'behind';
+    main = `${STATE.season} is ${verb} ${b} <span class="hl-delta ${pct >= 0 ? 'pos' : 'neg'}">${pct >= 0 ? '▲ +' : '▼ −'}${Math.abs(pct).toFixed(1)}%</span>`;
+  }
+  el.innerHTML = `<span class="hl-main">${main}</span><span class="hl-sub">${fmtCurrency(cur)} vs ${fmtCurrency(prior)} ${label} · ${scope}${why ? ' · ' + why : ''}</span>`;
 }
 
 function renderTotalKPIs() {
-  const p = totalPeriod();
+  const s = seasonP();
+  const others = shownYears().filter(y => y !== STATE.season).reverse();   // newest first, like Event Analyzer
   const card = (label, metric, fmt) => {
-    const fam = metricFamily(metric), cmp = compareFor(p, fam);
-    const cur = teamValue(p, metric), prior = cmp ? teamValue(cmp.period, metric) : null;
-    let chip = '', ctx;
-    if (!cmp) ctx = p.kind === 'all' ? allYearsText() : 'first year on file';
-    else if (prior === null) ctx = `no ${cmp.period.label} figure loaded`;
-    else if (cmp.mode === 'share' && !isAvgMetric(metric)) { chip = shareChip(cur, prior, cmp.period.year); ctx = `${cmp.period.year} full year · ${fmt(prior)}`; }
-    else { chip = chipYoY(cur, prior); ctx = `vs ${cmpLabel(cmp, fam)} · ${fmt(prior)}`; }
-    return statCard(label, cur === null ? naSpan : fmt(cur), chip, ctx);
+    const cur = teamValue(s, metric), st = teamStats(s, metric);
+    const meta = st && !isAvgMetric(metric) ? `${Math.round(st.orders).toLocaleString()} orders` : '';
+    const vals = others.map(y => ({ y, p: viewPeriod(y) })).map(o => ({ ...o, v: teamValue(o.p, metric) }));
+    if (vals.length > 1 && vals.every(o => o.v === null && missingWb(o.p))) {
+      const miss = [...new Set(vals.flatMap(o => o.p.parts.filter(c => !salesLoaded(c.year, c.n)).map(c => 'C' + c.n)))];
+      const yrs = vals.map(o => o.y).sort();
+      return `<div class="kcard">
+        <div class="kc-top"><span class="kc-label">${label}</span><span class="kc-meta">${meta}</span></div>
+        <div class="kc-val">${cur === null ? naSpan : fmt(cur)}</div>
+        <div class="kc-sub">${s.label} · ${s.closed ? 'full year' : thruText(s.k)}</div>
+        <div class="kc-rows"><div class="kc-row"><span class="k">${yrs.join(' · ')}</span><span class="v">—</span><span class="need">needs the ${miss.join(' + ')} ${yrs.join(' + ')} workbooks</span></div></div>
+      </div>`;
+    }
+    const rows = others.map(y => {
+      const p = viewPeriod(y), v = teamValue(p, metric);
+      const right = v === null ? `<span class="need">${missingWb(p) || 'not loaded'}</span>`
+        : shareMode(metric) ? shareChip(cur, v, y) : deltaPill(cur, v, metric);
+      return `<div class="kc-row${y === STATE.bench ? ' bench' : ''}"><span class="k">${y}${p.kind === 'year' && !p.closed ? ' so far' : ''}</span><span class="v">${v === null ? '—' : fmt(v)}</span>${right}</div>`;
+    }).join('');
+    return `<div class="kcard">
+      <div class="kc-top"><span class="kc-label">${label}</span><span class="kc-meta">${meta}</span></div>
+      <div class="kc-val">${cur === null ? naSpan : fmt(cur)}</div>
+      <div class="kc-sub">${s.label} · ${s.closed ? 'full year' : thruText(s.k)}</div>
+      <div class="kc-rows">${rows || `<div class="kc-row"><span class="k">Nothing earlier on file</span></div>`}</div>
+    </div>`;
   };
   document.getElementById('t-kpis').innerHTML =
-    card('Team Total CPO', 'total_sales', fmtCurrencyShort) +
-    card('Team Event CPO', 'total_event', fmtCurrencyShort) +
-    card('Non-Event CPO', 'bucket:Non-Event CPO', fmtCurrencyShort) +
-    card('Team Avg Order', 'total_avg_order', fmtCurrency);
+    card('Total CPO', 'total_sales', fmtCurrency) +
+    card('Event CPO', 'total_event', fmtCurrency) +
+    card('Average order', 'total_avg_order', v => '$' + v.toFixed(2));
 }
 
-function renderTotalGrid() {
-  const cols = CAMP_YEARS.map(y => {
-    const p = periodYear(y);
-    const k = salesK(p);
-    return { head: p.label, sub: !p.closed ? (p.k === 1 ? 'C1' : `C1–C${p.k}`) : k === 3 ? 'full year' : `total thru C${k}`, period: p, sel: STATE.year === y };
-  });
-  const last = periodYear(LAST_YEAR);
-  const cmpE = compareFor(last, 'event'), cmpS = compareFor(last, 'sales');
-  const li = cols.length - 1;
-  if (cmpE) {
-    cols.push({ head: `vs ${LAST_YEAR - 1}`, sub: last.closed ? 'growth' : 'same point / share', change: (row, stats, mode) => {
-      const fam = metricFamily(row.key), cmp = compareFor(last, fam);
-      if (!cmp) return '';
-      const cur = gridNum(stats[li], mode), prior = gridNum(teamStats(cmp.period, row.key), mode);
-      return (cmp.mode === 'share' && mode !== 'avg') ? shareChip(cur, prior, cmp.period.year) : fmtYoY(cur, prior);
-    } });
+// ----- Season shape: C1 / C2 / C3 bars, the season beside the years shown -----
+const SHAPE_METRICS = [['total_event', 'Event CPO'], ['total_sales', 'Total CPO']];
+function renderShape() {
+  const metric = STATE.shapeMetric, years = shownYears();
+  const mEl = document.getElementById('t-shape-metric');
+  mEl.innerHTML = SHAPE_METRICS.map(([m, l]) => `<button type="button" data-m="${m}" class="${m === metric ? 'active' : ''}" aria-pressed="${m === metric}">${l}</button>`).join('');
+  mEl.querySelectorAll('button').forEach(b => b.onclick = () => { STATE.shapeMetric = b.dataset.m; renderShape(); });
+  const colorOf = y => y === STATE.season ? '#C2410C' : y === STATE.bench ? '#3E4A5C' : '#B8B2A7';
+  document.getElementById('t-shape-legend').innerHTML = years.map(y =>
+    `<span class="li"><span class="sw" style="background:${colorOf(y)}"></span>${y}${y === STATE.season ? ' (season)' : ''}</span>`).join('');
+  document.getElementById('t-shape-context').textContent =
+    `${SHAPE_METRICS.find(x => x[0] === metric)[1]} per campaign · ${years.join(' vs ')}` +
+    (metric === 'total_sales' ? ' · a campaign with no Total Sales workbook shows no bar' : '');
+
+  const val = (y, n) => campaignsForYear(y).includes(n) ? teamValue(periodCamp(y, n), metric) : undefined;  // undefined = still open
+  const all = [];
+  for (const y of years) for (const n of [1, 2, 3]) { const v = val(y, n); if (v) all.push(v); }
+  const svg = document.getElementById('t-shape-svg');
+  const cw = svg.parentElement ? svg.parentElement.clientWidth : 0;
+  const narrow = cw > 0 && cw < 560;
+  const W = narrow ? Math.max(300, Math.round(cw)) : 900, H = narrow ? 230 : 280;
+  const padL = narrow ? 44 : 60, padR = 10, padT = 22, padB = 30;
+  svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+  const plotW = W - padL - padR, plotH = H - padT - padB;
+  const step = niceCeil(Math.max(...all, 1) * 1.12 / 4), yMax = step * 4;
+  const yFn = v => padT + plotH - v / yMax * plotH;
+  let html = '';
+  for (let i = 0; i <= 4; i++) {
+    const v = i * step, yy = yFn(v);
+    html += `<line x1="${padL}" y1="${yy}" x2="${W - padR}" y2="${yy}" stroke="${i ? '#ECE9E0' : '#D6D2C6'}" ${i ? 'stroke-dasharray="2,4"' : ''}/>`;
+    html += `<text x="${padL - 8}" y="${yy + 3}" text-anchor="end" class="chart-y-label">${fmtCurrencyShort(v)}</text>`;
   }
-  cols.push({ head: 'All years', sub: `${FIRST_YEAR}–${LAST_YEAR}`, period: periodAll(), sel: STATE.year === 'all' });
-  renderGrid('t-grid', cols);
+  const groupW = plotW / 3, inner = groupW * 0.72, gap = 4;
+  const barW = Math.min(narrow ? 30 : 58, (inner - gap * (years.length - 1)) / years.length);
+  const groupSpan = barW * years.length + gap * (years.length - 1);
+  [1, 2, 3].forEach((n, gi) => {
+    const x0 = padL + gi * groupW + (groupW - groupSpan) / 2;
+    html += `<text x="${padL + gi * groupW + groupW / 2}" y="${H - 9}" text-anchor="middle" class="chart-x-label">C${n} · ${CAMP_WINDOWS[n]}</text>`;
+    years.forEach((y, i) => {
+      const v = val(y, n), x = x0 + i * (barW + gap), cx = x + barW / 2;
+      if (v === undefined) { html += `<text x="${cx}" y="${yFn(0) - 5}" text-anchor="middle" class="shape-na">open</text>`; return; }
+      if (v === null || v === 0) { html += `<text x="${cx}" y="${yFn(0) - 5}" text-anchor="middle" class="shape-na"><title>No ${metric === 'total_sales' ? 'Total Sales workbook' : 'data'} for C${n} ${y}</title>—</text>`; return; }
+      const top = yFn(v);
+      html += `<rect x="${x}" y="${top}" width="${barW}" height="${yFn(0) - top}" rx="2.5" fill="${colorOf(y)}"><title>C${n} ${y}: ${fmtCurrency(v).replace(/<[^>]*>/g, '')}</title></rect>`;
+      if (!narrow || y === STATE.season) html += `<text x="${cx}" y="${top - 5}" text-anchor="middle" class="shape-lbl${y === STATE.season ? ' season' : ''}">${fmtCurrencyShort(v)}</text>`;
+    });
+  });
+  svg.innerHTML = html;
+}
+
+// ----- Category table: years as columns, share of the season, change vs the comparison year -----
+function renderTotalTable() {
+  const mode = GRID_STATE['t-grid'], s = seasonP(), b = STATE.bench, years = shownYears();
+  const periods = Object.fromEntries(years.map(y => [y, viewPeriod(y)]));
+  document.getElementById('t-table-title').textContent =
+    `${({ cpo: 'CPO', avg: 'Avg Order', orders: 'Orders' })[mode]} by Category · ${s.closed ? 'full year' : (STATE.samePoint ? 'through ' + thruText(s.k) : s.label + ' vs full years')}`;
+  const seasonEvent = teamStats(s, 'total_event');
+  const rows = GRID_ROWS.map(row => {
+    const stats = Object.fromEntries(years.map(y => [y, teamStats(periods[y], row.key)]));
+    const cur = gridNum(stats[STATE.season], mode), prior = b ? gridNum(stats[b], mode) : null;
+    return { row, stats, cur, prior, d: (cur !== null && prior !== null && cur !== undefined && prior !== undefined) ? cur - prior : null };
+  });
+  const maxD = Math.max(1, ...rows.filter(r => !r.row.cls && r.d !== null).map(r => Math.abs(r.d)));
+  const fmtD = (d, m) => m === 'orders' ? Math.abs(Math.round(d)).toLocaleString() : m === 'avg' ? '$' + Math.abs(d).toFixed(2) : '$' + Math.abs(Math.round(d)).toLocaleString();
+  const head = `<th>Category</th><th class="share-col">Share ${STATE.season}</th>` +
+    years.map(y => `<th class="${y === STATE.season ? 'sel' : ''}">${y}${y === STATE.season ? ' ●' : ''}<span class="th-sub">${periods[y].kind === 'thru' ? thruText(periods[y].k) : periods[y].closed ? 'full year' : 'so far'}</span></th>`).join('') +
+    (b ? `<th class="chg dlt-abs">Δ vs ${b}</th><th>%</th>` : '');
+  const body = rows.map(({ row, stats, cur, prior, d }) => {
+    const isEventBucket = row.key.startsWith('bucket:') && row.key !== 'bucket:Non-Event CPO';
+    const sc = stats[STATE.season];
+    const share = isEventBucket && sc && seasonEvent && seasonEvent.cpo ? sc.cpo / seasonEvent.cpo * 100 : null;
+    const shareCell = share === null ? '' : `<span class="sharebar"><span style="width:${Math.min(100, share).toFixed(1)}%"></span></span>${share.toFixed(0)}%`;
+    const cells = years.map(y => `<td class="${y === STATE.season ? 'sel' : ''}">${gridFmt(gridNum(stats[y], mode), mode)}</td>`).join('');
+    let dCell = '', pCell = '';
+    if (b) {
+      const share_ = shareMode(row.key) && mode !== 'avg';
+      if (d === null) { dCell = naSpan; pCell = naSpan; }
+      else if (share_) { dCell = ''; pCell = shareChip(cur, prior, b); }
+      else {
+        const up = d >= 0, w = row.cls ? 0 : Math.abs(d) / maxD * 100;
+        dCell = `${row.cls ? '' : `<span class="dbar"><span class="${up ? 'pos' : 'neg'}" style="width:${w.toFixed(1)}%"></span></span>`}<span class="dtext ${up ? 'pos' : 'neg'}">${up ? '▲ +' : '▼ −'}${fmtD(d, mode)}</span>`;
+        pCell = prior ? `<span class="dtext ${up ? 'pos' : 'neg'}">${up ? '+' : '−'}${Math.abs(d / prior * 100).toFixed(1)}%</span>` : naSpan;
+      }
+    }
+    return `<tr class="${row.cls || ''}"><td class="cat-name">${row.swatch ? `<span class="swatch" style="background:${row.swatch}"></span>` : ''}${row.label}</td><td class="share-col">${shareCell}</td>${cells}${b ? `<td class="chg dlt-abs">${dCell}</td><td>${pCell}</td>` : ''}</tr>`;
+  }).join('');
+  document.getElementById('t-grid').innerHTML = `<table class="cat-table grid"><thead><tr>${head}</tr></thead><tbody>${body}</tbody></table>`;
 
   const notes = [];
-  if (!last.closed) notes.push(`${last.label} = ${last.k === 1 ? 'C1' : 'C1 through C' + last.k}.`);
-  if (cmpE && !last.closed) notes.push(`Event rows compare ${last.label} with ${cmpE.period.label} (the same point).`);
-  if (cmpS && cmpS.mode === 'share') notes.push(`Total and Non-Event show ${last.label} as a share of all of ${cmpS.period.year}: ${cmpS.period.year} has no Total Sales workbook for C${salesThruK(cmpS.period.year) + 1}, so there is no same-point figure.`);
-  for (const y of CAMP_YEARS) { const py = periodYear(y), k = salesK(py); if (py.closed && k < 3) notes.push(`${y} Total and Non-Event cover C1${k > 1 ? '–C' + k : ''} only: no Total Sales workbook for C${k + 1} ${y} yet.`); }
-  const fy = CAMP_YEARS.filter(y => yearClosed(y) && yearHasFY(y));
-  if (fy.length) notes.push(`Full years (${fy.join(', ')}) use the year-end Total Sales figure; Non-Event = that minus the year's event sales.`);
-  notes.push(reconcileNote(cols.map(c => c.period)));
-  document.getElementById('t-grid-note').textContent = notes.join(' ');
+  if (!s.closed && b) notes.push(STATE.samePoint
+    ? `Earlier years are shown through ${thruText(s.k)}, the same point as ${s.label}.`
+    : `Earlier years are full years; ${s.label} totals show as a share of ${b}.`);
+  const gaps = years.map(y => missingWb(periods[y])).filter(Boolean);
+  if (gaps.length) notes.push(`Total CPO and Non-Event are — where a campaign has no Total Sales workbook (${[...new Set(gaps.map(g => g.replace(/^needs /, '')))].join('; ')}); event rows are complete.`);
+  notes.push('Share = the category\'s part of ' + STATE.season + ' event CPO.');
+  notes.push(reconcileNote(years.map(y => periods[y])));
+  document.getElementById('t-grid-note').textContent = notes.filter(Boolean).join(' ');
+}
+
+// ----- Rep leaderboard on Total (Alan, 2026-09-24): every core-team rep at a glance, filtered by
+// category, following the page's Season / Compare to / Same point controls. -----
+const TLB_MAIN = [['total_sales', 'Total CPO', 'Total'], ['total_event', 'Event CPO', 'Event'], ['bucket:Non-Event CPO', 'Non-Event CPO', 'Non-Event'], ['total_avg_order', 'Avg Order', 'Avg order']];
+const tlbLabel = m => (TLB_MAIN.find(x => x[0] === m) || [null, m.startsWith('bucket:') ? bLabel(m.slice(7)) : m])[1];
+function renderTotalLeaderboard() {
+  const metric = STATE.tRank, s = seasonP(), b = STATE.bench, years = shownYears(), seasonY = STATE.season;
+  const periods = Object.fromEntries(years.map(y => [y, viewPeriod(y)]));
+  const share = !!b && shareMode(metric);
+  const growthOK = !!b && !share;
+
+  // controls: main categories as pills, event categories in a menu, then the sort
+  const mEl = document.getElementById('t-lb-metric');
+  mEl.innerHTML = TLB_MAIN.map(([m, l, sm]) => `<button type="button" data-m="${m}" class="${m === metric ? 'active' : ''}" aria-pressed="${m === metric}"><span class="lg">${l}</span><span class="sm">${sm}</span></button>`).join('');
+  mEl.querySelectorAll('button').forEach(x => x.onclick = () => { STATE.tRank = x.dataset.m; renderTotalLeaderboard(); });
+  const bSel = document.getElementById('t-lb-bucket');
+  bSel.innerHTML = `<option value="">Category…</option>` + EVENT_SUB_BUCKETS.map(k => `<option value="bucket:${k}"${metric === 'bucket:' + k ? ' selected' : ''}>${bLabel(k)}</option>`).join('');
+  bSel.classList.toggle('active', metric.startsWith('bucket:') && metric !== 'bucket:Non-Event CPO');
+  bSel.onchange = e => { if (e.target.value) { STATE.tRank = e.target.value; renderTotalLeaderboard(); } };
+  const sEl = document.getElementById('t-lb-sort');
+  const sortNow = STATE.tSort === 'growth' && growthOK ? 'growth' : 'value';
+  sEl.innerHTML = [['value', 'Highest'], ['growth', 'Biggest growth']].map(([v, l]) =>
+    `<button type="button" data-s="${v}" class="${v === sortNow ? 'active' : ''}"${v === 'growth' && !growthOK ? ` disabled title="${!b ? 'Nothing earlier to compare with' : 'Growth needs a like-for-like comparison: turn Same point on'}"` : ''}>${l}</button>`).join('');
+  sEl.querySelectorAll('button').forEach(x => x.onclick = () => { STATE.tSort = x.dataset.s; renderTotalLeaderboard(); });
+
+  const rows = masterListReps().map(r => {
+    const vals = Object.fromEntries(years.map(y => [y, getMetric(r, periods[y], metric)]));
+    const cur = vals[seasonY], prior = b ? vals[b] : null;
+    const base = growthOK && !isAvgMetric(metric) ? metricOrders(r, periods[b], metric) : null;
+    const growth = (growthOK && cur !== null && prior !== null && prior > 0) ? (cur - prior) / prior * 100 : null;
+    const small = base !== null && base < MIN_GROWTH_ORDERS;
+    const orders = metricOrders(r, periods[seasonY], metric);   // the orders behind the season figure
+    return { r, vals, cur, prior, growth, base, small, orders };
+  });
+  const ranked = rows.filter(x => x.cur !== null);
+  if (sortNow === 'growth') {
+    const g = x => (x.growth === null || x.small) ? -Infinity : x.growth;
+    ranked.sort((a, c) => g(c) - g(a) || c.cur - a.cur);
+  } else ranked.sort((a, c) => c.cur - a.cur);
+  const missing = rows.filter(x => x.cur === null).sort((a, c) => a.r.name.localeCompare(c.r.name));
+  const maxVal = Math.max(1, ...ranked.map(x => x.cur));
+  const priorGap = b && rows.every(x => x.prior === null) ? missingWb(periods[b]) : '';
+  // Columns that would be all em-dashes (an earlier year with no workbook) stay off; the line above says why.
+  const cols = years.filter(y => y === seasonY || rows.some(x => x.vals[y] !== null));
+  const hasDelta = !!b && rows.some(x => x.cur !== null && x.prior !== null);
+
+  document.getElementById('t-lb-context').innerHTML =
+    `<strong>${tlbLabel(metric)}</strong> · ${s.label}` +
+    (b ? ` vs ${b}${s.closed ? '' : STATE.samePoint ? ` at the same point (${thruText(s.k)})` : ' full year'}` : '') +
+    ` · ${ranked.length} of ${MASTER.length} core-team reps` + (priorGap ? ` · ${b} ${priorGap.replace(/^needs/, 'needs the')}` : '');
+
+  const fmt = isAvgMetric(metric) ? (v => fmtCurrency(v)) : fmtMoneyFit;
+  const fmtD = d => isAvgMetric(metric) ? '$' + Math.abs(d).toFixed(0) : '$' + Math.abs(Math.round(d)).toLocaleString();
+  const yearHead = y => `<th class="num yr${y === seasonY ? ' cur-h' : ' yr-old'}">${y}${y === seasonY ? ' ●' : ''}<span class="th-sub opt">${periods[y].kind === 'thru' ? thruText(periods[y].k) : periods[y].closed ? 'full year' : 'so far'}</span></th>`;
+  let html = `<div class="lb-scroll"><table class="leaderboard tlb${sortNow === 'growth' ? ' growth-emph' : ''}"><thead><tr>
+    <th style="text-align:center;">#</th><th>Rep</th><th class="bar-h"></th>
+    ${cols.map(yearHead).join('')}
+    <th class="num ord">Orders<span class="th-sub opt">${s.label}</span></th>
+    ${hasDelta ? `<th class="num dlt-abs">Δ vs ${b}</th><th class="num g-col">${share ? `%<span class="lg-only"> of ${b}</span>` : '%'}</th>` : ''}
+  </tr></thead><tbody>`;
+  const deltaCells = x => {
+    if (!hasDelta) return '';
+    if (x.cur === null || x.prior === null) return `<td class="num dlt-abs">${naSpan}</td><td class="growth-cell">${naSpan}</td>`;
+    if (share) return `<td class="num dlt-abs"></td><td class="growth-cell">${shareChip(x.cur, x.prior, b)}</td>`;
+    const d = x.cur - x.prior, up = d >= 0;
+    const pct = x.small ? `<span class="chip na" title="Base under ${MIN_GROWTH_ORDERS} orders (${x.base}) — growth not meaningful">—</span>` : fmtYoY(x.cur, x.prior);
+    return `<td class="num dlt-abs"><span class="dtext ${up ? 'pos' : 'neg'}">${up ? '+' : '−'}${fmtD(d)}</span></td><td class="growth-cell">${pct}</td>`;
+  };
+  ranked.forEach((x, i) => {
+    const isSelf = x.r.name === STATE.selectedRep;
+    html += `<tr class="${[isSelf ? 'is-self' : '', i < 3 ? 'top3' : ''].filter(Boolean).join(' ')}" data-rep="${x.r.name}" title="Open ${x.r.name}">
+      <td class="rank">${i + 1}</td>
+      <td class="name">${x.r.name}${isSelf ? '<span class="viewing-dot"></span>' : ''}</td>
+      <td class="bar-cell"><div class="lb-track"><div class="lb-fill" style="width:${Math.max(1.5, x.cur / maxVal * 100).toFixed(1)}%"></div></div></td>
+      ${cols.map(y => `<td class="num yr${y === seasonY ? ' cur' : ' prior yr-old'}">${fmt(x.vals[y])}</td>`).join('')}
+      <td class="num ord">${fmtInt(x.orders)}</td>
+      ${deltaCells(x)}
+    </tr>`;
+  });
+  missing.forEach(x => {
+    const why = metricFamily(metric) === 'sales' && PENDING.includes(x.r.name) ? 'Total Sales pending' : `no ${tlbLabel(metric)} in ${s.label}`;
+    html += `<tr class="lb-missing" data-rep="${x.r.name}" title="${x.r.name}: ${why}">
+      <td class="rank">–</td><td class="name">${x.r.name}<span class="lb-why">${why}</span></td><td class="bar-cell"></td>
+      ${cols.map(y => `<td class="num yr${y === seasonY ? '' : ' yr-old'}">${fmt(x.vals[y])}</td>`).join('')}
+      <td class="num ord">${fmtInt(x.orders)}</td>
+      ${hasDelta ? `<td class="num dlt-abs"></td><td class="growth-cell"></td>` : ''}
+    </tr>`;
+  });
+  html += `</tbody></table></div>
+    <div class="lb-foot">Core team only. Tap a rep to open them. Bars scale to the top ${s.label} value.${sortNow === 'growth' ? ` Growth needs at least ${MIN_GROWTH_ORDERS} ${b} orders.` : ''}${share ? ` ${s.label} is shown as a share of ${b}'s full year (Same point is off).` : ''}</div>`;
+  const body = document.getElementById('t-lb-body');
+  body.innerHTML = html;
+  body.querySelectorAll('tbody tr').forEach(tr => tr.addEventListener('click', () => {
+    STATE.selectedRep = tr.dataset.rep; STATE.repMode = 'year'; STATE.year = STATE.season; STATE.chartMetric = null;
+    renderAll(); switchView('rep');
+  }));
 }
 
 function renderTotalView() {
-  const p = totalPeriod();
-  document.getElementById('t-title').textContent =
-    p.kind === 'all' ? 'All Years Combined' : p.closed ? `Full Year ${p.year}` : `${p.year} So Far`;
-  document.getElementById('t-scope').textContent =
-    (p.kind === 'all' ? `${FIRST_YEAR}–${LAST_YEAR}` : p.closed ? `Jan–Dec ${p.year}` : `${p.k === 1 ? 'C1' : 'C1–C' + p.k} ${p.year}`) + ' · core team';
-  renderYearCards();
+  const s = seasonP();
+  document.getElementById('t-title').textContent = `${STATE.season} season performance`;
+  document.getElementById('t-sub').textContent =
+    `Comparing ${shownYears().join(', ')} · ${s.closed ? 'full years' : STATE.samePoint ? `same point: through C${s.k} (${s.k} of 3 campaigns)` : `${s.label} vs full prior years`}`;
+  renderTotalControls();
+  renderTotalHeadline();
   renderTotalKPIs();
-  renderLeaderboard('t');
-  renderCategoryMix('t', p);
-  renderTotalGrid();
+  renderTotalLeaderboard();
+  renderShape();
+  renderTotalTable();
 }
 
 // ==========================================================================
@@ -1730,7 +2160,7 @@ function renderCampCards() {
       <div class="pc-foot">${foot}</div>
     </button>`;
   }).join('');
-  el.querySelectorAll('.pcard[data-n]').forEach(b => b.addEventListener('click', () => setCamp(y, +b.dataset.n)));
+  el.querySelectorAll('.pcard[data-n]').forEach(b => b.addEventListener('click', () => { LB.c.scope = 'camp'; setCamp(y, +b.dataset.n); }));
 }
 function renderCompareGrid() {
   const n = STATE.camp.n;
@@ -1739,16 +2169,17 @@ function renderCompareGrid() {
     disabled: !CAMP_YEARS.some(y => campaignsForYear(y).includes(k)) })), 'data-n'));
   campEl.querySelectorAll('button').forEach(b => b.addEventListener('click', () => {
     const k = +b.dataset.n;
+    LB.c.scope = 'camp';
     const y = campaignsForYear(STATE.camp.year).includes(k) ? STATE.camp.year
       : [...CAMP_YEARS].reverse().find(yy => campaignsForYear(yy).includes(k));
     setCamp(y, k);
   }));
 
   const years = CAMP_YEARS.filter(y => campaignsForYear(y).includes(n));
-  const cols = years.map(y => ({ head: `C${n} ${y}`, sub: CAMP_WINDOWS[n], period: periodCamp(y, n), sel: y === STATE.camp.year }));
+  const cols = years.map(y => ({ head: `<span class="lg-only">C${n} </span>${y}`, sub: CAMP_WINDOWS[n], subOpt: true, period: periodCamp(y, n), sel: y === STATE.camp.year }));
   if (years.length >= 2) {
     const a = years.length - 1, b = years.length - 2;
-    cols.push({ head: `${years[a]} vs ${years[b]}`, sub: 'change', change: (row, st, mode) => fmtYoY(gridNum(st[a], mode), gridNum(st[b], mode)) });
+    cols.push({ head: `<span class="lg-only">${years[a]} vs ${years[b]}</span><span class="sm-only">vs '${String(years[b]).slice(2)}</span>`, sub: 'change', subOpt: true, change: (row, st, mode) => fmtYoY(gridNum(st[a], mode), gridNum(st[b], mode)) });
   }
   document.getElementById('x-title').textContent = `${CAMP_NAMES[n]} · Year over Year`;
   renderGrid('x-grid', cols);
@@ -1908,7 +2339,7 @@ function renderRepScorecard() {
     </div>
   `;
 
-  const selectRep = name => { STATE.selectedRep = name; renderRepView(); renderLeaderboard('t'); renderLeaderboard('c'); renderHeader(); };
+  const selectRep = name => { STATE.selectedRep = name; renderRepView(); renderLeaderboard('c'); renderTotalLeaderboard(); renderHeader(); };
   document.getElementById('rep-select').onchange = e => selectRep(e.target.value);
   const step = dir => {
     const idx = MASTER.indexOf(STATE.selectedRep);
@@ -2099,6 +2530,17 @@ function renderRepSummary() {
       } else if (yoy < -15) {
         callouts.push({ type: 'watch', title: `${hero.label} declining`, body: `Down ${Math.abs(yoy).toFixed(1)}% vs ${cmp.period.label} — worth examining what's shifted.` });
       }
+    }
+  }
+
+  // When Total CPO can only be read as a share of last year (or has no baseline), event sales still
+  // compare like for like: use them so a big mover is not called "steady" (phone review 2026-09-24).
+  if (hero.metric === 'total_sales' && cmp && (cmp.mode === 'share' || !priorS)) {
+    const cmpE = compareFor(p, 'event'), e = pEvent(r, p), ep = cmpE ? pEvent(r, cmpE.period) : null;
+    if (e && ep && ep.cpo > 0 && ep.orders >= MIN_GROWTH_ORDERS) {
+      const yoy = (e.cpo - ep.cpo) / ep.cpo * 100;
+      if (yoy > 15) callouts.push({ type: 'good', title: 'Event sales growing', body: `Event CPO up ${yoy.toFixed(1)}% vs ${cmpE.period.label} (${fmtCurrencyShort(e.cpo)} vs ${fmtCurrencyShort(ep.cpo)}).` });
+      else if (yoy < -15) callouts.push({ type: 'watch', title: 'Event sales down', body: `Event CPO down ${Math.abs(yoy).toFixed(1)}% vs ${cmpE.period.label} (${fmtCurrencyShort(e.cpo)} vs ${fmtCurrencyShort(ep.cpo)}).` });
     }
   }
 
@@ -2319,22 +2761,22 @@ function renderRepBuckets() {
     const isEmpty = !cur && !prior;
     rows += `<tr class="${isEmpty ? 'empty' : ''}">
       <td class="cat-name"><span class="swatch" style="background:${BUCKET_COLORS[b]};${isEmpty ? 'opacity:.35;' : ''}"></span>${bLabel(b)}</td>
-      <td class="cur">${cur ? fmtCurrency(cur.cpo) : naSpan}</td>
-      ${cmpE ? `<td class="prior">${prior ? fmtCurrency(prior.cpo) : naSpan}</td><td>${fmtYoY(cur && cur.cpo, prior && prior.cpo)}</td>` : ''}
-      <td title="${cur && cur.events ? `${cur.events} event${cur.events === 1 ? '' : 's'}` : ''}">${fmtCurrency(cpoPerEvent)}</td>
-      <td>${fmtNumber(ordersPerEvent, 1)}</td>
-      <td>${fmtCurrency(avgOrd)}</td>
-      <td class="prior">${fmtCurrency(teamAv)}</td>
-      <td>${vsTeam === null ? naSpan : `<span class="chip ${vsTeam >= 0 ? 'pos' : 'neg'}" style="font-size:10px;padding:1px 6px;">${vsTeam >= 0 ? '+' : '−'}${Math.abs(vsTeam).toFixed(0)}%</span>`}</td>
+      <td class="cur">${cur ? fmtMoneyFit(cur.cpo) : naSpan}</td>
+      ${cmpE ? `<td class="prior">${prior ? fmtMoneyFit(prior.cpo) : naSpan}</td><td>${fmtYoY(cur && cur.cpo, prior && prior.cpo)}</td>` : ''}
+      <td class="xtra" title="${cur && cur.events ? `${cur.events} event${cur.events === 1 ? '' : 's'}` : ''}">${fmtCurrency(cpoPerEvent)}</td>
+      <td class="xtra">${fmtNumber(ordersPerEvent, 1)}</td>
+      <td class="xtra">${fmtCurrency(avgOrd)}</td>
+      <td class="prior xtra">${fmtCurrency(teamAv)}</td>
+      <td class="xtra">${vsTeam === null ? naSpan : `<span class="chip ${vsTeam >= 0 ? 'pos' : 'neg'}" style="font-size:10px;padding:1px 6px;">${vsTeam >= 0 ? '+' : '−'}${Math.abs(vsTeam).toFixed(0)}%</span>`}</td>
     </tr>`;
   }
   document.getElementById('rep-buckets-sub').innerHTML = `
     ${best ? `<div class="cat-best">Best CPO per event: <strong>${bLabel(best.b)}</strong> at ${fmtCurrency(best.v)} per event across ${best.events} events in ${p.label}.</div>` : ''}
-    <table class="cat-table">
+    <table class="cat-table rep-cats">
       <thead><tr>
         <th>Category</th><th>${p.label}</th>${cmpE ? `<th>${cmpE.period.label}</th><th>Growth</th>` : ''}
-        <th>CPO / Event</th><th>Orders / Event</th>
-        <th>Avg Order</th><th>Team Avg<i class="info-i" title="${UNIVERSE_TIP}">i</i></th><th>vs Team</th>
+        <th class="xtra">CPO / Event</th><th class="xtra">Orders / Event</th>
+        <th class="xtra">Avg Order</th><th class="xtra">Team Avg<i class="info-i" title="${UNIVERSE_TIP}">i</i></th><th class="xtra">vs Team</th>
       </tr></thead>
       <tbody>${rows}</tbody>
     </table>`;
@@ -2576,8 +3018,8 @@ function renderRepChart() {
   const canvas = document.querySelector('.trend-canvas');
   const cw = canvas ? canvas.clientWidth : 0;
   const narrow = cw > 0 && cw < 560;
-  const W = narrow ? 420 : 800, H = 300;
-  const padL = narrow ? 52 : 64, padR = narrow ? 74 : 96, padT = 28, padB = 44;
+  const W = narrow ? Math.max(300, Math.round(cw)) : 800, H = narrow ? 260 : 300;
+  const padL = narrow ? 46 : 64, padR = narrow ? 50 : 96, padT = 28, padB = 44;
   document.getElementById('rep-chart-svg').setAttribute('viewBox', `0 0 ${W} ${H}`);
   const plotW = W - padL - padR;
   const plotH = H - padT - padB;
@@ -2693,10 +3135,12 @@ function renderHeader() {
   if (STATE.view === 'campaigns') {
     const p = campPeriodSel(), c = compareFor(p, 'event');
     txt = `${p.long}${c ? ' · vs ' + c.period.year : ''}`;
+  } else if (STATE.view === 'total') {
+    const sp = seasonP();
+    txt = `${STATE.season} season${STATE.bench ? ' · vs ' + STATE.bench : ''}${STATE.bench && !sp.closed ? (STATE.samePoint ? ' · same point ' + thruText(sp.k) : ' · full years') : ''}`;
   } else {
-    const p = STATE.view === 'rep' ? repPeriod() : totalPeriod();
-    const c = compareFor(p, 'event');
-    txt = (STATE.view === 'rep' ? STATE.selectedRep + ' · ' : '') + (p.long || p.label) + (c ? ' · vs ' + c.period.year : '');
+    const p = repPeriod(), c = compareFor(p, 'event');
+    txt = STATE.selectedRep + ' · ' + (p.long || p.label) + (c ? ' · vs ' + c.period.year : '');
   }
   document.getElementById('cp-line').textContent = txt;
 }
@@ -2721,6 +3165,7 @@ function switchView(view) {
   STATE.view = view;
   // Chart sizing depends on the now-visible container width
   if (view === 'rep') renderRepChart();
+  if (view === 'total') renderShape();
   renderHeader();
   try { history.replaceState(null, '', '#' + view); } catch (e) { /* file:// or sandboxed: the hash is a convenience */ }
   window.scrollTo(0, 0);
@@ -2731,7 +3176,7 @@ window.addEventListener('resize', () => {
   clearTimeout(_resizeTimer);
   _resizeTimer = setTimeout(() => {
     if (STATE.view === 'rep') renderRepChart();
-    renderTotalGrid(); renderCompareGrid(); renderCampGrid();
+    renderShape(); renderTotalTable(); renderTotalLeaderboard(); renderLeaderboard('c'); renderCompareGrid(); renderCampGrid(); renderRepBuckets();
   }, 150);
 });
 
@@ -2748,7 +3193,6 @@ document.getElementById('rep-chart-metric').addEventListener('change', e => {
 });
 
 // Initial render. #total / #campaigns / #rep open that tab (#team from Phase 2 links opens Total).
-buildLeaderboard('t');
 buildLeaderboard('c');
 buildGridToggles();
 renderAll();
