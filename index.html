@@ -692,6 +692,7 @@
 
   table.leaderboard th .th-sub { display: block; font-weight: 500; font-size: 9px; letter-spacing: 0.04em; text-transform: none; color: var(--ink-faint); margin-top: 2px; }
   table.leaderboard th.cur-h { color: var(--ember); }
+  table.leaderboard td.ord { color: var(--ink-soft); }
   table.leaderboard tr.lb-missing td { color: var(--ink-faint); }
   table.leaderboard tr.lb-missing td.name { font-weight: 500; }
   .lb-why { display: block; font-family: var(--mono); font-size: 9.5px; font-weight: 400; color: var(--ink-faint); margin-top: 1px; }
@@ -1958,7 +1959,8 @@ function renderTotalLeaderboard() {
     const base = growthOK && !isAvgMetric(metric) ? metricOrders(r, periods[b], metric) : null;
     const growth = (growthOK && cur !== null && prior !== null && prior > 0) ? (cur - prior) / prior * 100 : null;
     const small = base !== null && base < MIN_GROWTH_ORDERS;
-    return { r, vals, cur, prior, growth, base, small };
+    const orders = metricOrders(r, periods[seasonY], metric);   // the orders behind the season figure
+    return { r, vals, cur, prior, growth, base, small, orders };
   });
   const ranked = rows.filter(x => x.cur !== null);
   if (sortNow === 'growth') {
@@ -1980,6 +1982,7 @@ function renderTotalLeaderboard() {
   let html = `<div class="lb-scroll"><table class="leaderboard tlb${sortNow === 'growth' ? ' growth-emph' : ''}"><thead><tr>
     <th style="text-align:center;">#</th><th>Rep</th><th class="bar-h"></th>
     ${years.map(yearHead).join('')}
+    <th class="num ord">Orders<span class="th-sub">${s.label}</span></th>
     ${b ? `<th class="num dlt-abs">Δ vs ${b}</th><th class="num g-col">${share ? `% of ${b}` : '%'}</th>` : ''}
   </tr></thead><tbody>`;
   const deltaCells = x => {
@@ -1997,6 +2000,7 @@ function renderTotalLeaderboard() {
       <td class="name">${x.r.name}${isSelf ? '<span class="viewing-dot"></span>' : ''}</td>
       <td class="bar-cell"><div class="lb-track"><div class="lb-fill" style="width:${Math.max(1.5, x.cur / maxVal * 100).toFixed(1)}%"></div></div></td>
       ${years.map(y => `<td class="num yr${y === seasonY ? ' cur' : ' prior yr-old'}">${fmt(x.vals[y])}</td>`).join('')}
+      <td class="num ord">${fmtInt(x.orders)}</td>
       ${deltaCells(x)}
     </tr>`;
   });
@@ -2005,6 +2009,7 @@ function renderTotalLeaderboard() {
     html += `<tr class="lb-missing" data-rep="${x.r.name}" title="${x.r.name}: ${why}">
       <td class="rank">–</td><td class="name">${x.r.name}<span class="lb-why">${why}</span></td><td class="bar-cell"></td>
       ${years.map(y => `<td class="num yr${y === seasonY ? '' : ' yr-old'}">${fmt(x.vals[y])}</td>`).join('')}
+      <td class="num ord">${fmtInt(x.orders)}</td>
       ${b ? `<td class="num dlt-abs"></td><td class="growth-cell"></td>` : ''}
     </tr>`;
   });
