@@ -18,8 +18,8 @@ Think of it less like a report and more like a coaching mirror — the rep opens
 
 **Three top-level tabs** (restructured 2026-09-24):
 
-1. **Total** — the whole year, every campaign added together. Cards across the top pick the year: 2024, 2025, 2026 so far, or All years. Below them: team Total / Event / Non-Event CPO and avg order, the leaderboard, the category mix, and a **Year by Year** table (Revenue / Avg Order / Orders).
-2. **Campaigns** — pick a year and tap a campaign card (C1 Jan–Apr, C2 May–Aug, C3 Sep–Dec). **Year over Year** shows that campaign in 2024, 2025 and 2026 side by side with the change; the leaderboard and category mix follow the campaign you tapped; **Campaign by Campaign** shows C1 / C2 / C3 / the year inside one year.
+1. **Total** — how the season is doing, laid out like the Event Analyzer overview. Pick the **Season** and who to **Compare to**; the **Same point** switch compares earlier years through the same campaign (on) or their full year (off); the **Show** buttons add or drop years. One headline line, three cards (Total CPO · Event CPO · Average order, each with a row per earlier year), a **CPO by Campaign** chart and the category table.
+2. **Campaigns** — pick a year and tap a campaign card (C1 Jan–Apr, C2 May–Aug, C3 Sep–Dec). **Year over Year** shows that campaign in 2024, 2025 and 2026 side by side with the change; the category mix follows the campaign you tapped; the **leaderboard** has its own C1 / C2 / C3 / **Full year** buttons (the year ranking lives here); **Campaign by Campaign** shows C1 / C2 / C3 / the year inside one year.
 3. **Rep View** — pick any rep, then **Year total** or **By campaign** at the top. Tapping a name on either leaderboard opens that rep in the same scope.
 
 **How years compare:** a closed year against the year before. The year in progress: event numbers against last year at the same point (2026 C1–C2 vs 2025 C1–C2); Total CPO as a share of last year's full year ("70% of 2025"), because 2025 C2 has no Total Sales workbook for a same-point figure.
