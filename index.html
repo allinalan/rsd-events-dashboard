@@ -699,6 +699,9 @@
   .lb-controls { align-items: center; }
   .lb-controls .ctl.active { border-color: var(--ink); color: var(--ink); font-weight: 700; }
 
+  .pills .sm, .sm-only { display: none; }
+  .cat-table-wrap > .cat-best { padding: 12px 16px 0; margin: 0 0 6px; }
+
   /* Footnote / methodology */
   .footnote {
     margin-top: 52px; padding-top: 18px; border-top: 1px solid var(--line);
@@ -758,6 +761,64 @@
     .shape-card { padding: 14px 14px 8px; }
     .share-col { display: none; }
     .dbar { display: none; }
+
+    /* ---- phone review 2026-09-24: thumb-size targets, legible labels, tables that fit ---- */
+    .pills button { padding: 10px 12px; }
+    .lg-only { display: none; }
+    .sm-only { display: inline; }
+    table .share-of { display: none; }
+    table.cat-table.grid th, table.leaderboard th, table.cat-table.rep-cats th { white-space: normal; }
+    table.leaderboard td.rank { width: 20px; }
+    table.cat-table.grid th .th-sub.opt, table.leaderboard th .th-sub.opt { display: none; }
+    table.cat-table.grid th:first-child, table.cat-table.grid td.cat-name { min-width: 84px; }
+    .name-select-wrap { min-width: 0; }
+    /* the ‹ › arrows sit beside the kicker so a long name gets the card's full width */
+    select.name-select { flex: 1 1 auto; min-width: 0; font-size: 22px; padding-right: 24px; background-position: right 6px center; text-overflow: ellipsis; }
+    .name-select-wrap .rep-step { position: absolute; top: 12px; z-index: 1; }
+    #rep-prev { right: 60px; }
+    #rep-next { right: 16px; }
+    .sc-kicker { padding-right: 96px; min-height: 24px; }
+    .info-i { width: 15px; height: 15px; font-size: 10px; }
+    .shift-card .s-scope, .pace-tick .t-label { font-size: 10px; }
+    .proj-tag { font-size: 9.5px; }
+    .ctl { min-height: 36px; font-size: 12px; }
+    .switch { padding: 8px 0; }
+    .rep-step { width: 36px; height: 36px; }
+    .pills .lg { display: none; }
+    .pills .sm { display: inline; }
+    .cb-k, .kc-label, .kc-meta, .pc-name, .pc-tag, .lb-why, .sc-badge .b-label, .s-row .k, .hc-row .k, .hc-sub,
+    .pace-stat .p-label, .pace-legend, .comp-cats-label, .cat-note, .lb-foot,
+    table.leaderboard th, table.cat-table th { font-size: 10px; }
+    table.leaderboard th .th-sub, table.cat-table th .th-sub { font-size: 9.5px; }
+    .ctlbar { display: grid; grid-template-columns: 1fr 1fr; gap: 12px 14px; align-items: end; }
+    .ctlbar .cb-season, .ctlbar .cb-bench { flex-direction: column; align-items: flex-start; gap: 4px; }
+    .ctlbar .cb-season { order: 1; } .ctlbar .cb-bench { order: 2; }
+    .ctlbar .cb-data { order: 3; grid-column: 1 / -1; }
+    .ctlbar .switch { order: 4; } .ctlbar .cb-show { order: 5; justify-self: end; }
+    .kcards { gap: 10px; }
+    .kcard { padding: 12px 14px 6px; }
+    .kc-val { font-size: 25px; margin-top: 6px; }
+    .kc-sub { margin: 2px 0 8px; }
+    .kc-row { padding: 6px 0; }
+    table.leaderboard th, table.leaderboard td { padding-left: 5px; padding-right: 5px; }
+    table.leaderboard td.rank { width: 24px; }
+    table.leaderboard td.name { font-size: 13px; }
+    td.name .viewing-dot { display: none; }   /* the highlighted row already marks the selected rep */
+    table.cat-table.grid th, table.cat-table.grid td { padding-left: 5px; padding-right: 5px; }
+    table.cat-table.grid th:first-child, table.cat-table.grid td.cat-name { min-width: 92px; padding-left: 10px; }
+    table.cat-table.grid .chip, table.leaderboard .chip { font-size: 10px; padding: 1px 5px; }
+    table.cat-table .dlt-abs { display: none; }
+    table.cat-table.rep-cats { min-width: 0; }
+    table.cat-table.rep-cats .xtra { display: none; }
+    table.cat-table.rep-cats th, table.cat-table.rep-cats td { padding-left: 6px; padding-right: 6px; }
+    table.cat-table.rep-cats td.cat-name, table.cat-table.rep-cats th:first-child { padding-left: 12px; white-space: normal; }
+    .pace-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .pace-stat .p-label { white-space: normal; }
+    .proj-tag { display: inline-block; margin: 4px 0 0; vertical-align: 0; }
+    .cat-bar-row { grid-template-columns: 116px 1fr 56px; }
+    .cat-bar-row .cb-name span.t { white-space: normal; line-height: 1.25; }
+    .pcard { padding: 12px 14px 10px; }
+    .pc-val { font-size: 22px; }
     table.cat-table.grid { min-width: 0; }
     table.cat-table.grid th, table.cat-table.grid td { padding-left: 7px; padding-right: 7px; font-size: 11px; }
     table.cat-table.grid th:first-child, table.cat-table.grid td.cat-name {
@@ -805,6 +866,11 @@
     #rep-view .section.o-cats    { order: 7; }
     #rep-view .section.o-shifts  { order: 8; }
     #rep-view > .section { margin-bottom: 24px; }
+  }
+
+  @media (max-width: 380px) {
+    table.leaderboard td.name { font-size: 12.5px; }
+    table.leaderboard th, table.leaderboard td { padding-left: 4px; padding-right: 4px; }
   }
 
   @media (max-width: 420px) {
@@ -1169,13 +1235,15 @@ function fmtYoY(cur, prior) {
   const pct = ((cur - prior) / prior) * 100;
   const cls = pct >= 0 ? 'pos' : 'neg';
   const sign = pct >= 0 ? '▲ +' : '▼ ';
-  return `<span class="chip ${cls}">${sign}${Math.abs(pct).toFixed(1)}%</span>`;
+  const digits = window.matchMedia('(max-width: 680px)').matches ? 0 : 1;
+  if (+Math.abs(pct).toFixed(digits) === 0) return `<span class="chip na" title="${pct >= 0 ? '+' : '−'}${Math.abs(pct).toFixed(2)}%">0%</span>`;
+  return `<span class="chip ${cls}">${sign}${Math.abs(pct).toFixed(digits)}%</span>`;
 }
 // Progress through an open year against a full prior year ("70% of 2025"): not growth, so no colour.
 function shareChip(cur, full, year, onDark) {
   const dark = onDark ? ' on-dark' : '';
   if (cur === null || cur === undefined || !full) return `<span class="chip na${dark}" title="${NA_TIP}">—</span>`;
-  return `<span class="chip share${dark}" title="Year to date as a share of ${year}'s full year">${Math.round(cur / full * 100)}% of ${year}</span>`;
+  return `<span class="chip share${dark}" title="Year to date as a share of ${year}'s full year">${Math.round(cur / full * 100)}%<span class="share-of"> of ${year}</span></span>`;
 }
 
 // ==========================================================================
@@ -1523,7 +1591,7 @@ function renderLeaderboard(prefix) {
   }
   const p = L.period(), metric = L.rankBy, fam = metricFamily(metric);
   const cmp = compareFor(p, fam);
-  const fmt = metric === 'orders_per_shift' ? (v => fmtNumber(v, 2)) : fmtCurrency;
+  const fmt = metric === 'orders_per_shift' ? (v => fmtNumber(v, 2)) : isAvgMetric(metric) ? fmtCurrency : fmtMoneyFit;
   const curLabel = fam === 'annual' ? annualLabel(p) : p.label;
   const priorLabel = cmp ? cmpLabel(cmp, fam) : null;
   // An average compares fine against a full year; a running total only as a share of it.
@@ -1663,13 +1731,15 @@ function gridNum(s, mode) {
 }
 // On a phone the grids use short amounts ($477K) so the newest column fits without a swipe.
 const compactGrid = () => window.matchMedia('(max-width: 680px)').matches;
+// Money in narrow columns: $612K on a phone, $611,555 elsewhere (em-dash stays an em-dash).
+const fmtMoneyFit = v => (v === null || v === undefined || isNaN(v)) ? naSpan : compactGrid() ? fmtCurrencyShort(v) : fmtCurrency(v);
 const gridFmt = (v, mode) => mode === 'orders' ? fmtInt(v)
   : (compactGrid() && mode === 'cpo' && v !== null && v !== undefined && !isNaN(v)) ? fmtCurrencyShort(v) : fmtCurrency(v);
 // cols: { head, sub, period, sel } or { head, sub, change: (row, stats, mode) => html }
 function renderGrid(id, cols) {
   const mode = GRID_STATE[id];
   const head = '<th>Category</th>' + cols.map(c =>
-    `<th class="${c.sel ? 'sel' : ''}${c.change ? ' chg' : ''}">${c.head}${c.sub ? `<span class="th-sub">${c.sub}</span>` : ''}</th>`).join('');
+    `<th class="${c.sel ? 'sel' : ''}${c.change ? ' chg' : ''}">${c.head}${c.sub ? `<span class="th-sub${c.subOpt ? ' opt' : ''}">${c.sub}</span>` : ''}</th>`).join('');
   let body = '';
   for (const row of GRID_ROWS) {
     const stats = cols.map(c => c.period ? teamStats(c.period, row.key) : null);
@@ -1757,16 +1827,16 @@ function renderTotalControls() {
   const el = document.getElementById('t-ctl');
   const opt = (list, sel) => list.map(y => `<option value="${y}"${y === sel ? ' selected' : ''}>${y}</option>`).join('');
   el.innerHTML = `
-    <div class="cb-group"><span class="cb-k">Season</span><select class="ctl ctl-strong" id="t-season" aria-label="Season">${opt(CAMP_YEARS, STATE.season)}</select></div>
-    <div class="cb-group"><span class="cb-k">Data through</span><span class="cb-v">${s.closed ? 'C3 · full year' : `C${s.k} · ${s.k} of 3 campaigns`}</span></div>
-    <div class="cb-group"><span class="cb-k">Compare to</span>${earlier.length
+    <div class="cb-group cb-season"><span class="cb-k">Season</span><select class="ctl ctl-strong" id="t-season" aria-label="Season">${opt(CAMP_YEARS, STATE.season)}</select></div>
+    <div class="cb-group cb-data"><span class="cb-k">Data through</span><span class="cb-v">${s.closed ? 'C3 · full year' : `C${s.k} · ${s.k} of 3 campaigns`}</span></div>
+    <div class="cb-group cb-bench"><span class="cb-k">Compare to</span>${earlier.length
       ? `<select class="ctl" id="t-bench" aria-label="Compare to">${opt(earlier, STATE.bench)}</select>`
       : '<span class="cb-v" title="Nothing earlier on file">—</span>'}</div>
     <div class="cb-spacer"></div>
     <button type="button" class="switch${!s.closed && STATE.samePoint ? ' on' : ''}" id="t-same" role="switch" aria-checked="${!s.closed && STATE.samePoint}"${s.closed || !earlier.length ? ' disabled' : ''}
       title="${s.closed ? 'A closed season compares full years' : `On: earlier years through ${thruText(s.k)}, like for like. Off: their full year`}">
-      <span>Same point${s.closed ? '' : ` (${thruText(s.k)})`}</span><span class="sw-track"><span class="sw-knob"></span></span></button>
-    ${earlier.length ? `<div class="cb-group"><span class="cb-k">Show</span><div class="pills" id="t-compare" aria-label="Years shown">${earlier.map(y =>
+      <span>Same point${s.closed ? '' : `<span class="lg-only"> (${thruText(s.k)})</span>`}</span><span class="sw-track"><span class="sw-knob"></span></span></button>
+    ${earlier.length ? `<div class="cb-group cb-show"><span class="cb-k">Show</span><div class="pills" id="t-compare" aria-label="Years shown">${earlier.map(y =>
       `<button type="button" data-y="${y}" class="${STATE.compare.has(y) ? 'active' : ''}" aria-pressed="${STATE.compare.has(y)}"${y === STATE.bench ? ' title="The comparison year is always shown"' : ''}>${y}</button>`).join('')}</div></div>` : ''}`;
   document.getElementById('t-season').onchange = e => setSeason(+e.target.value);
   const bench = document.getElementById('t-bench');
@@ -1787,7 +1857,7 @@ function renderTotalHeadline() {
   let metric = 'total_sales', label = 'Total CPO', why = '';
   let cur = teamValue(s, metric), prior = teamValue(pb, metric);
   if (cur === null || prior === null) {
-    why = `Total CPO ${cur === null ? 'not loaded for ' + s.label : (missingWb(pb) || 'not loaded') + ' to compare at the same point'}`;
+    why = `Total CPO ${cur === null ? 'not loaded for ' + s.label : (missingWb(pb) || 'not loaded')}`;
     metric = 'total_event'; label = 'Event CPO';
     cur = teamValue(s, metric); prior = teamValue(pb, metric);
   }
@@ -1811,6 +1881,17 @@ function renderTotalKPIs() {
   const card = (label, metric, fmt) => {
     const cur = teamValue(s, metric), st = teamStats(s, metric);
     const meta = st && !isAvgMetric(metric) ? `${Math.round(st.orders).toLocaleString()} orders` : '';
+    const vals = others.map(y => ({ y, p: viewPeriod(y) })).map(o => ({ ...o, v: teamValue(o.p, metric) }));
+    if (vals.length > 1 && vals.every(o => o.v === null && missingWb(o.p))) {
+      const miss = [...new Set(vals.flatMap(o => o.p.parts.filter(c => !salesLoaded(c.year, c.n)).map(c => 'C' + c.n)))];
+      const yrs = vals.map(o => o.y).sort();
+      return `<div class="kcard">
+        <div class="kc-top"><span class="kc-label">${label}</span><span class="kc-meta">${meta}</span></div>
+        <div class="kc-val">${cur === null ? naSpan : fmt(cur)}</div>
+        <div class="kc-sub">${s.label} · ${s.closed ? 'full year' : thruText(s.k)}</div>
+        <div class="kc-rows"><div class="kc-row"><span class="k">${yrs.join(' · ')}</span><span class="v">—</span><span class="need">needs the ${miss.join(' + ')} ${yrs.join(' + ')} workbooks</span></div></div>
+      </div>`;
+    }
     const rows = others.map(y => {
       const p = viewPeriod(y), v = teamValue(p, metric);
       const right = v === null ? `<span class="need">${missingWb(p) || 'not loaded'}</span>`
@@ -1850,7 +1931,7 @@ function renderShape() {
   const svg = document.getElementById('t-shape-svg');
   const cw = svg.parentElement ? svg.parentElement.clientWidth : 0;
   const narrow = cw > 0 && cw < 560;
-  const W = narrow ? 420 : 900, H = narrow ? 250 : 280;
+  const W = narrow ? Math.max(300, Math.round(cw)) : 900, H = narrow ? 230 : 280;
   const padL = narrow ? 44 : 60, padR = 10, padT = 22, padB = 30;
   svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
   const plotW = W - padL - padR, plotH = H - padT - padB;
@@ -1896,7 +1977,7 @@ function renderTotalTable() {
   const fmtD = (d, m) => m === 'orders' ? Math.abs(Math.round(d)).toLocaleString() : m === 'avg' ? '$' + Math.abs(d).toFixed(2) : '$' + Math.abs(Math.round(d)).toLocaleString();
   const head = `<th>Category</th><th class="share-col">Share ${STATE.season}</th>` +
     years.map(y => `<th class="${y === STATE.season ? 'sel' : ''}">${y}${y === STATE.season ? ' ●' : ''}<span class="th-sub">${periods[y].kind === 'thru' ? thruText(periods[y].k) : periods[y].closed ? 'full year' : 'so far'}</span></th>`).join('') +
-    (b ? `<th class="chg">Δ vs ${b}</th><th>%</th>` : '');
+    (b ? `<th class="chg dlt-abs">Δ vs ${b}</th><th>%</th>` : '');
   const body = rows.map(({ row, stats, cur, prior, d }) => {
     const isEventBucket = row.key.startsWith('bucket:') && row.key !== 'bucket:Non-Event CPO';
     const sc = stats[STATE.season];
@@ -1914,7 +1995,7 @@ function renderTotalTable() {
         pCell = prior ? `<span class="dtext ${up ? 'pos' : 'neg'}">${up ? '+' : '−'}${Math.abs(d / prior * 100).toFixed(1)}%</span>` : naSpan;
       }
     }
-    return `<tr class="${row.cls || ''}"><td class="cat-name">${row.swatch ? `<span class="swatch" style="background:${row.swatch}"></span>` : ''}${row.label}</td><td class="share-col">${shareCell}</td>${cells}${b ? `<td class="chg">${dCell}</td><td>${pCell}</td>` : ''}</tr>`;
+    return `<tr class="${row.cls || ''}"><td class="cat-name">${row.swatch ? `<span class="swatch" style="background:${row.swatch}"></span>` : ''}${row.label}</td><td class="share-col">${shareCell}</td>${cells}${b ? `<td class="chg dlt-abs">${dCell}</td><td>${pCell}</td>` : ''}</tr>`;
   }).join('');
   document.getElementById('t-grid').innerHTML = `<table class="cat-table grid"><thead><tr>${head}</tr></thead><tbody>${body}</tbody></table>`;
 
@@ -1931,7 +2012,7 @@ function renderTotalTable() {
 
 // ----- Rep leaderboard on Total (Alan, 2026-09-24): every core-team rep at a glance, filtered by
 // category, following the page's Season / Compare to / Same point controls. -----
-const TLB_MAIN = [['total_sales', 'Total CPO'], ['total_event', 'Event CPO'], ['bucket:Non-Event CPO', 'Non-Event CPO'], ['total_avg_order', 'Avg Order']];
+const TLB_MAIN = [['total_sales', 'Total CPO', 'Total'], ['total_event', 'Event CPO', 'Event'], ['bucket:Non-Event CPO', 'Non-Event CPO', 'Non-Event'], ['total_avg_order', 'Avg Order', 'Avg order']];
 const tlbLabel = m => (TLB_MAIN.find(x => x[0] === m) || [null, m.startsWith('bucket:') ? bLabel(m.slice(7)) : m])[1];
 function renderTotalLeaderboard() {
   const metric = STATE.tRank, s = seasonP(), b = STATE.bench, years = shownYears(), seasonY = STATE.season;
@@ -1941,10 +2022,10 @@ function renderTotalLeaderboard() {
 
   // controls: main categories as pills, event categories in a menu, then the sort
   const mEl = document.getElementById('t-lb-metric');
-  mEl.innerHTML = TLB_MAIN.map(([m, l]) => `<button type="button" data-m="${m}" class="${m === metric ? 'active' : ''}" aria-pressed="${m === metric}">${l}</button>`).join('');
+  mEl.innerHTML = TLB_MAIN.map(([m, l, sm]) => `<button type="button" data-m="${m}" class="${m === metric ? 'active' : ''}" aria-pressed="${m === metric}"><span class="lg">${l}</span><span class="sm">${sm}</span></button>`).join('');
   mEl.querySelectorAll('button').forEach(x => x.onclick = () => { STATE.tRank = x.dataset.m; renderTotalLeaderboard(); });
   const bSel = document.getElementById('t-lb-bucket');
-  bSel.innerHTML = `<option value="">Event category…</option>` + EVENT_SUB_BUCKETS.map(k => `<option value="bucket:${k}"${metric === 'bucket:' + k ? ' selected' : ''}>${bLabel(k)}</option>`).join('');
+  bSel.innerHTML = `<option value="">Category…</option>` + EVENT_SUB_BUCKETS.map(k => `<option value="bucket:${k}"${metric === 'bucket:' + k ? ' selected' : ''}>${bLabel(k)}</option>`).join('');
   bSel.classList.toggle('active', metric.startsWith('bucket:') && metric !== 'bucket:Non-Event CPO');
   bSel.onchange = e => { if (e.target.value) { STATE.tRank = e.target.value; renderTotalLeaderboard(); } };
   const sEl = document.getElementById('t-lb-sort');
@@ -1970,23 +2051,26 @@ function renderTotalLeaderboard() {
   const missing = rows.filter(x => x.cur === null).sort((a, c) => a.r.name.localeCompare(c.r.name));
   const maxVal = Math.max(1, ...ranked.map(x => x.cur));
   const priorGap = b && rows.every(x => x.prior === null) ? missingWb(periods[b]) : '';
+  // Columns that would be all em-dashes (an earlier year with no workbook) stay off; the line above says why.
+  const cols = years.filter(y => y === seasonY || rows.some(x => x.vals[y] !== null));
+  const hasDelta = !!b && rows.some(x => x.cur !== null && x.prior !== null);
 
   document.getElementById('t-lb-context').innerHTML =
     `<strong>${tlbLabel(metric)}</strong> · ${s.label}` +
     (b ? ` vs ${b}${s.closed ? '' : STATE.samePoint ? ` at the same point (${thruText(s.k)})` : ' full year'}` : '') +
     ` · ${ranked.length} of ${MASTER.length} core-team reps` + (priorGap ? ` · ${b} ${priorGap.replace(/^needs/, 'needs the')}` : '');
 
-  const fmt = isAvgMetric(metric) ? (v => fmtCurrency(v)) : fmtCurrency;
+  const fmt = isAvgMetric(metric) ? (v => fmtCurrency(v)) : fmtMoneyFit;
   const fmtD = d => isAvgMetric(metric) ? '$' + Math.abs(d).toFixed(0) : '$' + Math.abs(Math.round(d)).toLocaleString();
-  const yearHead = y => `<th class="num yr${y === seasonY ? ' cur-h' : ' yr-old'}">${y}${y === seasonY ? ' ●' : ''}<span class="th-sub">${periods[y].kind === 'thru' ? thruText(periods[y].k) : periods[y].closed ? 'full year' : 'so far'}</span></th>`;
+  const yearHead = y => `<th class="num yr${y === seasonY ? ' cur-h' : ' yr-old'}">${y}${y === seasonY ? ' ●' : ''}<span class="th-sub opt">${periods[y].kind === 'thru' ? thruText(periods[y].k) : periods[y].closed ? 'full year' : 'so far'}</span></th>`;
   let html = `<div class="lb-scroll"><table class="leaderboard tlb${sortNow === 'growth' ? ' growth-emph' : ''}"><thead><tr>
     <th style="text-align:center;">#</th><th>Rep</th><th class="bar-h"></th>
-    ${years.map(yearHead).join('')}
-    <th class="num ord">Orders<span class="th-sub">${s.label}</span></th>
-    ${b ? `<th class="num dlt-abs">Δ vs ${b}</th><th class="num g-col">${share ? `% of ${b}` : '%'}</th>` : ''}
+    ${cols.map(yearHead).join('')}
+    <th class="num ord">Orders<span class="th-sub opt">${s.label}</span></th>
+    ${hasDelta ? `<th class="num dlt-abs">Δ vs ${b}</th><th class="num g-col">${share ? `%<span class="lg-only"> of ${b}</span>` : '%'}</th>` : ''}
   </tr></thead><tbody>`;
   const deltaCells = x => {
-    if (!b) return '';
+    if (!hasDelta) return '';
     if (x.cur === null || x.prior === null) return `<td class="num dlt-abs">${naSpan}</td><td class="growth-cell">${naSpan}</td>`;
     if (share) return `<td class="num dlt-abs"></td><td class="growth-cell">${shareChip(x.cur, x.prior, b)}</td>`;
     const d = x.cur - x.prior, up = d >= 0;
@@ -1999,7 +2083,7 @@ function renderTotalLeaderboard() {
       <td class="rank">${i + 1}</td>
       <td class="name">${x.r.name}${isSelf ? '<span class="viewing-dot"></span>' : ''}</td>
       <td class="bar-cell"><div class="lb-track"><div class="lb-fill" style="width:${Math.max(1.5, x.cur / maxVal * 100).toFixed(1)}%"></div></div></td>
-      ${years.map(y => `<td class="num yr${y === seasonY ? ' cur' : ' prior yr-old'}">${fmt(x.vals[y])}</td>`).join('')}
+      ${cols.map(y => `<td class="num yr${y === seasonY ? ' cur' : ' prior yr-old'}">${fmt(x.vals[y])}</td>`).join('')}
       <td class="num ord">${fmtInt(x.orders)}</td>
       ${deltaCells(x)}
     </tr>`;
@@ -2008,9 +2092,9 @@ function renderTotalLeaderboard() {
     const why = metricFamily(metric) === 'sales' && PENDING.includes(x.r.name) ? 'Total Sales pending' : `no ${tlbLabel(metric)} in ${s.label}`;
     html += `<tr class="lb-missing" data-rep="${x.r.name}" title="${x.r.name}: ${why}">
       <td class="rank">–</td><td class="name">${x.r.name}<span class="lb-why">${why}</span></td><td class="bar-cell"></td>
-      ${years.map(y => `<td class="num yr${y === seasonY ? '' : ' yr-old'}">${fmt(x.vals[y])}</td>`).join('')}
+      ${cols.map(y => `<td class="num yr${y === seasonY ? '' : ' yr-old'}">${fmt(x.vals[y])}</td>`).join('')}
       <td class="num ord">${fmtInt(x.orders)}</td>
-      ${b ? `<td class="num dlt-abs"></td><td class="growth-cell"></td>` : ''}
+      ${hasDelta ? `<td class="num dlt-abs"></td><td class="growth-cell"></td>` : ''}
     </tr>`;
   });
   html += `</tbody></table></div>
@@ -2092,10 +2176,10 @@ function renderCompareGrid() {
   }));
 
   const years = CAMP_YEARS.filter(y => campaignsForYear(y).includes(n));
-  const cols = years.map(y => ({ head: `C${n} ${y}`, sub: CAMP_WINDOWS[n], period: periodCamp(y, n), sel: y === STATE.camp.year }));
+  const cols = years.map(y => ({ head: `<span class="lg-only">C${n} </span>${y}`, sub: CAMP_WINDOWS[n], subOpt: true, period: periodCamp(y, n), sel: y === STATE.camp.year }));
   if (years.length >= 2) {
     const a = years.length - 1, b = years.length - 2;
-    cols.push({ head: `${years[a]} vs ${years[b]}`, sub: 'change', change: (row, st, mode) => fmtYoY(gridNum(st[a], mode), gridNum(st[b], mode)) });
+    cols.push({ head: `<span class="lg-only">${years[a]} vs ${years[b]}</span><span class="sm-only">vs '${String(years[b]).slice(2)}</span>`, sub: 'change', subOpt: true, change: (row, st, mode) => fmtYoY(gridNum(st[a], mode), gridNum(st[b], mode)) });
   }
   document.getElementById('x-title').textContent = `${CAMP_NAMES[n]} · Year over Year`;
   renderGrid('x-grid', cols);
@@ -2449,6 +2533,17 @@ function renderRepSummary() {
     }
   }
 
+  // When Total CPO can only be read as a share of last year (or has no baseline), event sales still
+  // compare like for like: use them so a big mover is not called "steady" (phone review 2026-09-24).
+  if (hero.metric === 'total_sales' && cmp && (cmp.mode === 'share' || !priorS)) {
+    const cmpE = compareFor(p, 'event'), e = pEvent(r, p), ep = cmpE ? pEvent(r, cmpE.period) : null;
+    if (e && ep && ep.cpo > 0 && ep.orders >= MIN_GROWTH_ORDERS) {
+      const yoy = (e.cpo - ep.cpo) / ep.cpo * 100;
+      if (yoy > 15) callouts.push({ type: 'good', title: 'Event sales growing', body: `Event CPO up ${yoy.toFixed(1)}% vs ${cmpE.period.label} (${fmtCurrencyShort(e.cpo)} vs ${fmtCurrencyShort(ep.cpo)}).` });
+      else if (yoy < -15) callouts.push({ type: 'watch', title: 'Event sales down', body: `Event CPO down ${Math.abs(yoy).toFixed(1)}% vs ${cmpE.period.label} (${fmtCurrencyShort(e.cpo)} vs ${fmtCurrencyShort(ep.cpo)}).` });
+    }
+  }
+
   // Top-5 ranking?
   const rank = repRank(STATE.selectedRep, hero.metric, p);
   if (rank && rank.rank <= 5) {
@@ -2666,22 +2761,22 @@ function renderRepBuckets() {
     const isEmpty = !cur && !prior;
     rows += `<tr class="${isEmpty ? 'empty' : ''}">
       <td class="cat-name"><span class="swatch" style="background:${BUCKET_COLORS[b]};${isEmpty ? 'opacity:.35;' : ''}"></span>${bLabel(b)}</td>
-      <td class="cur">${cur ? fmtCurrency(cur.cpo) : naSpan}</td>
-      ${cmpE ? `<td class="prior">${prior ? fmtCurrency(prior.cpo) : naSpan}</td><td>${fmtYoY(cur && cur.cpo, prior && prior.cpo)}</td>` : ''}
-      <td title="${cur && cur.events ? `${cur.events} event${cur.events === 1 ? '' : 's'}` : ''}">${fmtCurrency(cpoPerEvent)}</td>
-      <td>${fmtNumber(ordersPerEvent, 1)}</td>
-      <td>${fmtCurrency(avgOrd)}</td>
-      <td class="prior">${fmtCurrency(teamAv)}</td>
-      <td>${vsTeam === null ? naSpan : `<span class="chip ${vsTeam >= 0 ? 'pos' : 'neg'}" style="font-size:10px;padding:1px 6px;">${vsTeam >= 0 ? '+' : '−'}${Math.abs(vsTeam).toFixed(0)}%</span>`}</td>
+      <td class="cur">${cur ? fmtMoneyFit(cur.cpo) : naSpan}</td>
+      ${cmpE ? `<td class="prior">${prior ? fmtMoneyFit(prior.cpo) : naSpan}</td><td>${fmtYoY(cur && cur.cpo, prior && prior.cpo)}</td>` : ''}
+      <td class="xtra" title="${cur && cur.events ? `${cur.events} event${cur.events === 1 ? '' : 's'}` : ''}">${fmtCurrency(cpoPerEvent)}</td>
+      <td class="xtra">${fmtNumber(ordersPerEvent, 1)}</td>
+      <td class="xtra">${fmtCurrency(avgOrd)}</td>
+      <td class="prior xtra">${fmtCurrency(teamAv)}</td>
+      <td class="xtra">${vsTeam === null ? naSpan : `<span class="chip ${vsTeam >= 0 ? 'pos' : 'neg'}" style="font-size:10px;padding:1px 6px;">${vsTeam >= 0 ? '+' : '−'}${Math.abs(vsTeam).toFixed(0)}%</span>`}</td>
     </tr>`;
   }
   document.getElementById('rep-buckets-sub').innerHTML = `
     ${best ? `<div class="cat-best">Best CPO per event: <strong>${bLabel(best.b)}</strong> at ${fmtCurrency(best.v)} per event across ${best.events} events in ${p.label}.</div>` : ''}
-    <table class="cat-table">
+    <table class="cat-table rep-cats">
       <thead><tr>
         <th>Category</th><th>${p.label}</th>${cmpE ? `<th>${cmpE.period.label}</th><th>Growth</th>` : ''}
-        <th>CPO / Event</th><th>Orders / Event</th>
-        <th>Avg Order</th><th>Team Avg<i class="info-i" title="${UNIVERSE_TIP}">i</i></th><th>vs Team</th>
+        <th class="xtra">CPO / Event</th><th class="xtra">Orders / Event</th>
+        <th class="xtra">Avg Order</th><th class="xtra">Team Avg<i class="info-i" title="${UNIVERSE_TIP}">i</i></th><th class="xtra">vs Team</th>
       </tr></thead>
       <tbody>${rows}</tbody>
     </table>`;
@@ -2923,8 +3018,8 @@ function renderRepChart() {
   const canvas = document.querySelector('.trend-canvas');
   const cw = canvas ? canvas.clientWidth : 0;
   const narrow = cw > 0 && cw < 560;
-  const W = narrow ? 420 : 800, H = 300;
-  const padL = narrow ? 52 : 64, padR = narrow ? 74 : 96, padT = 28, padB = 44;
+  const W = narrow ? Math.max(300, Math.round(cw)) : 800, H = narrow ? 260 : 300;
+  const padL = narrow ? 46 : 64, padR = narrow ? 50 : 96, padT = 28, padB = 44;
   document.getElementById('rep-chart-svg').setAttribute('viewBox', `0 0 ${W} ${H}`);
   const plotW = W - padL - padR;
   const plotH = H - padT - padB;
@@ -3081,7 +3176,7 @@ window.addEventListener('resize', () => {
   clearTimeout(_resizeTimer);
   _resizeTimer = setTimeout(() => {
     if (STATE.view === 'rep') renderRepChart();
-    renderShape(); renderTotalTable(); renderCompareGrid(); renderCampGrid();
+    renderShape(); renderTotalTable(); renderTotalLeaderboard(); renderLeaderboard('c'); renderCompareGrid(); renderCampGrid(); renderRepBuckets();
   }, 150);
 });
 
