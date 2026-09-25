@@ -690,6 +690,14 @@
   .dtext.pos { color: var(--pos); }
   .dtext.neg { color: var(--neg); }
 
+  table.leaderboard th .th-sub { display: block; font-weight: 500; font-size: 9px; letter-spacing: 0.04em; text-transform: none; color: var(--ink-faint); margin-top: 2px; }
+  table.leaderboard th.cur-h { color: var(--ember); }
+  table.leaderboard tr.lb-missing td { color: var(--ink-faint); }
+  table.leaderboard tr.lb-missing td.name { font-weight: 500; }
+  .lb-why { display: block; font-family: var(--mono); font-size: 9.5px; font-weight: 400; color: var(--ink-faint); margin-top: 1px; }
+  .lb-controls { align-items: center; }
+  .lb-controls .ctl.active { border-color: var(--ink); color: var(--ink); font-weight: 700; }
+
   /* Footnote / methodology */
   .footnote {
     margin-top: 52px; padding-top: 18px; border-top: 1px solid var(--line);
@@ -783,6 +791,7 @@
     table.leaderboard .bar-cell, table.leaderboard .prior,
     table.leaderboard th.bar-h, table.leaderboard th.prior-h { display: none; }
     table.leaderboard td.name { white-space: normal; }
+    table.leaderboard .yr-old, table.leaderboard .dlt-abs { display: none; }
     .team-grid { gap: 16px; }
 
     /* Mobile narrative order: identity → coach's read → trajectory → supporting */
@@ -844,6 +853,21 @@
   <div class="card ctlbar" id="t-ctl"></div>
   <div class="headline" id="t-headline"></div>
   <div class="kcards" id="t-kpis"></div>
+
+  <div class="card lb-card section" id="t-lb">
+    <div class="lb-top">
+      <div class="lb-title">
+        <h2>Rep Leaderboard</h2>
+        <div class="lb-context" id="t-lb-context"></div>
+      </div>
+      <div class="lb-controls">
+        <div class="pills" id="t-lb-metric" aria-label="Category"></div>
+        <select class="ctl" id="t-lb-bucket" aria-label="Event category"></select>
+        <div class="pills" id="t-lb-sort" aria-label="Sort"></div>
+      </div>
+    </div>
+    <div id="t-lb-body"></div>
+  </div>
 
   <div class="card shape-card">
     <div class="shape-head">
@@ -1060,6 +1084,8 @@ const STATE = {
   bench: CAMP_YEARS.includes(LAST_YEAR - 1) ? LAST_YEAR - 1 : null,  // what the headline and Δ compare against
   compare: new Set(CAMP_YEARS.filter(y => y < LAST_YEAR)),          // earlier years listed next to the season
   samePoint: true,                                // earlier years through the same campaign while the season is open
+  tRank: 'total_sales',                          // Total page leaderboard: the category it ranks
+  tSort: 'value',
   shapeMetric: 'total_event',                     // season-shape chart: Event CPO (every campaign has it) or Total CPO
   repMode: 'year',                                // Rep View follows 'year' (STATE.year) or 'camp' (STATE.camp)
   selectedRep: 'Alan Hernandez',
@@ -1902,6 +1928,96 @@ function renderTotalTable() {
   document.getElementById('t-grid-note').textContent = notes.filter(Boolean).join(' ');
 }
 
+// ----- Rep leaderboard on Total (Alan, 2026-09-24): every core-team rep at a glance, filtered by
+// category, following the page's Season / Compare to / Same point controls. -----
+const TLB_MAIN = [['total_sales', 'Total CPO'], ['total_event', 'Event CPO'], ['bucket:Non-Event CPO', 'Non-Event CPO'], ['total_avg_order', 'Avg Order']];
+const tlbLabel = m => (TLB_MAIN.find(x => x[0] === m) || [null, m.startsWith('bucket:') ? bLabel(m.slice(7)) : m])[1];
+function renderTotalLeaderboard() {
+  const metric = STATE.tRank, s = seasonP(), b = STATE.bench, years = shownYears(), seasonY = STATE.season;
+  const periods = Object.fromEntries(years.map(y => [y, viewPeriod(y)]));
+  const share = !!b && shareMode(metric);
+  const growthOK = !!b && !share;
+
+  // controls: main categories as pills, event categories in a menu, then the sort
+  const mEl = document.getElementById('t-lb-metric');
+  mEl.innerHTML = TLB_MAIN.map(([m, l]) => `<button type="button" data-m="${m}" class="${m === metric ? 'active' : ''}" aria-pressed="${m === metric}">${l}</button>`).join('');
+  mEl.querySelectorAll('button').forEach(x => x.onclick = () => { STATE.tRank = x.dataset.m; renderTotalLeaderboard(); });
+  const bSel = document.getElementById('t-lb-bucket');
+  bSel.innerHTML = `<option value="">Event category…</option>` + EVENT_SUB_BUCKETS.map(k => `<option value="bucket:${k}"${metric === 'bucket:' + k ? ' selected' : ''}>${bLabel(k)}</option>`).join('');
+  bSel.classList.toggle('active', metric.startsWith('bucket:') && metric !== 'bucket:Non-Event CPO');
+  bSel.onchange = e => { if (e.target.value) { STATE.tRank = e.target.value; renderTotalLeaderboard(); } };
+  const sEl = document.getElementById('t-lb-sort');
+  const sortNow = STATE.tSort === 'growth' && growthOK ? 'growth' : 'value';
+  sEl.innerHTML = [['value', 'Highest'], ['growth', 'Biggest growth']].map(([v, l]) =>
+    `<button type="button" data-s="${v}" class="${v === sortNow ? 'active' : ''}"${v === 'growth' && !growthOK ? ` disabled title="${!b ? 'Nothing earlier to compare with' : 'Growth needs a like-for-like comparison: turn Same point on'}"` : ''}>${l}</button>`).join('');
+  sEl.querySelectorAll('button').forEach(x => x.onclick = () => { STATE.tSort = x.dataset.s; renderTotalLeaderboard(); });
+
+  const rows = masterListReps().map(r => {
+    const vals = Object.fromEntries(years.map(y => [y, getMetric(r, periods[y], metric)]));
+    const cur = vals[seasonY], prior = b ? vals[b] : null;
+    const base = growthOK && !isAvgMetric(metric) ? metricOrders(r, periods[b], metric) : null;
+    const growth = (growthOK && cur !== null && prior !== null && prior > 0) ? (cur - prior) / prior * 100 : null;
+    const small = base !== null && base < MIN_GROWTH_ORDERS;
+    return { r, vals, cur, prior, growth, base, small };
+  });
+  const ranked = rows.filter(x => x.cur !== null);
+  if (sortNow === 'growth') {
+    const g = x => (x.growth === null || x.small) ? -Infinity : x.growth;
+    ranked.sort((a, c) => g(c) - g(a) || c.cur - a.cur);
+  } else ranked.sort((a, c) => c.cur - a.cur);
+  const missing = rows.filter(x => x.cur === null).sort((a, c) => a.r.name.localeCompare(c.r.name));
+  const maxVal = Math.max(1, ...ranked.map(x => x.cur));
+  const priorGap = b && rows.every(x => x.prior === null) ? missingWb(periods[b]) : '';
+
+  document.getElementById('t-lb-context').innerHTML =
+    `<strong>${tlbLabel(metric)}</strong> · ${s.label}` +
+    (b ? ` vs ${b}${s.closed ? '' : STATE.samePoint ? ` at the same point (${thruText(s.k)})` : ' full year'}` : '') +
+    ` · ${ranked.length} of ${MASTER.length} core-team reps` + (priorGap ? ` · ${b} ${priorGap.replace(/^needs/, 'needs the')}` : '');
+
+  const fmt = isAvgMetric(metric) ? (v => fmtCurrency(v)) : fmtCurrency;
+  const fmtD = d => isAvgMetric(metric) ? '$' + Math.abs(d).toFixed(0) : '$' + Math.abs(Math.round(d)).toLocaleString();
+  const yearHead = y => `<th class="num yr${y === seasonY ? ' cur-h' : ' yr-old'}">${y}${y === seasonY ? ' ●' : ''}<span class="th-sub">${periods[y].kind === 'thru' ? thruText(periods[y].k) : periods[y].closed ? 'full year' : 'so far'}</span></th>`;
+  let html = `<div class="lb-scroll"><table class="leaderboard tlb${sortNow === 'growth' ? ' growth-emph' : ''}"><thead><tr>
+    <th style="text-align:center;">#</th><th>Rep</th><th class="bar-h"></th>
+    ${years.map(yearHead).join('')}
+    ${b ? `<th class="num dlt-abs">Δ vs ${b}</th><th class="num g-col">${share ? `% of ${b}` : '%'}</th>` : ''}
+  </tr></thead><tbody>`;
+  const deltaCells = x => {
+    if (!b) return '';
+    if (x.cur === null || x.prior === null) return `<td class="num dlt-abs">${naSpan}</td><td class="growth-cell">${naSpan}</td>`;
+    if (share) return `<td class="num dlt-abs"></td><td class="growth-cell">${shareChip(x.cur, x.prior, b)}</td>`;
+    const d = x.cur - x.prior, up = d >= 0;
+    const pct = x.small ? `<span class="chip na" title="Base under ${MIN_GROWTH_ORDERS} orders (${x.base}) — growth not meaningful">—</span>` : fmtYoY(x.cur, x.prior);
+    return `<td class="num dlt-abs"><span class="dtext ${up ? 'pos' : 'neg'}">${up ? '+' : '−'}${fmtD(d)}</span></td><td class="growth-cell">${pct}</td>`;
+  };
+  ranked.forEach((x, i) => {
+    const isSelf = x.r.name === STATE.selectedRep;
+    html += `<tr class="${[isSelf ? 'is-self' : '', i < 3 ? 'top3' : ''].filter(Boolean).join(' ')}" data-rep="${x.r.name}" title="Open ${x.r.name}">
+      <td class="rank">${i + 1}</td>
+      <td class="name">${x.r.name}${isSelf ? '<span class="viewing-dot"></span>' : ''}</td>
+      <td class="bar-cell"><div class="lb-track"><div class="lb-fill" style="width:${Math.max(1.5, x.cur / maxVal * 100).toFixed(1)}%"></div></div></td>
+      ${years.map(y => `<td class="num yr${y === seasonY ? ' cur' : ' prior yr-old'}">${fmt(x.vals[y])}</td>`).join('')}
+      ${deltaCells(x)}
+    </tr>`;
+  });
+  missing.forEach(x => {
+    const why = metricFamily(metric) === 'sales' && PENDING.includes(x.r.name) ? 'Total Sales pending' : `no ${tlbLabel(metric)} in ${s.label}`;
+    html += `<tr class="lb-missing" data-rep="${x.r.name}" title="${x.r.name}: ${why}">
+      <td class="rank">–</td><td class="name">${x.r.name}<span class="lb-why">${why}</span></td><td class="bar-cell"></td>
+      ${years.map(y => `<td class="num yr${y === seasonY ? '' : ' yr-old'}">${fmt(x.vals[y])}</td>`).join('')}
+      ${b ? `<td class="num dlt-abs"></td><td class="growth-cell"></td>` : ''}
+    </tr>`;
+  });
+  html += `</tbody></table></div>
+    <div class="lb-foot">Core team only. Tap a rep to open them. Bars scale to the top ${s.label} value.${sortNow === 'growth' ? ` Growth needs at least ${MIN_GROWTH_ORDERS} ${b} orders.` : ''}${share ? ` ${s.label} is shown as a share of ${b}'s full year (Same point is off).` : ''}</div>`;
+  const body = document.getElementById('t-lb-body');
+  body.innerHTML = html;
+  body.querySelectorAll('tbody tr').forEach(tr => tr.addEventListener('click', () => {
+    STATE.selectedRep = tr.dataset.rep; STATE.repMode = 'year'; STATE.year = STATE.season; STATE.chartMetric = null;
+    renderAll(); switchView('rep');
+  }));
+}
+
 function renderTotalView() {
   const s = seasonP();
   document.getElementById('t-title').textContent = `${STATE.season} season performance`;
@@ -1910,6 +2026,7 @@ function renderTotalView() {
   renderTotalControls();
   renderTotalHeadline();
   renderTotalKPIs();
+  renderTotalLeaderboard();
   renderShape();
   renderTotalTable();
 }
@@ -2133,7 +2250,7 @@ function renderRepScorecard() {
     </div>
   `;
 
-  const selectRep = name => { STATE.selectedRep = name; renderRepView(); renderLeaderboard('c'); renderHeader(); };
+  const selectRep = name => { STATE.selectedRep = name; renderRepView(); renderLeaderboard('c'); renderTotalLeaderboard(); renderHeader(); };
   document.getElementById('rep-select').onchange = e => selectRep(e.target.value);
   const step = dir => {
     const idx = MASTER.indexOf(STATE.selectedRep);
