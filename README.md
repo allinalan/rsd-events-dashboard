@@ -1,7 +1,7 @@
 # RSD Rep Dashboard
 
 Single-page dashboard for the RSD Events Team (CUTCO Rising Sun Division).
-Three tabs: **Total** (one season against the earlier years you pick, Event Analyzer layout), **Campaigns** (one campaign compared across years, plus a full-year leaderboard), **Rep View** (year or campaign).
+Four tabs: **Total** (one season against the earlier years you pick, Event Analyzer layout), **Campaigns** (one campaign compared across years, plus a full-year leaderboard), **Products** (the home office's product report: nine lines, three years, a rep leaderboard per line), **Rep View** (year or campaign, plus the rep's product mix).
 
 **Live URL:** _(will populate after GitHub Pages is enabled)_
 
@@ -21,6 +21,7 @@ launchd `com.allinalan.rsd-intake`, Jan/May/Sep 8). It opens a PR here; merging 
 
 - 7-bucket taxonomy: Event (Traditional), Service Event, Industry Event, Realtor, Mall, Federal, Non-Event CPO
 - Total = a year (closed year: year-end Total Sales; open year: C1 onward); Campaigns = one campaign vs the same campaign in other years
+- Products is annual and comes from a separate report (`meta.products`, `reps[name].products`); its year to date is shown as a share of last year, never as growth
 - Event sales exist for every campaign; Total / Non-Event only where a Total Sales workbook (or the year-end figure) exists — never shown as $0
 - Annual scope for shifts and pacing baseline
 - Per-rep empirical pacing multipliers, capped to [×2.0, ×4.5]

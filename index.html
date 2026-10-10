@@ -702,6 +702,33 @@
   .pills .sm, .sm-only { display: none; }
   .cat-table-wrap > .cat-best { padding: 12px 16px 0; margin: 0 0 6px; }
 
+  /* ===================== PRODUCTS: the product report (2026-10-10) ===================== */
+  .pl-cards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; margin-bottom: 10px; }
+  .pl-card .kc-val { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+  .pl-unit { font-family: var(--mono); font-size: 11px; font-weight: 500; letter-spacing: 0.02em; color: var(--ink-faint); }
+  /* one row per year: label · bar · value · change. The bars are the three-year trend. */
+  .pl-row {
+    display: grid; grid-template-columns: 62px minmax(24px, 1fr) auto 98px; align-items: center; gap: 10px;
+    padding: 7px 0; border-bottom: 1px solid var(--line-soft); font-family: var(--mono); font-size: 11.5px;
+  }
+  .pl-row:last-child { border-bottom: 0; }
+  .pl-row .k { color: var(--ink-soft); white-space: nowrap; }
+  .pl-row .v { text-align: right; white-space: nowrap; min-width: 54px; }
+  .pl-row .c { text-align: right; white-space: nowrap; }
+  .pl-row.cur .k { color: var(--ink); font-weight: 600; }
+  .pl-row.cur .v { font-weight: 600; }
+  .pl-track { height: 5px; background: var(--line-soft); border-radius: 3px; overflow: hidden; }
+  .pl-fill { display: block; height: 100%; background: var(--ember); opacity: 0.42; border-radius: 3px; }
+  .pl-row.cur .pl-fill { opacity: 1; }
+  .pl-note { margin: 0 0 30px; }
+  .rp-empty { padding: 18px 20px; font-family: var(--mono); font-size: 11.5px; color: var(--ink-faint); }
+  @media (max-width: 1000px) { .pl-cards { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (max-width: 680px) {
+    .pl-cards { grid-template-columns: 1fr; gap: 10px; }
+    .pl-row { grid-template-columns: 58px minmax(20px, 1fr) auto 92px; gap: 8px; }
+    #p-ctl .cb-show { grid-column: 1 / -1; justify-self: start; }
+  }
+
   /* Footnote / methodology */
   .footnote {
     margin-top: 52px; padding-top: 18px; border-top: 1px solid var(--line);
@@ -864,7 +891,8 @@
     #rep-view .section.o-comp    { order: 5; }
     #rep-view .section.o-trend   { order: 6; }
     #rep-view .section.o-cats    { order: 7; }
-    #rep-view .section.o-shifts  { order: 8; }
+    #rep-view .section.o-products { order: 8; }
+    #rep-view .section.o-shifts  { order: 9; }
     #rep-view > .section { margin-bottom: 24px; }
   }
 
@@ -903,6 +931,7 @@
     <nav class="nav" role="tablist">
       <button data-view="total" class="active" role="tab" aria-selected="true">Total</button>
       <button data-view="campaigns" role="tab" aria-selected="false">Campaigns</button>
+      <button data-view="products" role="tab" aria-selected="false">Products</button>
       <button data-view="rep" role="tab" aria-selected="false">Rep View</button>
     </nav>
   </div>
@@ -1008,6 +1037,32 @@
   </div>
 </div>
 
+<!-- ============================== PRODUCTS VIEW ============================== -->
+<div id="products-view" class="view">
+  <div class="ov-head">
+    <span class="kicker">Product mix</span>
+    <h2 class="ov-title" id="p-title">Product growth</h2>
+    <div class="ov-sub" id="p-sub"></div>
+  </div>
+  <div class="card ctlbar" id="p-ctl"></div>
+  <div class="headline" id="p-headline"></div>
+  <div class="pl-cards" id="p-cards"></div>
+  <div class="cat-note pl-note" id="p-note"></div>
+
+  <div class="card lb-card section" id="p-lb">
+    <div class="lb-top">
+      <div class="lb-title">
+        <h2>Rep Leaderboard</h2>
+        <div class="lb-context" id="p-lb-context"></div>
+      </div>
+      <div class="lb-controls">
+        <select class="ctl" id="p-lb-line" aria-label="Product line"></select>
+      </div>
+    </div>
+    <div id="p-lb-body"></div>
+  </div>
+</div>
+
 <!-- ============================== REP VIEW ============================== -->
 <div id="rep-view" class="view">
 
@@ -1070,6 +1125,19 @@
     <div class="cat-note">The six categories above sum to Total Event CPO. &nbsp;— means no data captured (not $0).</div>
   </div>
 
+  <div class="section o-products" id="rep-products-section">
+    <div class="sec-head">
+      <div><span class="kicker">What I'm selling</span>
+        <h2>Product Mix</h2></div>
+      <div class="sec-tools">
+        <span class="scope" id="rp-scope"></span>
+        <div class="pills" id="rp-measure" aria-label="Show"></div>
+      </div>
+    </div>
+    <div class="cat-table-wrap" id="rep-products"></div>
+    <div class="cat-note" id="rp-note"></div>
+  </div>
+
   <div class="section o-shifts">
     <div class="sec-head">
       <div><span class="kicker">Booth productivity</span>
@@ -1097,6 +1165,7 @@
     Campaigns: C1 = Jan–Apr · C2 = May–Aug · C3 = Sep–Dec, each compared with the same campaign in other years.
     Shift metrics are annual.</p>
     <p id="fn-refresh"></p>
+    <p id="fn-products"></p>
   </div>
   <div class="fn-block">
     <div class="fn-title">Team averages vs rankings</div>
@@ -1159,6 +1228,9 @@ const STATE = {
   repMode: 'year',                                // Rep View follows 'year' (STATE.year) or 'camp' (STATE.camp)
   selectedRep: 'Alan Hernandez',
   chartMetric: null,                              // null = follow the mode (Total CPO by year, Event CPO by campaign)
+  pYear: META.products ? (META.products.ytd_year || META.products.years[META.products.years.length - 1]) : null,  // Products: the year shown
+  pMeasure: 'auto',                               // Products: 'auto' = each line's own headline number, or qty / cpo / orders
+  pLine: 'ULT',                                   // Products leaderboard: the line it ranks
 };
 if (!REPS[STATE.selectedRep]) STATE.selectedRep = MASTER[0];
 
@@ -3168,6 +3240,7 @@ function renderRepView() {
   renderRepComposition();
   renderRepChart();
   renderRepBuckets();
+  renderRepProducts();
   renderRepShifts();
   renderRepPacing();
 }
@@ -3180,6 +3253,9 @@ function renderHeader() {
   if (STATE.view === 'campaigns') {
     const p = campPeriodSel(), c = compareFor(p, 'event');
     txt = `${p.long}${c ? ' · vs ' + c.period.year : ''}`;
+  } else if (STATE.view === 'products') {
+    const y = STATE.pYear;
+    txt = `Products · ${pYearLabel(y)}${pYears().includes(y - 1) ? ' · vs ' + (y - 1) : ''}`;
   } else if (STATE.view === 'total') {
     const sp = seasonP();
     txt = `${STATE.season} season${STATE.bench ? ' · vs ' + STATE.bench : ''}${STATE.bench && !sp.closed ? (STATE.samePoint ? ' · same point ' + thruText(sp.k) : ' · full years') : ''}`;
@@ -3190,14 +3266,294 @@ function renderHeader() {
   document.getElementById('cp-line').textContent = txt;
 }
 
+// ==========================================================================
+// PRODUCTS: the home office's product report (units, CPO and orders per product line, per rep,
+// per year). Annual: the report's own year is year to date as of the day it was sent, so it is
+// shown as a share of last year, never as growth.
+// ==========================================================================
+const PRODUCTS = META.products || null;
+// Nine lines. Upgrades is the two blocks added together (Alan, 2026-10-10: a block is nearly always
+// an upgrade, so block CPO is the CPO for upgrades). `lead` is the number a line leads with.
+const PRODUCT_LINES = [
+  { key: 'ULT',  label: 'Ultimate Set',   tag: 'Sets',     parts: ['ULT'],          lead: 'qty', unit: 'sets' },
+  { key: 'SIG',  label: 'Signature Set',  tag: 'Sets',     parts: ['SIG'],          lead: 'qty', unit: 'sets' },
+  { key: 'HOM',  label: 'Homemaker+8',    tag: 'Sets',     parts: ['HOM'],          lead: 'qty', unit: 'sets' },
+  { key: 'GAL',  label: 'Galley+6',       tag: 'Sets',     parts: ['GAL'],          lead: 'qty', unit: 'sets' },
+  { key: 'UPG',  label: 'Upgrades',       tag: 'Ultimate + Signature blocks', parts: ['UBLK', 'SBLK'], lead: 'cpo', unit: 'blocks' },
+  { key: 'FLA',  label: 'Flatware',       tag: 'Add-on',   parts: ['FLA'],          lead: 'qty', unit: 'units' },
+  { key: 'COOK', label: 'Cookware',       tag: 'Add-on',   parts: ['COOK'],         lead: 'qty', unit: 'units' },
+  { key: 'BIZ',  label: 'Business Gifts', tag: 'Channel',  parts: ['BIZ'],          lead: 'cpo', unit: 'units' },
+  { key: 'RLT',  label: 'Realtor Gifts',  tag: 'Channel',  parts: ['RLT'],          lead: 'cpo', unit: 'units' },
+];
+const P_MEASURES = [['auto', 'Headline'], ['qty', 'Units'], ['cpo', 'CPO'], ['orders', 'Orders']];
+const pYears = () => PRODUCTS ? PRODUCTS.years : [];
+const pIsYtd = y => !!PRODUCTS && PRODUCTS.ytd_year === y;
+const pYearLabel = y => pIsYtd(y) ? `${y} YTD` : String(y);
+const pAsOf = () => { const [y, m, d] = PRODUCTS.as_of.split('-').map(Number); return `${['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'][m - 1]} ${d}, ${y}`; };
+const pMeasureFor = line => STATE.pMeasure === 'auto' ? line.lead : STATE.pMeasure;
+const pMeasureName = (m, line) => m === 'cpo' ? 'CPO' : m === 'orders' ? 'orders' : line.unit;
+// One rep, one line, one year: the line's parts added up. null = that rep or year is not in the report.
+function repProduct(rep, line, y) {
+  const yr = rep && rep.products && rep.products[y];
+  if (!yr) return null;
+  let acc = null;
+  for (const k of line.parts) {
+    const v = yr[k]; if (!v) continue;
+    acc = acc || { qty: 0, cpo: 0, orders: 0 };
+    acc.qty += v.qty || 0; acc.cpo += v.cpo || 0; acc.orders += v.orders || 0;
+  }
+  return acc;
+}
+function teamProduct(line, y) {
+  return memo(`tp:${line.key}:${y}`, () => {
+    let acc = null;
+    for (const rep of masterListReps()) {
+      const v = repProduct(rep, line, y); if (!v) continue;
+      acc = acc || { qty: 0, cpo: 0, orders: 0 };
+      acc.qty += v.qty; acc.cpo += v.cpo; acc.orders += v.orders;
+    }
+    return acc;
+  });
+}
+const pVal = (s, m) => s ? s[m] : null;
+const pNum = (v, m) => (v === null || v === undefined) ? naSpan : m === 'cpo' ? fmtMoneyFit(v) : Math.round(v).toLocaleString();
+const pPlain = (v, m, line) => (v === null || v === undefined) ? '—' : m === 'cpo' ? fmtCurrency(v) + ' CPO' : `${Math.round(v).toLocaleString()} ${pMeasureName(m, line)}`;
+// A year against the year before it: growth for a full year, "% of last year" for the year to date.
+function pChip(cur, prior, y) {
+  if (!pYears().includes(y - 1)) return '';
+  return pIsYtd(y) ? shareChip(cur, prior, y - 1) : chipYoY(cur, prior);
+}
+const pRatio = (line, y, m, of) => { const c = pVal(of(line, y), m), p = pVal(of(line, y - 1), m); return (c !== null && p !== null && p > 0) ? c / p : null; };
+// For scale next to a year-to-date figure: how much of last year's Total CPO the team had in by the
+// last campaign that closed before the report was sent (same reps on both sides).
+function pYardstick() {
+  if (!PRODUCTS || !PRODUCTS.ytd_year) return null;
+  const py = PRODUCTS.ytd_year - 1, md = PRODUCTS.as_of.slice(5);
+  const k = md > '08-31' ? 2 : md > '04-30' ? 1 : 0;
+  if (!k || !CAMP_YEARS.includes(py) || !yearHasFY(py) || salesThruK(py) < k) return null;
+  let part = 0, full = 0;
+  for (const rep of masterListReps()) {
+    if (heldOut(rep, 'total_sales')) continue;
+    const a = pSales(rep, periodThru(py, k)), f = repFYSales(rep, py);
+    if (a && f) { part += a.cpo; full += f.cpo; }
+  }
+  return full > 0 ? { k, py, share: part / full } : null;
+}
+function setProductMeasure(m) { STATE.pMeasure = m; renderProductsView(); renderRepProducts(); }
+const pMeasurePills = () => P_MEASURES.map(([k, l]) =>
+  `<button type="button" data-m="${k}" class="${STATE.pMeasure === k ? 'active' : ''}" aria-pressed="${STATE.pMeasure === k}"${k === 'auto' ? ' title="Units for sets, flatware and cookware; CPO for upgrades and the gift channels"' : ''}>${l}</button>`).join('');
+
+function renderProductControls() {
+  const el = document.getElementById('p-ctl'), y = STATE.pYear;
+  const prior = pYears().includes(y - 1) ? y - 1 : null;
+  el.innerHTML = `
+    <div class="cb-group cb-season"><span class="cb-k">Year</span><select class="ctl ctl-strong" id="p-year" aria-label="Year">${pYears().slice().reverse().map(yy =>
+      `<option value="${yy}"${yy === y ? ' selected' : ''}>${pYearLabel(yy)}</option>`).join('')}</select></div>
+    <div class="cb-group cb-bench"><span class="cb-k">Against</span><span class="cb-v">${prior ? `${prior} full year` : '<span title="Nothing earlier in the report">—</span>'}</span></div>
+    <div class="cb-group cb-data"><span class="cb-k">Report of</span><span class="cb-v">${pAsOf()} · ${PRODUCTS.reps} of ${MASTER.length} reps</span></div>
+    <div class="cb-spacer"></div>
+    <div class="cb-group cb-show"><span class="cb-k">Show</span><div class="pills" id="p-measure" aria-label="Show">${pMeasurePills()}</div></div>`;
+  document.getElementById('p-year').onchange = e => { STATE.pYear = +e.target.value; renderProductsView(); renderHeader(); };
+  el.querySelectorAll('#p-measure button').forEach(b => b.onclick = () => setProductMeasure(b.dataset.m));
+}
+
+function renderProductHeadline() {
+  const el = document.getElementById('p-headline'), y = STATE.pYear, py = y - 1;
+  if (!pYears().includes(py)) { el.innerHTML = `<span class="hl-main">${pYearLabel(y)}</span><span class="hl-sub">the first year in the report: nothing earlier to compare with</span>`; return; }
+  const rows = PRODUCT_LINES.map(l => ({ l, r: pRatio(l, y, pMeasureFor(l), teamProduct) })).filter(x => x.r !== null).sort((a, b) => b.r - a.r);
+  if (!rows.length) { el.innerHTML = `<span class="hl-main">${pYearLabel(y)}</span><span class="hl-sub">No figure to compare with ${py}.</span>`; return; }
+  const pct = r => Math.round(r * 100) + '%', top = rows[0], last = rows[rows.length - 1];
+  const names = xs => xs.length > 1 ? xs.slice(0, -1).join(', ') + ' and ' + xs[xs.length - 1] : xs[0];
+  let main, sub;
+  if (pIsYtd(y)) {
+    const past = rows.filter(x => x.r >= 1);
+    main = past.length
+      ? `${names(past.map(x => x.l.label))} ${past.length > 1 ? 'have' : 'has'} already passed all of ${py}`
+      : `${top.l.label} is furthest along <span class="hl-delta">${pct(top.r)} of ${py}</span>`;
+    sub = `${pYearLabel(y)} as a share of ${py}'s full year · furthest along: ${rows.slice(0, 3).map(x => `${x.l.label} ${pct(x.r)}`).join(', ')}` +
+      ` · furthest behind: ${last.l.label} ${pct(last.r)}`;
+  } else {
+    const g = r => `${r >= 1 ? '+' : '−'}${Math.abs((r - 1) * 100).toFixed(0)}%`, up = rows.filter(x => x.r > 1).length;
+    main = `${up} of ${rows.length} lines grew in ${y} <span class="hl-delta ${top.r >= 1 ? 'pos' : 'neg'}">best: ${top.l.label} ${g(top.r)}</span>`;
+    sub = `${y} vs ${py}, full years · grew most: ${rows.slice(0, 3).map(x => `${x.l.label} ${g(x.r)}`).join(', ')} · fell most: ${last.r < 1 ? `${last.l.label} ${g(last.r)}` : 'none'}`;
+  }
+  el.innerHTML = `<span class="hl-main">${main}</span><span class="hl-sub">${sub}</span>`;
+}
+
+function renderProductCards() {
+  const y = STATE.pYear, years = pYears().slice().reverse();   // newest first
+  document.getElementById('p-cards').innerHTML = PRODUCT_LINES.map(l => {
+    const m = pMeasureFor(l), cur = teamProduct(l, y);
+    const max = Math.max(1, ...years.map(yy => pVal(teamProduct(l, yy), m) || 0));
+    const rest = ['qty', 'cpo', 'orders'].filter(k => k !== m);
+    const rows = years.map(yy => {
+      const s = teamProduct(l, yy), v = pVal(s, m), pv = pVal(teamProduct(l, yy - 1), m);
+      const tip = s ? `${l.label} · ${pYearLabel(yy)}: ${['qty', 'cpo', 'orders'].map(k => pPlain(s[k], k, l)).join(' · ')}` : `${l.label} · ${pYearLabel(yy)}: not in the report`;
+      return `<div class="pl-row${yy === y ? ' cur' : ''}" title="${tip}">
+        <span class="k">${pYearLabel(yy)}</span>
+        <span class="pl-track"><span class="pl-fill" style="width:${v > 0 ? Math.max(1.5, v / max * 100).toFixed(1) : 0}%"></span></span>
+        <span class="v">${pNum(v, m)}</span>
+        <span class="c">${pChip(v, pv, yy)}</span>
+      </div>`;
+    }).join('');
+    return `<div class="kcard pl-card">
+      <div class="kc-top"><span class="kc-label">${l.label}</span><span class="kc-meta">${l.tag}</span></div>
+      <div class="kc-val">${pNum(pVal(cur, m), m)}<span class="pl-unit">${pMeasureName(m, l)}</span></div>
+      <div class="kc-sub">${pYearLabel(y)}${cur ? ' · ' + rest.map(k => pPlain(cur[k], k, l)).join(' · ') : ''}</div>
+      <div class="kc-rows">${rows}</div>
+    </div>`;
+  }).join('');
+  const ys = pIsYtd(y) ? pYardstick() : null;
+  document.getElementById('p-note').textContent =
+    (ys ? `For scale: by the end of C${ys.k} ${ys.py} the team had ${Math.round(ys.share * 100)}% of that year's Total CPO in, and the report runs a few weeks past that point. ` : '') +
+    'Core team, the ' + PRODUCTS.reps + ' reps in the report. Upgrades = Ultimate + Signature blocks. Business and Realtor Gifts are sales channels: they can include items counted in the other lines, so the lines are never added together.';
+}
+
+function renderProductLeaderboard() {
+  const line = PRODUCT_LINES.find(l => l.key === STATE.pLine) || PRODUCT_LINES[0];
+  const m = pMeasureFor(line), y = STATE.pYear, years = pYears(), py = years.includes(y - 1) ? y - 1 : null;
+  const sel = document.getElementById('p-lb-line');
+  sel.innerHTML = PRODUCT_LINES.map(l => `<option value="${l.key}"${l.key === line.key ? ' selected' : ''}>${l.label}</option>`).join('');
+  sel.onchange = e => { STATE.pLine = e.target.value; renderProductLeaderboard(); };
+  const rows = masterListReps().map(r => ({ r, vals: Object.fromEntries(years.map(yy => [yy, pVal(repProduct(r, line, yy), m)])) }));
+  const ranked = rows.filter(x => x.vals[y] !== null).sort((a, c) => c.vals[y] - a.vals[y] || a.r.name.localeCompare(c.r.name));
+  const missing = rows.filter(x => x.vals[y] === null).sort((a, c) => a.r.name.localeCompare(c.r.name));
+  const maxVal = Math.max(1, ...ranked.map(x => x.vals[y]));
+  document.getElementById('p-lb-context').innerHTML =
+    `<strong>${line.label}</strong> · ${m === 'cpo' ? 'CPO' : m === 'orders' ? 'orders' : line.unit} · ${pYearLabel(y)}${py ? ` vs ${py}` : ''} · ${ranked.length} of ${MASTER.length} core-team reps`;
+  const yearHead = yy => `<th class="num yr${yy === y ? ' cur-h' : ' yr-old'}">${pYearLabel(yy)}${yy === y ? ' ●' : ''}<span class="th-sub opt">${pIsYtd(yy) ? `as of ${pAsOf().replace(/, \d{4}$/, '')}` : 'full year'}</span></th>`;
+  let html = `<div class="lb-scroll"><table class="leaderboard tlb"><thead><tr>
+    <th style="text-align:center;">#</th><th>Rep</th><th class="bar-h"></th>
+    ${years.map(yearHead).join('')}
+    ${py ? `<th class="num g-col">${pIsYtd(y) ? `% of <span class="lg-only">${py}</span><span class="sm-only">'${String(py).slice(2)}</span>` : `vs <span class="lg-only">${py}</span><span class="sm-only">'${String(py).slice(2)}</span>`}</th>` : ''}
+  </tr></thead><tbody>`;
+  const cells = x => years.map(yy => `<td class="num yr${yy === y ? ' cur' : ' prior yr-old'}">${pNum(x.vals[yy], m)}</td>`).join('');
+  ranked.forEach((x, i) => {
+    const isSelf = x.r.name === STATE.selectedRep;
+    html += `<tr class="${[isSelf ? 'is-self' : '', i < 3 ? 'top3' : ''].filter(Boolean).join(' ')}" data-rep="${x.r.name}" title="Open ${x.r.name}">
+      <td class="rank">${i + 1}</td>
+      <td class="name">${x.r.name}${isSelf ? '<span class="viewing-dot"></span>' : ''}</td>
+      <td class="bar-cell"><div class="lb-track"><div class="lb-fill" style="width:${x.vals[y] > 0 ? Math.max(1.5, x.vals[y] / maxVal * 100).toFixed(1) : 0}%"></div></div></td>
+      ${cells(x)}
+      ${py ? `<td class="growth-cell">${pChip(x.vals[y], x.vals[py], y)}</td>` : ''}
+    </tr>`;
+  });
+  missing.forEach(x => {
+    html += `<tr class="lb-missing" data-rep="${x.r.name}" title="${x.r.name}: not in the product report">
+      <td class="rank">–</td><td class="name">${x.r.name}<span class="lb-why">not in the product report</span></td><td class="bar-cell"></td>
+      ${cells(x)}${py ? `<td class="growth-cell"></td>` : ''}
+    </tr>`;
+  });
+  html += `</tbody></table></div>
+    <div class="lb-foot">Core team only. Tap a rep to open their product mix. Bars scale to the top ${pYearLabel(y)} value.${pIsYtd(y) && py ? ` ${pYearLabel(y)} is shown as a share of ${py}'s full year, not as growth.` : ''}</div>`;
+  const body = document.getElementById('p-lb-body');
+  body.innerHTML = html;
+  body.querySelectorAll('tbody tr').forEach(tr => tr.addEventListener('click', () => {
+    STATE.selectedRep = tr.dataset.rep; STATE.chartMetric = null;
+    renderAll(); switchView('rep');
+    document.getElementById('rep-products-section').scrollIntoView({ block: 'start' });
+    window.scrollBy(0, -(document.querySelector('.masthead').offsetHeight + 12));
+  }));
+}
+
+function renderProductsView() {
+  if (!PRODUCTS) return;
+  const y = STATE.pYear, py = pYears().includes(y - 1) ? y - 1 : null;
+  document.getElementById('p-title').textContent = `${pYearLabel(y)} product growth`;
+  document.getElementById('p-sub').textContent = pIsYtd(y)
+    ? `Year to date as of the report of ${pAsOf()}${py ? `, against ${py}'s full year` : ''} · ${pYears().join(', ')} on file`
+    : `Full year${py ? `, against ${py}` : ''} · ${pYears().join(', ')} on file`;
+  renderProductControls();
+  renderProductHeadline();
+  renderProductCards();
+  renderProductLeaderboard();
+}
+
+// Rep View: the selected rep's nine lines across every year in the report. Annual, like shifts:
+// it does not follow the Year total / By campaign switch.
+function renderRepProducts() {
+  const sec = document.getElementById('rep-products-section');
+  sec.style.display = PRODUCTS ? '' : 'none';
+  if (!PRODUCTS) return;
+  const r = REPS[STATE.selectedRep], years = pYears(), last = years[years.length - 1];
+  document.getElementById('rp-scope').textContent = `Annual · report of ${pAsOf()}`;
+  const pills = document.getElementById('rp-measure');
+  pills.innerHTML = pMeasurePills();
+  pills.querySelectorAll('button').forEach(b => b.onclick = () => setProductMeasure(b.dataset.m));
+  const wrap = document.getElementById('rep-products'), noteEl = document.getElementById('rp-note');
+  if (!r || !r.products) {
+    wrap.innerHTML = `<div class="rp-empty">${STATE.selectedRep} is not in the product report of ${pAsOf()}. The next report can add them.</div>`;
+    noteEl.textContent = '';
+    return;
+  }
+  const mine = (line, y) => repProduct(r, line, y);
+  // Growth-first: the best full-year step, and the line furthest along this year. A tiny base is noise.
+  const floor = m => m === 'cpo' ? 1000 : 3;
+  let grew = null, along = null;
+  for (const l of PRODUCT_LINES) {
+    const m = pMeasureFor(l);
+    for (const y of years) {
+      const c = pVal(mine(l, y), m), p = pVal(mine(l, y - 1), m);
+      if (c === null || p === null || p < floor(m)) continue;
+      const x = { l, y, m, c, p, r: c / p };
+      if (pIsYtd(y)) { if (!along || x.r > along.r) along = x; }
+      else if (x.r > 1 && (!grew || x.r > grew.r)) grew = x;
+    }
+  }
+  const says = [];
+  if (grew) says.push(`Biggest growth in ${grew.y}: <strong>${grew.l.label}</strong>, ${pPlain(grew.c, grew.m, grew.l)} from ${pPlain(grew.p, grew.m, grew.l).replace(/ [a-zA-Z]+$/, '')} (+${((grew.r - 1) * 100).toFixed(0)}%).`);
+  if (along) says.push(`Furthest along in ${along.y}: <strong>${along.l.label}</strong>, ${along.r >= 1 ? 'already ' : ''}${Math.round(along.r * 100)}% of ${along.y - 1}.`);
+  const chipCols = years.filter(y => years.includes(y - 1));
+  const rank = (line, m) => {
+    const all = masterListReps().map(x => ({ n: x.name, v: pVal(repProduct(x, line, last), m) })).filter(x => x.v !== null).sort((a, b) => b.v - a.v);
+    const i = all.findIndex(x => x.n === r.name);
+    return i < 0 ? naSpan : `#${i + 1}<span style="color:var(--ink-faint)"> of ${all.length}</span>`;
+  };
+  const rows = PRODUCT_LINES.map(l => {
+    const m = pMeasureFor(l), vals = Object.fromEntries(years.map(y => [y, pVal(mine(l, y), m)]));
+    const empty = years.every(y => !vals[y]);
+    const tip = years.map(y => { const s = mine(l, y); return `${pYearLabel(y)}: ${s ? ['qty', 'cpo', 'orders'].map(k => pPlain(s[k], k, l)).join(' · ') : 'not in the report'}`; }).join('\n');
+    return `<tr class="${empty ? 'empty' : ''}" title="${tip}">
+      <td class="cat-name">${l.label}<span class="lb-why">${pMeasureName(m, l)}</span></td>
+      ${years.map((y, i) => `<td class="${y === last ? 'cur' : 'prior'}${years.length > 2 && i === 0 ? ' xtra' : ''}">${pNum(vals[y], m)}</td>`).join('')}
+      ${chipCols.map(y => `<td class="${y === last ? '' : 'xtra'}">${pChip(vals[y], vals[y - 1], y)}</td>`).join('')}
+      <td class="xtra">${rank(l, m)}</td>
+    </tr>`;
+  }).join('');
+  wrap.innerHTML = `
+    ${says.length ? `<div class="cat-best">${says.join(' ')}</div>` : ''}
+    <table class="cat-table rep-cats">
+      <thead><tr>
+        <th>Product line</th>
+        ${years.map((y, i) => `<th class="${years.length > 2 && i === 0 ? 'xtra' : ''}">${pYearLabel(y)}</th>`).join('')}
+        ${chipCols.map(y => `<th class="${y === last ? '' : 'xtra'}">${pIsYtd(y) ? `% of ${y - 1}` : `${y} vs ${y - 1}`}</th>`).join('')}
+        <th class="xtra">Team rank<i class="info-i" title="Rank among the core-team reps in the report, on the ${pYearLabel(last)} figure">i</i></th>
+      </tr></thead>
+      <tbody>${rows}</tbody>
+    </table>`;
+  noteEl.textContent = `Each line in ${STATE.pMeasure === 'auto' ? 'its headline number (units for sets, flatware and cookware; CPO for upgrades and the gift channels)' : P_MEASURES.find(x => x[0] === STATE.pMeasure)[1].toLowerCase()}. ` +
+    (PRODUCTS.ytd_year ? `${PRODUCTS.ytd_year} is year to date as of ${pAsOf()}, shown as a share of ${PRODUCTS.ytd_year - 1}, not as growth. ` : '') + 'Upgrades = Ultimate + Signature blocks.';
+}
+
+// The Products tab only exists when the intake has published a product report.
+(function () {
+  if (!PRODUCTS) { document.querySelector('.nav button[data-view="products"]').style.display = 'none'; return; }
+  document.getElementById('fn-products').textContent =
+    `Products: the home office's product report of ${pAsOf()}, ${PRODUCTS.reps} of ${MASTER.length} core-team reps` +
+    (PRODUCTS.not_in_report && PRODUCTS.not_in_report.length ? ` (not in it: ${PRODUCTS.not_in_report.join(', ')})` : '') + '. ' +
+    (PRODUCTS.ytd_year ? `${PRODUCTS.years.filter(y => y !== PRODUCTS.ytd_year).join(' and ')} are full years; ${PRODUCTS.ytd_year} is year to date as of the report. ` : 'Every year is a full year. ') +
+    'It is annual and does not follow the campaign selectors.';
+})();
+
 function renderAll() {
   renderTotalView();
   renderCampaignsView();
+  renderProductsView();
   renderRepView();
   renderHeader();
 }
 
-const VIEWS = ['total', 'campaigns', 'rep'];
+const VIEWS = PRODUCTS ? ['total', 'campaigns', 'products', 'rep'] : ['total', 'campaigns', 'rep'];
 function switchView(view) {
   if (!VIEWS.includes(view)) view = 'total';
   document.querySelectorAll('.nav button').forEach(b => {
@@ -3222,6 +3578,7 @@ window.addEventListener('resize', () => {
   _resizeTimer = setTimeout(() => {
     if (STATE.view === 'rep') renderRepChart();
     renderShape(); renderTotalTable(); renderTotalLeaderboard(); renderLeaderboard('c'); renderCompareGrid(); renderCampGrid(); renderRepBuckets();
+    renderProductsView(); renderRepProducts();
   }, 150);
 });
 
@@ -3237,7 +3594,7 @@ document.getElementById('rep-chart-metric').addEventListener('change', e => {
   renderRepChart();
 });
 
-// Initial render. #total / #campaigns / #rep open that tab (#team from Phase 2 links opens Total).
+// Initial render. #total / #campaigns / #products / #rep open that tab (#team from Phase 2 links opens Total).
 buildLeaderboard('c');
 buildGridToggles();
 renderAll();

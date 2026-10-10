@@ -16,11 +16,12 @@ Think of it less like a report and more like a coaching mirror — the rep opens
 
 ## How to navigate
 
-**Three top-level tabs** (restructured 2026-09-24):
+**Four top-level tabs** (restructured 2026-09-24; Products added 2026-10-10):
 
 1. **Total** — how the season is doing, laid out like the Event Analyzer overview. Pick the **Season** and who to **Compare to**; the **Same point** switch compares earlier years through the same campaign (on) or their full year (off); the **Show** buttons add or drop years. One headline line, three cards (Total CPO · Event CPO · Average order, each with a row per earlier year), the **Rep Leaderboard** (every core-team rep, the years side by side, change vs the comparison year; filter by Total CPO / Event CPO / Non-Event CPO / Avg Order or any event category; sort by highest or biggest growth), a **CPO by Campaign** chart and the category table.
 2. **Campaigns** — pick a year and tap a campaign card (C1 Jan–Apr, C2 May–Aug, C3 Sep–Dec). **Year over Year** shows that campaign in 2024, 2025 and 2026 side by side with the change; the category mix follows the campaign you tapped; the **leaderboard** has its own C1 / C2 / C3 / **Full year** buttons (the year ranking lives here); **Campaign by Campaign** shows C1 / C2 / C3 / the year inside one year.
-3. **Rep View** — pick any rep, then **Year total** or **By campaign** at the top. Tapping a name on either leaderboard opens that rep in the same scope.
+3. **Products** — the home office's product report: nine lines (Ultimate, Signature, Homemaker+8 and Galley+6 sets; Upgrades = Ultimate + Signature blocks; Flatware; Cookware; Business Gifts; Realtor Gifts) for 2024, 2025 and 2026 year to date. A card per line with the three years side by side, then a rep leaderboard you can point at any line. **Show** switches between each line's headline number (units for sets, flatware and cookware; CPO for upgrades and the gift channels), Units, CPO and Orders. 2026 is year to date as of the report, so it reads "59% of 2025", never as growth; 2025 vs 2024 is real growth. The lines are never added together: Business and Realtor Gifts are channels and can include items counted in the other lines.
+4. **Rep View** — pick any rep, then **Year total** or **By campaign** at the top. Tapping a name on either leaderboard opens that rep in the same scope. Further down the page, **Product Mix** shows that rep's nine lines across the three years, with their best growth line called out.
 
 **How years compare:** a closed year against the year before. The year in progress: event numbers against last year at the same point (2026 C1–C2 vs 2025 C1–C2); Total CPO as a share of last year's full year ("70% of 2025"), because 2025 C2 has no Total Sales workbook for a same-point figure.
 
@@ -99,7 +100,7 @@ In all cases, em-dash means "no data captured," NOT "$0." (Zero would imply effo
 
 ## What's still coming (v1.1)
 
-- **Product growth** (the placeholder tab was removed 2026-09-24; it returns when the data exists) — Ultimate Sets, Signature Sets, Homemaker Sets, Ultimate Blocks, Signature Blocks, Flatware, Cookware, Galley+6, Business Gift cross-channel, Realtor cross-channel. Three years of annual data per rep. Growth-first framing.
+- **Product report refresh** — the Products tab and each rep's Product Mix block run on the report of Sep 28, 2026 (20 reps; Cameron Couts was not on the request). The next report can add him and move 2026 forward.
 - **Service-Call-per-Event metric** — annual attribution % showing how much of each rep's book comes from event-generated service calls
 - **Jeremy / Rob / Roman** — C1 and full-year Total Sales loaded 2026-10-10; C2 2026 and order counts still to come from the home office
 

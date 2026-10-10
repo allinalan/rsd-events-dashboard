@@ -61,6 +61,32 @@ window.DASHBOARD_DATA = {
       "2026-C2"
     ],
     "universe": "master-list",
+    "products": {
+      "file": "product_growth-2026-09-28.xlsx",
+      "as_of": "2026-09-28",
+      "years": [
+        2024,
+        2025,
+        2026
+      ],
+      "ytd_year": 2026,
+      "lines": [
+        "ULT",
+        "SIG",
+        "HOM",
+        "GAL",
+        "FLA",
+        "COOK",
+        "BIZ",
+        "RLT",
+        "UBLK",
+        "SBLK"
+      ],
+      "reps": 20,
+      "not_in_report": [
+        "Cameron Couts"
+      ]
+    },
     "intake": {
       "source": "vectorconnect/eventalytics/team-sales",
       "total_sales_through": "2026-C2",
@@ -741,6 +767,164 @@ window.DASHBOARD_DATA = {
             "avg": 2269.3333333333335
           }
         }
+      },
+      "products": {
+        "2024": {
+          "ULT": {
+            "qty": 4,
+            "cpo": 13828,
+            "orders": 4
+          },
+          "SIG": {
+            "qty": 11,
+            "cpo": 26035,
+            "orders": 13
+          },
+          "HOM": {
+            "qty": 14,
+            "cpo": 14057.5,
+            "orders": 13
+          },
+          "GAL": {
+            "qty": 15,
+            "cpo": 13073,
+            "orders": 12
+          },
+          "FLA": {
+            "qty": 48,
+            "cpo": 7960,
+            "orders": 14
+          },
+          "COOK": {
+            "qty": 9,
+            "cpo": 2823,
+            "orders": 3
+          },
+          "BIZ": {
+            "qty": 5582,
+            "cpo": 145773,
+            "orders": 62
+          },
+          "RLT": {
+            "qty": 14929,
+            "cpo": 257879,
+            "orders": 184
+          },
+          "UBLK": {
+            "qty": 17,
+            "cpo": 4856,
+            "orders": 17
+          },
+          "SBLK": {
+            "qty": 9,
+            "cpo": 2812,
+            "orders": 8
+          }
+        },
+        "2025": {
+          "ULT": {
+            "qty": 7,
+            "cpo": 20891,
+            "orders": 7
+          },
+          "SIG": {
+            "qty": 4,
+            "cpo": 9409.75,
+            "orders": 4
+          },
+          "HOM": {
+            "qty": 7,
+            "cpo": 8505,
+            "orders": 7
+          },
+          "GAL": {
+            "qty": 12,
+            "cpo": 10526,
+            "orders": 12
+          },
+          "FLA": {
+            "qty": 36,
+            "cpo": 9319,
+            "orders": 13
+          },
+          "COOK": {
+            "qty": 10,
+            "cpo": 3742,
+            "orders": 5
+          },
+          "BIZ": {
+            "qty": 7125,
+            "cpo": 149211,
+            "orders": 59
+          },
+          "RLT": {
+            "qty": 10729,
+            "cpo": 206571,
+            "orders": 129
+          },
+          "UBLK": {
+            "qty": 13,
+            "cpo": 4625,
+            "orders": 15
+          },
+          "SBLK": {
+            "qty": 9,
+            "cpo": 2196,
+            "orders": 9
+          }
+        },
+        "2026": {
+          "ULT": {
+            "qty": 1,
+            "cpo": 3561,
+            "orders": 1
+          },
+          "SIG": {
+            "qty": 6,
+            "cpo": 15721,
+            "orders": 6
+          },
+          "HOM": {
+            "qty": 12,
+            "cpo": 16242,
+            "orders": 12
+          },
+          "GAL": {
+            "qty": 10,
+            "cpo": 10396,
+            "orders": 10
+          },
+          "FLA": {
+            "qty": 43,
+            "cpo": 2429,
+            "orders": 6
+          },
+          "COOK": {
+            "qty": 10,
+            "cpo": 5303,
+            "orders": 8
+          },
+          "BIZ": {
+            "qty": 2590,
+            "cpo": 75319,
+            "orders": 49
+          },
+          "RLT": {
+            "qty": 8668,
+            "cpo": 163232,
+            "orders": 105
+          },
+          "UBLK": {
+            "qty": 4,
+            "cpo": 1880,
+            "orders": 5
+          },
+          "SBLK": {
+            "qty": 7,
+            "cpo": 1874,
+            "orders": 7
+          }
+        }
       }
     },
     "Adam Jeffrey": {
@@ -1378,6 +1562,164 @@ window.DASHBOARD_DATA = {
             "cpo": 30012,
             "orders": 43,
             "avg": 2000.8
+          }
+        }
+      },
+      "products": {
+        "2024": {
+          "ULT": {
+            "qty": 8,
+            "cpo": 26721,
+            "orders": 8
+          },
+          "SIG": {
+            "qty": 5,
+            "cpo": 12022,
+            "orders": 6
+          },
+          "HOM": {
+            "qty": 6,
+            "cpo": 6031,
+            "orders": 6
+          },
+          "GAL": {
+            "qty": 3,
+            "cpo": 2913,
+            "orders": 3
+          },
+          "FLA": {
+            "qty": 31,
+            "cpo": 4324,
+            "orders": 10
+          },
+          "COOK": {
+            "qty": 29,
+            "cpo": 16669,
+            "orders": 8
+          },
+          "BIZ": {
+            "qty": 0,
+            "cpo": 0,
+            "orders": 0
+          },
+          "RLT": {
+            "qty": 8,
+            "cpo": 158,
+            "orders": 1
+          },
+          "UBLK": {
+            "qty": 16,
+            "cpo": 6611,
+            "orders": 15
+          },
+          "SBLK": {
+            "qty": 0,
+            "cpo": 0,
+            "orders": 0
+          }
+        },
+        "2025": {
+          "ULT": {
+            "qty": 4,
+            "cpo": 12482,
+            "orders": 4
+          },
+          "SIG": {
+            "qty": 5,
+            "cpo": 9953,
+            "orders": 5
+          },
+          "HOM": {
+            "qty": 5,
+            "cpo": 5033,
+            "orders": 5
+          },
+          "GAL": {
+            "qty": 2,
+            "cpo": 1914,
+            "orders": 3
+          },
+          "FLA": {
+            "qty": 16,
+            "cpo": 4234,
+            "orders": 8
+          },
+          "COOK": {
+            "qty": 15,
+            "cpo": 7479,
+            "orders": 5
+          },
+          "BIZ": {
+            "qty": 138,
+            "cpo": 6091,
+            "orders": 4
+          },
+          "RLT": {
+            "qty": 0,
+            "cpo": 0,
+            "orders": 0
+          },
+          "UBLK": {
+            "qty": 5,
+            "cpo": 2267,
+            "orders": 6
+          },
+          "SBLK": {
+            "qty": 1,
+            "cpo": 366,
+            "orders": 1
+          }
+        },
+        "2026": {
+          "ULT": {
+            "qty": 0,
+            "cpo": 0,
+            "orders": 0
+          },
+          "SIG": {
+            "qty": 2,
+            "cpo": 4123,
+            "orders": 2
+          },
+          "HOM": {
+            "qty": 6,
+            "cpo": 6692,
+            "orders": 6
+          },
+          "GAL": {
+            "qty": 1,
+            "cpo": 1087,
+            "orders": 1
+          },
+          "FLA": {
+            "qty": 29,
+            "cpo": 7509,
+            "orders": 7
+          },
+          "COOK": {
+            "qty": 23,
+            "cpo": 11618,
+            "orders": 9
+          },
+          "BIZ": {
+            "qty": 0,
+            "cpo": 0,
+            "orders": 0
+          },
+          "RLT": {
+            "qty": 2706,
+            "cpo": 12951,
+            "orders": 1
+          },
+          "UBLK": {
+            "qty": 4,
+            "cpo": 1866,
+            "orders": 4
+          },
+          "SBLK": {
+            "qty": 5,
+            "cpo": 1508,
+            "orders": 4
           }
         }
       }
@@ -2019,6 +2361,164 @@ window.DASHBOARD_DATA = {
             "avg": 3235.25
           }
         }
+      },
+      "products": {
+        "2024": {
+          "ULT": {
+            "qty": 9,
+            "cpo": 28659,
+            "orders": 9
+          },
+          "SIG": {
+            "qty": 12,
+            "cpo": 26713,
+            "orders": 14
+          },
+          "HOM": {
+            "qty": 23,
+            "cpo": 29047,
+            "orders": 23
+          },
+          "GAL": {
+            "qty": 16,
+            "cpo": 14534,
+            "orders": 16
+          },
+          "FLA": {
+            "qty": 100,
+            "cpo": 40313,
+            "orders": 42
+          },
+          "COOK": {
+            "qty": 68,
+            "cpo": 35131,
+            "orders": 36
+          },
+          "BIZ": {
+            "qty": 708,
+            "cpo": 46693,
+            "orders": 17
+          },
+          "RLT": {
+            "qty": 0,
+            "cpo": 0,
+            "orders": 0
+          },
+          "UBLK": {
+            "qty": 21,
+            "cpo": 9269,
+            "orders": 21
+          },
+          "SBLK": {
+            "qty": 20,
+            "cpo": 5325,
+            "orders": 20
+          }
+        },
+        "2025": {
+          "ULT": {
+            "qty": 6,
+            "cpo": 18723,
+            "orders": 6
+          },
+          "SIG": {
+            "qty": 14,
+            "cpo": 32121,
+            "orders": 13
+          },
+          "HOM": {
+            "qty": 24,
+            "cpo": 32749.5,
+            "orders": 25
+          },
+          "GAL": {
+            "qty": 25,
+            "cpo": 26624,
+            "orders": 26
+          },
+          "FLA": {
+            "qty": 90,
+            "cpo": 24477,
+            "orders": 35
+          },
+          "COOK": {
+            "qty": 71,
+            "cpo": 33113,
+            "orders": 42
+          },
+          "BIZ": {
+            "qty": 809,
+            "cpo": 56241,
+            "orders": 14
+          },
+          "RLT": {
+            "qty": 120,
+            "cpo": 7827,
+            "orders": 5
+          },
+          "UBLK": {
+            "qty": 36,
+            "cpo": 15048,
+            "orders": 37
+          },
+          "SBLK": {
+            "qty": 22,
+            "cpo": 6943,
+            "orders": 26
+          }
+        },
+        "2026": {
+          "ULT": {
+            "qty": 6,
+            "cpo": 20085,
+            "orders": 6
+          },
+          "SIG": {
+            "qty": 7,
+            "cpo": 18023,
+            "orders": 7
+          },
+          "HOM": {
+            "qty": 11,
+            "cpo": 16496,
+            "orders": 12
+          },
+          "GAL": {
+            "qty": 13,
+            "cpo": 12285,
+            "orders": 13
+          },
+          "FLA": {
+            "qty": 38,
+            "cpo": 18166,
+            "orders": 19
+          },
+          "COOK": {
+            "qty": 87,
+            "cpo": 40920,
+            "orders": 41
+          },
+          "BIZ": {
+            "qty": 151,
+            "cpo": 10211,
+            "orders": 7
+          },
+          "RLT": {
+            "qty": 0,
+            "cpo": 0,
+            "orders": 0
+          },
+          "UBLK": {
+            "qty": 21,
+            "cpo": 8916,
+            "orders": 22
+          },
+          "SBLK": {
+            "qty": 12,
+            "cpo": 3393,
+            "orders": 13
+          }
+        }
       }
     },
     "Alec Luyendyk": {
@@ -2656,6 +3156,164 @@ window.DASHBOARD_DATA = {
             "cpo": 61292,
             "orders": 82,
             "avg": 2918.6666666666665
+          }
+        }
+      },
+      "products": {
+        "2024": {
+          "ULT": {
+            "qty": 8,
+            "cpo": 25698,
+            "orders": 8
+          },
+          "SIG": {
+            "qty": 9,
+            "cpo": 19920,
+            "orders": 9
+          },
+          "HOM": {
+            "qty": 22,
+            "cpo": 27849,
+            "orders": 20
+          },
+          "GAL": {
+            "qty": 15,
+            "cpo": 13722,
+            "orders": 14
+          },
+          "FLA": {
+            "qty": 124,
+            "cpo": 24024,
+            "orders": 31
+          },
+          "COOK": {
+            "qty": 98,
+            "cpo": 40994,
+            "orders": 52
+          },
+          "BIZ": {
+            "qty": 2737,
+            "cpo": 24681,
+            "orders": 6
+          },
+          "RLT": {
+            "qty": 110,
+            "cpo": 4137,
+            "orders": 4
+          },
+          "UBLK": {
+            "qty": 24,
+            "cpo": 10172,
+            "orders": 26
+          },
+          "SBLK": {
+            "qty": 18,
+            "cpo": 6390,
+            "orders": 18
+          }
+        },
+        "2025": {
+          "ULT": {
+            "qty": 6,
+            "cpo": 17805,
+            "orders": 7
+          },
+          "SIG": {
+            "qty": 6,
+            "cpo": 12706,
+            "orders": 6
+          },
+          "HOM": {
+            "qty": 25,
+            "cpo": 30406,
+            "orders": 24
+          },
+          "GAL": {
+            "qty": 5,
+            "cpo": 4915,
+            "orders": 6
+          },
+          "FLA": {
+            "qty": 84,
+            "cpo": 23592,
+            "orders": 33
+          },
+          "COOK": {
+            "qty": 72,
+            "cpo": 26790,
+            "orders": 41
+          },
+          "BIZ": {
+            "qty": 3562,
+            "cpo": 34930,
+            "orders": 8
+          },
+          "RLT": {
+            "qty": 116,
+            "cpo": 3593,
+            "orders": 4
+          },
+          "UBLK": {
+            "qty": 21,
+            "cpo": 9524,
+            "orders": 21
+          },
+          "SBLK": {
+            "qty": 19,
+            "cpo": 6566,
+            "orders": 19
+          }
+        },
+        "2026": {
+          "ULT": {
+            "qty": 1,
+            "cpo": 3561,
+            "orders": 1
+          },
+          "SIG": {
+            "qty": 8,
+            "cpo": 18865,
+            "orders": 8
+          },
+          "HOM": {
+            "qty": 10,
+            "cpo": 12882,
+            "orders": 12
+          },
+          "GAL": {
+            "qty": 6,
+            "cpo": 5567,
+            "orders": 6
+          },
+          "FLA": {
+            "qty": 46,
+            "cpo": 9969,
+            "orders": 13
+          },
+          "COOK": {
+            "qty": 79,
+            "cpo": 33773,
+            "orders": 41
+          },
+          "BIZ": {
+            "qty": 206,
+            "cpo": 6613,
+            "orders": 6
+          },
+          "RLT": {
+            "qty": 84,
+            "cpo": 2923,
+            "orders": 2
+          },
+          "UBLK": {
+            "qty": 17,
+            "cpo": 7934,
+            "orders": 18
+          },
+          "SBLK": {
+            "qty": 5,
+            "cpo": 1852,
+            "orders": 7
           }
         }
       }
@@ -3926,6 +4584,164 @@ window.DASHBOARD_DATA = {
             "avg": 734.5555555555555
           }
         }
+      },
+      "products": {
+        "2024": {
+          "ULT": {
+            "qty": 4,
+            "cpo": 12927,
+            "orders": 4
+          },
+          "SIG": {
+            "qty": 3,
+            "cpo": 6852,
+            "orders": 3
+          },
+          "HOM": {
+            "qty": 4,
+            "cpo": 5509,
+            "orders": 4
+          },
+          "GAL": {
+            "qty": 5,
+            "cpo": 4983,
+            "orders": 4
+          },
+          "FLA": {
+            "qty": 64,
+            "cpo": 9690,
+            "orders": 11
+          },
+          "COOK": {
+            "qty": 34,
+            "cpo": 8220,
+            "orders": 19
+          },
+          "BIZ": {
+            "qty": 12,
+            "cpo": 4317,
+            "orders": 1
+          },
+          "RLT": {
+            "qty": 0,
+            "cpo": 0,
+            "orders": 0
+          },
+          "UBLK": {
+            "qty": 28,
+            "cpo": 12353,
+            "orders": 28
+          },
+          "SBLK": {
+            "qty": 12,
+            "cpo": 3919,
+            "orders": 14
+          }
+        },
+        "2025": {
+          "ULT": {
+            "qty": 4,
+            "cpo": 13363,
+            "orders": 4
+          },
+          "SIG": {
+            "qty": 1,
+            "cpo": 2556,
+            "orders": 2
+          },
+          "HOM": {
+            "qty": 3,
+            "cpo": 3855,
+            "orders": 3
+          },
+          "GAL": {
+            "qty": 6,
+            "cpo": 6230,
+            "orders": 6
+          },
+          "FLA": {
+            "qty": 19,
+            "cpo": 10828,
+            "orders": 11
+          },
+          "COOK": {
+            "qty": 34,
+            "cpo": 14942,
+            "orders": 12
+          },
+          "BIZ": {
+            "qty": 0,
+            "cpo": 0,
+            "orders": 0
+          },
+          "RLT": {
+            "qty": 0,
+            "cpo": 0,
+            "orders": 0
+          },
+          "UBLK": {
+            "qty": 13,
+            "cpo": 5889,
+            "orders": 14
+          },
+          "SBLK": {
+            "qty": 6,
+            "cpo": 2196,
+            "orders": 6
+          }
+        },
+        "2026": {
+          "ULT": {
+            "qty": -1,
+            "cpo": -3561,
+            "orders": 1
+          },
+          "SIG": {
+            "qty": 1,
+            "cpo": 1872,
+            "orders": 1
+          },
+          "HOM": {
+            "qty": 0,
+            "cpo": 0,
+            "orders": 0
+          },
+          "GAL": {
+            "qty": 2,
+            "cpo": 1914,
+            "orders": 2
+          },
+          "FLA": {
+            "qty": 2,
+            "cpo": 1524,
+            "orders": 1
+          },
+          "COOK": {
+            "qty": 13,
+            "cpo": 3644,
+            "orders": 10
+          },
+          "BIZ": {
+            "qty": 0,
+            "cpo": 0,
+            "orders": 0
+          },
+          "RLT": {
+            "qty": 0,
+            "cpo": 0,
+            "orders": 0
+          },
+          "UBLK": {
+            "qty": 6,
+            "cpo": 2792,
+            "orders": 6
+          },
+          "SBLK": {
+            "qty": 12,
+            "cpo": 4524,
+            "orders": 12
+          }
+        }
       }
     },
     "Craig Coker": {
@@ -4440,6 +5256,164 @@ window.DASHBOARD_DATA = {
             "cpo": 4672,
             "orders": 6,
             "avg": 467.2
+          }
+        }
+      },
+      "products": {
+        "2024": {
+          "ULT": {
+            "qty": 3,
+            "cpo": 10235,
+            "orders": 3
+          },
+          "SIG": {
+            "qty": 7,
+            "cpo": 16004,
+            "orders": 7
+          },
+          "HOM": {
+            "qty": 8,
+            "cpo": 10610,
+            "orders": 7
+          },
+          "GAL": {
+            "qty": 1,
+            "cpo": 803,
+            "orders": 1
+          },
+          "FLA": {
+            "qty": 24,
+            "cpo": 6481,
+            "orders": 6
+          },
+          "COOK": {
+            "qty": 4,
+            "cpo": 4232,
+            "orders": 2
+          },
+          "BIZ": {
+            "qty": 110,
+            "cpo": 4082,
+            "orders": 2
+          },
+          "RLT": {
+            "qty": 0,
+            "cpo": 0,
+            "orders": 0
+          },
+          "UBLK": {
+            "qty": 3,
+            "cpo": 1312,
+            "orders": 3
+          },
+          "SBLK": {
+            "qty": 1,
+            "cpo": 355,
+            "orders": 2
+          }
+        },
+        "2025": {
+          "ULT": {
+            "qty": 1,
+            "cpo": 3561,
+            "orders": 1
+          },
+          "SIG": {
+            "qty": 0,
+            "cpo": 0,
+            "orders": 1
+          },
+          "HOM": {
+            "qty": 0,
+            "cpo": 0,
+            "orders": 0
+          },
+          "GAL": {
+            "qty": 2,
+            "cpo": 1890,
+            "orders": 2
+          },
+          "FLA": {
+            "qty": 2,
+            "cpo": 1149,
+            "orders": 1
+          },
+          "COOK": {
+            "qty": 1,
+            "cpo": 1669,
+            "orders": 1
+          },
+          "BIZ": {
+            "qty": 0,
+            "cpo": 0,
+            "orders": 0
+          },
+          "RLT": {
+            "qty": 0,
+            "cpo": 0,
+            "orders": 0
+          },
+          "UBLK": {
+            "qty": 0,
+            "cpo": 0,
+            "orders": 0
+          },
+          "SBLK": {
+            "qty": 0,
+            "cpo": 0,
+            "orders": 0
+          }
+        },
+        "2026": {
+          "ULT": {
+            "qty": 0,
+            "cpo": 0,
+            "orders": 0
+          },
+          "SIG": {
+            "qty": 0,
+            "cpo": 0,
+            "orders": 0
+          },
+          "HOM": {
+            "qty": 0,
+            "cpo": 0,
+            "orders": 0
+          },
+          "GAL": {
+            "qty": 0,
+            "cpo": 0,
+            "orders": 0
+          },
+          "FLA": {
+            "qty": 4,
+            "cpo": 0,
+            "orders": 1
+          },
+          "COOK": {
+            "qty": 0,
+            "cpo": 0,
+            "orders": 0
+          },
+          "BIZ": {
+            "qty": 0,
+            "cpo": 0,
+            "orders": 0
+          },
+          "RLT": {
+            "qty": 0,
+            "cpo": 0,
+            "orders": 0
+          },
+          "UBLK": {
+            "qty": 0,
+            "cpo": 0,
+            "orders": 0
+          },
+          "SBLK": {
+            "qty": 0,
+            "cpo": 0,
+            "orders": 0
           }
         }
       }
@@ -5081,6 +6055,164 @@ window.DASHBOARD_DATA = {
             "avg": 1613.9166666666667
           }
         }
+      },
+      "products": {
+        "2024": {
+          "ULT": {
+            "qty": 5,
+            "cpo": 17013,
+            "orders": 7
+          },
+          "SIG": {
+            "qty": 10,
+            "cpo": 24341,
+            "orders": 9
+          },
+          "HOM": {
+            "qty": 21,
+            "cpo": 26947,
+            "orders": 21
+          },
+          "GAL": {
+            "qty": 7,
+            "cpo": 7133,
+            "orders": 7
+          },
+          "FLA": {
+            "qty": 31,
+            "cpo": 9452,
+            "orders": 12
+          },
+          "COOK": {
+            "qty": 4,
+            "cpo": 966,
+            "orders": 6
+          },
+          "BIZ": {
+            "qty": 482,
+            "cpo": 21622,
+            "orders": 13
+          },
+          "RLT": {
+            "qty": 0,
+            "cpo": 0,
+            "orders": 0
+          },
+          "UBLK": {
+            "qty": 12,
+            "cpo": 5316,
+            "orders": 12
+          },
+          "SBLK": {
+            "qty": 6,
+            "cpo": 2102,
+            "orders": 6
+          }
+        },
+        "2025": {
+          "ULT": {
+            "qty": 7,
+            "cpo": 24927,
+            "orders": 7
+          },
+          "SIG": {
+            "qty": 13,
+            "cpo": 32627,
+            "orders": 13
+          },
+          "HOM": {
+            "qty": 10,
+            "cpo": 11904,
+            "orders": 10
+          },
+          "GAL": {
+            "qty": 5,
+            "cpo": 3828,
+            "orders": 5
+          },
+          "FLA": {
+            "qty": 51,
+            "cpo": 8868,
+            "orders": 14
+          },
+          "COOK": {
+            "qty": 13,
+            "cpo": 8482,
+            "orders": 13
+          },
+          "BIZ": {
+            "qty": 125,
+            "cpo": 8654,
+            "orders": 4
+          },
+          "RLT": {
+            "qty": 21,
+            "cpo": 923,
+            "orders": 1
+          },
+          "UBLK": {
+            "qty": 18,
+            "cpo": 8169,
+            "orders": 17
+          },
+          "SBLK": {
+            "qty": 13,
+            "cpo": 4370,
+            "orders": 13
+          }
+        },
+        "2026": {
+          "ULT": {
+            "qty": 1,
+            "cpo": 3668,
+            "orders": 1
+          },
+          "SIG": {
+            "qty": 8,
+            "cpo": 21064,
+            "orders": 8
+          },
+          "HOM": {
+            "qty": 5,
+            "cpo": 7389,
+            "orders": 5
+          },
+          "GAL": {
+            "qty": 1,
+            "cpo": 1120,
+            "orders": 1
+          },
+          "FLA": {
+            "qty": 12,
+            "cpo": 6228,
+            "orders": 6
+          },
+          "COOK": {
+            "qty": 15,
+            "cpo": 10091,
+            "orders": 6
+          },
+          "BIZ": {
+            "qty": 5,
+            "cpo": 1467,
+            "orders": 1
+          },
+          "RLT": {
+            "qty": 0,
+            "cpo": 0,
+            "orders": 0
+          },
+          "UBLK": {
+            "qty": 16,
+            "cpo": 6552,
+            "orders": 16
+          },
+          "SBLK": {
+            "qty": 8,
+            "cpo": 3005,
+            "orders": 8
+          }
+        }
       }
     },
     "Jason Jeffrey": {
@@ -5720,6 +6852,164 @@ window.DASHBOARD_DATA = {
             "avg": 4376.172413793103
           }
         }
+      },
+      "products": {
+        "2024": {
+          "ULT": {
+            "qty": 3,
+            "cpo": 9436,
+            "orders": 4
+          },
+          "SIG": {
+            "qty": 9,
+            "cpo": 21017,
+            "orders": 9
+          },
+          "HOM": {
+            "qty": 4,
+            "cpo": 5091,
+            "orders": 5
+          },
+          "GAL": {
+            "qty": 5,
+            "cpo": 3165,
+            "orders": 5
+          },
+          "FLA": {
+            "qty": 94,
+            "cpo": 16298,
+            "orders": 24
+          },
+          "COOK": {
+            "qty": 54,
+            "cpo": 21107,
+            "orders": 27
+          },
+          "BIZ": {
+            "qty": 275,
+            "cpo": 11311,
+            "orders": 3
+          },
+          "RLT": {
+            "qty": 98,
+            "cpo": 2573,
+            "orders": 2
+          },
+          "UBLK": {
+            "qty": 25,
+            "cpo": 9729,
+            "orders": 28
+          },
+          "SBLK": {
+            "qty": 9,
+            "cpo": 2826,
+            "orders": 9
+          }
+        },
+        "2025": {
+          "ULT": {
+            "qty": 0,
+            "cpo": 0,
+            "orders": 0
+          },
+          "SIG": {
+            "qty": 7,
+            "cpo": 17220,
+            "orders": 8
+          },
+          "HOM": {
+            "qty": 7,
+            "cpo": 7975,
+            "orders": 5
+          },
+          "GAL": {
+            "qty": 2,
+            "cpo": 1606,
+            "orders": 2
+          },
+          "FLA": {
+            "qty": 77,
+            "cpo": 19711,
+            "orders": 28
+          },
+          "COOK": {
+            "qty": 78,
+            "cpo": 34271,
+            "orders": 41
+          },
+          "BIZ": {
+            "qty": 174,
+            "cpo": 5620,
+            "orders": 3
+          },
+          "RLT": {
+            "qty": 53,
+            "cpo": 2148,
+            "orders": 1
+          },
+          "UBLK": {
+            "qty": 46,
+            "cpo": 19100,
+            "orders": 46
+          },
+          "SBLK": {
+            "qty": 21,
+            "cpo": 6899,
+            "orders": 24
+          }
+        },
+        "2026": {
+          "ULT": {
+            "qty": 4,
+            "cpo": 11004,
+            "orders": 4
+          },
+          "SIG": {
+            "qty": 6,
+            "cpo": 15721,
+            "orders": 6
+          },
+          "HOM": {
+            "qty": 3,
+            "cpo": 2426,
+            "orders": 3
+          },
+          "GAL": {
+            "qty": 0,
+            "cpo": 0,
+            "orders": 0
+          },
+          "FLA": {
+            "qty": 100,
+            "cpo": 20352,
+            "orders": 23
+          },
+          "COOK": {
+            "qty": 107,
+            "cpo": 62546,
+            "orders": 51
+          },
+          "BIZ": {
+            "qty": 49,
+            "cpo": 3955,
+            "orders": 2
+          },
+          "RLT": {
+            "qty": 22,
+            "cpo": 2131,
+            "orders": 1
+          },
+          "UBLK": {
+            "qty": 51,
+            "cpo": 22946,
+            "orders": 54
+          },
+          "SBLK": {
+            "qty": 17,
+            "cpo": 7130,
+            "orders": 24
+          }
+        }
       }
     },
     "Jeremy Katen": {
@@ -6322,6 +7612,164 @@ window.DASHBOARD_DATA = {
             "cpo": 48451,
             "orders": 43,
             "avg": 6056.375
+          }
+        }
+      },
+      "products": {
+        "2024": {
+          "ULT": {
+            "qty": 9,
+            "cpo": 31113,
+            "orders": 11
+          },
+          "SIG": {
+            "qty": 8,
+            "cpo": 19703,
+            "orders": 8
+          },
+          "HOM": {
+            "qty": 12,
+            "cpo": 16675,
+            "orders": 10
+          },
+          "GAL": {
+            "qty": 10,
+            "cpo": 10018,
+            "orders": 5
+          },
+          "FLA": {
+            "qty": 30,
+            "cpo": 7792,
+            "orders": 6
+          },
+          "COOK": {
+            "qty": 23,
+            "cpo": 6877,
+            "orders": 14
+          },
+          "BIZ": {
+            "qty": 650,
+            "cpo": 16998,
+            "orders": 12
+          },
+          "RLT": {
+            "qty": 8784,
+            "cpo": 172863,
+            "orders": 71
+          },
+          "UBLK": {
+            "qty": 17,
+            "cpo": 7514,
+            "orders": 22
+          },
+          "SBLK": {
+            "qty": 7,
+            "cpo": 2130,
+            "orders": 7
+          }
+        },
+        "2025": {
+          "ULT": {
+            "qty": 8,
+            "cpo": 28384,
+            "orders": 8
+          },
+          "SIG": {
+            "qty": 12,
+            "cpo": 30796,
+            "orders": 13
+          },
+          "HOM": {
+            "qty": 5,
+            "cpo": 6933,
+            "orders": 5
+          },
+          "GAL": {
+            "qty": 2,
+            "cpo": 2248,
+            "orders": 2
+          },
+          "FLA": {
+            "qty": 18,
+            "cpo": 7826,
+            "orders": 7
+          },
+          "COOK": {
+            "qty": 26,
+            "cpo": 13976,
+            "orders": 14
+          },
+          "BIZ": {
+            "qty": 687,
+            "cpo": 27870,
+            "orders": 14
+          },
+          "RLT": {
+            "qty": 10004,
+            "cpo": 169879,
+            "orders": 74
+          },
+          "UBLK": {
+            "qty": 26,
+            "cpo": 10853,
+            "orders": 27
+          },
+          "SBLK": {
+            "qty": 4,
+            "cpo": 1109,
+            "orders": 5
+          }
+        },
+        "2026": {
+          "ULT": {
+            "qty": 4,
+            "cpo": 13764,
+            "orders": 5
+          },
+          "SIG": {
+            "qty": 7,
+            "cpo": 14693,
+            "orders": 7
+          },
+          "HOM": {
+            "qty": 6,
+            "cpo": 7013,
+            "orders": 6
+          },
+          "GAL": {
+            "qty": 0,
+            "cpo": 0,
+            "orders": 0
+          },
+          "FLA": {
+            "qty": 21,
+            "cpo": 4694,
+            "orders": 6
+          },
+          "COOK": {
+            "qty": 32,
+            "cpo": 17654,
+            "orders": 11
+          },
+          "BIZ": {
+            "qty": 998,
+            "cpo": 39602,
+            "orders": 12
+          },
+          "RLT": {
+            "qty": 6687,
+            "cpo": 151301,
+            "orders": 65
+          },
+          "UBLK": {
+            "qty": 16,
+            "cpo": 7492,
+            "orders": 18
+          },
+          "SBLK": {
+            "qty": 0,
+            "cpo": 377,
+            "orders": 4
           }
         }
       }
@@ -6963,6 +8411,164 @@ window.DASHBOARD_DATA = {
             "avg": 1885.7272727272727
           }
         }
+      },
+      "products": {
+        "2024": {
+          "ULT": {
+            "qty": 3,
+            "cpo": 10371,
+            "orders": 3
+          },
+          "SIG": {
+            "qty": 7,
+            "cpo": 15665.75,
+            "orders": 7
+          },
+          "HOM": {
+            "qty": 13,
+            "cpo": 13403,
+            "orders": 13
+          },
+          "GAL": {
+            "qty": 2,
+            "cpo": 1858,
+            "orders": 2
+          },
+          "FLA": {
+            "qty": 71,
+            "cpo": 9406,
+            "orders": 13
+          },
+          "COOK": {
+            "qty": 25,
+            "cpo": 11539,
+            "orders": 11
+          },
+          "BIZ": {
+            "qty": 240,
+            "cpo": 13787,
+            "orders": 4
+          },
+          "RLT": {
+            "qty": 17,
+            "cpo": 426,
+            "orders": 1
+          },
+          "UBLK": {
+            "qty": 5,
+            "cpo": 2215,
+            "orders": 5
+          },
+          "SBLK": {
+            "qty": 11,
+            "cpo": 3905,
+            "orders": 11
+          }
+        },
+        "2025": {
+          "ULT": {
+            "qty": 2,
+            "cpo": 6751,
+            "orders": 2
+          },
+          "SIG": {
+            "qty": 6,
+            "cpo": 13119,
+            "orders": 6
+          },
+          "HOM": {
+            "qty": 5,
+            "cpo": 5354,
+            "orders": 5
+          },
+          "GAL": {
+            "qty": 4,
+            "cpo": 4088,
+            "orders": 4
+          },
+          "FLA": {
+            "qty": 24,
+            "cpo": 10488,
+            "orders": 10
+          },
+          "COOK": {
+            "qty": 27,
+            "cpo": 7172,
+            "orders": 11
+          },
+          "BIZ": {
+            "qty": 191,
+            "cpo": 14250,
+            "orders": 6
+          },
+          "RLT": {
+            "qty": 8,
+            "cpo": 289,
+            "orders": 1
+          },
+          "UBLK": {
+            "qty": 9,
+            "cpo": 3648,
+            "orders": 8
+          },
+          "SBLK": {
+            "qty": 4,
+            "cpo": 1464,
+            "orders": 4
+          }
+        },
+        "2026": {
+          "ULT": {
+            "qty": 1,
+            "cpo": 3286,
+            "orders": 1
+          },
+          "SIG": {
+            "qty": 2,
+            "cpo": 5313,
+            "orders": 2
+          },
+          "HOM": {
+            "qty": 7,
+            "cpo": 9167,
+            "orders": 7
+          },
+          "GAL": {
+            "qty": 2,
+            "cpo": 2240,
+            "orders": 3
+          },
+          "FLA": {
+            "qty": 17,
+            "cpo": 8218,
+            "orders": 11
+          },
+          "COOK": {
+            "qty": 18,
+            "cpo": 4861,
+            "orders": 10
+          },
+          "BIZ": {
+            "qty": 18,
+            "cpo": 2105,
+            "orders": 2
+          },
+          "RLT": {
+            "qty": 79,
+            "cpo": 2412,
+            "orders": 2
+          },
+          "UBLK": {
+            "qty": 6,
+            "cpo": 2778,
+            "orders": 6
+          },
+          "SBLK": {
+            "qty": 4,
+            "cpo": 1508,
+            "orders": 4
+          }
+        }
       }
     },
     "Johnathan Parker": {
@@ -7593,6 +9199,164 @@ window.DASHBOARD_DATA = {
             "avg": 1511.3
           }
         }
+      },
+      "products": {
+        "2024": {
+          "ULT": {
+            "qty": 4,
+            "cpo": 13029,
+            "orders": 4
+          },
+          "SIG": {
+            "qty": 5,
+            "cpo": 11040,
+            "orders": 5
+          },
+          "HOM": {
+            "qty": 3,
+            "cpo": 3755,
+            "orders": 3
+          },
+          "GAL": {
+            "qty": 5,
+            "cpo": 4519,
+            "orders": 5
+          },
+          "FLA": {
+            "qty": 8,
+            "cpo": 945,
+            "orders": 3
+          },
+          "COOK": {
+            "qty": 32,
+            "cpo": 10990,
+            "orders": 12
+          },
+          "BIZ": {
+            "qty": 0,
+            "cpo": 0,
+            "orders": 0
+          },
+          "RLT": {
+            "qty": 0,
+            "cpo": 0,
+            "orders": 0
+          },
+          "UBLK": {
+            "qty": 4,
+            "cpo": 1772,
+            "orders": 4
+          },
+          "SBLK": {
+            "qty": 1,
+            "cpo": 355,
+            "orders": 1
+          }
+        },
+        "2025": {
+          "ULT": {
+            "qty": 6,
+            "cpo": 16961,
+            "orders": 7
+          },
+          "SIG": {
+            "qty": 12,
+            "cpo": 26085,
+            "orders": 12
+          },
+          "HOM": {
+            "qty": 13,
+            "cpo": 16945,
+            "orders": 13
+          },
+          "GAL": {
+            "qty": 25,
+            "cpo": 22082,
+            "orders": 14
+          },
+          "FLA": {
+            "qty": 15,
+            "cpo": 5376,
+            "orders": 7
+          },
+          "COOK": {
+            "qty": 34,
+            "cpo": 14923,
+            "orders": 16
+          },
+          "BIZ": {
+            "qty": 834,
+            "cpo": 48105,
+            "orders": 15
+          },
+          "RLT": {
+            "qty": 0,
+            "cpo": 0,
+            "orders": 0
+          },
+          "UBLK": {
+            "qty": 12,
+            "cpo": 4990,
+            "orders": 11
+          },
+          "SBLK": {
+            "qty": 9,
+            "cpo": 3272,
+            "orders": 9
+          }
+        },
+        "2026": {
+          "ULT": {
+            "qty": 5,
+            "cpo": 16444,
+            "orders": 5
+          },
+          "SIG": {
+            "qty": 10,
+            "cpo": 22133,
+            "orders": 10
+          },
+          "HOM": {
+            "qty": 5,
+            "cpo": 6065,
+            "orders": 5
+          },
+          "GAL": {
+            "qty": 5,
+            "cpo": 4746,
+            "orders": 5
+          },
+          "FLA": {
+            "qty": 20,
+            "cpo": 5324,
+            "orders": 9
+          },
+          "COOK": {
+            "qty": 55,
+            "cpo": 20226,
+            "orders": 18
+          },
+          "BIZ": {
+            "qty": 436,
+            "cpo": 16658,
+            "orders": 10
+          },
+          "RLT": {
+            "qty": 229,
+            "cpo": 13997,
+            "orders": 3
+          },
+          "UBLK": {
+            "qty": 6,
+            "cpo": 2820,
+            "orders": 9
+          },
+          "SBLK": {
+            "qty": 9,
+            "cpo": 3371,
+            "orders": 9
+          }
+        }
       }
     },
     "Kendall Gooch": {
@@ -7968,6 +9732,164 @@ window.DASHBOARD_DATA = {
             "cpo": 6952,
             "orders": 12,
             "avg": 1390.4
+          }
+        }
+      },
+      "products": {
+        "2024": {
+          "ULT": {
+            "qty": 0,
+            "cpo": 0,
+            "orders": 0
+          },
+          "SIG": {
+            "qty": 0,
+            "cpo": 0,
+            "orders": 0
+          },
+          "HOM": {
+            "qty": 0,
+            "cpo": 0,
+            "orders": 0
+          },
+          "GAL": {
+            "qty": 0,
+            "cpo": 0,
+            "orders": 0
+          },
+          "FLA": {
+            "qty": 0,
+            "cpo": 0,
+            "orders": 0
+          },
+          "COOK": {
+            "qty": 0,
+            "cpo": 0,
+            "orders": 0
+          },
+          "BIZ": {
+            "qty": 0,
+            "cpo": 0,
+            "orders": 0
+          },
+          "RLT": {
+            "qty": 0,
+            "cpo": 0,
+            "orders": 0
+          },
+          "UBLK": {
+            "qty": 0,
+            "cpo": 0,
+            "orders": 0
+          },
+          "SBLK": {
+            "qty": 0,
+            "cpo": 0,
+            "orders": 0
+          }
+        },
+        "2025": {
+          "ULT": {
+            "qty": 2,
+            "cpo": 6241,
+            "orders": 2
+          },
+          "SIG": {
+            "qty": 3,
+            "cpo": 5451,
+            "orders": 3
+          },
+          "HOM": {
+            "qty": 1,
+            "cpo": 1178,
+            "orders": 1
+          },
+          "GAL": {
+            "qty": 2,
+            "cpo": 1087,
+            "orders": 2
+          },
+          "FLA": {
+            "qty": 6,
+            "cpo": 1656,
+            "orders": 3
+          },
+          "COOK": {
+            "qty": 4,
+            "cpo": 2573,
+            "orders": 2
+          },
+          "BIZ": {
+            "qty": 248,
+            "cpo": 3721,
+            "orders": 3
+          },
+          "RLT": {
+            "qty": 0,
+            "cpo": 0,
+            "orders": 0
+          },
+          "UBLK": {
+            "qty": 2,
+            "cpo": 456,
+            "orders": 1
+          },
+          "SBLK": {
+            "qty": 0,
+            "cpo": 0,
+            "orders": 0
+          }
+        },
+        "2026": {
+          "ULT": {
+            "qty": 1,
+            "cpo": 3561,
+            "orders": 1
+          },
+          "SIG": {
+            "qty": 1,
+            "cpo": 1872,
+            "orders": 1
+          },
+          "HOM": {
+            "qty": 3,
+            "cpo": 4632,
+            "orders": 3
+          },
+          "GAL": {
+            "qty": 1,
+            "cpo": 0,
+            "orders": 1
+          },
+          "FLA": {
+            "qty": 12,
+            "cpo": 7403,
+            "orders": 4
+          },
+          "COOK": {
+            "qty": 11,
+            "cpo": 4637,
+            "orders": 9
+          },
+          "BIZ": {
+            "qty": 0,
+            "cpo": 0,
+            "orders": 0
+          },
+          "RLT": {
+            "qty": 0,
+            "cpo": 0,
+            "orders": 0
+          },
+          "UBLK": {
+            "qty": 3,
+            "cpo": 1410,
+            "orders": 3
+          },
+          "SBLK": {
+            "qty": 6,
+            "cpo": 2262,
+            "orders": 6
           }
         }
       }
@@ -8597,6 +10519,164 @@ window.DASHBOARD_DATA = {
             "cpo": 28815,
             "orders": 31,
             "avg": 4802.5
+          }
+        }
+      },
+      "products": {
+        "2024": {
+          "ULT": {
+            "qty": 5,
+            "cpo": 16486,
+            "orders": 5
+          },
+          "SIG": {
+            "qty": 8,
+            "cpo": 19696,
+            "orders": 8
+          },
+          "HOM": {
+            "qty": 15,
+            "cpo": 17303,
+            "orders": 15
+          },
+          "GAL": {
+            "qty": 14,
+            "cpo": 14690,
+            "orders": 7
+          },
+          "FLA": {
+            "qty": 63,
+            "cpo": 14961,
+            "orders": 20
+          },
+          "COOK": {
+            "qty": 33,
+            "cpo": 8787,
+            "orders": 10
+          },
+          "BIZ": {
+            "qty": 1697,
+            "cpo": 64662,
+            "orders": 40
+          },
+          "RLT": {
+            "qty": 443,
+            "cpo": 14472,
+            "orders": 10
+          },
+          "UBLK": {
+            "qty": 17,
+            "cpo": 7514,
+            "orders": 17
+          },
+          "SBLK": {
+            "qty": 10,
+            "cpo": 3181,
+            "orders": 8
+          }
+        },
+        "2025": {
+          "ULT": {
+            "qty": 8,
+            "cpo": 26939.25,
+            "orders": 8
+          },
+          "SIG": {
+            "qty": 3,
+            "cpo": 6685,
+            "orders": 3
+          },
+          "HOM": {
+            "qty": 18,
+            "cpo": 23645,
+            "orders": 18
+          },
+          "GAL": {
+            "qty": 10,
+            "cpo": 10870,
+            "orders": 10
+          },
+          "FLA": {
+            "qty": 72,
+            "cpo": 13083,
+            "orders": 20
+          },
+          "COOK": {
+            "qty": 38,
+            "cpo": 9565,
+            "orders": 16
+          },
+          "BIZ": {
+            "qty": 5892,
+            "cpo": 172558,
+            "orders": 51
+          },
+          "RLT": {
+            "qty": 182,
+            "cpo": 5462,
+            "orders": 4
+          },
+          "UBLK": {
+            "qty": 18,
+            "cpo": 7726,
+            "orders": 18
+          },
+          "SBLK": {
+            "qty": 12,
+            "cpo": 4015,
+            "orders": 12
+          }
+        },
+        "2026": {
+          "ULT": {
+            "qty": 8,
+            "cpo": 27234,
+            "orders": 7
+          },
+          "SIG": {
+            "qty": 11,
+            "cpo": 27934,
+            "orders": 11
+          },
+          "HOM": {
+            "qty": 4,
+            "cpo": 4632,
+            "orders": 4
+          },
+          "GAL": {
+            "qty": 4,
+            "cpo": 4480,
+            "orders": 4
+          },
+          "FLA": {
+            "qty": 52,
+            "cpo": 7385,
+            "orders": 11
+          },
+          "COOK": {
+            "qty": 30,
+            "cpo": 9566,
+            "orders": 8
+          },
+          "BIZ": {
+            "qty": 3347,
+            "cpo": 107434,
+            "orders": 33
+          },
+          "RLT": {
+            "qty": 652,
+            "cpo": 6399,
+            "orders": 5
+          },
+          "UBLK": {
+            "qty": 12,
+            "cpo": 5612,
+            "orders": 12
+          },
+          "SBLK": {
+            "qty": 6,
+            "cpo": 1874,
+            "orders": 6
           }
         }
       }
@@ -9238,6 +11318,164 @@ window.DASHBOARD_DATA = {
             "avg": 4576.596153846154
           }
         }
+      },
+      "products": {
+        "2024": {
+          "ULT": {
+            "qty": 11,
+            "cpo": 37755,
+            "orders": 11
+          },
+          "SIG": {
+            "qty": 28,
+            "cpo": 65420,
+            "orders": 29
+          },
+          "HOM": {
+            "qty": 23,
+            "cpo": 30669,
+            "orders": 25
+          },
+          "GAL": {
+            "qty": 12,
+            "cpo": 10981,
+            "orders": 12
+          },
+          "FLA": {
+            "qty": 89,
+            "cpo": 25534,
+            "orders": 29
+          },
+          "COOK": {
+            "qty": 84,
+            "cpo": 44450,
+            "orders": 41
+          },
+          "BIZ": {
+            "qty": 1034,
+            "cpo": 54140,
+            "orders": 18
+          },
+          "RLT": {
+            "qty": 0,
+            "cpo": 0,
+            "orders": 0
+          },
+          "UBLK": {
+            "qty": 28,
+            "cpo": 11910,
+            "orders": 32
+          },
+          "SBLK": {
+            "qty": 7,
+            "cpo": 2471,
+            "orders": 7
+          }
+        },
+        "2025": {
+          "ULT": {
+            "qty": 11,
+            "cpo": 35298,
+            "orders": 11
+          },
+          "SIG": {
+            "qty": 26,
+            "cpo": 65326,
+            "orders": 26
+          },
+          "HOM": {
+            "qty": 21,
+            "cpo": 29162,
+            "orders": 21
+          },
+          "GAL": {
+            "qty": 20,
+            "cpo": 13951,
+            "orders": 8
+          },
+          "FLA": {
+            "qty": 73,
+            "cpo": 22865,
+            "orders": 24
+          },
+          "COOK": {
+            "qty": 77,
+            "cpo": 46284,
+            "orders": 44
+          },
+          "BIZ": {
+            "qty": 939,
+            "cpo": 35083,
+            "orders": 18
+          },
+          "RLT": {
+            "qty": 265,
+            "cpo": 7846,
+            "orders": 6
+          },
+          "UBLK": {
+            "qty": 24,
+            "cpo": 10931,
+            "orders": 25
+          },
+          "SBLK": {
+            "qty": 11,
+            "cpo": 4026,
+            "orders": 11
+          }
+        },
+        "2026": {
+          "ULT": {
+            "qty": 12,
+            "cpo": 43802,
+            "orders": 12
+          },
+          "SIG": {
+            "qty": 16,
+            "cpo": 41081,
+            "orders": 16
+          },
+          "HOM": {
+            "qty": 19,
+            "cpo": 25886,
+            "orders": 19
+          },
+          "GAL": {
+            "qty": 1,
+            "cpo": 1087,
+            "orders": 1
+          },
+          "FLA": {
+            "qty": 195,
+            "cpo": 50305,
+            "orders": 51
+          },
+          "COOK": {
+            "qty": 161,
+            "cpo": 67353,
+            "orders": 67
+          },
+          "BIZ": {
+            "qty": 787,
+            "cpo": 42410,
+            "orders": 20
+          },
+          "RLT": {
+            "qty": 250,
+            "cpo": 6052,
+            "orders": 3
+          },
+          "UBLK": {
+            "qty": 57,
+            "cpo": 24714,
+            "orders": 58
+          },
+          "SBLK": {
+            "qty": 22,
+            "cpo": 8294,
+            "orders": 23
+          }
+        }
       }
     },
     "Matthew Aragon": {
@@ -9805,6 +12043,164 @@ window.DASHBOARD_DATA = {
             "cpo": 6906,
             "orders": 20,
             "avg": 431.625
+          }
+        }
+      },
+      "products": {
+        "2024": {
+          "ULT": {
+            "qty": 0,
+            "cpo": 0,
+            "orders": 0
+          },
+          "SIG": {
+            "qty": 1,
+            "cpo": 2482,
+            "orders": 1
+          },
+          "HOM": {
+            "qty": 2,
+            "cpo": 1144,
+            "orders": 2
+          },
+          "GAL": {
+            "qty": 2,
+            "cpo": 1606,
+            "orders": 2
+          },
+          "FLA": {
+            "qty": 0,
+            "cpo": 0,
+            "orders": 0
+          },
+          "COOK": {
+            "qty": 1,
+            "cpo": 1605,
+            "orders": 1
+          },
+          "BIZ": {
+            "qty": 0,
+            "cpo": 0,
+            "orders": 0
+          },
+          "RLT": {
+            "qty": 0,
+            "cpo": 0,
+            "orders": 0
+          },
+          "UBLK": {
+            "qty": 1,
+            "cpo": 443,
+            "orders": 1
+          },
+          "SBLK": {
+            "qty": 0,
+            "cpo": 0,
+            "orders": 0
+          }
+        },
+        "2025": {
+          "ULT": {
+            "qty": 1,
+            "cpo": 3561,
+            "orders": 1
+          },
+          "SIG": {
+            "qty": 3,
+            "cpo": 7668,
+            "orders": 3
+          },
+          "HOM": {
+            "qty": 3,
+            "cpo": 2677,
+            "orders": 3
+          },
+          "GAL": {
+            "qty": 1,
+            "cpo": 0,
+            "orders": 1
+          },
+          "FLA": {
+            "qty": 32,
+            "cpo": 7961,
+            "orders": 6
+          },
+          "COOK": {
+            "qty": 5,
+            "cpo": 7169,
+            "orders": 7
+          },
+          "BIZ": {
+            "qty": 0,
+            "cpo": 0,
+            "orders": 0
+          },
+          "RLT": {
+            "qty": 0,
+            "cpo": 0,
+            "orders": 0
+          },
+          "UBLK": {
+            "qty": 5,
+            "cpo": 2267,
+            "orders": 5
+          },
+          "SBLK": {
+            "qty": 6,
+            "cpo": 2196,
+            "orders": 6
+          }
+        },
+        "2026": {
+          "ULT": {
+            "qty": 1,
+            "cpo": 3668,
+            "orders": 1
+          },
+          "SIG": {
+            "qty": 1,
+            "cpo": 2680,
+            "orders": 1
+          },
+          "HOM": {
+            "qty": 0,
+            "cpo": 0,
+            "orders": 0
+          },
+          "GAL": {
+            "qty": 3,
+            "cpo": 1120,
+            "orders": 3
+          },
+          "FLA": {
+            "qty": 19,
+            "cpo": 3031,
+            "orders": 5
+          },
+          "COOK": {
+            "qty": 18,
+            "cpo": 4142,
+            "orders": 13
+          },
+          "BIZ": {
+            "qty": 0,
+            "cpo": 0,
+            "orders": 0
+          },
+          "RLT": {
+            "qty": 0,
+            "cpo": 0,
+            "orders": 0
+          },
+          "UBLK": {
+            "qty": 5,
+            "cpo": 2350,
+            "orders": 5
+          },
+          "SBLK": {
+            "qty": 4,
+            "cpo": 1508,
+            "orders": 4
           }
         }
       }
@@ -10409,6 +12805,164 @@ window.DASHBOARD_DATA = {
             "cpo": 649,
             "orders": 4,
             "avg": 81.125
+          }
+        }
+      },
+      "products": {
+        "2024": {
+          "ULT": {
+            "qty": 4,
+            "cpo": 6914,
+            "orders": 2
+          },
+          "SIG": {
+            "qty": 6,
+            "cpo": 12263,
+            "orders": 6
+          },
+          "HOM": {
+            "qty": 1,
+            "cpo": 1455,
+            "orders": 1
+          },
+          "GAL": {
+            "qty": 5,
+            "cpo": 5023,
+            "orders": 5
+          },
+          "FLA": {
+            "qty": 7,
+            "cpo": 3046,
+            "orders": 4
+          },
+          "COOK": {
+            "qty": 8,
+            "cpo": 3654,
+            "orders": 3
+          },
+          "BIZ": {
+            "qty": 35,
+            "cpo": 770,
+            "orders": 1
+          },
+          "RLT": {
+            "qty": 69,
+            "cpo": 1915,
+            "orders": 1
+          },
+          "UBLK": {
+            "qty": 3,
+            "cpo": 1329,
+            "orders": 5
+          },
+          "SBLK": {
+            "qty": 0,
+            "cpo": 0,
+            "orders": 0
+          }
+        },
+        "2025": {
+          "ULT": {
+            "qty": 2,
+            "cpo": 3561,
+            "orders": 2
+          },
+          "SIG": {
+            "qty": 2,
+            "cpo": 5112,
+            "orders": 2
+          },
+          "HOM": {
+            "qty": 2,
+            "cpo": 2677,
+            "orders": 3
+          },
+          "GAL": {
+            "qty": 4,
+            "cpo": 4056,
+            "orders": 4
+          },
+          "FLA": {
+            "qty": 33,
+            "cpo": 4764,
+            "orders": 7
+          },
+          "COOK": {
+            "qty": 3,
+            "cpo": 3632,
+            "orders": 5
+          },
+          "BIZ": {
+            "qty": 6,
+            "cpo": 285,
+            "orders": 1
+          },
+          "RLT": {
+            "qty": 0,
+            "cpo": 0,
+            "orders": 0
+          },
+          "UBLK": {
+            "qty": 1,
+            "cpo": 456,
+            "orders": 1
+          },
+          "SBLK": {
+            "qty": 1,
+            "cpo": 366,
+            "orders": 1
+          }
+        },
+        "2026": {
+          "ULT": {
+            "qty": 2,
+            "cpo": 7336,
+            "orders": 2
+          },
+          "SIG": {
+            "qty": 1,
+            "cpo": 2633,
+            "orders": 1
+          },
+          "HOM": {
+            "qty": 2,
+            "cpo": 2757,
+            "orders": 2
+          },
+          "GAL": {
+            "qty": 1,
+            "cpo": 1120,
+            "orders": 1
+          },
+          "FLA": {
+            "qty": 4,
+            "cpo": 764,
+            "orders": 1
+          },
+          "COOK": {
+            "qty": 6,
+            "cpo": 1987,
+            "orders": 2
+          },
+          "BIZ": {
+            "qty": 47,
+            "cpo": 2272,
+            "orders": 1
+          },
+          "RLT": {
+            "qty": 0,
+            "cpo": 0,
+            "orders": 0
+          },
+          "UBLK": {
+            "qty": 5,
+            "cpo": 2350,
+            "orders": 5
+          },
+          "SBLK": {
+            "qty": 0,
+            "cpo": 0,
+            "orders": 0
           }
         }
       }
@@ -11018,6 +13572,164 @@ window.DASHBOARD_DATA = {
             "cpo": 3236,
             "orders": 4,
             "avg": 3236
+          }
+        }
+      },
+      "products": {
+        "2024": {
+          "ULT": {
+            "qty": 1,
+            "cpo": 3457,
+            "orders": 1
+          },
+          "SIG": {
+            "qty": 9,
+            "cpo": 19099.25,
+            "orders": 9
+          },
+          "HOM": {
+            "qty": 17,
+            "cpo": 22945.5,
+            "orders": 17
+          },
+          "GAL": {
+            "qty": 9,
+            "cpo": 9495,
+            "orders": 9
+          },
+          "FLA": {
+            "qty": 97,
+            "cpo": 9553,
+            "orders": 21
+          },
+          "COOK": {
+            "qty": 25,
+            "cpo": 6658,
+            "orders": 11
+          },
+          "BIZ": {
+            "qty": 240,
+            "cpo": 9189,
+            "orders": 7
+          },
+          "RLT": {
+            "qty": 18,
+            "cpo": 1033,
+            "orders": 1
+          },
+          "UBLK": {
+            "qty": 14,
+            "cpo": 5725,
+            "orders": 15
+          },
+          "SBLK": {
+            "qty": 11,
+            "cpo": 3181,
+            "orders": 11
+          }
+        },
+        "2025": {
+          "ULT": {
+            "qty": 4,
+            "cpo": 13363,
+            "orders": 4
+          },
+          "SIG": {
+            "qty": 9,
+            "cpo": 21526,
+            "orders": 9
+          },
+          "HOM": {
+            "qty": 10,
+            "cpo": 12396,
+            "orders": 10
+          },
+          "GAL": {
+            "qty": 14,
+            "cpo": 13894,
+            "orders": 12
+          },
+          "FLA": {
+            "qty": 75,
+            "cpo": 11665,
+            "orders": 20
+          },
+          "COOK": {
+            "qty": 29,
+            "cpo": 10550,
+            "orders": 19
+          },
+          "BIZ": {
+            "qty": 312,
+            "cpo": 12754,
+            "orders": 12
+          },
+          "RLT": {
+            "qty": 107,
+            "cpo": 2702,
+            "orders": 2
+          },
+          "UBLK": {
+            "qty": 15,
+            "cpo": 6840,
+            "orders": 15
+          },
+          "SBLK": {
+            "qty": 9,
+            "cpo": 2906,
+            "orders": 8
+          }
+        },
+        "2026": {
+          "ULT": {
+            "qty": 1,
+            "cpo": 2760,
+            "orders": 1
+          },
+          "SIG": {
+            "qty": 4,
+            "cpo": 8718,
+            "orders": 4
+          },
+          "HOM": {
+            "qty": 14,
+            "cpo": 20058,
+            "orders": 14
+          },
+          "GAL": {
+            "qty": 10,
+            "cpo": 10080,
+            "orders": 10
+          },
+          "FLA": {
+            "qty": 36,
+            "cpo": 4809,
+            "orders": 10
+          },
+          "COOK": {
+            "qty": 11,
+            "cpo": 4798,
+            "orders": 6
+          },
+          "BIZ": {
+            "qty": 235,
+            "cpo": 6287,
+            "orders": 12
+          },
+          "RLT": {
+            "qty": 151,
+            "cpo": 3578,
+            "orders": 2
+          },
+          "UBLK": {
+            "qty": 8,
+            "cpo": 3290,
+            "orders": 8
+          },
+          "SBLK": {
+            "qty": 3,
+            "cpo": 1120,
+            "orders": 3
           }
         }
       }
@@ -11634,6 +14346,164 @@ window.DASHBOARD_DATA = {
             "avg": 1152.6818181818182
           }
         }
+      },
+      "products": {
+        "2024": {
+          "ULT": {
+            "qty": 2,
+            "cpo": 6914,
+            "orders": 2
+          },
+          "SIG": {
+            "qty": 2,
+            "cpo": 3982,
+            "orders": 2
+          },
+          "HOM": {
+            "qty": 5,
+            "cpo": 3648,
+            "orders": 5
+          },
+          "GAL": {
+            "qty": 4,
+            "cpo": 2913,
+            "orders": 4
+          },
+          "FLA": {
+            "qty": 9,
+            "cpo": 5876,
+            "orders": 6
+          },
+          "COOK": {
+            "qty": 7,
+            "cpo": 1893,
+            "orders": 5
+          },
+          "BIZ": {
+            "qty": 0,
+            "cpo": 0,
+            "orders": 0
+          },
+          "RLT": {
+            "qty": 0,
+            "cpo": 0,
+            "orders": 0
+          },
+          "UBLK": {
+            "qty": 14,
+            "cpo": 6185,
+            "orders": 15
+          },
+          "SBLK": {
+            "qty": 5,
+            "cpo": 1420,
+            "orders": 5
+          }
+        },
+        "2025": {
+          "ULT": {
+            "qty": 3,
+            "cpo": 9802,
+            "orders": 3
+          },
+          "SIG": {
+            "qty": 4,
+            "cpo": 10170,
+            "orders": 5
+          },
+          "HOM": {
+            "qty": 7,
+            "cpo": 9836,
+            "orders": 6
+          },
+          "GAL": {
+            "qty": 12,
+            "cpo": 10684,
+            "orders": 12
+          },
+          "FLA": {
+            "qty": 41,
+            "cpo": 8813,
+            "orders": 14
+          },
+          "COOK": {
+            "qty": 18,
+            "cpo": 8040,
+            "orders": 14
+          },
+          "BIZ": {
+            "qty": 214,
+            "cpo": 8644,
+            "orders": 10
+          },
+          "RLT": {
+            "qty": 41,
+            "cpo": 1310,
+            "orders": 1
+          },
+          "UBLK": {
+            "qty": 16,
+            "cpo": 7296,
+            "orders": 16
+          },
+          "SBLK": {
+            "qty": 6,
+            "cpo": 2196,
+            "orders": 6
+          }
+        },
+        "2026": {
+          "ULT": {
+            "qty": 1,
+            "cpo": 3668,
+            "orders": 1
+          },
+          "SIG": {
+            "qty": 1,
+            "cpo": 1872,
+            "orders": 1
+          },
+          "HOM": {
+            "qty": 1,
+            "cpo": 1227,
+            "orders": 1
+          },
+          "GAL": {
+            "qty": 1,
+            "cpo": 0,
+            "orders": 2
+          },
+          "FLA": {
+            "qty": 12,
+            "cpo": 4412,
+            "orders": 7
+          },
+          "COOK": {
+            "qty": 6,
+            "cpo": 1248,
+            "orders": 6
+          },
+          "BIZ": {
+            "qty": 91,
+            "cpo": 2724,
+            "orders": 3
+          },
+          "RLT": {
+            "qty": 84,
+            "cpo": 3443,
+            "orders": 2
+          },
+          "UBLK": {
+            "qty": 8,
+            "cpo": 2820,
+            "orders": 10
+          },
+          "SBLK": {
+            "qty": 3,
+            "cpo": 1131,
+            "orders": 3
+          }
+        }
       }
     },
     "Sean Potter": {
@@ -12212,6 +15082,164 @@ window.DASHBOARD_DATA = {
             "cpo": 940,
             "orders": 4,
             "avg": 470
+          }
+        }
+      },
+      "products": {
+        "2024": {
+          "ULT": {
+            "qty": 3,
+            "cpo": 6914,
+            "orders": 3
+          },
+          "SIG": {
+            "qty": 6,
+            "cpo": 14892,
+            "orders": 6
+          },
+          "HOM": {
+            "qty": 13,
+            "cpo": 18998,
+            "orders": 12
+          },
+          "GAL": {
+            "qty": 11,
+            "cpo": 10904.5,
+            "orders": 13
+          },
+          "FLA": {
+            "qty": 34,
+            "cpo": 10619,
+            "orders": 10
+          },
+          "COOK": {
+            "qty": 30,
+            "cpo": 10911,
+            "orders": 14
+          },
+          "BIZ": {
+            "qty": 0,
+            "cpo": 0,
+            "orders": 0
+          },
+          "RLT": {
+            "qty": 0,
+            "cpo": 0,
+            "orders": 0
+          },
+          "UBLK": {
+            "qty": 12,
+            "cpo": 5265,
+            "orders": 12
+          },
+          "SBLK": {
+            "qty": 4,
+            "cpo": 1420,
+            "orders": 4
+          }
+        },
+        "2025": {
+          "ULT": {
+            "qty": 3,
+            "cpo": 10683,
+            "orders": 3
+          },
+          "SIG": {
+            "qty": 5,
+            "cpo": 11431,
+            "orders": 5
+          },
+          "HOM": {
+            "qty": 9,
+            "cpo": 12285,
+            "orders": 9
+          },
+          "GAL": {
+            "qty": 10,
+            "cpo": 9987,
+            "orders": 9
+          },
+          "FLA": {
+            "qty": 51,
+            "cpo": 9407,
+            "orders": 12
+          },
+          "COOK": {
+            "qty": 67,
+            "cpo": 25021,
+            "orders": 28
+          },
+          "BIZ": {
+            "qty": 165,
+            "cpo": 5536,
+            "orders": 3
+          },
+          "RLT": {
+            "qty": 48,
+            "cpo": 1643,
+            "orders": 2
+          },
+          "UBLK": {
+            "qty": 15,
+            "cpo": 6840,
+            "orders": 16
+          },
+          "SBLK": {
+            "qty": 4,
+            "cpo": 1464,
+            "orders": 4
+          }
+        },
+        "2026": {
+          "ULT": {
+            "qty": 2,
+            "cpo": 7443,
+            "orders": 4
+          },
+          "SIG": {
+            "qty": 0,
+            "cpo": 0,
+            "orders": 1
+          },
+          "HOM": {
+            "qty": 4,
+            "cpo": 6463,
+            "orders": 5
+          },
+          "GAL": {
+            "qty": 0,
+            "cpo": 0,
+            "orders": 0
+          },
+          "FLA": {
+            "qty": 25,
+            "cpo": 8000,
+            "orders": 11
+          },
+          "COOK": {
+            "qty": 19,
+            "cpo": 6402,
+            "orders": 13
+          },
+          "BIZ": {
+            "qty": 13,
+            "cpo": 1252,
+            "orders": 1
+          },
+          "RLT": {
+            "qty": 0,
+            "cpo": 0,
+            "orders": 0
+          },
+          "UBLK": {
+            "qty": 5,
+            "cpo": 2350,
+            "orders": 6
+          },
+          "SBLK": {
+            "qty": 3,
+            "cpo": 1131,
+            "orders": 3
           }
         }
       }
@@ -12851,6 +15879,164 @@ window.DASHBOARD_DATA = {
             "cpo": 11534,
             "orders": 48,
             "avg": 607.0526315789474
+          }
+        }
+      },
+      "products": {
+        "2024": {
+          "ULT": {
+            "qty": 1,
+            "cpo": 3457,
+            "orders": 2
+          },
+          "SIG": {
+            "qty": 9,
+            "cpo": 20512,
+            "orders": 9
+          },
+          "HOM": {
+            "qty": 12,
+            "cpo": 15163,
+            "orders": 12
+          },
+          "GAL": {
+            "qty": 13,
+            "cpo": 12514,
+            "orders": 13
+          },
+          "FLA": {
+            "qty": 74,
+            "cpo": 9351,
+            "orders": 20
+          },
+          "COOK": {
+            "qty": 39,
+            "cpo": 20438,
+            "orders": 27
+          },
+          "BIZ": {
+            "qty": 440,
+            "cpo": 18335,
+            "orders": 12
+          },
+          "RLT": {
+            "qty": 505,
+            "cpo": 13131,
+            "orders": 13
+          },
+          "UBLK": {
+            "qty": 23,
+            "cpo": 9678,
+            "orders": 24
+          },
+          "SBLK": {
+            "qty": 8,
+            "cpo": 2826,
+            "orders": 8
+          }
+        },
+        "2025": {
+          "ULT": {
+            "qty": 1,
+            "cpo": 3561,
+            "orders": 1
+          },
+          "SIG": {
+            "qty": 2,
+            "cpo": 4127,
+            "orders": 2
+          },
+          "HOM": {
+            "qty": 17,
+            "cpo": 22676,
+            "orders": 18
+          },
+          "GAL": {
+            "qty": 11,
+            "cpo": 10572.5,
+            "orders": 10
+          },
+          "FLA": {
+            "qty": 42,
+            "cpo": 10069,
+            "orders": 13
+          },
+          "COOK": {
+            "qty": 40,
+            "cpo": 14707,
+            "orders": 27
+          },
+          "BIZ": {
+            "qty": 358,
+            "cpo": 11723,
+            "orders": 9
+          },
+          "RLT": {
+            "qty": 266,
+            "cpo": 6198,
+            "orders": 12
+          },
+          "UBLK": {
+            "qty": 18,
+            "cpo": 5915,
+            "orders": 16
+          },
+          "SBLK": {
+            "qty": 6,
+            "cpo": 1830,
+            "orders": 6
+          }
+        },
+        "2026": {
+          "ULT": {
+            "qty": 1,
+            "cpo": 3668,
+            "orders": 1
+          },
+          "SIG": {
+            "qty": 0,
+            "cpo": 0,
+            "orders": 0
+          },
+          "HOM": {
+            "qty": 1,
+            "cpo": 1213,
+            "orders": 1
+          },
+          "GAL": {
+            "qty": 3,
+            "cpo": 3360,
+            "orders": 2
+          },
+          "FLA": {
+            "qty": 17,
+            "cpo": 3888,
+            "orders": 5
+          },
+          "COOK": {
+            "qty": 13,
+            "cpo": 1364,
+            "orders": 10
+          },
+          "BIZ": {
+            "qty": 89,
+            "cpo": 2365,
+            "orders": 2
+          },
+          "RLT": {
+            "qty": 51,
+            "cpo": 662,
+            "orders": 1
+          },
+          "UBLK": {
+            "qty": 10,
+            "cpo": 4686,
+            "orders": 10
+          },
+          "SBLK": {
+            "qty": 5,
+            "cpo": 754,
+            "orders": 5
           }
         }
       }
