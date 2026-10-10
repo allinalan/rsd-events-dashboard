@@ -87,7 +87,7 @@ When something renders as `—` instead of a number, it's intentional. There are
 
 | Rep(s) | What's em-dash | Why |
 |---|---|---|
-| **Jeremy Katen, Rob Lord, Roman Earhart** | Non-Event CPO bucket, all years | Their individual Total Sales reports are pending. Will populate when those reports arrive (timed with product growth data). |
+| **Jeremy Katen, Rob Lord, Roman Earhart** | Total CPO and Non-Event CPO for 2026 so far and for any C2 or C3; order counts and average order everywhere | Their Total Sales comes as an individual report from the home office. C1 2024–2026 and the full years 2024 and 2025 are loaded (CPO only, no order counts); C2 2026 is still pending. Until it arrives they are left out of the team's Total CPO, Non-Event and average order, so every year adds up the same reps. Their own pages and the leaderboards show what is on file. |
 | **Sarah Krick** | 2026 Shifts breakdown | She's a District Manager now — no booth shifts in 2026 by design. |
 | **Kendall Gooch** | All 2024 + 2025 data | New rep, only became active in 2026. |
 | **Matthew Aragon** | 2024 C1 data | Contract date 2024-06-14 — wasn't a rep yet during C1 2024. |
@@ -101,7 +101,7 @@ In all cases, em-dash means "no data captured," NOT "$0." (Zero would imply effo
 
 - **Product growth** (the placeholder tab was removed 2026-09-24; it returns when the data exists) — Ultimate Sets, Signature Sets, Homemaker Sets, Ultimate Blocks, Signature Blocks, Flatware, Cookware, Galley+6, Business Gift cross-channel, Realtor cross-channel. Three years of annual data per rep. Growth-first framing.
 - **Service-Call-per-Event metric** — annual attribution % showing how much of each rep's book comes from event-generated service calls
-- **Jeremy / Rob / Roman Non-Event** — fills in once their individual Total Sales arrive (timed with product data)
+- **Jeremy / Rob / Roman** — C1 and full-year Total Sales loaded 2026-10-10; C2 2026 and order counts still to come from the home office
 
 ---
 

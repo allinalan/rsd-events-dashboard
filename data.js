@@ -88,6 +88,22 @@ window.DASHBOARD_DATA = {
           "campaign": "2026-C2"
         }
       ],
+      "individual_total_sales": {
+        "file": "individual_total_sales.csv",
+        "figures": 15,
+        "reps": [
+          "Jeremy Katen",
+          "Rob Lord",
+          "Roman Earhart"
+        ],
+        "periods": [
+          "2024-C1",
+          "2024-FY",
+          "2025-C1",
+          "2025-FY",
+          "2026-C1"
+        ]
+      },
       "profile_refreshed": "2026-09-08",
       "note": "Prior campaigns are re-pulled from VectorConnect and may restate; event totals include work outside Rising Sun for reps on the cross-division list."
     }
@@ -5750,9 +5766,9 @@ window.DASHBOARD_DATA = {
                 "events": null
               },
               "Non-Event CPO": {
-                "cpo": null,
+                "cpo": 55734,
                 "orders": null,
-                "events": null
+                "events": 0
               }
             },
             "total_event": {
@@ -5760,7 +5776,11 @@ window.DASHBOARD_DATA = {
               "orders": 49,
               "events": 9
             },
-            "total_sales": null,
+            "total_sales": {
+              "cpo": 102331,
+              "orders": null,
+              "events": 0
+            },
             "source": "rep-pass"
           },
           "2": {
@@ -5890,9 +5910,9 @@ window.DASHBOARD_DATA = {
                 "events": null
               },
               "Non-Event CPO": {
-                "cpo": null,
+                "cpo": 48043,
                 "orders": null,
-                "events": null
+                "events": 0
               }
             },
             "total_event": {
@@ -5900,7 +5920,11 @@ window.DASHBOARD_DATA = {
               "orders": 47,
               "events": 11
             },
-            "total_sales": null,
+            "total_sales": {
+              "cpo": 101397,
+              "orders": null,
+              "events": 0
+            },
             "source": "rep-pass"
           },
           "2": {
@@ -6030,9 +6054,9 @@ window.DASHBOARD_DATA = {
                 "events": null
               },
               "Non-Event CPO": {
-                "cpo": null,
+                "cpo": 43873,
                 "orders": null,
-                "events": null
+                "events": 0
               }
             },
             "total_event": {
@@ -6040,7 +6064,11 @@ window.DASHBOARD_DATA = {
               "orders": 71,
               "events": 10
             },
-            "total_sales": null,
+            "total_sales": {
+              "cpo": 110351,
+              "orders": null,
+              "events": 0
+            },
             "source": "rep-pass"
           },
           "2": {
@@ -6124,9 +6152,9 @@ window.DASHBOARD_DATA = {
             "events": null
           },
           "Non-Event CPO": {
-            "cpo": null,
+            "cpo": 55734,
             "orders": null,
-            "events": null
+            "events": 0
           }
         },
         "2025": {
@@ -6161,9 +6189,9 @@ window.DASHBOARD_DATA = {
             "events": null
           },
           "Non-Event CPO": {
-            "cpo": null,
+            "cpo": 48043,
             "orders": null,
-            "events": null
+            "events": 0
           }
         },
         "2026": {
@@ -6198,9 +6226,9 @@ window.DASHBOARD_DATA = {
             "events": null
           },
           "Non-Event CPO": {
-            "cpo": null,
+            "cpo": 43873,
             "orders": null,
-            "events": null
+            "events": 0
           }
         }
       },
@@ -6221,8 +6249,35 @@ window.DASHBOARD_DATA = {
           "events": 10
         }
       },
-      "c1_total_sales": {},
-      "fy_total_sales": {},
+      "c1_total_sales": {
+        "2024": {
+          "cpo": 102331,
+          "orders": null,
+          "events": 0
+        },
+        "2025": {
+          "cpo": 101397,
+          "orders": null,
+          "events": 0
+        },
+        "2026": {
+          "cpo": 110351,
+          "orders": null,
+          "events": 0
+        }
+      },
+      "fy_total_sales": {
+        "2024": {
+          "cpo": 379147,
+          "orders": null,
+          "events": 0
+        },
+        "2025": {
+          "cpo": 399174,
+          "orders": null,
+          "events": 0
+        }
+      },
       "shifts": {
         "2024": {
           "key": {
@@ -9798,9 +9853,9 @@ window.DASHBOARD_DATA = {
                 "events": null
               },
               "Non-Event CPO": {
-                "cpo": null,
+                "cpo": 5982,
                 "orders": null,
-                "events": null
+                "events": 0
               }
             },
             "total_event": {
@@ -9808,7 +9863,11 @@ window.DASHBOARD_DATA = {
               "orders": 17,
               "events": 6
             },
-            "total_sales": null,
+            "total_sales": {
+              "cpo": 13256,
+              "orders": null,
+              "events": 0
+            },
             "source": "rep-pass"
           },
           "2": {
@@ -9938,9 +9997,9 @@ window.DASHBOARD_DATA = {
                 "events": null
               },
               "Non-Event CPO": {
-                "cpo": null,
+                "cpo": 2391,
                 "orders": null,
-                "events": null
+                "events": 0
               }
             },
             "total_event": {
@@ -9948,7 +10007,11 @@ window.DASHBOARD_DATA = {
               "orders": 41,
               "events": 13
             },
-            "total_sales": null,
+            "total_sales": {
+              "cpo": 14306,
+              "orders": null,
+              "events": 0
+            },
             "source": "rep-pass"
           },
           "2": {
@@ -10078,9 +10141,9 @@ window.DASHBOARD_DATA = {
                 "events": null
               },
               "Non-Event CPO": {
-                "cpo": null,
+                "cpo": 3148,
                 "orders": null,
-                "events": null
+                "events": 0
               }
             },
             "total_event": {
@@ -10088,7 +10151,11 @@ window.DASHBOARD_DATA = {
               "orders": 18,
               "events": 8
             },
-            "total_sales": null,
+            "total_sales": {
+              "cpo": 12183,
+              "orders": null,
+              "events": 0
+            },
             "source": "rep-pass"
           },
           "2": {
@@ -10172,9 +10239,9 @@ window.DASHBOARD_DATA = {
             "events": null
           },
           "Non-Event CPO": {
-            "cpo": null,
+            "cpo": 5982,
             "orders": null,
-            "events": null
+            "events": 0
           }
         },
         "2025": {
@@ -10209,9 +10276,9 @@ window.DASHBOARD_DATA = {
             "events": null
           },
           "Non-Event CPO": {
-            "cpo": null,
+            "cpo": 2391,
             "orders": null,
-            "events": null
+            "events": 0
           }
         },
         "2026": {
@@ -10246,9 +10313,9 @@ window.DASHBOARD_DATA = {
             "events": null
           },
           "Non-Event CPO": {
-            "cpo": null,
+            "cpo": 3148,
             "orders": null,
-            "events": null
+            "events": 0
           }
         }
       },
@@ -10269,8 +10336,35 @@ window.DASHBOARD_DATA = {
           "events": 8
         }
       },
-      "c1_total_sales": {},
-      "fy_total_sales": {},
+      "c1_total_sales": {
+        "2024": {
+          "cpo": 13256,
+          "orders": null,
+          "events": 0
+        },
+        "2025": {
+          "cpo": 14306,
+          "orders": null,
+          "events": 0
+        },
+        "2026": {
+          "cpo": 12183,
+          "orders": null,
+          "events": 0
+        }
+      },
+      "fy_total_sales": {
+        "2024": {
+          "cpo": 97938,
+          "orders": null,
+          "events": 0
+        },
+        "2025": {
+          "cpo": 88800,
+          "orders": null,
+          "events": 0
+        }
+      },
       "shifts": {
         "2024": {
           "key": null,
@@ -10363,9 +10457,9 @@ window.DASHBOARD_DATA = {
                 "events": null
               },
               "Non-Event CPO": {
-                "cpo": null,
+                "cpo": 34355,
                 "orders": null,
-                "events": null
+                "events": 0
               }
             },
             "total_event": {
@@ -10373,7 +10467,11 @@ window.DASHBOARD_DATA = {
               "orders": 73,
               "events": 21
             },
-            "total_sales": null,
+            "total_sales": {
+              "cpo": 67822,
+              "orders": null,
+              "events": 0
+            },
             "source": "rep-pass"
           },
           "2": {
@@ -10503,9 +10601,9 @@ window.DASHBOARD_DATA = {
                 "events": null
               },
               "Non-Event CPO": {
-                "cpo": null,
+                "cpo": 22580,
                 "orders": null,
-                "events": null
+                "events": 0
               }
             },
             "total_event": {
@@ -10513,7 +10611,11 @@ window.DASHBOARD_DATA = {
               "orders": 103,
               "events": 21
             },
-            "total_sales": null,
+            "total_sales": {
+              "cpo": 76014,
+              "orders": null,
+              "events": 0
+            },
             "source": "rep-pass"
           },
           "2": {
@@ -10643,9 +10745,9 @@ window.DASHBOARD_DATA = {
                 "events": null
               },
               "Non-Event CPO": {
-                "cpo": null,
+                "cpo": 24017,
                 "orders": null,
-                "events": null
+                "events": 0
               }
             },
             "total_event": {
@@ -10653,7 +10755,11 @@ window.DASHBOARD_DATA = {
               "orders": 54,
               "events": 8
             },
-            "total_sales": null,
+            "total_sales": {
+              "cpo": 57890,
+              "orders": null,
+              "events": 0
+            },
             "source": "rep-pass"
           },
           "2": {
@@ -10737,9 +10843,9 @@ window.DASHBOARD_DATA = {
             "events": null
           },
           "Non-Event CPO": {
-            "cpo": null,
+            "cpo": 34355,
             "orders": null,
-            "events": null
+            "events": 0
           }
         },
         "2025": {
@@ -10774,9 +10880,9 @@ window.DASHBOARD_DATA = {
             "events": null
           },
           "Non-Event CPO": {
-            "cpo": null,
+            "cpo": 22580,
             "orders": null,
-            "events": null
+            "events": 0
           }
         },
         "2026": {
@@ -10811,9 +10917,9 @@ window.DASHBOARD_DATA = {
             "events": null
           },
           "Non-Event CPO": {
-            "cpo": null,
+            "cpo": 24017,
             "orders": null,
-            "events": null
+            "events": 0
           }
         }
       },
@@ -10834,8 +10940,35 @@ window.DASHBOARD_DATA = {
           "events": 8
         }
       },
-      "c1_total_sales": {},
-      "fy_total_sales": {},
+      "c1_total_sales": {
+        "2024": {
+          "cpo": 67822,
+          "orders": null,
+          "events": 0
+        },
+        "2025": {
+          "cpo": 76014,
+          "orders": null,
+          "events": 0
+        },
+        "2026": {
+          "cpo": 57890,
+          "orders": null,
+          "events": 0
+        }
+      },
+      "fy_total_sales": {
+        "2024": {
+          "cpo": 234794,
+          "orders": null,
+          "events": 0
+        },
+        "2025": {
+          "cpo": 236743,
+          "orders": null,
+          "events": 0
+        }
+      },
       "shifts": {
         "2024": {
           "key": {

@@ -1122,6 +1122,8 @@ const MASTER = META.master_list;       // the core team (21 reps)
 const BUCKETS = META.buckets;          // 7-bucket taxonomy
 const YEARS = META.years;              // [2024, 2025, 2026]
 const PENDING = META.pending_individual_total_sales || [];
+// Reps with an individual Total Sales report on file (manual/individual_total_sales.csv in the intake).
+const INDIVIDUAL = (META.intake && META.intake.individual_total_sales && META.intake.individual_total_sales.reps) || [];
 
 // Campaigns present in data.js (written by the intake), e.g. ["2024-C1", …, "2026-C2"].
 const CAMPAIGNS_AVAILABLE = (META.campaigns_available || YEARS.map(y => `${y}-C1`)).map(s => {
@@ -1282,9 +1284,16 @@ function repFYSales(rep, year) {
 function repShifts(rep, year) {
   return (rep && rep.shifts && rep.shifts[year]) || null;
 }
+// An individual Total Sales report (Katen, Earhart, Lord) carries CPO with no order count. Those
+// dollars are tracked as `blind` wherever figures are added up, so they never raise an average
+// order, and an order count that is missing any part shows an em-dash instead of a low number.
 function avgOrder(stats) {
   if (!stats || !stats.orders || stats.orders === 0) return null;
-  return stats.cpo / stats.orders;
+  return (stats.cpo - (stats.blind || 0)) / stats.orders;
+}
+function ordersOf(stats) {
+  if (!stats || stats.orders === null || stats.orders === undefined || stats.blind) return null;
+  return stats.orders;
 }
 
 // ==========================================================================
@@ -1341,6 +1350,8 @@ function addStats(acc, s) {
   if (!s) return acc;
   acc = acc || { cpo: 0, orders: 0, events: 0 };
   acc.cpo += s.cpo || 0; acc.orders += s.orders || 0; acc.events += s.events || 0;
+  const blind = s.blind !== undefined ? s.blind : (s.orders === null || s.orders === undefined) ? (s.cpo || 0) : 0;
+  if (blind) acc.blind = (acc.blind || 0) + blind;
   return acc;
 }
 // Every part must have a figure: a campaign without a Total Sales workbook is unknown, never $0.
@@ -1379,8 +1390,8 @@ function pNonEvent(rep, p) {
       const fy = repFYSales(rep, p.year); if (!fy) return null;
       const ev = pEvent(rep, p) || { cpo: 0, orders: 0 };
       const cpo = fy.cpo - ev.cpo; if (cpo < 0) return null;
-      const orders = (fy.orders || 0) - (ev.orders || 0);
-      return { cpo, orders: orders >= 0 ? orders : null, events: 0 };
+      const orders = (fy.orders === null || fy.orders === undefined) ? null : fy.orders - (ev.orders || 0);
+      return { cpo, orders: orders !== null && orders >= 0 ? orders : null, events: 0 };
     }
     const k = salesThruK(p.year);
     return k ? strictSum(p.parts.slice(0, k), ne) : null;
@@ -1433,7 +1444,7 @@ function getMetric(rep, p, metric) {
 }
 function metricOrders(rep, p, metric) {
   const s = metricFamily(metric) === 'annual' ? null : metricStats(rep, p, metric);
-  return s ? s.orders : null;
+  return ordersOf(s);
 }
 
 // What a period is measured against. mode 'growth' = % change on a like-for-like period;
@@ -1465,9 +1476,19 @@ function cmpLabel(cmp, fam) {
 // ==========================================================================
 function masterListReps() { return MASTER.map(n => REPS[n]).filter(Boolean); }
 function statsUniverse() { return Object.values(REPS); }
+// Reps whose Total Sales arrives as an individual report (another home division) and is still
+// pending for the latest loaded campaign stay out of the team totals that need Total Sales, in
+// every period: with 2025 on file but not this season they would otherwise count on one side of a
+// comparison and not the other. Their own pages and the leaderboards show what is on file; they
+// join the team totals once the pending campaign arrives.
+const HELD_OUT = PENDING.filter(name => INDIVIDUAL.includes(name));
+const heldOut = (rep, metric) => (metricFamily(metric) === 'sales' || metric === 'bucket_avg:Non-Event CPO') && HELD_OUT.includes(rep.name);
+// Under a leaderboard: why its rows can add up to more than the team total above it.
+const heldOutNote = metric => (HELD_OUT.length && metricFamily(metric) === 'sales')
+  ? ` ${HELD_OUT.join(', ')} ${HELD_OUT.length > 1 ? 'are' : 'is'} ranked here on what is on file, and left out of the team totals until Total Sales is complete for them.` : '';
 function teamStats(p, metric) {
   let acc = null;
-  for (const rep of masterListReps()) acc = addStats(acc, metricStats(rep, p, metric));
+  for (const rep of masterListReps()) if (!heldOut(rep, metric)) acc = addStats(acc, metricStats(rep, p, metric));
   return acc;
 }
 function teamValue(p, metric) {
@@ -1508,6 +1529,18 @@ const BUCKET_COLORS = {
 // The 6 event sub-buckets (everything except Non-Event CPO) — these sum to Total Event
 const EVENT_SUB_BUCKETS = ['Event (Traditional)', 'Service Event', 'Industry Event', 'Realtor', 'Mall', 'Federal'];
 
+// Who is still waiting on Total Sales, for which campaign, and what that does to the team totals.
+function pendingNote() {
+  if (!PENDING.length) return '';
+  const thru = /^(\d{4})-C([123])$/.exec((META.intake && META.intake.total_sales_through) || '');
+  const camp = thru ? ` for C${thru[2]} ${thru[1]}` : '';
+  const cpoOnly = MASTER.filter(name => { const r = REPS[name]; return r && [...Object.values(r.fy_total_sales || {}),
+    ...Object.values(r.campaigns || {}).flatMap(yr => Object.values(yr).map(c => c.total_sales))].some(t => t && t.cpo !== null && t.orders === null); });
+  return ` Total Sales${camp} is still pending for ${PENDING.join(', ')}.` +
+    (HELD_OUT.length ? ` The team's Total CPO, Non-Event CPO and average order leave ${HELD_OUT.join(', ')} out of every year until theirs arrives, so each year adds up the same reps; their own pages and the leaderboards show what is on file.` : '') +
+    (cpoOnly.length ? ` Total Sales for ${cpoOnly.join(', ')} is an individual report with CPO only: no order count or average order.` : '');
+}
+
 // What is loaded, said plainly in the footnote.
 (function () {
   const loaded = CAMPAIGNS_AVAILABLE.filter(c => salesLoaded(c.year, c.n)).map(c => `C${c.n} ${c.year}`);
@@ -1516,8 +1549,7 @@ const EVENT_SUB_BUCKETS = ['Event (Traditional)', 'Service Event', 'Industry Eve
     'An em-dash (—) means no data captured or not applicable — it is not $0. Event sales are loaded for every campaign. ' +
     'Total Sales is loaded for ' + (loaded.length ? loaded.join(', ') : 'no campaign yet') +
     (fy.length ? ' and the full years ' + fy.join(', ') : '') +
-    '; anywhere else Total CPO and Non-Event CPO show —.' +
-    (PENDING.length ? ' Non-Event CPO for ' + PENDING.join(', ') + ' is pending an individual Total Sales figure.' : '');
+    '; anywhere else Total CPO and Non-Event CPO show —.' + pendingNote();
 })();
 
 // ==========================================================================
@@ -1660,7 +1692,7 @@ function renderLeaderboard(prefix) {
     </tr>`;
   });
   html += `</tbody></table></div>
-    <div class="lb-foot">Rankings: Events Team core roster only. Tap a row to open that rep. Bars scale to the ${isGrowthSort ? 'value column (growth order can differ)' : 'top value'}.${isGrowthSort ? ` Growth needs at least ${MIN_GROWTH_ORDERS} ${priorLabel} orders.` : ''}${share ? ` ${p.label} is shown as a share of ${cmp.period.year}'s full year: ${cmp.period.year} has no Total Sales workbook for the same point.` : ''}</div>`;
+    <div class="lb-foot">Rankings: Events Team core roster only. Tap a row to open that rep. Bars scale to the ${isGrowthSort ? 'value column (growth order can differ)' : 'top value'}.${isGrowthSort ? ` Growth needs at least ${MIN_GROWTH_ORDERS} ${priorLabel} orders.` : ''}${share ? ` ${p.label} is shown as a share of ${cmp.period.year}'s full year: ${cmp.period.year} has no Total Sales workbook for the same point.` : ''}${heldOutNote(metric)}</div>`;
   body.innerHTML = html;
 
   // Row click → open that rep, in the same scope as this page
@@ -1757,7 +1789,7 @@ function reconcileNote(periods) {
     const t = teamStats(p, 'total_sales'), e = teamStats(p, 'total_event'), ne = teamStats(p, 'bucket:Non-Event CPO');
     return t && e && ne && Math.abs(e.cpo + ne.cpo - t.cpo) > 1;
   });
-  return off ? 'Event + Non-Event can differ from Total CPO: event rows include reps with no Total Sales on file (' +
+  return off ? 'Event + Non-Event can differ from Total CPO: event rows include reps whose Total Sales is pending (' +
     (PENDING.length ? PENDING.join(', ') : 'pending reps') + '), and Non-Event is left blank for a rep with Total Sales but no VectorConnect event row that campaign.' : '';
 }
 function buildGridToggles() {
@@ -2089,7 +2121,9 @@ function renderTotalLeaderboard() {
     </tr>`;
   });
   missing.forEach(x => {
-    const why = metricFamily(metric) === 'sales' && PENDING.includes(x.r.name) ? 'Total Sales pending' : `no ${tlbLabel(metric)} in ${s.label}`;
+    const why = metricFamily(metric) !== 'sales' ? `no ${tlbLabel(metric)} in ${s.label}`
+      : isAvgMetric(metric) && pSales(x.r, periods[seasonY]) ? 'no order count on file'
+      : PENDING.includes(x.r.name) ? 'Total Sales pending' : `no ${tlbLabel(metric)} in ${s.label}`;
     html += `<tr class="lb-missing" data-rep="${x.r.name}" title="${x.r.name}: ${why}">
       <td class="rank">–</td><td class="name">${x.r.name}<span class="lb-why">${why}</span></td><td class="bar-cell"></td>
       ${cols.map(y => `<td class="num yr${y === seasonY ? '' : ' yr-old'}">${fmt(x.vals[y])}</td>`).join('')}
@@ -2098,7 +2132,7 @@ function renderTotalLeaderboard() {
     </tr>`;
   });
   html += `</tbody></table></div>
-    <div class="lb-foot">Core team only. Tap a rep to open them. Bars scale to the top ${s.label} value.${sortNow === 'growth' ? ` Growth needs at least ${MIN_GROWTH_ORDERS} ${b} orders.` : ''}${share ? ` ${s.label} is shown as a share of ${b}'s full year (Same point is off).` : ''}</div>`;
+    <div class="lb-foot">Core team only. Tap a rep to open them. Bars scale to the top ${s.label} value.${sortNow === 'growth' ? ` Growth needs at least ${MIN_GROWTH_ORDERS} ${b} orders.` : ''}${share ? ` ${s.label} is shown as a share of ${b}'s full year (Same point is off).` : ''}${heldOutNote(metric)}</div>`;
   const body = document.getElementById('t-lb-body');
   body.innerHTML = html;
   body.querySelectorAll('tbody tr').forEach(tr => tr.addEventListener('click', () => {
@@ -2369,12 +2403,12 @@ function renderRepMinis() {
       <div class="delta-row">${chip}<span class="ctx">${ctx}</span></div>
     </div>`;
   const ordersChip = !cmp ? '' : cmp.mode === 'share'
-    ? shareChip(cur && cur.orders, priorS && priorS.orders, cmp.period.year)
-    : chipYoY(cur && cur.orders, priorS && priorS.orders);
+    ? shareChip(ordersOf(cur), ordersOf(priorS), cmp.period.year)
+    : chipYoY(ordersOf(cur), ordersOf(priorS));
 
   document.getElementById('rep-minis').innerHTML =
-    mini(`${hero.fallback ? 'Event orders' : 'Orders'} · ${p.label}`, cur ? fmtInt(cur.orders) : naSpan, ordersChip,
-      cmp ? `${priorTxt} · ${priorS ? fmtInt(priorS.orders) : '—'}` : (p.kind === 'all' ? allYearsText() : '')) +
+    mini(`${hero.fallback ? 'Event orders' : 'Orders'} · ${p.label}`, fmtInt(ordersOf(cur)), ordersChip,
+      cmp ? `${priorTxt} · ${ordersOf(priorS) === null ? '—' : fmtInt(ordersOf(priorS))}` : (p.kind === 'all' ? allYearsText() : '')) +
     mini(`Avg Order · ${p.label}`, fmtCurrency(aoCur), cmp ? chipYoY(aoCur, aoPrior) : '',
       cmp ? `vs ${priorTxt} · ${fmtCurrency(aoPrior)}` : '') +
     // Shift avg is an average, so YTD vs a full year is comparable; hide the chip on a base under 5 shifts (review B1).
@@ -2584,7 +2618,10 @@ function renderRepSummary() {
 
   // Pending uploads note
   if (PENDING.includes(STATE.selectedRep)) {
-    callouts.push({ type: 'watch', title: 'Total Sales pending', body: `Your full-CPO report is pending individual upload. Non-Event CPO will render once it arrives.` });
+    // All years adds up what is on file, so say which year it is missing.
+    const gap = p.kind === 'all' ? p.years.filter(y => !pSales(r, periodYear(y)) && pEvent(r, periodYear(y))) : [];
+    if (!pSales(r, p)) callouts.push({ type: 'watch', title: 'Total Sales pending', body: `Your Total Sales for ${p.label} is pending individual upload. Total CPO and Non-Event CPO will render once it arrives.` });
+    else if (gap.length) callouts.push({ type: 'watch', title: 'Total Sales pending', body: `Total CPO here leaves out ${gap.join(' and ')}: your Total Sales for ${gap.length > 1 ? 'those years' : 'that year'} is pending individual upload.` });
   }
 
   // Cap to 4 strengths + 1 watch (the opportunity renders separately below)
@@ -2835,13 +2872,14 @@ function renderRepShifts() {
 // ---- Pacing: the year in progress, through its last closed campaign (review A2) ----
 // YTD = Σ Total Sales over C1..Ck of a year (null if none present; lists campaigns still missing).
 function ytdSales(rep, year, k) {
-  let cpo = 0, orders = 0, have = 0; const missing = [];
+  let cpo = 0, orders = 0, blind = 0, have = 0; const missing = [];
   for (let n = 1; n <= k; n++) {
     const t = repTotalSales(rep, year, n);
     if (!t) { missing.push(n); continue; }
     cpo += t.cpo; orders += t.orders || 0; have++;
+    if (t.orders === null || t.orders === undefined) blind += t.cpo;
   }
-  return { cpo: have ? cpo : null, orders, missing };
+  return { cpo: have ? cpo : null, orders, blind, missing };
 }
 function ytdEvent(rep, year, k) {
   let cpo = 0, have = 0; const missing = [];
@@ -2892,17 +2930,23 @@ function repMultiplierInfo(rep, y, k) {
 
 function renderRepPacing() {
   const p = repPeriod();
-  const y = LAST_YEAR, k = campaignsForYear(y).length;
+  const y = LAST_YEAR, kAll = campaignsForYear(y).length;
   // Only the year in progress has a trajectory.
   const show = !yearClosed(y) && p.kind !== 'all' && p.year === y;
   document.getElementById('pace-section').style.display = show ? '' : 'none';
   if (!show) return;
 
   const r = REPS[STATE.selectedRep];
+  // Counted through the last campaign this rep has Total Sales for. A rep whose individual report
+  // stops short of the team's (C1 on file, C2 pending) is projected from what is on file with that
+  // campaign's multiplier, never as if one campaign were two.
+  let k = 0; while (k < kAll && repTotalSales(r, y, k + 1)) k++;
+  const short = k > 0 && k < kAll;
+  if (!k) k = kAll;
   const ytd = ytdSales(r, y, k);
   const fy_1 = repFYSales(r, y - 1);
   const fy_2 = repFYSales(r, y - 2);
-  const remaining = k === 1 ? 'C2 and C3 still to come' : 'only C3 still to come';
+  const remaining = short ? `C${k + 1}${k + 1 < 3 ? ' and C3' : ''} not counted yet` : k === 1 ? 'C2 and C3 still to come' : 'only C3 still to come';
 
   const minfo = repMultiplierInfo(r, y, k);
   const multiplier = minfo.multiplier;
@@ -2918,6 +2962,7 @@ function renderRepPacing() {
     basisLabel = `Based on the team-average share of the year done by the end of C${k} (multiplier ×${multiplier.toFixed(2)}) — your personal history is too limited for a stable projection`;
   }
   if (ytd.cpo !== null && ytd.missing.length) basisLabel += ` · Total Sales for C${ytd.missing.join(', C')} ${y} not loaded yet, so YTD uses what has arrived`;
+  if (short) basisLabel += ` · Total Sales for C${k + 1} ${y} is still pending for this rep, so this runs from ${k === 1 ? 'C1' : 'C1–C' + k}`;
 
   let summary = '';
   if (ytd.cpo === null) {
@@ -2975,10 +3020,10 @@ function renderRepPacing() {
     <div class="pace-basis">${basisLabel}</div>
     ${vizHtml}
     <div class="pace-stats">
-      ${stat(`${y} through C${k} · Actual`, ytd.cpo !== null ? fmtCurrencyShort(ytd.cpo) : '—', ytd.cpo !== null ? ytd.orders + ' orders' : '')}
+      ${stat(`${y} through C${k} · Actual`, ytd.cpo !== null ? fmtCurrencyShort(ytd.cpo) : '—', ytd.cpo !== null && !ytd.blind ? ytd.orders + ' orders' : '')}
       ${stat(`Projected ${y}<span class="proj-tag">Projection</span>`, projected ? '≈' + fmtCurrencyShort(projected) : '—', `×${multiplier.toFixed(2)} · ${remaining}`, 'projected')}
-      ${stat(`FY ${y - 1} · Actual`, fy_1 ? fmtCurrencyShort(fy_1.cpo) : '—', fy_1 ? fy_1.orders + ' orders' : '')}
-      ${stat(`FY ${y - 2} · Actual`, fy_2 ? fmtCurrencyShort(fy_2.cpo) : '—', fy_2 ? fy_2.orders + ' orders' : '')}
+      ${stat(`FY ${y - 1} · Actual`, fy_1 ? fmtCurrencyShort(fy_1.cpo) : '—', ordersOf(fy_1) === null ? '' : fy_1.orders + ' orders')}
+      ${stat(`FY ${y - 2} · Actual`, fy_2 ? fmtCurrencyShort(fy_2.cpo) : '—', ordersOf(fy_2) === null ? '' : fy_2.orders + ' orders')}
     </div>
     <div class="pace-summary">${summary}</div>
   `;
