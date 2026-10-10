@@ -112,6 +112,10 @@ window.DASHBOARD_DATA = {
         {
           "file": "rep_order_summary-2026-09-08_15_02.xlsx",
           "campaign": "2026-C2"
+        },
+        {
+          "file": "rep_order_summary-2026-10-10_15_36.xlsx",
+          "campaign": "2026-C2"
         }
       ],
       "individual_total_sales": {
@@ -130,7 +134,7 @@ window.DASHBOARD_DATA = {
           "2026-C1"
         ]
       },
-      "profile_refreshed": "2026-09-08",
+      "profile_refreshed": "2026-10-10",
       "note": "Prior campaigns are re-pulled from VectorConnect and may restate; event totals include work outside Rising Sun for reps on the cross-division list."
     }
   },
@@ -141,7 +145,7 @@ window.DASHBOARD_DATA = {
       "title": "CSP",
       "email": "adam@swlegacygifts.com",
       "office": "7599 - Scottsdale",
-      "career_cpo": 5524311.22,
+      "career_cpo": 5588911.22,
       "contract_date": "2008-08-02",
       "in_master_list": true,
       "campaigns": {
@@ -533,7 +537,7 @@ window.DASHBOARD_DATA = {
                 "events": null
               },
               "Non-Event CPO": {
-                "cpo": 64905,
+                "cpo": 65010,
                 "orders": 70,
                 "events": 0
               }
@@ -544,7 +548,7 @@ window.DASHBOARD_DATA = {
               "events": 18
             },
             "total_sales": {
-              "cpo": 141249,
+              "cpo": 141354,
               "orders": 142,
               "events": 0
             },
@@ -933,7 +937,7 @@ window.DASHBOARD_DATA = {
       "title": "CSP",
       "email": "knifeguyadamjay@gmail.com",
       "office": "7599 - Scottsdale",
-      "career_cpo": 480751.5,
+      "career_cpo": 494420.5,
       "contract_date": "2016-01-12",
       "in_master_list": true,
       "campaigns": {
@@ -1730,7 +1734,7 @@ window.DASHBOARD_DATA = {
       "title": "CSP",
       "email": "ahernandez@allinknifeguy.com",
       "office": "7599 - Scottsdale",
-      "career_cpo": 2435145.5,
+      "career_cpo": 2457266.5,
       "contract_date": "2017-06-16",
       "in_master_list": true,
       "campaigns": {
@@ -2122,8 +2126,8 @@ window.DASHBOARD_DATA = {
                 "events": null
               },
               "Non-Event CPO": {
-                "cpo": 78723,
-                "orders": 101,
+                "cpo": 76877,
+                "orders": 99,
                 "events": 0
               }
             },
@@ -2133,8 +2137,8 @@ window.DASHBOARD_DATA = {
               "events": 14
             },
             "total_sales": {
-              "cpo": 156190,
-              "orders": 199,
+              "cpo": 154344,
+              "orders": 197,
               "events": 0
             },
             "source": "rep-pass"
@@ -2527,7 +2531,7 @@ window.DASHBOARD_DATA = {
       "title": "CSP",
       "email": "alec.luyendyk18@gmail.com",
       "office": "7599 - Scottsdale",
-      "career_cpo": 2683730.25,
+      "career_cpo": 2698052.25,
       "contract_date": "2012-07-07",
       "in_master_list": true,
       "campaigns": {
@@ -3324,7 +3328,7 @@ window.DASHBOARD_DATA = {
       "title": "CSP",
       "email": "ccouts4@gmail.com",
       "office": "75N9 - East Valley",
-      "career_cpo": 1178910.75,
+      "career_cpo": 1192564,
       "contract_date": "2014-06-20",
       "in_master_list": true,
       "campaigns": {
@@ -3716,7 +3720,7 @@ window.DASHBOARD_DATA = {
                 "events": null
               },
               "Non-Event CPO": {
-                "cpo": 58935,
+                "cpo": 59032,
                 "orders": 106,
                 "events": 0
               }
@@ -3727,7 +3731,7 @@ window.DASHBOARD_DATA = {
               "events": 3
             },
             "total_sales": {
-              "cpo": 61229,
+              "cpo": 61326,
               "orders": 112,
               "events": 0
             },
@@ -3963,7 +3967,7 @@ window.DASHBOARD_DATA = {
       "title": "CSP",
       "email": "charitycampbellvector@gmail.com",
       "office": "75N9 - East Valley",
-      "career_cpo": 661110,
+      "career_cpo": 663452,
       "contract_date": "2020-04-17",
       "in_master_list": true,
       "campaigns": {
@@ -5474,7 +5478,7 @@ window.DASHBOARD_DATA = {
       "title": "CSP",
       "email": "knifeguyeli@gmail.com",
       "office": "7599 - Scottsdale",
-      "career_cpo": 1733226.25,
+      "career_cpo": 1755608.25,
       "contract_date": "2013-08-16",
       "in_master_list": true,
       "campaigns": {
@@ -5866,7 +5870,7 @@ window.DASHBOARD_DATA = {
                 "events": null
               },
               "Non-Event CPO": {
-                "cpo": 23947,
+                "cpo": 23840,
                 "orders": 59,
                 "events": 0
               }
@@ -5877,7 +5881,7 @@ window.DASHBOARD_DATA = {
               "events": 8
             },
             "total_sales": {
-              "cpo": 52919,
+              "cpo": 52812,
               "orders": 110,
               "events": 0
             },
@@ -6271,7 +6275,7 @@ window.DASHBOARD_DATA = {
       "title": "CSP",
       "email": "cutcojj@gmail.com",
       "office": "7599 - Scottsdale",
-      "career_cpo": 8731400.39,
+      "career_cpo": 8758311.39,
       "contract_date": "2002-06-08",
       "in_master_list": true,
       "campaigns": {
@@ -6663,7 +6667,7 @@ window.DASHBOARD_DATA = {
                 "events": null
               },
               "Non-Event CPO": {
-                "cpo": 202709,
+                "cpo": 202602,
                 "orders": 159,
                 "events": 0
               }
@@ -6674,7 +6678,7 @@ window.DASHBOARD_DATA = {
               "events": 4
             },
             "total_sales": {
-              "cpo": 208214,
+              "cpo": 208107,
               "orders": 171,
               "events": 0
             },
@@ -7830,7 +7834,7 @@ window.DASHBOARD_DATA = {
       "title": "CSP",
       "email": "gramir17.gr@gmail.com",
       "office": "7599 - Scottsdale",
-      "career_cpo": 774029.5,
+      "career_cpo": 780346.5,
       "contract_date": "2019-03-23",
       "in_master_list": true,
       "campaigns": {
@@ -8222,7 +8226,7 @@ window.DASHBOARD_DATA = {
                 "events": null
               },
               "Non-Event CPO": {
-                "cpo": 28080,
+                "cpo": 28014,
                 "orders": 66,
                 "events": 0
               }
@@ -8233,7 +8237,7 @@ window.DASHBOARD_DATA = {
               "events": 4
             },
             "total_sales": {
-              "cpo": 41571,
+              "cpo": 41505,
               "orders": 92,
               "events": 0
             },
@@ -8627,7 +8631,7 @@ window.DASHBOARD_DATA = {
       "title": "CSP",
       "email": "cutcojp24@gmail.com",
       "office": "7599 - Scottsdale",
-      "career_cpo": 1490979.69,
+      "career_cpo": 1539512.69,
       "contract_date": "2009-05-22",
       "in_master_list": true,
       "campaigns": {
@@ -9015,7 +9019,7 @@ window.DASHBOARD_DATA = {
                 "events": null
               },
               "Non-Event CPO": {
-                "cpo": 9445,
+                "cpo": 9246,
                 "orders": 26,
                 "events": 0
               }
@@ -9026,7 +9030,7 @@ window.DASHBOARD_DATA = {
               "events": 8
             },
             "total_sales": {
-              "cpo": 38541,
+              "cpo": 38342,
               "orders": 71,
               "events": 0
             },
@@ -9415,7 +9419,7 @@ window.DASHBOARD_DATA = {
       "title": "FSM",
       "email": "kendallgooch4@gmail.com",
       "office": "75N9 - East Valley",
-      "career_cpo": 122465.5,
+      "career_cpo": 130966.5,
       "contract_date": "2020-10-31",
       "in_master_list": true,
       "campaigns": {
@@ -9950,7 +9954,7 @@ window.DASHBOARD_DATA = {
       "title": "CSP",
       "email": "cutcoluke@gmail.com",
       "office": "7599 - Scottsdale",
-      "career_cpo": 4098184.2,
+      "career_cpo": 4166717.2,
       "contract_date": "2006-12-29",
       "in_master_list": true,
       "campaigns": {
@@ -10737,7 +10741,7 @@ window.DASHBOARD_DATA = {
       "title": "CSP",
       "email": "mfoss68@gmail.com",
       "office": "7599 - Scottsdale",
-      "career_cpo": 4938988.5,
+      "career_cpo": 5033730,
       "contract_date": "2012-03-03",
       "in_master_list": true,
       "campaigns": {
@@ -11129,7 +11133,7 @@ window.DASHBOARD_DATA = {
                 "events": null
               },
               "Non-Event CPO": {
-                "cpo": 117351,
+                "cpo": 116941,
                 "orders": 167,
                 "events": 0
               }
@@ -11140,7 +11144,7 @@ window.DASHBOARD_DATA = {
               "events": 25
             },
             "total_sales": {
-              "cpo": 291243,
+              "cpo": 290833,
               "orders": 381,
               "events": 0
             },
@@ -11534,7 +11538,7 @@ window.DASHBOARD_DATA = {
       "title": "SFSM",
       "email": "mtitoaragon@gmail.com",
       "office": "7519 - West Valley",
-      "career_cpo": 167422.25,
+      "career_cpo": 180503.25,
       "contract_date": "2024-06-14",
       "in_master_list": true,
       "campaigns": {
@@ -13790,7 +13794,7 @@ window.DASHBOARD_DATA = {
       "title": "DM",
       "email": "sarah.b.krick@gmail.com",
       "office": "7559 - Tempe",
-      "career_cpo": 500894,
+      "career_cpo": 504032.75,
       "contract_date": "2022-06-02",
       "in_master_list": true,
       "campaigns": {
@@ -14562,7 +14566,7 @@ window.DASHBOARD_DATA = {
       "title": "CSP",
       "email": "sean_potter@hotmail.com",
       "office": "7599 - Scottsdale",
-      "career_cpo": 1534037.5,
+      "career_cpo": 1535082.5,
       "contract_date": "2012-06-08",
       "in_master_list": true,
       "campaigns": {
@@ -15354,7 +15358,7 @@ window.DASHBOARD_DATA = {
       "title": "CSP",
       "email": "zduran@cutcorep.com",
       "office": "75M9 - West Tucson",
-      "career_cpo": 2576256,
+      "career_cpo": 2585658,
       "contract_date": "2010-03-20",
       "in_master_list": true,
       "campaigns": {
