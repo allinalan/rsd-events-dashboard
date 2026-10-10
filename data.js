@@ -102,6 +102,10 @@ window.DASHBOARD_DATA = {
           "campaign": "2024-C3"
         },
         {
+          "file": "rep_order_summary-2025-C1.xlsx",
+          "campaign": "2025-C1"
+        },
+        {
           "file": "rep_order_summary-2025-C2.xlsx",
           "campaign": "2025-C2"
         },
@@ -111,6 +115,10 @@ window.DASHBOARD_DATA = {
         },
         {
           "file": "rep_order_summary-2026-09-08_15_02.xlsx",
+          "campaign": "2026-C2"
+        },
+        {
+          "file": "rep_order_summary-2026-10-10_15_36.xlsx",
           "campaign": "2026-C2"
         }
       ],
@@ -130,7 +138,7 @@ window.DASHBOARD_DATA = {
           "2026-C1"
         ]
       },
-      "profile_refreshed": "2026-09-08",
+      "profile_refreshed": "2026-10-10",
       "note": "Prior campaigns are re-pulled from VectorConnect and may restate; event totals include work outside Rising Sun for reps on the cross-division list."
     }
   },
@@ -141,7 +149,7 @@ window.DASHBOARD_DATA = {
       "title": "CSP",
       "email": "adam@swlegacygifts.com",
       "office": "7599 - Scottsdale",
-      "career_cpo": 5524311.22,
+      "career_cpo": 5588911.22,
       "contract_date": "2008-08-02",
       "in_master_list": true,
       "campaigns": {
@@ -331,8 +339,8 @@ window.DASHBOARD_DATA = {
                 "events": null
               },
               "Non-Event CPO": {
-                "cpo": 78277.5,
-                "orders": 99,
+                "cpo": 67675,
+                "orders": 72,
                 "events": 0
               }
             },
@@ -342,8 +350,8 @@ window.DASHBOARD_DATA = {
               "events": 30
             },
             "total_sales": {
-              "cpo": 161872.5,
-              "orders": 221,
+              "cpo": 151270,
+              "orders": 194,
               "events": 0
             },
             "source": "rep-pass"
@@ -533,7 +541,7 @@ window.DASHBOARD_DATA = {
                 "events": null
               },
               "Non-Event CPO": {
-                "cpo": 64905,
+                "cpo": 65010,
                 "orders": 70,
                 "events": 0
               }
@@ -544,7 +552,7 @@ window.DASHBOARD_DATA = {
               "events": 18
             },
             "total_sales": {
-              "cpo": 141249,
+              "cpo": 141354,
               "orders": 142,
               "events": 0
             },
@@ -622,8 +630,8 @@ window.DASHBOARD_DATA = {
             "events": null
           },
           "Non-Event CPO": {
-            "cpo": 78277.5,
-            "orders": 99,
+            "cpo": 67675,
+            "orders": 72,
             "events": 0
           }
         },
@@ -689,8 +697,8 @@ window.DASHBOARD_DATA = {
           "events": 0
         },
         "2025": {
-          "cpo": 161872.5,
-          "orders": 221,
+          "cpo": 151270,
+          "orders": 194,
           "events": 0
         },
         "2026": {
@@ -933,7 +941,7 @@ window.DASHBOARD_DATA = {
       "title": "CSP",
       "email": "knifeguyadamjay@gmail.com",
       "office": "7599 - Scottsdale",
-      "career_cpo": 480751.5,
+      "career_cpo": 494420.5,
       "contract_date": "2016-01-12",
       "in_master_list": true,
       "campaigns": {
@@ -1730,7 +1738,7 @@ window.DASHBOARD_DATA = {
       "title": "CSP",
       "email": "ahernandez@allinknifeguy.com",
       "office": "7599 - Scottsdale",
-      "career_cpo": 2435145.5,
+      "career_cpo": 2457266.5,
       "contract_date": "2017-06-16",
       "in_master_list": true,
       "campaigns": {
@@ -1920,8 +1928,8 @@ window.DASHBOARD_DATA = {
                 "events": null
               },
               "Non-Event CPO": {
-                "cpo": 3012,
-                "orders": 27,
+                "cpo": 3389,
+                "orders": 26,
                 "events": 0
               }
             },
@@ -1931,8 +1939,8 @@ window.DASHBOARD_DATA = {
               "events": 20
             },
             "total_sales": {
-              "cpo": 99783,
-              "orders": 211,
+              "cpo": 100160,
+              "orders": 210,
               "events": 0
             },
             "source": "rep-pass"
@@ -2122,8 +2130,8 @@ window.DASHBOARD_DATA = {
                 "events": null
               },
               "Non-Event CPO": {
-                "cpo": 78723,
-                "orders": 101,
+                "cpo": 76877,
+                "orders": 99,
                 "events": 0
               }
             },
@@ -2133,8 +2141,8 @@ window.DASHBOARD_DATA = {
               "events": 14
             },
             "total_sales": {
-              "cpo": 156190,
-              "orders": 199,
+              "cpo": 154344,
+              "orders": 197,
               "events": 0
             },
             "source": "rep-pass"
@@ -2211,8 +2219,8 @@ window.DASHBOARD_DATA = {
             "events": null
           },
           "Non-Event CPO": {
-            "cpo": 3012,
-            "orders": 27,
+            "cpo": 3389,
+            "orders": 26,
             "events": 0
           }
         },
@@ -2278,8 +2286,8 @@ window.DASHBOARD_DATA = {
           "events": 0
         },
         "2025": {
-          "cpo": 99783,
-          "orders": 211,
+          "cpo": 100160,
+          "orders": 210,
           "events": 0
         },
         "2026": {
@@ -2527,7 +2535,7 @@ window.DASHBOARD_DATA = {
       "title": "CSP",
       "email": "alec.luyendyk18@gmail.com",
       "office": "7599 - Scottsdale",
-      "career_cpo": 2683730.25,
+      "career_cpo": 2698052.25,
       "contract_date": "2012-07-07",
       "in_master_list": true,
       "campaigns": {
@@ -2717,8 +2725,8 @@ window.DASHBOARD_DATA = {
                 "events": null
               },
               "Non-Event CPO": {
-                "cpo": 6037,
-                "orders": 17,
+                "cpo": 5554,
+                "orders": 16,
                 "events": 0
               }
             },
@@ -2728,8 +2736,8 @@ window.DASHBOARD_DATA = {
               "events": 23
             },
             "total_sales": {
-              "cpo": 101994,
-              "orders": 162,
+              "cpo": 101511,
+              "orders": 161,
               "events": 0
             },
             "source": "rep-pass"
@@ -3008,8 +3016,8 @@ window.DASHBOARD_DATA = {
             "events": null
           },
           "Non-Event CPO": {
-            "cpo": 6037,
-            "orders": 17,
+            "cpo": 5554,
+            "orders": 16,
             "events": 0
           }
         },
@@ -3075,8 +3083,8 @@ window.DASHBOARD_DATA = {
           "events": 0
         },
         "2025": {
-          "cpo": 101994,
-          "orders": 162,
+          "cpo": 101511,
+          "orders": 161,
           "events": 0
         },
         "2026": {
@@ -3324,7 +3332,7 @@ window.DASHBOARD_DATA = {
       "title": "CSP",
       "email": "ccouts4@gmail.com",
       "office": "75N9 - East Valley",
-      "career_cpo": 1178910.75,
+      "career_cpo": 1192564,
       "contract_date": "2014-06-20",
       "in_master_list": true,
       "campaigns": {
@@ -3514,8 +3522,8 @@ window.DASHBOARD_DATA = {
                 "events": null
               },
               "Non-Event CPO": {
-                "cpo": 23865.5,
-                "orders": 54,
+                "cpo": 16132,
+                "orders": 40,
                 "events": 0
               }
             },
@@ -3525,8 +3533,8 @@ window.DASHBOARD_DATA = {
               "events": 8
             },
             "total_sales": {
-              "cpo": 35198.5,
-              "orders": 93,
+              "cpo": 27465,
+              "orders": 79,
               "events": 0
             },
             "source": "division-pass"
@@ -3716,7 +3724,7 @@ window.DASHBOARD_DATA = {
                 "events": null
               },
               "Non-Event CPO": {
-                "cpo": 58935,
+                "cpo": 59032,
                 "orders": 106,
                 "events": 0
               }
@@ -3727,7 +3735,7 @@ window.DASHBOARD_DATA = {
               "events": 3
             },
             "total_sales": {
-              "cpo": 61229,
+              "cpo": 61326,
               "orders": 112,
               "events": 0
             },
@@ -3805,8 +3813,8 @@ window.DASHBOARD_DATA = {
             "events": null
           },
           "Non-Event CPO": {
-            "cpo": 23865.5,
-            "orders": 54,
+            "cpo": 16132,
+            "orders": 40,
             "events": 0
           }
         },
@@ -3872,8 +3880,8 @@ window.DASHBOARD_DATA = {
           "events": 0
         },
         "2025": {
-          "cpo": 35198.5,
-          "orders": 93,
+          "cpo": 27465,
+          "orders": 79,
           "events": 0
         },
         "2026": {
@@ -3963,7 +3971,7 @@ window.DASHBOARD_DATA = {
       "title": "CSP",
       "email": "charitycampbellvector@gmail.com",
       "office": "75N9 - East Valley",
-      "career_cpo": 661110,
+      "career_cpo": 663452,
       "contract_date": "2020-04-17",
       "in_master_list": true,
       "campaigns": {
@@ -4153,8 +4161,8 @@ window.DASHBOARD_DATA = {
                 "events": null
               },
               "Non-Event CPO": {
-                "cpo": 21558,
-                "orders": 43,
+                "cpo": 21165,
+                "orders": 45,
                 "events": 0
               }
             },
@@ -4164,8 +4172,8 @@ window.DASHBOARD_DATA = {
               "events": 7
             },
             "total_sales": {
-              "cpo": 45588,
-              "orders": 77,
+              "cpo": 45195,
+              "orders": 79,
               "events": 0
             },
             "source": "division-pass"
@@ -4444,8 +4452,8 @@ window.DASHBOARD_DATA = {
             "events": null
           },
           "Non-Event CPO": {
-            "cpo": 21558,
-            "orders": 43,
+            "cpo": 21165,
+            "orders": 45,
             "events": 0
           }
         },
@@ -4511,8 +4519,8 @@ window.DASHBOARD_DATA = {
           "events": 0
         },
         "2025": {
-          "cpo": 45588,
-          "orders": 77,
+          "cpo": 45195,
+          "orders": 79,
           "events": 0
         },
         "2026": {
@@ -4940,9 +4948,9 @@ window.DASHBOARD_DATA = {
                 "events": null
               },
               "Non-Event CPO": {
-                "cpo": null,
-                "orders": null,
-                "events": null
+                "cpo": 440,
+                "orders": 1,
+                "events": 0
               }
             },
             "total_event": {
@@ -4950,8 +4958,62 @@ window.DASHBOARD_DATA = {
               "orders": 8,
               "events": 5
             },
-            "total_sales": null,
+            "total_sales": {
+              "cpo": 4335,
+              "orders": 9,
+              "events": 0
+            },
             "source": "division-pass"
+          },
+          "2": {
+            "buckets": {
+              "Event (Traditional)": {
+                "cpo": null,
+                "orders": null,
+                "events": null
+              },
+              "Service Event": {
+                "cpo": null,
+                "orders": null,
+                "events": null
+              },
+              "Industry Event": {
+                "cpo": null,
+                "orders": null,
+                "events": null
+              },
+              "Realtor": {
+                "cpo": null,
+                "orders": null,
+                "events": null
+              },
+              "Mall": {
+                "cpo": null,
+                "orders": null,
+                "events": null
+              },
+              "Federal": {
+                "cpo": null,
+                "orders": null,
+                "events": null
+              },
+              "Non-Event CPO": {
+                "cpo": null,
+                "orders": null,
+                "events": null
+              }
+            },
+            "total_event": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "total_sales": {
+              "cpo": 179,
+              "orders": 1,
+              "events": 0
+            },
+            "source": "no-events"
           },
           "3": {
             "buckets": {
@@ -5123,9 +5185,9 @@ window.DASHBOARD_DATA = {
             "events": null
           },
           "Non-Event CPO": {
-            "cpo": null,
-            "orders": null,
-            "events": null
+            "cpo": 440,
+            "orders": 1,
+            "events": 0
           }
         },
         "2026": {
@@ -5187,6 +5249,11 @@ window.DASHBOARD_DATA = {
         "2024": {
           "cpo": 58577,
           "orders": 66,
+          "events": 0
+        },
+        "2025": {
+          "cpo": 4335,
+          "orders": 9,
           "events": 0
         }
       },
@@ -5424,7 +5491,7 @@ window.DASHBOARD_DATA = {
       "title": "CSP",
       "email": "knifeguyeli@gmail.com",
       "office": "7599 - Scottsdale",
-      "career_cpo": 1733226.25,
+      "career_cpo": 1755608.25,
       "contract_date": "2013-08-16",
       "in_master_list": true,
       "campaigns": {
@@ -5614,8 +5681,8 @@ window.DASHBOARD_DATA = {
                 "events": null
               },
               "Non-Event CPO": {
-                "cpo": 23120,
-                "orders": 36,
+                "cpo": 20921,
+                "orders": 34,
                 "events": 0
               }
             },
@@ -5625,8 +5692,8 @@ window.DASHBOARD_DATA = {
               "events": 8
             },
             "total_sales": {
-              "cpo": 62197,
-              "orders": 93,
+              "cpo": 59998,
+              "orders": 91,
               "events": 0
             },
             "source": "rep-pass"
@@ -5816,7 +5883,7 @@ window.DASHBOARD_DATA = {
                 "events": null
               },
               "Non-Event CPO": {
-                "cpo": 23947,
+                "cpo": 23840,
                 "orders": 59,
                 "events": 0
               }
@@ -5827,7 +5894,7 @@ window.DASHBOARD_DATA = {
               "events": 8
             },
             "total_sales": {
-              "cpo": 52919,
+              "cpo": 52812,
               "orders": 110,
               "events": 0
             },
@@ -5905,8 +5972,8 @@ window.DASHBOARD_DATA = {
             "events": null
           },
           "Non-Event CPO": {
-            "cpo": 23120,
-            "orders": 36,
+            "cpo": 20921,
+            "orders": 34,
             "events": 0
           }
         },
@@ -5972,8 +6039,8 @@ window.DASHBOARD_DATA = {
           "events": 0
         },
         "2025": {
-          "cpo": 62197,
-          "orders": 93,
+          "cpo": 59998,
+          "orders": 91,
           "events": 0
         },
         "2026": {
@@ -6221,7 +6288,7 @@ window.DASHBOARD_DATA = {
       "title": "CSP",
       "email": "cutcojj@gmail.com",
       "office": "7599 - Scottsdale",
-      "career_cpo": 8731400.39,
+      "career_cpo": 8758311.39,
       "contract_date": "2002-06-08",
       "in_master_list": true,
       "campaigns": {
@@ -6411,9 +6478,9 @@ window.DASHBOARD_DATA = {
                 "events": null
               },
               "Non-Event CPO": {
-                "cpo": null,
-                "orders": null,
-                "events": null
+                "cpo": 5417,
+                "orders": 34,
+                "events": 0
               }
             },
             "total_event": {
@@ -6422,8 +6489,8 @@ window.DASHBOARD_DATA = {
               "events": 25
             },
             "total_sales": {
-              "cpo": 146914,
-              "orders": 192,
+              "cpo": 161117,
+              "orders": 198,
               "events": 0
             },
             "source": "rep-pass"
@@ -6613,7 +6680,7 @@ window.DASHBOARD_DATA = {
                 "events": null
               },
               "Non-Event CPO": {
-                "cpo": 202709,
+                "cpo": 202602,
                 "orders": 159,
                 "events": 0
               }
@@ -6624,7 +6691,7 @@ window.DASHBOARD_DATA = {
               "events": 4
             },
             "total_sales": {
-              "cpo": 208214,
+              "cpo": 208107,
               "orders": 171,
               "events": 0
             },
@@ -6702,9 +6769,9 @@ window.DASHBOARD_DATA = {
             "events": null
           },
           "Non-Event CPO": {
-            "cpo": null,
-            "orders": null,
-            "events": null
+            "cpo": 5417,
+            "orders": 34,
+            "events": 0
           }
         },
         "2026": {
@@ -6769,8 +6836,8 @@ window.DASHBOARD_DATA = {
           "events": 0
         },
         "2025": {
-          "cpo": 146914,
-          "orders": 192,
+          "cpo": 161117,
+          "orders": 198,
           "events": 0
         },
         "2026": {
@@ -7780,7 +7847,7 @@ window.DASHBOARD_DATA = {
       "title": "CSP",
       "email": "gramir17.gr@gmail.com",
       "office": "7599 - Scottsdale",
-      "career_cpo": 774029.5,
+      "career_cpo": 780346.5,
       "contract_date": "2019-03-23",
       "in_master_list": true,
       "campaigns": {
@@ -7970,8 +8037,8 @@ window.DASHBOARD_DATA = {
                 "events": null
               },
               "Non-Event CPO": {
-                "cpo": 15185,
-                "orders": 36,
+                "cpo": 15029,
+                "orders": 35,
                 "events": 0
               }
             },
@@ -7981,8 +8048,8 @@ window.DASHBOARD_DATA = {
               "events": 9
             },
             "total_sales": {
-              "cpo": 24917,
-              "orders": 66,
+              "cpo": 24761,
+              "orders": 65,
               "events": 0
             },
             "source": "rep-pass"
@@ -8172,7 +8239,7 @@ window.DASHBOARD_DATA = {
                 "events": null
               },
               "Non-Event CPO": {
-                "cpo": 28080,
+                "cpo": 28014,
                 "orders": 66,
                 "events": 0
               }
@@ -8183,7 +8250,7 @@ window.DASHBOARD_DATA = {
               "events": 4
             },
             "total_sales": {
-              "cpo": 41571,
+              "cpo": 41505,
               "orders": 92,
               "events": 0
             },
@@ -8261,8 +8328,8 @@ window.DASHBOARD_DATA = {
             "events": null
           },
           "Non-Event CPO": {
-            "cpo": 15185,
-            "orders": 36,
+            "cpo": 15029,
+            "orders": 35,
             "events": 0
           }
         },
@@ -8328,8 +8395,8 @@ window.DASHBOARD_DATA = {
           "events": 0
         },
         "2025": {
-          "cpo": 24917,
-          "orders": 66,
+          "cpo": 24761,
+          "orders": 65,
           "events": 0
         },
         "2026": {
@@ -8577,7 +8644,7 @@ window.DASHBOARD_DATA = {
       "title": "CSP",
       "email": "cutcojp24@gmail.com",
       "office": "7599 - Scottsdale",
-      "career_cpo": 1490979.69,
+      "career_cpo": 1539512.69,
       "contract_date": "2009-05-22",
       "in_master_list": true,
       "campaigns": {
@@ -8763,8 +8830,8 @@ window.DASHBOARD_DATA = {
                 "events": null
               },
               "Non-Event CPO": {
-                "cpo": 23655.75,
-                "orders": 27,
+                "cpo": 19584,
+                "orders": 19,
                 "events": 0
               }
             },
@@ -8774,8 +8841,8 @@ window.DASHBOARD_DATA = {
               "events": 10
             },
             "total_sales": {
-              "cpo": 44290.75,
-              "orders": 61,
+              "cpo": 40219,
+              "orders": 53,
               "events": 0
             },
             "source": "rep-pass"
@@ -8965,7 +9032,7 @@ window.DASHBOARD_DATA = {
                 "events": null
               },
               "Non-Event CPO": {
-                "cpo": 9445,
+                "cpo": 9246,
                 "orders": 26,
                 "events": 0
               }
@@ -8976,7 +9043,7 @@ window.DASHBOARD_DATA = {
               "events": 8
             },
             "total_sales": {
-              "cpo": 38541,
+              "cpo": 38342,
               "orders": 71,
               "events": 0
             },
@@ -9054,8 +9121,8 @@ window.DASHBOARD_DATA = {
             "events": null
           },
           "Non-Event CPO": {
-            "cpo": 23655.75,
-            "orders": 27,
+            "cpo": 19584,
+            "orders": 19,
             "events": 0
           }
         },
@@ -9116,8 +9183,8 @@ window.DASHBOARD_DATA = {
       },
       "c1_total_sales": {
         "2025": {
-          "cpo": 44290.75,
-          "orders": 61,
+          "cpo": 40219,
+          "orders": 53,
           "events": 0
         },
         "2026": {
@@ -9365,11 +9432,61 @@ window.DASHBOARD_DATA = {
       "title": "FSM",
       "email": "kendallgooch4@gmail.com",
       "office": "75N9 - East Valley",
-      "career_cpo": 122465.5,
+      "career_cpo": 130966.5,
       "contract_date": "2020-10-31",
       "in_master_list": true,
       "campaigns": {
         "2025": {
+          "1": {
+            "buckets": {
+              "Event (Traditional)": {
+                "cpo": null,
+                "orders": null,
+                "events": null
+              },
+              "Service Event": {
+                "cpo": null,
+                "orders": null,
+                "events": null
+              },
+              "Industry Event": {
+                "cpo": null,
+                "orders": null,
+                "events": null
+              },
+              "Realtor": {
+                "cpo": null,
+                "orders": null,
+                "events": null
+              },
+              "Mall": {
+                "cpo": null,
+                "orders": null,
+                "events": null
+              },
+              "Federal": {
+                "cpo": null,
+                "orders": null,
+                "events": null
+              },
+              "Non-Event CPO": {
+                "cpo": null,
+                "orders": null,
+                "events": null
+              }
+            },
+            "total_event": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "total_sales": {
+              "cpo": 134,
+              "orders": 1,
+              "events": 0
+            },
+            "source": "no-events"
+          },
           "2": {
             "buckets": {
               "Event (Traditional)": {
@@ -9705,6 +9822,11 @@ window.DASHBOARD_DATA = {
         }
       },
       "c1_total_sales": {
+        "2025": {
+          "cpo": 134,
+          "orders": 1,
+          "events": 0
+        },
         "2026": {
           "cpo": 16851,
           "orders": 35,
@@ -9900,7 +10022,7 @@ window.DASHBOARD_DATA = {
       "title": "CSP",
       "email": "cutcoluke@gmail.com",
       "office": "7599 - Scottsdale",
-      "career_cpo": 4098184.2,
+      "career_cpo": 4166717.2,
       "contract_date": "2006-12-29",
       "in_master_list": true,
       "campaigns": {
@@ -10090,8 +10212,8 @@ window.DASHBOARD_DATA = {
                 "events": null
               },
               "Non-Event CPO": {
-                "cpo": 23291.25,
-                "orders": 64,
+                "cpo": 19503,
+                "orders": 58,
                 "events": 0
               }
             },
@@ -10101,8 +10223,8 @@ window.DASHBOARD_DATA = {
               "events": 8
             },
             "total_sales": {
-              "cpo": 78495.25,
-              "orders": 123,
+              "cpo": 74707,
+              "orders": 117,
               "events": 0
             },
             "source": "rep-pass"
@@ -10381,8 +10503,8 @@ window.DASHBOARD_DATA = {
             "events": null
           },
           "Non-Event CPO": {
-            "cpo": 23291.25,
-            "orders": 64,
+            "cpo": 19503,
+            "orders": 58,
             "events": 0
           }
         },
@@ -10448,8 +10570,8 @@ window.DASHBOARD_DATA = {
           "events": 0
         },
         "2025": {
-          "cpo": 78495.25,
-          "orders": 123,
+          "cpo": 74707,
+          "orders": 117,
           "events": 0
         },
         "2026": {
@@ -10687,7 +10809,7 @@ window.DASHBOARD_DATA = {
       "title": "CSP",
       "email": "mfoss68@gmail.com",
       "office": "7599 - Scottsdale",
-      "career_cpo": 4938988.5,
+      "career_cpo": 5033730,
       "contract_date": "2012-03-03",
       "in_master_list": true,
       "campaigns": {
@@ -11079,7 +11201,7 @@ window.DASHBOARD_DATA = {
                 "events": null
               },
               "Non-Event CPO": {
-                "cpo": 117351,
+                "cpo": 116941,
                 "orders": 167,
                 "events": 0
               }
@@ -11090,7 +11212,7 @@ window.DASHBOARD_DATA = {
               "events": 25
             },
             "total_sales": {
-              "cpo": 291243,
+              "cpo": 290833,
               "orders": 381,
               "events": 0
             },
@@ -11484,7 +11606,7 @@ window.DASHBOARD_DATA = {
       "title": "SFSM",
       "email": "mtitoaragon@gmail.com",
       "office": "7519 - West Valley",
-      "career_cpo": 167422.25,
+      "career_cpo": 180503.25,
       "contract_date": "2024-06-14",
       "in_master_list": true,
       "campaigns": {
@@ -11624,8 +11746,8 @@ window.DASHBOARD_DATA = {
                 "events": null
               },
               "Non-Event CPO": {
-                "cpo": 10824,
-                "orders": 26,
+                "cpo": 10329,
+                "orders": 24,
                 "events": 0
               }
             },
@@ -11635,8 +11757,8 @@ window.DASHBOARD_DATA = {
               "events": 3
             },
             "total_sales": {
-              "cpo": 12199,
-              "orders": 31,
+              "cpo": 11704,
+              "orders": 29,
               "events": 0
             },
             "source": "division-pass"
@@ -11915,8 +12037,8 @@ window.DASHBOARD_DATA = {
             "events": null
           },
           "Non-Event CPO": {
-            "cpo": 10824,
-            "orders": 26,
+            "cpo": 10329,
+            "orders": 24,
             "events": 0
           }
         },
@@ -11977,8 +12099,8 @@ window.DASHBOARD_DATA = {
       },
       "c1_total_sales": {
         "2025": {
-          "cpo": 12199,
-          "orders": 31,
+          "cpo": 11704,
+          "orders": 29,
           "events": 0
         },
         "2026": {
@@ -13740,7 +13862,7 @@ window.DASHBOARD_DATA = {
       "title": "DM",
       "email": "sarah.b.krick@gmail.com",
       "office": "7559 - Tempe",
-      "career_cpo": 500894,
+      "career_cpo": 504032.75,
       "contract_date": "2022-06-02",
       "in_master_list": true,
       "campaigns": {
@@ -13930,8 +14052,8 @@ window.DASHBOARD_DATA = {
                 "events": null
               },
               "Non-Event CPO": {
-                "cpo": 17466,
-                "orders": 54,
+                "cpo": 17277,
+                "orders": 51,
                 "events": 0
               }
             },
@@ -13941,8 +14063,8 @@ window.DASHBOARD_DATA = {
               "events": 11
             },
             "total_sales": {
-              "cpo": 28586,
-              "orders": 82,
+              "cpo": 28397,
+              "orders": 79,
               "events": 0
             },
             "source": "division-pass"
@@ -14221,8 +14343,8 @@ window.DASHBOARD_DATA = {
             "events": null
           },
           "Non-Event CPO": {
-            "cpo": 17466,
-            "orders": 54,
+            "cpo": 17277,
+            "orders": 51,
             "events": 0
           }
         },
@@ -14288,8 +14410,8 @@ window.DASHBOARD_DATA = {
           "events": 0
         },
         "2025": {
-          "cpo": 28586,
-          "orders": 82,
+          "cpo": 28397,
+          "orders": 79,
           "events": 0
         },
         "2026": {
@@ -14512,7 +14634,7 @@ window.DASHBOARD_DATA = {
       "title": "CSP",
       "email": "sean_potter@hotmail.com",
       "office": "7599 - Scottsdale",
-      "career_cpo": 1534037.5,
+      "career_cpo": 1535082.5,
       "contract_date": "2012-06-08",
       "in_master_list": true,
       "campaigns": {
@@ -14600,9 +14722,9 @@ window.DASHBOARD_DATA = {
                 "events": null
               },
               "Non-Event CPO": {
-                "cpo": null,
-                "orders": null,
-                "events": null
+                "cpo": 2358,
+                "orders": 6,
+                "events": 0
               }
             },
             "total_event": {
@@ -14610,7 +14732,11 @@ window.DASHBOARD_DATA = {
               "orders": 1,
               "events": 1
             },
-            "total_sales": null,
+            "total_sales": {
+              "cpo": 2979,
+              "orders": 7,
+              "events": 0
+            },
             "source": "rep-pass"
           },
           "3": {
@@ -14698,8 +14824,8 @@ window.DASHBOARD_DATA = {
                 "events": 6
               },
               "Non-Event CPO": {
-                "cpo": 10210,
-                "orders": 19,
+                "cpo": 10094,
+                "orders": 18,
                 "events": 0
               }
             },
@@ -14709,11 +14835,61 @@ window.DASHBOARD_DATA = {
               "events": 11
             },
             "total_sales": {
-              "cpo": 73784,
-              "orders": 124,
+              "cpo": 73668,
+              "orders": 123,
               "events": 0
             },
             "source": "rep-pass"
+          },
+          "2": {
+            "buckets": {
+              "Event (Traditional)": {
+                "cpo": null,
+                "orders": null,
+                "events": null
+              },
+              "Service Event": {
+                "cpo": null,
+                "orders": null,
+                "events": null
+              },
+              "Industry Event": {
+                "cpo": null,
+                "orders": null,
+                "events": null
+              },
+              "Realtor": {
+                "cpo": null,
+                "orders": null,
+                "events": null
+              },
+              "Mall": {
+                "cpo": null,
+                "orders": null,
+                "events": null
+              },
+              "Federal": {
+                "cpo": null,
+                "orders": null,
+                "events": null
+              },
+              "Non-Event CPO": {
+                "cpo": null,
+                "orders": null,
+                "events": null
+              }
+            },
+            "total_event": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "total_sales": {
+              "cpo": 1929,
+              "orders": 3,
+              "events": 0
+            },
+            "source": "no-events"
           },
           "3": {
             "buckets": {
@@ -14939,8 +15115,8 @@ window.DASHBOARD_DATA = {
             "events": 6
           },
           "Non-Event CPO": {
-            "cpo": 10210,
-            "orders": 19,
+            "cpo": 10094,
+            "orders": 18,
             "events": 0
           }
         },
@@ -15006,8 +15182,8 @@ window.DASHBOARD_DATA = {
           "events": 0
         },
         "2025": {
-          "cpo": 73784,
-          "orders": 124,
+          "cpo": 73668,
+          "orders": 123,
           "events": 0
         },
         "2026": {
@@ -15250,7 +15426,7 @@ window.DASHBOARD_DATA = {
       "title": "CSP",
       "email": "zduran@cutcorep.com",
       "office": "75M9 - West Tucson",
-      "career_cpo": 2576256,
+      "career_cpo": 2585658,
       "contract_date": "2010-03-20",
       "in_master_list": true,
       "campaigns": {
@@ -15440,8 +15616,8 @@ window.DASHBOARD_DATA = {
                 "events": null
               },
               "Non-Event CPO": {
-                "cpo": 26442.5,
-                "orders": 70,
+                "cpo": 23616,
+                "orders": 48,
                 "events": 0
               }
             },
@@ -15451,8 +15627,8 @@ window.DASHBOARD_DATA = {
               "events": 31
             },
             "total_sales": {
-              "cpo": 101013.5,
-              "orders": 234,
+              "cpo": 98187,
+              "orders": 212,
               "events": 0
             },
             "source": "rep-pass"
@@ -15731,8 +15907,8 @@ window.DASHBOARD_DATA = {
             "events": null
           },
           "Non-Event CPO": {
-            "cpo": 26442.5,
-            "orders": 70,
+            "cpo": 23616,
+            "orders": 48,
             "events": 0
           }
         },
@@ -15798,8 +15974,8 @@ window.DASHBOARD_DATA = {
           "events": 0
         },
         "2025": {
-          "cpo": 101013.5,
-          "orders": 234,
+          "cpo": 98187,
+          "orders": 212,
           "events": 0
         },
         "2026": {
