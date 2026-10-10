@@ -720,11 +720,15 @@
   .pl-row.cur .pl-fill { opacity: 1; }
   .pl-note { margin: 0 0 30px; }
   .dtext.zero { color: var(--ink-faint); }
-  table.cat-table th.grp, table.cat-table td.grp { border-left: 1px solid var(--line-soft); }
-  table.cat-table .grp + .grp { border-left: 0; }
-  @media (max-width: 900px) {
-    table.cat-table.rep-cats .mid { display: none; }
-    table.cat-table.rep-cats .mid + .grp { border-left: 1px solid var(--line-soft); }
+  table.cat-table th.grp, table.cat-table td.grp, table.leaderboard th.grp, table.leaderboard td.grp { border-left: 1px solid var(--line-soft); }
+  table.leaderboard td.num.was { color: var(--ink-faint); }
+  /* the year, the Compare to year and the change stay side by side; rank and the bar give way first */
+  @media (max-width: 1000px) {
+    table.cat-table.rep-cats .mid, table.leaderboard.plb .bar-cell, table.leaderboard.plb th.bar-h { display: none; }
+    table.cat-table.rep-cats { min-width: 0; }
+    table.cat-table.rep-cats th, table.cat-table.rep-cats td { padding-left: 8px; padding-right: 8px; }
+    table.cat-table.rep-cats th:first-child, table.cat-table.rep-cats td.cat-name { padding-left: 14px; }
+    table.leaderboard.plb th, table.leaderboard.plb td { padding-left: 5px; padding-right: 5px; }
   }
   /* sortable column heads on the product leaderboard */
   .th-sort {
@@ -848,7 +852,8 @@
     td.name .viewing-dot { display: none; }   /* the highlighted row already marks the selected rep */
     table.cat-table.grid th, table.cat-table.grid td { padding-left: 5px; padding-right: 5px; }
     table.cat-table.grid th:first-child, table.cat-table.grid td.cat-name { min-width: 92px; padding-left: 10px; }
-    table.cat-table.grid .chip, table.leaderboard .chip { font-size: 10px; padding: 1px 5px; }
+    table.cat-table.grid .chip, table.leaderboard .chip, table.cat-table.rep-cats .chip { font-size: 10px; padding: 1px 5px; }
+    table.cat-table.rep-cats th, table.cat-table.rep-cats td { padding-left: 5px; padding-right: 5px; }
     table.cat-table .dlt-abs { display: none; }
     table.cat-table.rep-cats { min-width: 0; }
     table.cat-table.rep-cats .xtra { display: none; }
@@ -3262,7 +3267,12 @@ function pDiff(cur, prior) {
   const d = Math.round(cur - prior);
   return `<span class="dtext ${d > 0 ? 'pos' : d < 0 ? 'neg' : 'zero'}">${d > 0 ? '+' : d < 0 ? '−' : ''}${Math.abs(d).toLocaleString()}</span>`;
 }
-const pChange = (cur, prior, m) => m === 'cpo' ? chipYoY(cur, prior) : pDiff(cur, prior);
+function pPct(cur, prior) {
+  if (cur === null || cur === undefined || prior === null || prior === undefined || prior === 0) return `<span class="chip na" title="${NA_TIP}">—</span>`;
+  const pct = (cur - prior) / prior * 100, up = pct >= 0;
+  return `<span class="chip ${up ? 'pos' : 'neg'}">${up ? '▲ +' : '▼ −'}${Math.abs(pct).toFixed(compactGrid() ? 0 : 1)}%</span>`;   // whole percents on a phone
+}
+const pChange = (cur, prior, m) => m === 'cpo' ? pPct(cur, prior) : pDiff(cur, prior);
 const pRatio = (line, y, m, of, by = y - 1) => { const c = pVal(of(line, y), m), p = pVal(of(line, by), m); return (c !== null && p !== null && p > 0) ? c / p : null; };
 // For scale next to a year-to-date figure: how much of last year's Total CPO the team had in by the
 // last campaign that closed before the report was sent (same reps on both sides).
@@ -3360,8 +3370,7 @@ function renderProductLeaderboard() {
   // Units, CPO and orders sit side by side; a tap on a column head sorts by it, largest first.
   // Until a head is tapped the board follows Show (each line's own headline number on Headline).
   const m = STATE.pSort || pMeasureFor(line);
-  const COLS = [['qty', line.unit.charAt(0).toUpperCase() + line.unit.slice(1)], ['cpo', 'CPO'], ['orders', 'Orders']];
-  const sortName = COLS.find(c => c[0] === m)[1];
+  const unitName = line.unit.charAt(0).toUpperCase() + line.unit.slice(1);
   const sel = document.getElementById('p-lb-line');
   sel.innerHTML = PRODUCT_LINES.map(l => `<option value="${l.key}"${l.key === line.key ? ' selected' : ''}>${l.label}</option>`).join('');
   sel.onchange = e => { STATE.pLine = e.target.value; renderProductLeaderboard(); };
@@ -3371,15 +3380,24 @@ function renderProductLeaderboard() {
   const maxVal = Math.max(1, ...ranked.map(x => x.cur[m]));
   document.getElementById('p-lb-context').innerHTML =
     `<strong>${line.label}</strong> · ${pYearLabel(y)}${py ? ` vs ${py}` : ''} · ${ranked.length} of ${MASTER.length} reps`;
-  const head = ([k, label]) => `<th class="num${k === m ? ' cur-h' : ''}${k === 'orders' ? ' yr-old' : ''}" aria-sort="${k === m ? 'descending' : 'none'}">` +
-    `<button type="button" class="th-sort${k === m ? ' on' : ''}" data-sort="${k}" title="Sort by ${label}, largest first">${label}<span class="th-arrow">${k === m ? '▼' : '↕'}</span></button></th>`;
-  let html = `<div class="lb-scroll"><table class="leaderboard tlb"><thead><tr>
+  // Units, then CPO: the year, the Compare to year and the change between them. Orders ride along.
+  // On a phone only the measure the board is sorted by keeps its Compare to year and change (.yr-old hides the rest).
+  const TRIOS = [['qty', unitName], ['cpo', 'CPO']];
+  const off = k => k === m ? '' : ' yr-old';
+  const sortHead = (k, label, cls) => `<th class="num${k === m ? ' cur-h' : ''}${cls}" aria-sort="${k === m ? 'descending' : 'none'}">` +
+    `<button type="button" class="th-sort${k === m ? ' on' : ''}" data-sort="${k}" title="Sort by ${label}, largest first">${label}<span class="th-arrow">${k === m ? '▼' : '↕'}</span></button>` +
+    `<span class="th-sub opt">${pYearLabel(y)}</span></th>`;
+  let html = `<div class="lb-scroll"><table class="leaderboard tlb plb"><thead><tr>
     <th style="text-align:center;">#</th><th>Rep</th><th class="bar-h"></th>
-    ${COLS.map(head).join('')}
-    ${py ? `<th class="num yr yr-old">${py}<span class="th-sub opt">${sortName}, full year</span></th>
-    <th class="num g-col">${m === 'cpo' ? '%' : '+/−'} vs <span class="lg-only">${py}</span><span class="sm-only">'${String(py).slice(2)}</span></th>` : ''}
+    ${TRIOS.map(([k, label], i) => sortHead(k, label, i ? ' grp' : '') + (py
+      ? `<th class="num${off(k)}">${py}<span class="th-sub opt">${label}</span></th>
+         <th class="num g-col${off(k)}">${k === 'cpo' ? '%' : '+/−'}<span class="th-sub opt">vs ${py}</span></th>` : '')).join('')}
+    ${sortHead('orders', 'Orders', ' grp' + off('orders'))}
   </tr></thead><tbody>`;
-  const cells = x => COLS.map(([k]) => `<td class="num${k === m ? ' cur' : ''}${k === 'orders' ? ' yr-old' : ''}">${pNum(pVal(x.cur, k), k)}</td>`).join('');
+  const cells = x => TRIOS.map(([k], i) => `<td class="num${k === m ? ' cur' : ''}${i ? ' grp' : ''}">${pNum(pVal(x.cur, k), k)}</td>` + (py
+      ? `<td class="num was${off(k)}">${x.cur ? pNum(pVal(x.prior, k), k) : naSpan}</td>
+         <td class="num growth-cell${off(k)}">${x.cur ? pChange(pVal(x.cur, k), pVal(x.prior, k), k) : ''}</td>` : '')).join('') +
+    `<td class="num grp${m === 'orders' ? ' cur' : ''}${off('orders')}">${pNum(pVal(x.cur, 'orders'), 'orders')}</td>`;
   ranked.forEach((x, i) => {
     const isSelf = x.r.name === STATE.selectedRep;
     html += `<tr class="${[isSelf ? 'is-self' : '', i < 3 ? 'top3' : ''].filter(Boolean).join(' ')}" data-rep="${x.r.name}" title="Open ${x.r.name}">
@@ -3387,13 +3405,12 @@ function renderProductLeaderboard() {
       <td class="name">${x.r.name}${isSelf ? '<span class="viewing-dot"></span>' : ''}</td>
       <td class="bar-cell"><div class="lb-track"><div class="lb-fill" style="width:${x.cur[m] > 0 ? Math.max(1.5, x.cur[m] / maxVal * 100).toFixed(1) : 0}%"></div></div></td>
       ${cells(x)}
-      ${py ? `<td class="num prior yr-old">${pNum(pVal(x.prior, m), m)}</td><td class="growth-cell">${pChange(x.cur[m], pVal(x.prior, m), m)}</td>` : ''}
     </tr>`;
   });
   missing.forEach(x => {
     html += `<tr class="lb-missing" data-rep="${x.r.name}" title="${x.r.name}: not in the product report">
       <td class="rank">–</td><td class="name">${x.r.name}<span class="lb-why">not in the product report</span></td><td class="bar-cell"></td>
-      ${cells(x)}${py ? `<td class="num prior yr-old">${naSpan}</td><td class="growth-cell"></td>` : ''}
+      ${cells(x)}
     </tr>`;
   });
   html += `</tbody></table></div>
@@ -3466,16 +3483,15 @@ function renderRepProducts() {
     const i = all.findIndex(x => x.n === r.name);
     return i < 0 ? naSpan : `<span title="By ${pMeasureName(line.lead, line)}, ${pYearLabel(y)}">#${i + 1}<span style="color:var(--ink-faint)"> of ${all.length}</span></span>`;
   };
-  // Units and CPO side by side: the Compare to year, the year shown, then +/- units and % change in CPO.
+  // Units and CPO side by side: the year shown, the Compare to year, then +/- units and % change in CPO.
   const cmpHead = m => `${m === 'cpo' ? '%' : '+/−'} vs ${by}`;
-  const group = (m, name, first) => (by ? `<th class="xtra mid${first ? '' : ' grp'}">${by}<span class="th-sub">${name}</span></th>` : '') +
-    `<th class="${first ? '' : 'grp'}">${pYearLabel(y)}<span class="th-sub">${name}</span></th>` +
-    (by ? `<th class="${first ? '' : 'xtra'}">${cmpHead(m)}<span class="th-sub">${name}</span></th>` : '');
+  const group = (m, name, first) => `<th class="${first ? '' : 'grp'}">${pYearLabel(y)}<span class="th-sub">${name}</span></th>` +
+    (by ? `<th class="${first ? '' : 'xtra'}">${by}<span class="th-sub">${name}</span></th>
+           <th>${cmpHead(m)}<span class="th-sub">${name}</span></th>` : '');
   const cells = (l, m, first) => {
     const cur = pVal(mine(l, y), m), prior = by ? pVal(mine(l, by), m) : null;
-    return (by ? `<td class="prior xtra mid${first ? '' : ' grp'}">${pNum(prior, m)}</td>` : '') +
-      `<td class="cur${first ? '' : ' grp'}">${pNum(cur, m)}</td>` +
-      (by ? `<td class="${first ? '' : 'xtra'}">${pChange(cur, prior, m)}</td>` : '');
+    return `<td class="cur${first ? '' : ' grp'}">${pNum(cur, m)}</td>` +
+      (by ? `<td class="prior${first ? '' : ' xtra'}">${pNum(prior, m)}</td><td>${pChange(cur, prior, m)}</td>` : '');
   };
   const rows = PRODUCT_LINES.map(l => {
     const empty = years.every(yy => !pVal(mine(l, yy), 'qty') && !pVal(mine(l, yy), 'cpo'));
@@ -3483,7 +3499,7 @@ function renderRepProducts() {
     return `<tr class="${empty ? 'empty' : ''}" title="${tip}">
       <td class="cat-name">${l.label}<span class="lb-why">${l.unit}</span></td>
       ${cells(l, 'qty', true)}${cells(l, 'cpo', false)}
-      <td class="xtra">${rank(l)}</td>
+      <td class="xtra mid">${rank(l)}</td>
     </tr>`;
   }).join('');
   wrap.innerHTML = `
@@ -3492,7 +3508,7 @@ function renderRepProducts() {
       <thead><tr>
         <th>Product line</th>
         ${group('qty', 'units', true)}${group('cpo', 'CPO', false)}
-        <th class="xtra">Team rank<i class="info-i" title="Rank among the core-team reps in the report for ${pYearLabel(y)}: by units for sets, flatware and cookware, by CPO for upgrades and the gift channels">i</i></th>
+        <th class="xtra mid">Team rank<i class="info-i" title="Rank among the core-team reps in the report for ${pYearLabel(y)}: by units for sets, flatware and cookware, by CPO for upgrades and the gift channels">i</i></th>
       </tr></thead>
       <tbody>${rows}</tbody>
     </table>`;
