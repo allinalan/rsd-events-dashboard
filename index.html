@@ -691,7 +691,6 @@
 
   table.leaderboard th .th-sub { display: block; font-weight: 500; font-size: 9px; letter-spacing: 0.04em; text-transform: none; color: var(--ink-faint); margin-top: 2px; }
   table.leaderboard th.cur-h { color: var(--ember); }
-  table.leaderboard td.ord { color: var(--ink-soft); }
   table.leaderboard tr.lb-missing td { color: var(--ink-faint); }
   table.leaderboard tr.lb-missing td.name { font-weight: 500; }
   .lb-why { display: block; font-family: var(--mono); font-size: 9.5px; font-weight: 400; color: var(--ink-faint); margin-top: 1px; }
@@ -1033,16 +1032,6 @@
       <div id="c-mix"></div>
     </div>
   </div>
-
-  <div class="section">
-    <div class="sec-head">
-      <div><span class="kicker">Inside the year</span>
-        <h2 id="c-grid-title">Campaign by Campaign</h2></div>
-      <div class="pills" data-grid="c-grid" role="tablist" aria-label="Show"></div>
-    </div>
-    <div class="cat-table-wrap" id="c-grid"></div>
-    <div class="cat-note" id="c-grid-note"></div>
-  </div>
 </div>
 
 <!-- ============================== PRODUCTS VIEW ============================== -->
@@ -1124,11 +1113,11 @@
   <div class="section o-cats">
     <div class="sec-head">
       <div><span class="kicker">Where I win · what needs work</span>
-        <h2>By Category</h2></div>
+        <h2>Event vs Non-Event</h2></div>
       <span class="scope" id="cats-scope"></span>
     </div>
     <div class="headline-duo" id="rep-buckets-top"></div>
-    <div class="cat-table-wrap" id="rep-buckets-sub"></div>
+    <div id="rep-buckets-sub"></div>
   </div>
 
   <div class="section o-products" id="rep-products-section">
@@ -1813,7 +1802,7 @@ const GRID_ROWS = [
   { key: 'total_sales', label: 'Total CPO', cls: 'total' },
 ];
 const GRID_MODES = [['cpo', 'Revenue'], ['avg', 'Avg Order'], ['orders', 'Orders']];
-const GRID_STATE = { 't-grid': 'cpo', 'x-grid': 'cpo', 'c-grid': 'cpo' };
+const GRID_STATE = { 't-grid': 'cpo', 'x-grid': 'cpo' };
 function gridNum(s, mode) {
   if (!s) return null;
   return mode === 'cpo' ? s.cpo : mode === 'avg' ? avgOrder(s) : s.orders;
@@ -1858,7 +1847,7 @@ function buildGridToggles() {
     el.innerHTML = GRID_MODES.map(([m, l]) => `<button type="button" role="tab" data-mode="${m}">${l}</button>`).join('');
     el.querySelectorAll('button').forEach(b => b.addEventListener('click', () => {
       GRID_STATE[id] = b.dataset.mode; paint();
-      ({ 't-grid': renderTotalTable, 'x-grid': renderCompareGrid, 'c-grid': renderCampGrid })[id]();
+      ({ 't-grid': renderTotalTable, 'x-grid': renderCompareGrid })[id]();
     }));
     paint();
   });
@@ -2123,8 +2112,7 @@ function renderTotalLeaderboard() {
     const base = growthOK && !isAvgMetric(metric) ? metricOrders(r, periods[b], metric) : null;
     const growth = (growthOK && cur !== null && prior !== null && prior > 0) ? (cur - prior) / prior * 100 : null;
     const small = base !== null && base < MIN_GROWTH_ORDERS;
-    const orders = metricOrders(r, periods[seasonY], metric);   // the orders behind the season figure
-    return { r, vals, cur, prior, growth, base, small, orders };
+    return { r, vals, cur, prior, growth, base, small };
   });
   const ranked = rows.filter(x => x.cur !== null);
   if (sortNow === 'growth') {
@@ -2149,7 +2137,6 @@ function renderTotalLeaderboard() {
   let html = `<div class="lb-scroll"><table class="leaderboard tlb${sortNow === 'growth' ? ' growth-emph' : ''}"><thead><tr>
     <th style="text-align:center;">#</th><th>Rep</th><th class="bar-h"></th>
     ${cols.map(yearHead).join('')}
-    <th class="num ord">Orders<span class="th-sub opt">${s.label}</span></th>
     ${hasDelta ? `<th class="num dlt-abs">Δ vs ${b}</th><th class="num g-col">${share ? `%<span class="lg-only"> of ${b}</span>` : '%'}</th>` : ''}
   </tr></thead><tbody>`;
   const deltaCells = x => {
@@ -2167,7 +2154,6 @@ function renderTotalLeaderboard() {
       <td class="name">${x.r.name}${isSelf ? '<span class="viewing-dot"></span>' : ''}</td>
       <td class="bar-cell"><div class="lb-track"><div class="lb-fill" style="width:${Math.max(1.5, x.cur / maxVal * 100).toFixed(1)}%"></div></div></td>
       ${cols.map(y => `<td class="num yr${y === seasonY ? ' cur' : ' prior yr-old'}">${fmt(x.vals[y])}</td>`).join('')}
-      <td class="num ord">${fmtInt(x.orders)}</td>
       ${deltaCells(x)}
     </tr>`;
   });
@@ -2178,7 +2164,6 @@ function renderTotalLeaderboard() {
     html += `<tr class="lb-missing" data-rep="${x.r.name}" title="${x.r.name}: ${why}">
       <td class="rank">–</td><td class="name">${x.r.name}<span class="lb-why">${why}</span></td><td class="bar-cell"></td>
       ${cols.map(y => `<td class="num yr${y === seasonY ? '' : ' yr-old'}">${fmt(x.vals[y])}</td>`).join('')}
-      <td class="num ord">${fmtInt(x.orders)}</td>
       ${hasDelta ? `<td class="num dlt-abs"></td><td class="growth-cell"></td>` : ''}
     </tr>`;
   });
@@ -2273,23 +2258,6 @@ function renderCompareGrid() {
   notes.push(reconcileNote(cols.map(c => c.period)));
   document.getElementById('x-grid-note').textContent = notes.join(' ');
 }
-function renderCampGrid() {
-  const y = STATE.camp.year, ns = campaignsForYear(y);
-  const cols = [1, 2, 3].map(n => ns.includes(n)
-    ? { head: `C${n}`, sub: CAMP_WINDOWS[n], period: periodCamp(y, n), sel: n === STATE.camp.n }
-    : { head: `C${n}`, sub: 'open', period: null });
-  const yp = periodYear(y);
-  cols.push({ head: yp.closed ? `Year ${y}` : `${y} so far`, sub: yp.closed ? 'full year' : (yp.k === 1 ? 'C1' : `C1–C${yp.k}`), period: yp });
-  document.getElementById('c-grid-title').textContent = `Campaign by Campaign · ${y}`;
-  renderGrid('c-grid', cols);
-
-  const notes = [];
-  const noWb = ns.filter(n => !salesLoaded(y, n));
-  if (noWb.length) notes.push(`No Total Sales workbook for ${noWb.map(n => 'C' + n).join(', ')} ${y}, so Total CPO and Non-Event show — there.`);
-  if (yp.closed && yearHasFY(y)) notes.push(`The Year column uses ${y}'s year-end Total Sales figure.`);
-  notes.push(reconcileNote(cols.map(c => c.period)));
-  document.getElementById('c-grid-note').textContent = notes.join(' ');
-}
 function renderCampaignsView() {
   document.getElementById('c-title').textContent = `Campaigns · ${STATE.camp.year}`;
   renderCampYears();
@@ -2297,7 +2265,6 @@ function renderCampaignsView() {
   renderCompareGrid();
   renderLeaderboard('c');
   renderCategoryMix('c', campPeriodSel());
-  renderCampGrid();
 }
 
 // ==========================================================================
@@ -2789,7 +2756,7 @@ function renderRepComposition() {
     ${rows}`;
 }
 
-// ----- Category detail (headline duo + table) -----
+// ----- Event vs Non-Event (headline duo + the best CPO per event) -----
 function renderRepBuckets() {
   const r = REPS[STATE.selectedRep];
   const p = repPeriod(), cmpE = compareFor(p, 'event'), cmpS = compareFor(p, 'sales');
@@ -2830,41 +2797,15 @@ function renderRepBuckets() {
     headlineCard('Total Event CPO', 'All six categories', 'var(--ink)', totEvtCur, totEvtPrior, cmpE, teamAvgTotEvt, vsTeamTotEvt) +
     headlineCard('Non-Event CPO', "SC's / Marketing", 'var(--bk-nonevent)', nonEvtCur, nonEvtPrior, cmpS, teamAvgNonEvt, vsTeamNonEvt);
 
-  // Per-event productivity (review D3): the intake delivers events per bucket, so CPO / event
-  // and orders / event are available. Best CPO / event gets a callout.
-  let rows = '';
+  // The intake delivers events per bucket; the category with the best CPO / event gets a callout.
   let best = null;
   for (const b of EVENT_SUB_BUCKETS) {
     const cur = pEvent(r, p, b);
-    const prior = cmpE ? pEvent(r, cmpE.period, b) : null;
-    const teamAv = teamAvg('bucket:' + b, p);
-    const vsTeam = (cur && teamAv) ? ((cur.cpo - teamAv) / teamAv * 100) : null;
-    const avgOrd = avgOrder(cur);
     const cpoPerEvent = cur && cur.events ? cur.cpo / cur.events : null;
-    const ordersPerEvent = cur && cur.events && cur.orders !== null ? cur.orders / cur.events : null;
     if (cpoPerEvent !== null && cur.events >= 2 && (!best || cpoPerEvent > best.v)) best = { b, v: cpoPerEvent, events: cur.events };
-    const isEmpty = !cur && !prior;
-    rows += `<tr class="${isEmpty ? 'empty' : ''}">
-      <td class="cat-name"><span class="swatch" style="background:${BUCKET_COLORS[b]};${isEmpty ? 'opacity:.35;' : ''}"></span>${bLabel(b)}</td>
-      <td class="cur">${cur ? fmtMoneyFit(cur.cpo) : naSpan}</td>
-      ${cmpE ? `<td class="prior">${prior ? fmtMoneyFit(prior.cpo) : naSpan}</td><td>${fmtYoY(cur && cur.cpo, prior && prior.cpo)}</td>` : ''}
-      <td class="xtra" title="${cur && cur.events ? `${cur.events} event${cur.events === 1 ? '' : 's'}` : ''}">${fmtCurrency(cpoPerEvent)}</td>
-      <td class="xtra">${fmtNumber(ordersPerEvent, 1)}</td>
-      <td class="xtra">${fmtCurrency(avgOrd)}</td>
-      <td class="prior xtra">${fmtCurrency(teamAv)}</td>
-      <td class="xtra">${vsTeam === null ? naSpan : `<span class="chip ${vsTeam >= 0 ? 'pos' : 'neg'}" style="font-size:10px;padding:1px 6px;">${vsTeam >= 0 ? '+' : '−'}${Math.abs(vsTeam).toFixed(0)}%</span>`}</td>
-    </tr>`;
   }
-  document.getElementById('rep-buckets-sub').innerHTML = `
-    ${best ? `<div class="cat-best">Best CPO per event: <strong>${bLabel(best.b)}</strong> at ${fmtCurrency(best.v)} per event across ${best.events} events in ${p.label}.</div>` : ''}
-    <table class="cat-table rep-cats">
-      <thead><tr>
-        <th>Category</th><th>${p.label}</th>${cmpE ? `<th>${cmpE.period.label}</th><th>Growth</th>` : ''}
-        <th class="xtra">CPO / Event</th><th class="xtra">Orders / Event</th>
-        <th class="xtra">Avg Order</th><th class="xtra">Team Avg<i class="info-i" title="${UNIVERSE_TIP}">i</i></th><th class="xtra">vs Team</th>
-      </tr></thead>
-      <tbody>${rows}</tbody>
-    </table>`;
+  document.getElementById('rep-buckets-sub').innerHTML = best
+    ? `<div class="cat-best">Best CPO per event: <strong>${bLabel(best.b)}</strong> at ${fmtCurrency(best.v)} per event across ${best.events} events in ${p.label}.</div>` : '';
 }
 
 function renderRepShifts() {
@@ -3551,7 +3492,7 @@ window.addEventListener('resize', () => {
   clearTimeout(_resizeTimer);
   _resizeTimer = setTimeout(() => {
     if (STATE.view === 'rep') renderRepChart();
-    renderShape(); renderTotalTable(); renderTotalLeaderboard(); renderLeaderboard('c'); renderCompareGrid(); renderCampGrid(); renderRepBuckets();
+    renderShape(); renderTotalTable(); renderTotalLeaderboard(); renderLeaderboard('c'); renderCompareGrid(); renderRepBuckets();
     renderProductsView(); renderRepProducts();
   }, 150);
 });
