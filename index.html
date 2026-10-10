@@ -719,12 +719,7 @@
   .pl-fill { display: block; height: 100%; background: var(--ember); opacity: 0.42; border-radius: 3px; }
   .pl-row.cur .pl-fill { opacity: 1; }
   .pl-note { margin: 0 0 30px; }
-  /* progress toward another year's total: the track is that year's full figure, the fill is this year so far */
-  .pmeter { display: inline-flex; align-items: center; gap: 8px; font-family: var(--mono); font-size: 11.5px; font-weight: 600; color: var(--ink-soft); white-space: nowrap; }
-  .pm-track { width: 54px; height: 6px; background: var(--line-soft); border-radius: 3px; overflow: hidden; }
-  .pm-fill { display: block; height: 100%; background: var(--ink-faint); border-radius: 3px; }
-  .pmeter.done { color: var(--pos); }
-  .pmeter.done .pm-fill { background: var(--pos); }
+  .dtext.zero { color: var(--ink-faint); }
   table.cat-table th.grp, table.cat-table td.grp { border-left: 1px solid var(--line-soft); }
   table.cat-table .grp + .grp { border-left: 0; }
   @media (max-width: 900px) {
@@ -857,8 +852,6 @@
     table.cat-table .dlt-abs { display: none; }
     table.cat-table.rep-cats { min-width: 0; }
     table.cat-table.rep-cats .xtra { display: none; }
-    .pm-track { width: 30px; }
-    table.leaderboard .pm-track { display: none; }
     table.cat-table.rep-cats th, table.cat-table.rep-cats td { padding-left: 6px; padding-right: 6px; }
     table.cat-table.rep-cats td.cat-name, table.cat-table.rep-cats th:first-child { padding-left: 12px; white-space: normal; }
     .pace-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -3263,13 +3256,13 @@ function pChip(cur, prior, y, by = y - 1) {
   if (!pYears().includes(by)) return '';
   return pIsYtd(y) ? shareChip(cur, prior, by) : chipYoY(cur, prior);
 }
-// The year to date against another year's full total is progress toward it, never growth: a bar that fills up.
-function pMeter(cur, full, by, plain) {
-  if (cur === null || cur === undefined || !full) return naSpan;
-  const pct = Math.round(cur / full * 100), left = full - cur;
-  const tip = `${plain(cur)} so far · ${plain(full)} in all of ${by} · ${left > 0 ? plain(left) + ' to go' : left < 0 ? plain(-left) + ' past it' : 'matched'}`;
-  return `<span class="pmeter${pct >= 100 ? ' done' : ''}" title="${tip}"><span class="pm-track"><span class="pm-fill" style="width:${Math.max(0, Math.min(100, pct))}%"></span></span>${pct}%</span>`;
+// In the tables a count compares as a plain difference ("+16" / "−7") and CPO as a percent change.
+function pDiff(cur, prior) {
+  if (cur === null || cur === undefined || prior === null || prior === undefined) return naSpan;
+  const d = Math.round(cur - prior);
+  return `<span class="dtext ${d > 0 ? 'pos' : d < 0 ? 'neg' : 'zero'}">${d > 0 ? '+' : d < 0 ? '−' : ''}${Math.abs(d).toLocaleString()}</span>`;
 }
+const pChange = (cur, prior, m) => m === 'cpo' ? chipYoY(cur, prior) : pDiff(cur, prior);
 const pRatio = (line, y, m, of, by = y - 1) => { const c = pVal(of(line, y), m), p = pVal(of(line, by), m); return (c !== null && p !== null && p > 0) ? c / p : null; };
 // For scale next to a year-to-date figure: how much of last year's Total CPO the team had in by the
 // last campaign that closed before the report was sent (same reps on both sides).
@@ -3384,7 +3377,7 @@ function renderProductLeaderboard() {
     <th style="text-align:center;">#</th><th>Rep</th><th class="bar-h"></th>
     ${COLS.map(head).join('')}
     ${py ? `<th class="num yr yr-old">${py}<span class="th-sub opt">${sortName}, full year</span></th>
-    <th class="num g-col">${pIsYtd(y) ? `<span class="lg-only">Toward ${py} total</span><span class="sm-only">% of '${String(py).slice(2)}</span>` : `vs <span class="lg-only">${py}</span><span class="sm-only">'${String(py).slice(2)}</span>`}</th>` : ''}
+    <th class="num g-col">${m === 'cpo' ? '%' : '+/−'} vs <span class="lg-only">${py}</span><span class="sm-only">'${String(py).slice(2)}</span></th>` : ''}
   </tr></thead><tbody>`;
   const cells = x => COLS.map(([k]) => `<td class="num${k === m ? ' cur' : ''}${k === 'orders' ? ' yr-old' : ''}">${pNum(pVal(x.cur, k), k)}</td>`).join('');
   ranked.forEach((x, i) => {
@@ -3394,7 +3387,7 @@ function renderProductLeaderboard() {
       <td class="name">${x.r.name}${isSelf ? '<span class="viewing-dot"></span>' : ''}</td>
       <td class="bar-cell"><div class="lb-track"><div class="lb-fill" style="width:${x.cur[m] > 0 ? Math.max(1.5, x.cur[m] / maxVal * 100).toFixed(1) : 0}%"></div></div></td>
       ${cells(x)}
-      ${py ? `<td class="num prior yr-old">${pNum(pVal(x.prior, m), m)}</td><td class="growth-cell">${pIsYtd(y) ? pMeter(x.cur[m], pVal(x.prior, m), py, v => pPlain(v, m, line)) : chipYoY(x.cur[m], pVal(x.prior, m))}</td>` : ''}
+      ${py ? `<td class="num prior yr-old">${pNum(pVal(x.prior, m), m)}</td><td class="growth-cell">${pChange(x.cur[m], pVal(x.prior, m), m)}</td>` : ''}
     </tr>`;
   });
   missing.forEach(x => {
@@ -3473,16 +3466,16 @@ function renderRepProducts() {
     const i = all.findIndex(x => x.n === r.name);
     return i < 0 ? naSpan : `<span title="By ${pMeasureName(line.lead, line)}, ${pYearLabel(y)}">#${i + 1}<span style="color:var(--ink-faint)"> of ${all.length}</span></span>`;
   };
-  // Units and CPO side by side: the Compare to year, the year shown, and how the two compare.
-  const cmpHead = ytd ? `Toward ${by}` : `vs ${by}`;
-  const group = (m, first) => (by ? `<th class="xtra mid${first ? '' : ' grp'}">${by}<span class="th-sub">${m}</span></th>` : '') +
-    `<th class="${first ? '' : 'grp'}">${pYearLabel(y)}<span class="th-sub">${m}</span></th>` +
-    (by ? `<th class="${first ? '' : 'xtra'}">${cmpHead}<span class="th-sub">${m}</span></th>` : '');
+  // Units and CPO side by side: the Compare to year, the year shown, then +/- units and % change in CPO.
+  const cmpHead = m => `${m === 'cpo' ? '%' : '+/−'} vs ${by}`;
+  const group = (m, name, first) => (by ? `<th class="xtra mid${first ? '' : ' grp'}">${by}<span class="th-sub">${name}</span></th>` : '') +
+    `<th class="${first ? '' : 'grp'}">${pYearLabel(y)}<span class="th-sub">${name}</span></th>` +
+    (by ? `<th class="${first ? '' : 'xtra'}">${cmpHead(m)}<span class="th-sub">${name}</span></th>` : '');
   const cells = (l, m, first) => {
     const cur = pVal(mine(l, y), m), prior = by ? pVal(mine(l, by), m) : null;
     return (by ? `<td class="prior xtra mid${first ? '' : ' grp'}">${pNum(prior, m)}</td>` : '') +
       `<td class="cur${first ? '' : ' grp'}">${pNum(cur, m)}</td>` +
-      (by ? `<td class="${first ? '' : 'xtra'}">${ytd ? pMeter(cur, prior, by, v => pPlain(v, m, l)) : chipYoY(cur, prior)}</td>` : '');
+      (by ? `<td class="${first ? '' : 'xtra'}">${pChange(cur, prior, m)}</td>` : '');
   };
   const rows = PRODUCT_LINES.map(l => {
     const empty = years.every(yy => !pVal(mine(l, yy), 'qty') && !pVal(mine(l, yy), 'cpo'));
@@ -3498,12 +3491,12 @@ function renderRepProducts() {
     <table class="cat-table rep-cats">
       <thead><tr>
         <th>Product line</th>
-        ${group('units', true)}${group('CPO', false)}
+        ${group('qty', 'units', true)}${group('cpo', 'CPO', false)}
         <th class="xtra">Team rank<i class="info-i" title="Rank among the core-team reps in the report for ${pYearLabel(y)}: by units for sets, flatware and cookware, by CPO for upgrades and the gift channels">i</i></th>
       </tr></thead>
       <tbody>${rows}</tbody>
     </table>`;
-  noteEl.textContent = (ytd && by ? `Toward ${by}: how much of ${by}'s full-year total has been reached so far in ${y}. ` : '') + 'Upgrades = Ultimate + Signature blocks.';
+  noteEl.textContent = (ytd && by ? `${y} is year to date; ${by} is the full year. ` : '') + 'Upgrades = Ultimate + Signature blocks.';
 }
 
 // The Products tab only exists when the intake has published a product report.
