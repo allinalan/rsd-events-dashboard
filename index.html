@@ -719,6 +719,18 @@
   .pl-fill { display: block; height: 100%; background: var(--ember); opacity: 0.42; border-radius: 3px; }
   .pl-row.cur .pl-fill { opacity: 1; }
   .pl-note { margin: 0 0 30px; }
+  /* progress toward another year's total: the track is that year's full figure, the fill is this year so far */
+  .pmeter { display: inline-flex; align-items: center; gap: 8px; font-family: var(--mono); font-size: 11.5px; font-weight: 600; color: var(--ink-soft); white-space: nowrap; }
+  .pm-track { width: 54px; height: 6px; background: var(--line-soft); border-radius: 3px; overflow: hidden; }
+  .pm-fill { display: block; height: 100%; background: var(--ink-faint); border-radius: 3px; }
+  .pmeter.done { color: var(--pos); }
+  .pmeter.done .pm-fill { background: var(--pos); }
+  table.cat-table th.grp, table.cat-table td.grp { border-left: 1px solid var(--line-soft); }
+  table.cat-table .grp + .grp { border-left: 0; }
+  @media (max-width: 900px) {
+    table.cat-table.rep-cats .mid { display: none; }
+    table.cat-table.rep-cats .mid + .grp { border-left: 1px solid var(--line-soft); }
+  }
   /* sortable column heads on the product leaderboard */
   .th-sort {
     appearance: none; border: 0; background: transparent; cursor: pointer; padding: 6px 0 6px 6px; margin: -6px 0;
@@ -845,6 +857,8 @@
     table.cat-table .dlt-abs { display: none; }
     table.cat-table.rep-cats { min-width: 0; }
     table.cat-table.rep-cats .xtra { display: none; }
+    .pm-track { width: 30px; }
+    table.leaderboard .pm-track { display: none; }
     table.cat-table.rep-cats th, table.cat-table.rep-cats td { padding-left: 6px; padding-right: 6px; }
     table.cat-table.rep-cats td.cat-name, table.cat-table.rep-cats th:first-child { padding-left: 12px; white-space: normal; }
     .pace-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -1126,7 +1140,7 @@
         <h2>Product Mix</h2></div>
       <div class="sec-tools">
         <span class="scope" id="rp-scope"></span>
-        <div class="pills" id="rp-measure" aria-label="Show"></div>
+        <div class="sec-tools" id="rp-tools"></div>
       </div>
     </div>
     <div class="cat-table-wrap" id="rep-products"></div>
@@ -1219,7 +1233,8 @@ const STATE = {
   selectedRep: 'Alan Hernandez',
   chartMetric: null,                              // null = follow the mode (Total CPO by year, Event CPO by campaign)
   pYear: META.products ? (META.products.ytd_year || META.products.years[META.products.years.length - 1]) : null,  // Products: the year shown
-  pMeasure: 'auto',                               // Products: 'auto' = each line's own headline number, or qty / cpo / orders
+  pBench: null,                                   // Products: the year it is compared with; null = the year before
+  pMeasure: 'auto',                                   // Products: 'auto' = each line's own headline number, or qty / cpo / orders
   pLine: 'ULT',                                   // Products leaderboard: the line it ranks
   pSort: null,                                    // Products leaderboard: qty / cpo / orders once a column head is tapped; null = follow Show
 };
@@ -3171,8 +3186,8 @@ function renderHeader() {
     const p = campPeriodSel(), c = compareFor(p, 'event');
     txt = `${p.long}${c ? ' · vs ' + c.period.year : ''}`;
   } else if (STATE.view === 'products') {
-    const y = STATE.pYear;
-    txt = `Products · ${pYearLabel(y)}${pYears().includes(y - 1) ? ' · vs ' + (y - 1) : ''}`;
+    const y = STATE.pYear, by = pBench(y);
+    txt = `Products · ${pYearLabel(y)}${by ? ' · vs ' + by : ''}`;
   } else if (STATE.view === 'total') {
     const sp = seasonP();
     txt = `${STATE.season} season${STATE.bench ? ' · vs ' + STATE.bench : ''}${STATE.bench && !sp.closed ? (STATE.samePoint ? ' · same point ' + thruText(sp.k) : ' · full years') : ''}`;
@@ -3235,17 +3250,32 @@ function teamProduct(line, y) {
 const pVal = (s, m) => s ? s[m] : null;
 const pNum = (v, m) => (v === null || v === undefined) ? naSpan : m === 'cpo' ? fmtMoneyFit(v) : Math.round(v).toLocaleString();
 const pPlain = (v, m, line) => (v === null || v === undefined) ? '—' : m === 'cpo' ? fmtCurrency(v) + ' CPO' : `${Math.round(v).toLocaleString()} ${pMeasureName(m, line)}`;
-// A year against the year before it: growth for a full year, "% of last year" for the year to date.
-function pChip(cur, prior, y) {
-  if (!pYears().includes(y - 1)) return '';
-  return pIsYtd(y) ? shareChip(cur, prior, y - 1) : chipYoY(cur, prior);
+// What the Products year is compared with: the year before it, unless another earlier year is picked.
+function pBench(y = STATE.pYear) {
+  const earlier = pYears().filter(x => x < y);
+  return !earlier.length ? null : earlier.includes(STATE.pBench) ? STATE.pBench : earlier[earlier.length - 1];
 }
-const pRatio = (line, y, m, of) => { const c = pVal(of(line, y), m), p = pVal(of(line, y - 1), m); return (c !== null && p !== null && p > 0) ? c / p : null; };
+const pEarlier = y => pYears().filter(x => x < y).reverse();   // newest first, for the Compare to menu
+function setProductYear(y) { STATE.pYear = y; STATE.pBench = null; renderProductsView(); renderRepProducts(); renderHeader(); }
+function setProductBench(y) { STATE.pBench = y; renderProductsView(); renderRepProducts(); renderHeader(); }
+// One year against another: growth between two full years, "% of that year" for the year to date.
+function pChip(cur, prior, y, by = y - 1) {
+  if (!pYears().includes(by)) return '';
+  return pIsYtd(y) ? shareChip(cur, prior, by) : chipYoY(cur, prior);
+}
+// The year to date against another year's full total is progress toward it, never growth: a bar that fills up.
+function pMeter(cur, full, by, plain) {
+  if (cur === null || cur === undefined || !full) return naSpan;
+  const pct = Math.round(cur / full * 100), left = full - cur;
+  const tip = `${plain(cur)} so far · ${plain(full)} in all of ${by} · ${left > 0 ? plain(left) + ' to go' : left < 0 ? plain(-left) + ' past it' : 'matched'}`;
+  return `<span class="pmeter${pct >= 100 ? ' done' : ''}" title="${tip}"><span class="pm-track"><span class="pm-fill" style="width:${Math.max(0, Math.min(100, pct))}%"></span></span>${pct}%</span>`;
+}
+const pRatio = (line, y, m, of, by = y - 1) => { const c = pVal(of(line, y), m), p = pVal(of(line, by), m); return (c !== null && p !== null && p > 0) ? c / p : null; };
 // For scale next to a year-to-date figure: how much of last year's Total CPO the team had in by the
 // last campaign that closed before the report was sent (same reps on both sides).
-function pYardstick() {
-  if (!PRODUCTS || !PRODUCTS.ytd_year) return null;
-  const py = PRODUCTS.ytd_year - 1, md = PRODUCTS.as_of.slice(5);
+function pYardstick(py) {
+  if (!PRODUCTS || !PRODUCTS.ytd_year || !py) return null;
+  const md = PRODUCTS.as_of.slice(5);
   const k = md > '08-31' ? 2 : md > '04-30' ? 1 : 0;
   if (!k || !CAMP_YEARS.includes(py) || !yearHasFY(py) || salesThruK(py) < k) return null;
   let part = 0, full = 0;
@@ -3261,23 +3291,26 @@ const pMeasurePills = () => P_MEASURES.map(([k, l]) =>
   `<button type="button" data-m="${k}" class="${STATE.pMeasure === k ? 'active' : ''}" aria-pressed="${STATE.pMeasure === k}"${k === 'auto' ? ' title="Units for sets, flatware and cookware; CPO for upgrades and the gift channels"' : ''}>${l}</button>`).join('');
 
 function renderProductControls() {
-  const el = document.getElementById('p-ctl'), y = STATE.pYear;
-  const prior = pYears().includes(y - 1) ? y - 1 : null;
+  const el = document.getElementById('p-ctl'), y = STATE.pYear, by = pBench(y);
   el.innerHTML = `
     <div class="cb-group cb-season"><span class="cb-k">Year</span><select class="ctl ctl-strong" id="p-year" aria-label="Year">${pYears().slice().reverse().map(yy =>
       `<option value="${yy}"${yy === y ? ' selected' : ''}>${pYearLabel(yy)}</option>`).join('')}</select></div>
-    <div class="cb-group cb-bench"><span class="cb-k">Against</span><span class="cb-v">${prior ? `${prior} full year` : '<span title="Nothing earlier in the report">—</span>'}</span></div>
+    <div class="cb-group cb-bench"><span class="cb-k">Compare to</span>${by
+      ? `<select class="ctl" id="p-bench" aria-label="Compare to">${pEarlier(y).map(yy => `<option value="${yy}"${yy === by ? ' selected' : ''}>${yy}${pIsYtd(y) ? ' full year' : ''}</option>`).join('')}</select>`
+      : '<span class="cb-v" title="Nothing earlier in the report">—</span>'}</div>
     <div class="cb-group cb-data"><span class="cb-k">Report of</span><span class="cb-v">${pAsOf()} · ${PRODUCTS.reps} of ${MASTER.length} reps</span></div>
     <div class="cb-spacer"></div>
     <div class="cb-group cb-show"><span class="cb-k">Show</span><div class="pills" id="p-measure" aria-label="Show">${pMeasurePills()}</div></div>`;
-  document.getElementById('p-year').onchange = e => { STATE.pYear = +e.target.value; renderProductsView(); renderHeader(); };
+  document.getElementById('p-year').onchange = e => setProductYear(+e.target.value);
+  const bench = document.getElementById('p-bench');
+  if (bench) bench.onchange = e => setProductBench(+e.target.value);
   el.querySelectorAll('#p-measure button').forEach(b => b.onclick = () => setProductMeasure(b.dataset.m));
 }
 
 function renderProductHeadline() {
-  const el = document.getElementById('p-headline'), y = STATE.pYear, py = y - 1;
-  if (!pYears().includes(py)) { el.innerHTML = `<span class="hl-main">${pYearLabel(y)}</span><span class="hl-sub">the first year in the report: nothing earlier to compare with</span>`; return; }
-  const rows = PRODUCT_LINES.map(l => ({ l, r: pRatio(l, y, pMeasureFor(l), teamProduct) })).filter(x => x.r !== null).sort((a, b) => b.r - a.r);
+  const el = document.getElementById('p-headline'), y = STATE.pYear, py = pBench(y);
+  if (!py) { el.innerHTML = `<span class="hl-main">${pYearLabel(y)}</span><span class="hl-sub">the first year in the report: nothing earlier to compare with</span>`; return; }
+  const rows = PRODUCT_LINES.map(l => ({ l, r: pRatio(l, y, pMeasureFor(l), teamProduct, py) })).filter(x => x.r !== null).sort((a, b) => b.r - a.r);
   if (!rows.length) { el.innerHTML = `<span class="hl-main">${pYearLabel(y)}</span><span class="hl-sub">No figure to compare with ${py}.</span>`; return; }
   const pct = r => Math.round(r * 100) + '%', top = rows[0], last = rows[rows.length - 1];
   const names = xs => xs.length > 1 ? xs.slice(0, -1).join(', ') + ' and ' + xs[xs.length - 1] : xs[0];
@@ -3285,9 +3318,9 @@ function renderProductHeadline() {
   if (pIsYtd(y)) {
     const past = rows.filter(x => x.r >= 1);
     main = past.length
-      ? `${names(past.map(x => x.l.label))} ${past.length > 1 ? 'have' : 'has'} already passed all of ${py}`
-      : `${top.l.label} is furthest along <span class="hl-delta">${pct(top.r)} of ${py}</span>`;
-    sub = `% of ${py}'s full year · furthest along: ${rows.slice(0, 3).map(x => `${x.l.label} ${pct(x.r)}`).join(', ')}` +
+      ? `${names(past.map(x => x.l.label))} ${past.length > 1 ? 'have' : 'has'} already passed ${py}'s total`
+      : `${top.l.label} is furthest along <span class="hl-delta">${pct(top.r)}</span> of the way to ${py}'s total`;
+    sub = `${y} so far against ${py}'s full-year total · furthest along: ${rows.slice(0, 3).map(x => `${x.l.label} ${pct(x.r)}`).join(', ')}` +
       ` · furthest behind: ${last.l.label} ${pct(last.r)}`;
   } else {
     const g = r => `${r >= 1 ? '+' : '−'}${Math.abs((r - 1) * 100).toFixed(0)}%`, up = rows.filter(x => x.r > 1).length;
@@ -3298,19 +3331,21 @@ function renderProductHeadline() {
 }
 
 function renderProductCards() {
-  const y = STATE.pYear, years = pYears().slice().reverse();   // newest first
+  const y = STATE.pYear, by = pBench(y), years = pYears().slice().reverse();   // newest first
   document.getElementById('p-cards').innerHTML = PRODUCT_LINES.map(l => {
     const m = pMeasureFor(l), cur = teamProduct(l, y);
     const max = Math.max(1, ...years.map(yy => pVal(teamProduct(l, yy), m) || 0));
     const rest = ['qty', 'cpo', 'orders'].filter(k => k !== m);
     const rows = years.map(yy => {
-      const s = teamProduct(l, yy), v = pVal(s, m), pv = pVal(teamProduct(l, yy - 1), m);
+      // The year shown compares with the Compare to year; the others with the year before them.
+      const against = yy === y ? by : yy - 1;
+      const s = teamProduct(l, yy), v = pVal(s, m), pv = pVal(teamProduct(l, against), m);
       const tip = s ? `${l.label} · ${pYearLabel(yy)}: ${['qty', 'cpo', 'orders'].map(k => pPlain(s[k], k, l)).join(' · ')}` : `${l.label} · ${pYearLabel(yy)}: not in the report`;
       return `<div class="pl-row${yy === y ? ' cur' : ''}" title="${tip}">
         <span class="k">${pYearLabel(yy)}</span>
         <span class="pl-track"><span class="pl-fill" style="width:${v > 0 ? Math.max(1.5, v / max * 100).toFixed(1) : 0}%"></span></span>
         <span class="v">${pNum(v, m)}</span>
-        <span class="c">${pChip(v, pv, yy)}</span>
+        <span class="c">${pChip(v, pv, yy, against)}</span>
       </div>`;
     }).join('');
     return `<div class="kcard pl-card">
@@ -3320,7 +3355,7 @@ function renderProductCards() {
       <div class="kc-rows">${rows}</div>
     </div>`;
   }).join('');
-  const ys = pIsYtd(y) ? pYardstick() : null;
+  const ys = pIsYtd(y) ? pYardstick(by) : null;
   document.getElementById('p-note').textContent =
     (ys ? `For scale: ${Math.round(ys.share * 100)}% of ${ys.py}'s Total CPO was in by the end of C${ys.k} (${CAMP_ENDS[ys.k]}). ` : '') +
     'Business and Realtor Gifts can include items counted in the other lines, so the lines are never added together.';
@@ -3328,7 +3363,7 @@ function renderProductCards() {
 
 function renderProductLeaderboard() {
   const line = PRODUCT_LINES.find(l => l.key === STATE.pLine) || PRODUCT_LINES[0];
-  const y = STATE.pYear, years = pYears(), py = years.includes(y - 1) ? y - 1 : null;
+  const y = STATE.pYear, py = pBench(y);
   // Units, CPO and orders sit side by side; a tap on a column head sorts by it, largest first.
   // Until a head is tapped the board follows Show (each line's own headline number on Headline).
   const m = STATE.pSort || pMeasureFor(line);
@@ -3349,7 +3384,7 @@ function renderProductLeaderboard() {
     <th style="text-align:center;">#</th><th>Rep</th><th class="bar-h"></th>
     ${COLS.map(head).join('')}
     ${py ? `<th class="num yr yr-old">${py}<span class="th-sub opt">${sortName}, full year</span></th>
-    <th class="num g-col">${pIsYtd(y) ? `% of <span class="lg-only">${py}</span><span class="sm-only">'${String(py).slice(2)}</span>` : `vs <span class="lg-only">${py}</span><span class="sm-only">'${String(py).slice(2)}</span>`}</th>` : ''}
+    <th class="num g-col">${pIsYtd(y) ? `<span class="lg-only">Toward ${py} total</span><span class="sm-only">% of '${String(py).slice(2)}</span>` : `vs <span class="lg-only">${py}</span><span class="sm-only">'${String(py).slice(2)}</span>`}</th>` : ''}
   </tr></thead><tbody>`;
   const cells = x => COLS.map(([k]) => `<td class="num${k === m ? ' cur' : ''}${k === 'orders' ? ' yr-old' : ''}">${pNum(pVal(x.cur, k), k)}</td>`).join('');
   ranked.forEach((x, i) => {
@@ -3359,7 +3394,7 @@ function renderProductLeaderboard() {
       <td class="name">${x.r.name}${isSelf ? '<span class="viewing-dot"></span>' : ''}</td>
       <td class="bar-cell"><div class="lb-track"><div class="lb-fill" style="width:${x.cur[m] > 0 ? Math.max(1.5, x.cur[m] / maxVal * 100).toFixed(1) : 0}%"></div></div></td>
       ${cells(x)}
-      ${py ? `<td class="num prior yr-old">${pNum(pVal(x.prior, m), m)}</td><td class="growth-cell">${pChip(x.cur[m], pVal(x.prior, m), y)}</td>` : ''}
+      ${py ? `<td class="num prior yr-old">${pNum(pVal(x.prior, m), m)}</td><td class="growth-cell">${pIsYtd(y) ? pMeter(x.cur[m], pVal(x.prior, m), py, v => pPlain(v, m, line)) : chipYoY(x.cur[m], pVal(x.prior, m))}</td>` : ''}
     </tr>`;
   });
   missing.forEach(x => {
@@ -3396,49 +3431,66 @@ function renderRepProducts() {
   const sec = document.getElementById('rep-products-section');
   sec.style.display = PRODUCTS ? '' : 'none';
   if (!PRODUCTS) return;
-  const r = REPS[STATE.selectedRep], years = pYears(), last = years[years.length - 1];
+  const r = REPS[STATE.selectedRep], years = pYears(), y = STATE.pYear, by = pBench(y), ytd = pIsYtd(y);
   document.getElementById('rp-scope').textContent = `Annual · report of ${pAsOf()}`;
-  const pills = document.getElementById('rp-measure');
-  pills.innerHTML = pMeasurePills();
-  pills.querySelectorAll('button').forEach(b => b.onclick = () => setProductMeasure(b.dataset.m));
+  // Same Year / Compare to as the Products tab: last year unless another is picked.
+  const tools = document.getElementById('rp-tools');
+  tools.innerHTML = `
+    <span class="cb-group"><span class="cb-k">Year</span><select class="ctl ctl-strong" id="rp-year" aria-label="Year">${years.slice().reverse().map(yy =>
+      `<option value="${yy}"${yy === y ? ' selected' : ''}>${pYearLabel(yy)}</option>`).join('')}</select></span>
+    ${by ? `<span class="cb-group"><span class="cb-k">Compare to</span><select class="ctl" id="rp-bench" aria-label="Compare to">${pEarlier(y).map(yy =>
+      `<option value="${yy}"${yy === by ? ' selected' : ''}>${yy}</option>`).join('')}</select></span>` : ''}`;
+  document.getElementById('rp-year').onchange = e => setProductYear(+e.target.value);
+  const bench = document.getElementById('rp-bench');
+  if (bench) bench.onchange = e => setProductBench(+e.target.value);
+
   const wrap = document.getElementById('rep-products'), noteEl = document.getElementById('rp-note');
   if (!r || !r.products) {
     wrap.innerHTML = `<div class="rp-empty">${STATE.selectedRep} is not in the product report of ${pAsOf()}. The next report can add them.</div>`;
     noteEl.textContent = '';
     return;
   }
-  const mine = (line, y) => repProduct(r, line, y);
+  const mine = (line, yy) => repProduct(r, line, yy);
   // Growth-first: the best full-year step, and the line furthest along this year. A tiny base is noise.
   const floor = m => m === 'cpo' ? 1000 : 3;
   let grew = null, along = null;
   for (const l of PRODUCT_LINES) {
-    const m = pMeasureFor(l);
-    for (const y of years) {
-      const c = pVal(mine(l, y), m), p = pVal(mine(l, y - 1), m);
+    const m = l.lead;
+    for (const yy of years) {
+      const c = pVal(mine(l, yy), m), p = pVal(mine(l, yy - 1), m);
       if (c === null || p === null || p < floor(m)) continue;
-      const x = { l, y, m, c, p, r: c / p };
-      if (pIsYtd(y)) { if (!along || x.r > along.r) along = x; }
+      const x = { l, y: yy, m, c, p, r: c / p };
+      if (pIsYtd(yy)) { if (!along || x.r > along.r) along = x; }
       else if (x.r > 1 && (!grew || x.r > grew.r)) grew = x;
     }
   }
   const says = [];
   if (grew) says.push(`Biggest growth in ${grew.y}: <strong>${grew.l.label}</strong>, ${pPlain(grew.c, grew.m, grew.l)} from ${pPlain(grew.p, grew.m, grew.l).replace(/ [a-zA-Z]+$/, '')} (+${((grew.r - 1) * 100).toFixed(0)}%).`);
-  if (along) says.push(`Furthest along in ${along.y}: <strong>${along.l.label}</strong>, ${along.r >= 1 ? 'already ' : ''}${Math.round(along.r * 100)}% of ${along.y - 1}.`);
-  const chipCols = years.filter(y => years.includes(y - 1));
-  const rank = (line, m) => {
-    const all = masterListReps().map(x => ({ n: x.name, v: pVal(repProduct(x, line, last), m) })).filter(x => x.v !== null).sort((a, b) => b.v - a.v);
+  if (along) says.push(`Furthest along in ${along.y}: <strong>${along.l.label}</strong>, ${along.r >= 1 ? `already past ${along.y - 1}'s total` : `${Math.round(along.r * 100)}% of the way to ${along.y - 1}'s total`}.`);
+  // Team rank: each line on its own headline number (units for sets, flatware and cookware; CPO for the rest).
+  const rank = line => {
+    const all = masterListReps().map(x => ({ n: x.name, v: pVal(repProduct(x, line, y), line.lead) })).filter(x => x.v !== null).sort((a, b) => b.v - a.v);
     const i = all.findIndex(x => x.n === r.name);
-    return i < 0 ? naSpan : `#${i + 1}<span style="color:var(--ink-faint)"> of ${all.length}</span>`;
+    return i < 0 ? naSpan : `<span title="By ${pMeasureName(line.lead, line)}, ${pYearLabel(y)}">#${i + 1}<span style="color:var(--ink-faint)"> of ${all.length}</span></span>`;
+  };
+  // Units and CPO side by side: the Compare to year, the year shown, and how the two compare.
+  const cmpHead = ytd ? `Toward ${by}` : `vs ${by}`;
+  const group = (m, first) => (by ? `<th class="xtra mid${first ? '' : ' grp'}">${by}<span class="th-sub">${m}</span></th>` : '') +
+    `<th class="${first ? '' : 'grp'}">${pYearLabel(y)}<span class="th-sub">${m}</span></th>` +
+    (by ? `<th class="${first ? '' : 'xtra'}">${cmpHead}<span class="th-sub">${m}</span></th>` : '');
+  const cells = (l, m, first) => {
+    const cur = pVal(mine(l, y), m), prior = by ? pVal(mine(l, by), m) : null;
+    return (by ? `<td class="prior xtra mid${first ? '' : ' grp'}">${pNum(prior, m)}</td>` : '') +
+      `<td class="cur${first ? '' : ' grp'}">${pNum(cur, m)}</td>` +
+      (by ? `<td class="${first ? '' : 'xtra'}">${ytd ? pMeter(cur, prior, by, v => pPlain(v, m, l)) : chipYoY(cur, prior)}</td>` : '');
   };
   const rows = PRODUCT_LINES.map(l => {
-    const m = pMeasureFor(l), vals = Object.fromEntries(years.map(y => [y, pVal(mine(l, y), m)]));
-    const empty = years.every(y => !vals[y]);
-    const tip = years.map(y => { const s = mine(l, y); return `${pYearLabel(y)}: ${s ? ['qty', 'cpo', 'orders'].map(k => pPlain(s[k], k, l)).join(' · ') : 'not in the report'}`; }).join('\n');
+    const empty = years.every(yy => !pVal(mine(l, yy), 'qty') && !pVal(mine(l, yy), 'cpo'));
+    const tip = years.map(yy => { const s = mine(l, yy); return `${pYearLabel(yy)}: ${s ? ['qty', 'cpo', 'orders'].map(k => pPlain(s[k], k, l)).join(' · ') : 'not in the report'}`; }).join('\n');
     return `<tr class="${empty ? 'empty' : ''}" title="${tip}">
-      <td class="cat-name">${l.label}<span class="lb-why">${pMeasureName(m, l)}</span></td>
-      ${years.map((y, i) => `<td class="${y === last ? 'cur' : 'prior'}${years.length > 2 && i === 0 ? ' xtra' : ''}">${pNum(vals[y], m)}</td>`).join('')}
-      ${chipCols.map(y => `<td class="${y === last ? '' : 'xtra'}">${pChip(vals[y], vals[y - 1], y)}</td>`).join('')}
-      <td class="xtra">${rank(l, m)}</td>
+      <td class="cat-name">${l.label}<span class="lb-why">${l.unit}</span></td>
+      ${cells(l, 'qty', true)}${cells(l, 'cpo', false)}
+      <td class="xtra">${rank(l)}</td>
     </tr>`;
   }).join('');
   wrap.innerHTML = `
@@ -3446,13 +3498,12 @@ function renderRepProducts() {
     <table class="cat-table rep-cats">
       <thead><tr>
         <th>Product line</th>
-        ${years.map((y, i) => `<th class="${years.length > 2 && i === 0 ? 'xtra' : ''}">${pYearLabel(y)}</th>`).join('')}
-        ${chipCols.map(y => `<th class="${y === last ? '' : 'xtra'}">${pIsYtd(y) ? `% of ${y - 1}` : `${y} vs ${y - 1}`}</th>`).join('')}
-        <th class="xtra">Team rank<i class="info-i" title="Rank among the core-team reps in the report, on the ${pYearLabel(last)} figure">i</i></th>
+        ${group('units', true)}${group('CPO', false)}
+        <th class="xtra">Team rank<i class="info-i" title="Rank among the core-team reps in the report for ${pYearLabel(y)}: by units for sets, flatware and cookware, by CPO for upgrades and the gift channels">i</i></th>
       </tr></thead>
       <tbody>${rows}</tbody>
     </table>`;
-  noteEl.textContent = 'Upgrades = Ultimate + Signature blocks.';
+  noteEl.textContent = (ytd && by ? `Toward ${by}: how much of ${by}'s full-year total has been reached so far in ${y}. ` : '') + 'Upgrades = Ultimate + Signature blocks.';
 }
 
 // The Products tab only exists when the intake has published a product report.

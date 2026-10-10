@@ -21,7 +21,7 @@ launchd `com.allinalan.rsd-intake`, Jan/May/Sep 8). It opens a PR here; merging 
 
 - 7-bucket taxonomy: Event (Traditional), Service Event, Industry Event, Realtor, Mall, Federal, Non-Event CPO
 - Total = a year (closed year: year-end Total Sales; open year: C1 onward); Campaigns = one campaign vs the same campaign in other years
-- Products is annual and comes from a separate report (`meta.products`, `reps[name].products`); its year to date is shown as a share of last year, never as growth
+- Products is annual and comes from a separate report (`meta.products`, `reps[name].products`); it compares with the year before unless Compare to picks another, and its year to date is shown as progress toward that year's full total, never as growth
 - Event sales exist for every campaign; Total / Non-Event only where a Total Sales workbook (or the year-end figure) exists — never shown as $0
 - Annual scope for shifts and pacing baseline
 - Per-rep empirical pacing multipliers, capped to [×2.0, ×4.5]
