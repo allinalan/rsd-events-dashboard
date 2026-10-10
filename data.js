@@ -4953,6 +4953,56 @@ window.DASHBOARD_DATA = {
             "total_sales": null,
             "source": "division-pass"
           },
+          "2": {
+            "buckets": {
+              "Event (Traditional)": {
+                "cpo": null,
+                "orders": null,
+                "events": null
+              },
+              "Service Event": {
+                "cpo": null,
+                "orders": null,
+                "events": null
+              },
+              "Industry Event": {
+                "cpo": null,
+                "orders": null,
+                "events": null
+              },
+              "Realtor": {
+                "cpo": null,
+                "orders": null,
+                "events": null
+              },
+              "Mall": {
+                "cpo": null,
+                "orders": null,
+                "events": null
+              },
+              "Federal": {
+                "cpo": null,
+                "orders": null,
+                "events": null
+              },
+              "Non-Event CPO": {
+                "cpo": null,
+                "orders": null,
+                "events": null
+              }
+            },
+            "total_event": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "total_sales": {
+              "cpo": 179,
+              "orders": 1,
+              "events": 0
+            },
+            "source": "no-events"
+          },
           "3": {
             "buckets": {
               "Event (Traditional)": {
@@ -14600,9 +14650,9 @@ window.DASHBOARD_DATA = {
                 "events": null
               },
               "Non-Event CPO": {
-                "cpo": null,
-                "orders": null,
-                "events": null
+                "cpo": 2358,
+                "orders": 6,
+                "events": 0
               }
             },
             "total_event": {
@@ -14610,7 +14660,11 @@ window.DASHBOARD_DATA = {
               "orders": 1,
               "events": 1
             },
-            "total_sales": null,
+            "total_sales": {
+              "cpo": 2979,
+              "orders": 7,
+              "events": 0
+            },
             "source": "rep-pass"
           },
           "3": {
@@ -14714,6 +14768,56 @@ window.DASHBOARD_DATA = {
               "events": 0
             },
             "source": "rep-pass"
+          },
+          "2": {
+            "buckets": {
+              "Event (Traditional)": {
+                "cpo": null,
+                "orders": null,
+                "events": null
+              },
+              "Service Event": {
+                "cpo": null,
+                "orders": null,
+                "events": null
+              },
+              "Industry Event": {
+                "cpo": null,
+                "orders": null,
+                "events": null
+              },
+              "Realtor": {
+                "cpo": null,
+                "orders": null,
+                "events": null
+              },
+              "Mall": {
+                "cpo": null,
+                "orders": null,
+                "events": null
+              },
+              "Federal": {
+                "cpo": null,
+                "orders": null,
+                "events": null
+              },
+              "Non-Event CPO": {
+                "cpo": null,
+                "orders": null,
+                "events": null
+              }
+            },
+            "total_event": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "total_sales": {
+              "cpo": 1929,
+              "orders": 3,
+              "events": 0
+            },
+            "source": "no-events"
           },
           "3": {
             "buckets": {
