@@ -721,6 +721,16 @@
   .pl-fill { display: block; height: 100%; background: var(--ember); opacity: 0.42; border-radius: 3px; }
   .pl-row.cur .pl-fill { opacity: 1; }
   .pl-note { margin: 0 0 30px; }
+  /* sortable column heads on the product leaderboard */
+  .th-sort {
+    appearance: none; border: 0; background: transparent; cursor: pointer; padding: 6px 0 6px 6px; margin: -6px 0;
+    font: inherit; letter-spacing: inherit; text-transform: inherit; color: inherit; white-space: nowrap;
+  }
+  .th-sort:hover { color: var(--ink); }
+  .th-sort.on { color: var(--ember); }
+  .th-arrow { display: inline-block; margin-left: 4px; font-size: 8.5px; opacity: 0.55; }
+  .th-sort.on .th-arrow { opacity: 1; }
+  .lb-foot strong { font-weight: 600; color: var(--ink-soft); }
   .rp-empty { padding: 18px 20px; font-family: var(--mono); font-size: 11.5px; color: var(--ink-faint); }
   @media (max-width: 1000px) { .pl-cards { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
   @media (max-width: 680px) {
@@ -1231,6 +1241,7 @@ const STATE = {
   pYear: META.products ? (META.products.ytd_year || META.products.years[META.products.years.length - 1]) : null,  // Products: the year shown
   pMeasure: 'auto',                               // Products: 'auto' = each line's own headline number, or qty / cpo / orders
   pLine: 'ULT',                                   // Products leaderboard: the line it ranks
+  pSort: null,                                    // Products leaderboard: qty / cpo / orders once a column head is tapped; null = follow Show
 };
 if (!REPS[STATE.selectedRep]) STATE.selectedRep = MASTER[0];
 
@@ -3339,7 +3350,7 @@ function pYardstick() {
   }
   return full > 0 ? { k, py, share: part / full } : null;
 }
-function setProductMeasure(m) { STATE.pMeasure = m; renderProductsView(); renderRepProducts(); }
+function setProductMeasure(m) { STATE.pMeasure = m; STATE.pSort = null; renderProductsView(); renderRepProducts(); }
 const pMeasurePills = () => P_MEASURES.map(([k, l]) =>
   `<button type="button" data-m="${k}" class="${STATE.pMeasure === k ? 'active' : ''}" aria-pressed="${STATE.pMeasure === k}"${k === 'auto' ? ' title="Units for sets, flatware and cookware; CPO for upgrades and the gift channels"' : ''}>${l}</button>`).join('');
 
@@ -3411,43 +3422,51 @@ function renderProductCards() {
 
 function renderProductLeaderboard() {
   const line = PRODUCT_LINES.find(l => l.key === STATE.pLine) || PRODUCT_LINES[0];
-  const m = pMeasureFor(line), y = STATE.pYear, years = pYears(), py = years.includes(y - 1) ? y - 1 : null;
+  const y = STATE.pYear, years = pYears(), py = years.includes(y - 1) ? y - 1 : null;
+  // Units, CPO and orders sit side by side; a tap on a column head sorts by it, largest first.
+  // Until a head is tapped the board follows Show (each line's own headline number on Headline).
+  const m = STATE.pSort || pMeasureFor(line);
+  const COLS = [['qty', line.unit.charAt(0).toUpperCase() + line.unit.slice(1)], ['cpo', 'CPO'], ['orders', 'Orders']];
+  const sortName = COLS.find(c => c[0] === m)[1];
   const sel = document.getElementById('p-lb-line');
   sel.innerHTML = PRODUCT_LINES.map(l => `<option value="${l.key}"${l.key === line.key ? ' selected' : ''}>${l.label}</option>`).join('');
   sel.onchange = e => { STATE.pLine = e.target.value; renderProductLeaderboard(); };
-  const rows = masterListReps().map(r => ({ r, vals: Object.fromEntries(years.map(yy => [yy, pVal(repProduct(r, line, yy), m)])) }));
-  const ranked = rows.filter(x => x.vals[y] !== null).sort((a, c) => c.vals[y] - a.vals[y] || a.r.name.localeCompare(c.r.name));
-  const missing = rows.filter(x => x.vals[y] === null).sort((a, c) => a.r.name.localeCompare(c.r.name));
-  const maxVal = Math.max(1, ...ranked.map(x => x.vals[y]));
+  const rows = masterListReps().map(r => ({ r, cur: repProduct(r, line, y), prior: py ? repProduct(r, line, py) : null }));
+  const ranked = rows.filter(x => x.cur).sort((a, c) => c.cur[m] - a.cur[m] || c.cur.cpo - a.cur.cpo || a.r.name.localeCompare(c.r.name));
+  const missing = rows.filter(x => !x.cur).sort((a, c) => a.r.name.localeCompare(c.r.name));
+  const maxVal = Math.max(1, ...ranked.map(x => x.cur[m]));
   document.getElementById('p-lb-context').innerHTML =
-    `<strong>${line.label}</strong> · ${m === 'cpo' ? 'CPO' : m === 'orders' ? 'orders' : line.unit} · ${pYearLabel(y)}${py ? ` vs ${py}` : ''} · ${ranked.length} of ${MASTER.length} core-team reps`;
-  const yearHead = yy => `<th class="num yr${yy === y ? ' cur-h' : ' yr-old'}">${pYearLabel(yy)}${yy === y ? ' ●' : ''}<span class="th-sub opt">${pIsYtd(yy) ? `as of ${pAsOf().replace(/, \d{4}$/, '')}` : 'full year'}</span></th>`;
+    `<strong>${line.label}</strong> · ${pYearLabel(y)}${py ? ` vs ${py}` : ''} · sorted by <strong>${sortName}</strong>, largest first · ${ranked.length} of ${MASTER.length} core-team reps`;
+  const head = ([k, label]) => `<th class="num${k === m ? ' cur-h' : ''}${k === 'orders' ? ' yr-old' : ''}" aria-sort="${k === m ? 'descending' : 'none'}">` +
+    `<button type="button" class="th-sort${k === m ? ' on' : ''}" data-sort="${k}" title="Sort by ${label}, largest first">${label}<span class="th-arrow">${k === m ? '▼' : '↕'}</span></button></th>`;
   let html = `<div class="lb-scroll"><table class="leaderboard tlb"><thead><tr>
     <th style="text-align:center;">#</th><th>Rep</th><th class="bar-h"></th>
-    ${years.map(yearHead).join('')}
-    ${py ? `<th class="num g-col">${pIsYtd(y) ? `% of <span class="lg-only">${py}</span><span class="sm-only">'${String(py).slice(2)}</span>` : `vs <span class="lg-only">${py}</span><span class="sm-only">'${String(py).slice(2)}</span>`}</th>` : ''}
+    ${COLS.map(head).join('')}
+    ${py ? `<th class="num yr yr-old">${py}<span class="th-sub opt">${sortName}, full year</span></th>
+    <th class="num g-col">${pIsYtd(y) ? `% of <span class="lg-only">${py}</span><span class="sm-only">'${String(py).slice(2)}</span>` : `vs <span class="lg-only">${py}</span><span class="sm-only">'${String(py).slice(2)}</span>`}</th>` : ''}
   </tr></thead><tbody>`;
-  const cells = x => years.map(yy => `<td class="num yr${yy === y ? ' cur' : ' prior yr-old'}">${pNum(x.vals[yy], m)}</td>`).join('');
+  const cells = x => COLS.map(([k]) => `<td class="num${k === m ? ' cur' : ''}${k === 'orders' ? ' yr-old' : ''}">${pNum(pVal(x.cur, k), k)}</td>`).join('');
   ranked.forEach((x, i) => {
     const isSelf = x.r.name === STATE.selectedRep;
     html += `<tr class="${[isSelf ? 'is-self' : '', i < 3 ? 'top3' : ''].filter(Boolean).join(' ')}" data-rep="${x.r.name}" title="Open ${x.r.name}">
       <td class="rank">${i + 1}</td>
       <td class="name">${x.r.name}${isSelf ? '<span class="viewing-dot"></span>' : ''}</td>
-      <td class="bar-cell"><div class="lb-track"><div class="lb-fill" style="width:${x.vals[y] > 0 ? Math.max(1.5, x.vals[y] / maxVal * 100).toFixed(1) : 0}%"></div></div></td>
+      <td class="bar-cell"><div class="lb-track"><div class="lb-fill" style="width:${x.cur[m] > 0 ? Math.max(1.5, x.cur[m] / maxVal * 100).toFixed(1) : 0}%"></div></div></td>
       ${cells(x)}
-      ${py ? `<td class="growth-cell">${pChip(x.vals[y], x.vals[py], y)}</td>` : ''}
+      ${py ? `<td class="num prior yr-old">${pNum(pVal(x.prior, m), m)}</td><td class="growth-cell">${pChip(x.cur[m], pVal(x.prior, m), y)}</td>` : ''}
     </tr>`;
   });
   missing.forEach(x => {
     html += `<tr class="lb-missing" data-rep="${x.r.name}" title="${x.r.name}: not in the product report">
       <td class="rank">–</td><td class="name">${x.r.name}<span class="lb-why">not in the product report</span></td><td class="bar-cell"></td>
-      ${cells(x)}${py ? `<td class="growth-cell"></td>` : ''}
+      ${cells(x)}${py ? `<td class="num prior yr-old">${naSpan}</td><td class="growth-cell"></td>` : ''}
     </tr>`;
   });
   html += `</tbody></table></div>
-    <div class="lb-foot">Core team only. Tap a rep to open their product mix. Bars scale to the top ${pYearLabel(y)} value.${pIsYtd(y) && py ? ` ${pYearLabel(y)} is shown as a share of ${py}'s full year, not as growth.` : ''}</div>`;
+    <div class="lb-foot">Core team only. Tap <strong>${COLS[0][1]}</strong><span class="lg-only">, <strong>CPO</strong> or <strong>Orders</strong></span><span class="sm-only"> or <strong>CPO</strong></span> at the top of a column to sort by it, largest first. Tap a rep to open their product mix.${pIsYtd(y) && py ? ` ${pYearLabel(y)} is shown as a share of ${py}'s full year, not as growth.` : ''}</div>`;
   const body = document.getElementById('p-lb-body');
   body.innerHTML = html;
+  body.querySelectorAll('.th-sort').forEach(btn => btn.addEventListener('click', () => { STATE.pSort = btn.dataset.sort; renderProductLeaderboard(); }));
   body.querySelectorAll('tbody tr').forEach(tr => tr.addEventListener('click', () => {
     STATE.selectedRep = tr.dataset.rep; STATE.chartMetric = null;
     renderAll(); switchView('rep');
