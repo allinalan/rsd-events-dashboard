@@ -602,6 +602,7 @@
   }
   .pace-tick { position: absolute; top: -7px; bottom: -7px; width: 2px; background: var(--label); border-radius: 1px; }
   .pace-tick.faint { background: var(--ink-faint); }
+  .pace-tick::after { content: ''; position: absolute; inset: -4px -11px; }
   .pace-tick .t-label {
     position: absolute; top: -18px; left: 50%; transform: translateX(-50%);
     font-size: 11px; font-weight: 600;
@@ -683,9 +684,11 @@
     color: var(--ink-soft); padding: 5px 12px; border-radius: 999px; white-space: nowrap; line-height: 1.25;
     transition: color 200ms ease-out, background-color 150ms ease-out, transform var(--spring-ms) var(--spring);
   }
-  .pills button:hover:not(:disabled):not(.active) { color: var(--label); background: var(--fill-hover); }
+  .pills button:hover:not(:disabled):not([aria-disabled="true"]):not(.active) { color: var(--label); background: var(--fill-hover); }
   .pills button.active { background: var(--selected); color: var(--ivory); }
-  .pills button:disabled { opacity: 0.35; cursor: default; }
+  /* aria-disabled rather than disabled when the pill can say why it is off: a disabled button gets no taps */
+  .pills button:disabled, .pills button[aria-disabled="true"] { opacity: 0.35; cursor: default; }
+  .pills button[aria-disabled="true"][data-tip] { cursor: help; }
   /* Single-choice groups: one dark thumb slides to the chosen pill (syncThumb sets the --thumb-* values) */
   .pills.has-thumb::before {
     content: ''; position: absolute; z-index: -1; left: 0; top: 0;
@@ -721,7 +724,8 @@
     appearance: none; border: 0; background: transparent; cursor: pointer; padding: 0;
     display: inline-flex; align-items: center; gap: 9px; font-family: var(--ui); font-size: 13px; color: var(--ink-soft);
   }
-  .switch:disabled { cursor: default; opacity: 0.5; }
+  .switch:disabled, .switch[aria-disabled="true"] { cursor: help; opacity: 0.5; }
+  .sw-wrap { display: inline-flex; align-items: center; }
   .sw-track { width: 34px; height: 19px; border-radius: 999px; background: var(--line); position: relative; transition: background-color 200ms ease-out; flex-shrink: 0; }
   .sw-knob { position: absolute; top: 2px; left: 2px; width: 15px; height: 15px; border-radius: 50%; background: var(--knob); box-shadow: 0 1px 2px rgba(0,0,0,0.25); transition: transform var(--spring-ms) var(--spring); }
   .switch.on .sw-track { background: var(--selected); }
@@ -865,6 +869,24 @@
     #tip { background: var(--tip-solid); -webkit-backdrop-filter: none; backdrop-filter: none; }
   }
   .on-dark .info-i, .sc-badge .info-i { border-color: var(--ivory-dim); color: var(--ivory-dim); }
+  /* A chip, dash or bar whose explanation changes how it reads opens the same popover (tipBtn in the script).
+     They are buttons, so a keyboard reaches them; this takes the button look off and leaves their own class. */
+  :where(button.tip-u, .pace-viz button) {
+    appearance: none; border: 0; background: none; padding: 0; margin: 0;
+    font: inherit; color: inherit; text-align: inherit; cursor: help;
+  }
+  /* The cue that there is an explanation behind it: a dotted underline, as on an abbreviation */
+  .tip-u {
+    text-decoration: underline dotted; text-decoration-thickness: 1px; text-underline-offset: 3px;
+    text-decoration-color: color-mix(in srgb, currentColor 60%, transparent);
+  }
+  .tip-u.dash { text-decoration: none; }
+  .tip-i {
+    display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; vertical-align: 1px;
+    width: 13px; height: 13px; margin-left: 4px; border-radius: 50%; border: 1px solid currentColor;
+    font: 600 9px/1 var(--ui);
+  }
+  .chip .tip-i { margin-left: 1px; }   /* the chip's own 3px gap makes up the rest */
 
   /* ============================ RESPONSIVE ============================ */
   @media (max-width: 1000px) {
@@ -930,7 +952,7 @@
     .ctlbar .cb-season, .ctlbar .cb-bench { flex-direction: column; align-items: flex-start; gap: 4px; }
     .ctlbar .cb-season { order: 1; } .ctlbar .cb-bench { order: 2; }
     .ctlbar .cb-data { order: 3; grid-column: 1 / -1; }
-    .ctlbar .switch { order: 4; } .ctlbar .cb-show { order: 5; grid-column: 1 / -1; justify-self: start; }
+    .ctlbar .sw-wrap { order: 4; } .ctlbar .cb-show { order: 5; grid-column: 1 / -1; justify-self: start; }
     .kcards { gap: 10px; }
     .kcard { padding: 12px 14px 6px; }
     .kc-val { font-size: 24px; }
@@ -1015,7 +1037,7 @@
 
   /* ===================== MOTION + TOUCH (Apple HIG pass, 2026-10-15) ===================== */
   /* Respond on press, not release: a quick press in, a spring back out */
-  .nav button:active, .pills button:active:not(:disabled), .rep-step:active, .pcard:not(:disabled):active {
+  .nav button:active, .pills button:active:not(:disabled):not([aria-disabled="true"]), .rep-step:active, .pcard:not(:disabled):active {
     transform: scale(0.96); transition-duration: 80ms;
   }
   /* Bars grow in the first time a tab is shown; after that they change in place (morph() in the script) */
@@ -1035,6 +1057,8 @@
     table.leaderboard td { padding-top: 11px; padding-bottom: 11px; }
     .info-i { position: relative; }
     .info-i::after { content: ''; position: absolute; inset: -15px; }
+    button.tip-u { position: relative; }
+    button.tip-u::after { content: ''; position: absolute; inset: -12px -6px; }
   }
   @media (pointer: coarse) and (max-width: 680px) {
     #rep-prev { right: 68px; }
@@ -1383,12 +1407,21 @@ document.getElementById('legend-team-tip').dataset.tip = UNIVERSE_TIP;
 document.getElementById('legend-team-tip').setAttribute('aria-label', UNIVERSE_TIP);
 // Info "i" buttons carry their text in data-tip (title tooltips never show on a phone)
 const infoI = tip => `<button type="button" class="info-i" data-tip="${tip}" aria-label="${tip}">i</button>`;
+// A chip or dash whose explanation changes how it reads: tapping it opens the same popover. It is a button so a
+// keyboard reaches it, named for what it shows and then why. cls is its look ('chip na', 'cb-v').
+// Text gets a dotted underline as the cue; a lone dash can't carry one that reads, so it gets a small "i".
+const tipBtn = (cls, html, tip, name) => {
+  const dash = html === '—';
+  return `<button type="button" class="${cls} tip-u${dash ? ' dash' : ''}" data-tip="${tip}" aria-label="${name}: ${tip}">${html}${dash ? '<span class="tip-i" aria-hidden="true">i</span>' : ''}</button>`;
+};
 
 // ==========================================================================
 // Formatters
 // ==========================================================================
 const NA_TIP = 'No data captured or not applicable — not $0';
 const naSpan = '<span class="na" title="' + NA_TIP + '">—</span>';
+// Growth on a handful of orders swings wildly, so it shows a dash that says why
+const smallBaseChip = base => tipBtn('chip na', '—', `Base under ${MIN_GROWTH_ORDERS} orders (${base}): growth not meaningful`, 'No growth figure');
 
 function fmtCurrency(n) {
   if (n === null || n === undefined || isNaN(n)) return naSpan;
@@ -1445,7 +1478,8 @@ function fmtYoY(cur, prior) {
 function shareChip(cur, full, year, onDark) {
   const dark = onDark ? ' on-dark' : '';
   if (cur === null || cur === undefined || !full) return `<span class="chip na${dark}" title="${NA_TIP}">—</span>`;
-  return `<span class="chip share${dark}" title="Year to date as a share of ${year}'s full year">${Math.round(cur / full * 100)}%<span class="share-of"> of ${year}</span></span>`;
+  const pct = Math.round(cur / full * 100);
+  return tipBtn(`chip share${dark}`, `${pct}%<span class="share-of"> of ${year}</span>`, `Year to date as a share of ${year}'s full year`, `${pct}% of ${year}`);
 }
 
 // ==========================================================================
@@ -1867,7 +1901,7 @@ function renderLeaderboard(prefix) {
     if (cmp) {
       delta = share ? shareChip(x.cur, x.prior, cmp.period.year)
         : (x.base !== null && x.base < MIN_GROWTH_ORDERS && x.growth !== null)
-          ? `<span class="chip na" title="Base under ${MIN_GROWTH_ORDERS} orders (${x.base}) — growth not meaningful">—</span>`
+          ? smallBaseChip(x.base)
           : fmtYoY(x.cur, x.prior);
     }
     html += `<tr class="${cls}" data-rep="${x.rep.name}" title="Open ${x.rep.name} in Rep View">
@@ -1995,9 +2029,13 @@ function buildGridToggles() {
   });
 }
 // Pill group of buttons; returns HTML. items: [{ value, label, active, disabled, title }]
+// A disabled pill with a title is aria-disabled instead, so a tap still reaches it and opens the title as a tip;
+// the tip listener stops that tap before the pill's own handler. One without a title is plain disabled.
 function segHtml(items, attr, aria) {
+  const extra = it => it.disabled ? (it.title ? ` aria-disabled="true" data-tip="${it.title}"` : ' disabled')
+    : it.title ? ` title="${it.title}"` : '';
   return `<div class="pills" role="tablist"${aria ? ` aria-label="${aria}"` : ''}>${items.map(it =>
-    `<button type="button" role="tab" ${attr}="${it.value}" class="${it.active ? 'active' : ''}" aria-selected="${!!it.active}"${it.disabled ? ' disabled' : ''}${it.title ? ` title="${it.title}"` : ''}>${it.label}</button>`).join('')}</div>`;
+    `<button type="button" role="tab" ${attr}="${it.value}" class="${it.active ? 'active' : ''}" aria-selected="${!!it.active}"${extra(it)}>${it.label}</button>`).join('')}</div>`;
 }
 const unwrapSeg = html => html.replace(/^<div class="pills"[^>]*>/, '').replace(/<\/div>$/, '');
 
@@ -2043,6 +2081,11 @@ function deltaPill(cur, prior, metric) {
 
 function renderTotalControls() {
   const s = seasonP(), earlier = earlierYears();
+  // An off switch can't be tapped on, so it carries its reason as a tip (aria-disabled, as segHtml does)
+  const sameOff = s.closed || !earlier.length;
+  const sameTip = s.closed ? 'A closed season compares full years'
+    : !earlier.length ? 'Nothing earlier to compare with'
+    : `On: earlier years through ${thruText(s.k)}, like for like. Off: their full year`;
   const el = document.getElementById('t-ctl');
   const opt = (list, sel) => list.map(y => `<option value="${y}"${y === sel ? ' selected' : ''}>${y}</option>`).join('');
   el.innerHTML = `
@@ -2050,13 +2093,12 @@ function renderTotalControls() {
     <div class="cb-group cb-data"><span class="cb-k">Data through</span><span class="cb-v">${s.closed ? 'C3 · full year' : `C${s.k} · ${s.k} of 3 campaigns`}</span></div>
     <div class="cb-group cb-bench"><span class="cb-k">Compare to</span>${earlier.length
       ? `<select class="ctl" id="t-bench" aria-label="Compare to">${opt(earlier, STATE.bench)}</select>`
-      : '<span class="cb-v" title="Nothing earlier on file">—</span>'}</div>
+      : tipBtn('cb-v', '—', 'Nothing earlier on file', 'Nothing to compare with')}</div>
     <div class="cb-spacer"></div>
-    <button type="button" class="switch${!s.closed && STATE.samePoint ? ' on' : ''}" id="t-same" role="switch" aria-checked="${!s.closed && STATE.samePoint}"${s.closed || !earlier.length ? ' disabled' : ''}
-      title="${s.closed ? 'A closed season compares full years' : `On: earlier years through ${thruText(s.k)}, like for like. Off: their full year`}">
-      <span>Same point${s.closed ? '' : `<span class="lg-only"> (${thruText(s.k)})</span>`}</span><span class="sw-track"><span class="sw-knob"></span></span></button>
+    <span class="sw-wrap"><button type="button" class="switch${!s.closed && STATE.samePoint ? ' on' : ''}" id="t-same" role="switch" aria-checked="${!s.closed && STATE.samePoint}"${sameOff ? ` aria-disabled="true" data-tip="${sameTip}"` : ''}>
+      <span>Same point${s.closed ? '' : `<span class="lg-only"> (${thruText(s.k)})</span>`}</span><span class="sw-track"><span class="sw-knob"></span></span></button>${infoI(sameTip)}</span>
     ${earlier.length ? `<div class="cb-group cb-show"><span class="cb-k">Show</span><div class="pills" id="t-compare" aria-label="Years shown">${earlier.map(y =>
-      `<button type="button" data-y="${y}" class="${STATE.compare.has(y) ? 'active' : ''}" aria-pressed="${STATE.compare.has(y)}"${y === STATE.bench ? ' title="The comparison year is always shown"' : ''}>${y}</button>`).join('')}</div></div>` : ''}`;
+      `<button type="button" data-y="${y}" class="${STATE.compare.has(y) ? 'active' : ''}" aria-pressed="${STATE.compare.has(y)}"${y === STATE.bench ? ' data-tip="The comparison year is always shown"' : ''}>${y}</button>`).join('')}</div></div>` : ''}`;
   document.getElementById('t-season').onchange = e => setSeason(+e.target.value);
   const bench = document.getElementById('t-bench');
   if (bench) bench.onchange = e => { STATE.bench = +e.target.value; STATE.compare.add(STATE.bench); renderAll(); };
@@ -2194,7 +2236,7 @@ function renderTotalTable() {
   });
   const maxD = Math.max(1, ...rows.filter(r => !r.row.cls && r.d !== null).map(r => Math.abs(r.d)));
   const fmtD = (d, m) => m === 'orders' ? Math.abs(Math.round(d)).toLocaleString() : m === 'avg' ? '$' + Math.abs(d).toFixed(2) : '$' + Math.abs(Math.round(d)).toLocaleString();
-  const head = `<th>Category</th><th class="share-col" title="Share of ${STATE.season} event CPO">Share ${STATE.season}</th>` +
+  const head = `<th>Category</th><th class="share-col">Share ${STATE.season}${infoI(`Share of ${STATE.season} event CPO`)}</th>` +
     years.map(y => `<th class="${y === STATE.season ? 'sel' : ''}">${y}${y === STATE.season ? ' ●' : ''}<span class="th-sub">${periods[y].kind === 'thru' ? thruText(periods[y].k) : periods[y].closed ? 'full year' : 'so far'}</span></th>`).join('') +
     (b ? `<th class="chg dlt-abs">Δ vs ${b}</th><th>%</th>` : '');
   const body = rows.map(({ row, stats, cur, prior, d }) => {
@@ -2246,7 +2288,7 @@ function renderTotalLeaderboard() {
   const sEl = document.getElementById('t-lb-sort');
   const sortNow = STATE.tSort === 'growth' && growthOK ? 'growth' : 'value';
   sEl.innerHTML = [['value', 'Highest'], ['growth', 'Biggest growth']].map(([v, l]) =>
-    `<button type="button" data-s="${v}" class="${v === sortNow ? 'active' : ''}"${v === 'growth' && !growthOK ? ` disabled title="${!b ? 'Nothing earlier to compare with' : 'Growth needs a like-for-like comparison: turn Same point on'}"` : ''}>${l}</button>`).join('');
+    `<button type="button" data-s="${v}" class="${v === sortNow ? 'active' : ''}"${v === 'growth' && !growthOK ? ` aria-disabled="true" data-tip="${!b ? 'Nothing earlier to compare with' : 'Growth needs a like-for-like comparison: turn Same point on'}"` : ''}>${l}</button>`).join('');
   sEl.querySelectorAll('button').forEach(x => x.onclick = () => { STATE.tSort = x.dataset.s; renderTotalLeaderboard(); });
 
   const rows = masterListReps().map(r => {
@@ -2287,7 +2329,7 @@ function renderTotalLeaderboard() {
     if (x.cur === null || x.prior === null) return `<td class="num dlt-abs">${naSpan}</td><td class="growth-cell">${naSpan}</td>`;
     if (share) return `<td class="num dlt-abs"></td><td class="growth-cell">${shareChip(x.cur, x.prior, b)}</td>`;
     const d = x.cur - x.prior, up = d >= 0;
-    const pct = x.small ? `<span class="chip na" title="Base under ${MIN_GROWTH_ORDERS} orders (${x.base}) — growth not meaningful">—</span>` : fmtYoY(x.cur, x.prior);
+    const pct = x.small ? smallBaseChip(x.base) : fmtYoY(x.cur, x.prior);
     return `<td class="num dlt-abs"><span class="dtext ${up ? 'pos' : 'neg'}">${up ? '+' : '−'}${fmtD(d)}</span></td><td class="growth-cell">${pct}</td>`;
   };
   ranked.forEach((x, i) => {
@@ -2375,8 +2417,10 @@ function renderCampCards() {
 function renderCompareGrid() {
   const n = STATE.camp.n;
   const campEl = document.getElementById('x-camps');
-  campEl.innerHTML = unwrapSeg(segHtml([1, 2, 3].map(k => ({ value: k, label: `C${k}`, active: k === n,
-    disabled: !CAMP_YEARS.some(y => campaignsForYear(y).includes(k)) })), 'data-n'));
+  campEl.innerHTML = unwrapSeg(segHtml([1, 2, 3].map(k => {
+    const off = !CAMP_YEARS.some(y => campaignsForYear(y).includes(k));
+    return { value: k, label: `C${k}`, active: k === n, disabled: off, title: off ? `C${k} has not closed in any year on file` : '' };
+  }), 'data-n'));
   campEl.querySelectorAll('button').forEach(b => b.addEventListener('click', () => {
     const k = +b.dataset.n;
     LB.c.scope = 'camp';
@@ -2572,7 +2616,7 @@ function renderRepMinis() {
       cmp ? `vs ${priorTxt} · ${fmtCurrency(aoPrior)}` : '') +
     // Shift avg is an average, so YTD vs a full year is comparable; hide the chip on a base under 5 shifts (review B1).
     mini(`Shift Avg · ${annualLabel(p)}`, fmtCurrency(shAvgCur),
-      !shiftPrior ? '' : (shiftCur && shiftCur.combined && shiftCur.combined.shifts >= 5) ? chipYoY(shAvgCur, shAvgPrior) : `<span class="chip na" title="Fewer than 5 shifts — growth not meaningful">—</span>`,
+      !shiftPrior ? '' : (shiftCur && shiftCur.combined && shiftCur.combined.shifts >= 5) ? chipYoY(shAvgCur, shAvgPrior) : tipBtn('chip na', '—', 'Fewer than 5 shifts: growth not meaningful', 'No growth figure'),
       shiftPrior ? `vs FY ${p.year - 1} · ${fmtCurrency(shAvgPrior)}` : (p.kind === 'all' ? 'all years' : ''));
 }
 
@@ -2810,8 +2854,8 @@ function renderRepSummary() {
       </div>`;
   } else {
     oppHtml = `
-      <div class="opp-none" title="The opportunity engine only surfaces a callout when the uplift clears at least 5% of the period's book (or $2K).">
-        No standout opportunity for ${p.label}.
+      <div class="opp-none">
+        No standout opportunity for ${p.label}.${infoI("A callout appears only when the uplift is at least 5% of this period's book, and never under $2K")}
       </div>`;
   }
 
@@ -2976,9 +3020,9 @@ function renderRepShifts() {
   const priorTag = p.kind === 'all' ? '' : `FY ${p.year - 1}`;
   // YTD counts against a full prior year are not a decline (review B1): no growth chip on
   // counts while the year is open, and none on an average with fewer than 5 shifts behind it.
-  const noChip = t => `<span class="chip na" title="${t}">—</span>`;
-  const countGrowth = (a, b) => ytd ? noChip('Year-to-date vs a full year — not comparable until the year closes') : fmtYoY(a, b);
-  const avgGrowth = (curS, priorS) => (curS && curS.shifts >= 5 && priorS) ? fmtYoY(curS.avg, priorS.avg) : noChip('Fewer than 5 shifts — growth not meaningful');
+  const noChip = t => tipBtn('chip na', '—', t, 'No growth figure');
+  const countGrowth = (a, b) => ytd ? noChip('Year to date against a full year: not comparable until the year closes') : fmtYoY(a, b);
+  const avgGrowth = (curS, priorS) => (curS && curS.shifts >= 5 && priorS) ? fmtYoY(curS.avg, priorS.avg) : noChip('Fewer than 5 shifts: growth not meaningful');
 
   const card = (name, val, rows) => `
     <div class="shift-card">
@@ -3127,14 +3171,17 @@ function renderRepPacing() {
     const pctOf = v => Math.min(100, v / maxScale * 100);
     const actualPct = pctOf(ytd.cpo);
     const projPct = pctOf(projected);
-    const tick = (v, label, faint) => v ? `<div class="pace-tick${faint ? ' faint' : ''}" style="left:${pctOf(v).toFixed(2)}%" title="${label}: ${fmtCurrencyShort(v)}"><span class="t-label">${label}</span></div>` : '';
+    // Each piece is a button that says what it is on tap (the legend names them; the figures live here)
+    const piece = (cls, style, tip, inner = '') => `<button type="button" class="${cls}" style="${style}" data-tip="${tip}" aria-label="${tip}">${inner}</button>`;
+    const tick = (v, label, faint, yr) => v ? piece(`pace-tick${faint ? ' faint' : ''}`, `left:${pctOf(v).toFixed(2)}%`,
+      `${yr} full-year finish: ${fmtCurrencyShort(v)}`, `<span class="t-label">${label}</span>`) : '';
     vizHtml = `
       <div class="pace-viz">
         <div class="pace-track">
-          <div class="pace-actual" style="width:${actualPct.toFixed(2)}%" title="${y} through C${k} actual: ${fmtCurrencyShort(ytd.cpo)}"></div>
-          <div class="pace-proj" style="left:${actualPct.toFixed(2)}%; width:${(projPct - actualPct).toFixed(2)}%" title="Projected remainder to ≈${fmtCurrencyShort(projected)} — a projection, not a result"></div>
-          ${tick(fy_1 && fy_1.cpo, "'" + String(y - 1).slice(2), false)}
-          ${tick(fy_2 && fy_2.cpo, "'" + String(y - 2).slice(2), true)}
+          ${piece('pace-actual', `width:${actualPct.toFixed(2)}%`, `${y} through C${k}, actual: ${fmtCurrencyShort(ytd.cpo)}`)}
+          ${piece('pace-proj', `left:${actualPct.toFixed(2)}%; width:${(projPct - actualPct).toFixed(2)}%`, `Projected finish ≈${fmtCurrencyShort(projected)}: an estimate from your pace, not a result`)}
+          ${tick(fy_1 && fy_1.cpo, "'" + String(y - 1).slice(2), false, y - 1)}
+          ${tick(fy_2 && fy_2.cpo, "'" + String(y - 2).slice(2), true, y - 2)}
         </div>
       </div>
       <div class="pace-legend">
@@ -3428,7 +3475,7 @@ function pYardstick(py) {
 }
 function setProductMeasure(m) { STATE.pMeasure = m; STATE.pSort = null; renderProductsView(); renderRepProducts(); }
 const pMeasurePills = () => P_MEASURES.map(([k, l]) =>
-  `<button type="button" data-m="${k}" class="${STATE.pMeasure === k ? 'active' : ''}" aria-pressed="${STATE.pMeasure === k}"${k === 'auto' ? ' title="Units for sets, flatware and cookware; CPO for upgrades and the gift channels"' : ''}>${l}</button>`).join('');
+  `<button type="button" data-m="${k}" class="${STATE.pMeasure === k ? 'active' : ''}" aria-pressed="${STATE.pMeasure === k}">${l}</button>`).join('');
 
 function renderProductControls() {
   const el = document.getElementById('p-ctl'), y = STATE.pYear, by = pBench(y);
@@ -3437,10 +3484,10 @@ function renderProductControls() {
       `<option value="${yy}"${yy === y ? ' selected' : ''}>${pYearLabel(yy)}</option>`).join('')}</select></div>
     <div class="cb-group cb-bench"><span class="cb-k">Compare to</span>${by
       ? `<select class="ctl" id="p-bench" aria-label="Compare to">${pEarlier(y).map(yy => `<option value="${yy}"${yy === by ? ' selected' : ''}>${yy}${pIsYtd(y) ? ' full year' : ''}</option>`).join('')}</select>`
-      : '<span class="cb-v" title="Nothing earlier in the report">—</span>'}</div>
+      : tipBtn('cb-v', '—', 'Nothing earlier in the report', 'Nothing to compare with')}</div>
     <div class="cb-group cb-data"><span class="cb-k">Report of</span><span class="cb-v">${pAsOf()} · ${PRODUCTS.reps} of ${MASTER.length} reps</span></div>
     <div class="cb-spacer"></div>
-    <div class="cb-group cb-show"><span class="cb-k">Show</span><div class="pills" id="p-measure" aria-label="Show">${pMeasurePills()}</div></div>`;
+    <div class="cb-group cb-show"><span class="cb-k">Show</span><div class="pills" id="p-measure" aria-label="Show">${pMeasurePills()}</div>${infoI('Headline: units for sets, flatware and cookware; CPO for upgrades and the gift channels')}</div>`;
   document.getElementById('p-year').onchange = e => setProductYear(+e.target.value);
   const bench = document.getElementById('p-bench');
   if (bench) bench.onchange = e => setProductBench(+e.target.value);
@@ -3730,8 +3777,11 @@ function syncTabUnderline(animate) {
   if (!animate) { getComputedStyle(nav, '::after').transform; nav.classList.remove('instant'); }
 }
 
-// One shared popover for the "i" buttons. It grows out of the icon that opened it, and a tap
-// anywhere else (or a scroll) closes it. title= tooltips never show on a phone.
+// One shared popover for everything with a data-tip: the "i" buttons, and the chips, dashes, pacing bars and
+// off pills that used to explain themselves in a title= (title tooltips never show on a phone). It grows out of
+// what opened it; a second tap on that, a tap anywhere else, or a scroll closes it.
+// The click is caught on the way down and stopped there, so a tip inside a clickable leaderboard row opens
+// without opening the rep, and an aria-disabled pill or switch says why without running its own handler.
 const tipEl = document.createElement('div');
 tipEl.id = 'tip';
 tipEl.setAttribute('popover', 'auto');
@@ -3741,8 +3791,9 @@ const canPop = typeof tipEl.showPopover === 'function';
 let tipFrom = null, tipOpenFor = null;
 document.addEventListener('pointerdown', () => { tipOpenFor = canPop && tipEl.matches(':popover-open') ? tipFrom : null; }, true);
 document.addEventListener('click', e => {
-  const t = e.target.closest('.info-i');
+  const t = e.target.closest('[data-tip]');
   if (!t || !t.dataset.tip) return;
+  e.stopPropagation();
   if (!canPop) { window.alert(t.dataset.tip); return; }
   const wasOpen = t === tipOpenFor;
   tipOpenFor = null;
@@ -3760,7 +3811,7 @@ document.addEventListener('click', e => {
   tipEl.style.left = x + 'px';
   tipEl.style.top = (above ? r.top - h - 8 : r.bottom + 8) + 'px';
   tipEl.style.transformOrigin = `${r.left + r.width / 2 - x}px ${above ? '100%' : '0'}`;
-});
+}, true);
 window.addEventListener('scroll', () => { if (canPop && tipEl.matches(':popover-open')) tipEl.hidePopover(); }, { passive: true });
 
 const VIEWS = PRODUCTS ? ['total', 'campaigns', 'products', 'rep'] : ['total', 'campaigns', 'rep'];
