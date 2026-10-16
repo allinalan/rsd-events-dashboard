@@ -4,7 +4,10 @@
 <meta charset="UTF-8">
 <title>Rising Sun — Events Team Performance</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#191612">
+<meta name="color-scheme" content="light dark">
+<!-- the masthead glass over the page ground, so the browser bar continues it -->
+<meta name="theme-color" content="#45423E" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#312E2A" media="(prefers-color-scheme: dark)">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23191612'/%3E%3Cpath d='M8 19a8 8 0 0 1 16 0Z' fill='%23C2410C'/%3E%3Crect x='6' y='21' width='20' height='2.4' rx='1.2' fill='%23F4F1EA'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -12,9 +15,15 @@
 <style>
   /* ============================ DESIGN TOKENS ============================ */
   :root {
+    color-scheme: light dark;
     --bone:      #F4F2EC;   /* page ground */
     --card:      #FFFFFF;
-    --ink:       #191612;   /* warm black */
+    --card-hover:#F9F8F4;   /* a card under the pointer: between card and ground */
+    --fill-hover:#F4F2EC;   /* a row or pill under the pointer, inside a card */
+    --label:     #191612;   /* warm black: text */
+    --chrome:    #191612;   /* masthead */
+    --chrome-glass: rgba(25,22,18,0.80);
+    --selected:  #191612;   /* the chosen pill, a switch that is on */
     --panel:     #1C1915;   /* dark scorecard */
     --panel-hi:  #26221C;
     --ivory:     #F4F1EA;   /* text on dark */
@@ -31,6 +40,22 @@
     --pos-tint:  #E9F3EC;
     --neg:       #B42318;
     --neg-tint:  #F9ECEA;
+    --warn:      #B45309;
+    --on-fill:   #191612;   /* text on a mid-tone fill, either mode */
+    --knob:      #FFFFFF;
+    --axis:      #D6D2C6;   /* chart baseline */
+    --bench:     #3E4A5C;   /* the comparison year's bars */
+    --bar-other: #B8B2A7;   /* the other years' bars */
+    --area-alpha: 0.07;     /* the shade under the rep's trend line */
+    --tip-glass: rgba(255,255,255,0.78);
+    --tip-solid: #FFFFFF;
+    /* on the masthead and scorecard, which stay dark in both modes */
+    --ember-on-dark: #E8925D;
+    /* text on the masthead glass, strong enough to pass 4.5:1 with a white card scrolled under it */
+    --glass-dim:    rgba(244,241,234,0.68);
+    --glass-accent: #F0A070;
+    --pos-on-dark:   #8FD6A9;
+    --neg-on-dark:   #F0A18F;
     --disp: 'Archivo', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;   /* wordmark + headings */
     --ui:   -apple-system, BlinkMacSystemFont, system-ui, 'Segoe UI', Roboto, sans-serif;   /* everything else: SF Pro on Apple devices */
     --radius: 12px;
@@ -53,11 +78,53 @@
     --bk-federal:  #37414F;  /* Federal — dark slate */
     --bk-nonevent: #A39E94;  /* Non-Event — warm gray (outside the booth) */
   }
+  /* Dark mode. Text tokens are checked on --card: label 15.3:1, ink-soft 8.3:1, ink-faint 5.8:1.
+     The masthead and scorecard were already dark; they move up a step so they still read as surfaces. */
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bone:      #0F0E0C;
+      --card:      #1B1916;
+      --card-hover:#22201C;
+      --fill-hover:#26231F;
+      --label:     #F2EFE8;
+      --chrome:    #3A3631;
+      --chrome-glass: rgba(58,54,49,0.80);
+      --selected:  #6B655D;   /* 3:1 against the pill track and the ground, so the choice reads */
+      --panel:     #22201C;
+      --panel-hi:  #2C2924;
+      --ink-soft:  #B8B2A7;
+      --ink-faint: #9A9489;
+      --line:      rgba(242,239,232,0.12);
+      --line-soft: rgba(242,239,232,0.07);
+      --ember:     #F07A45;
+      --ember-deep:#F59A6B;
+      --ember-tint:rgba(240,122,69,0.14);
+      --pos:       #5BD08A;
+      --pos-tint:  rgba(91,208,138,0.14);
+      --neg:       #F38B7A;
+      --neg-tint:  rgba(243,139,122,0.14);
+      --warn:      #E9A23B;
+      --axis:      rgba(242,239,232,0.22);
+      --bench:     #8E9BAF;
+      --bar-other: #5C574F;
+      --area-alpha: 0.08;
+      --tip-glass: rgba(40,37,33,0.78);
+      --tip-solid: #282521;
+      /* the same seven hues, lifted to at least 4.5:1 on the dark card */
+      --bk-trad:     #F07A45;
+      --bk-service:  #C99236;
+      --bk-industry: #97A35B;
+      --bk-rlt:      #7699BC;
+      --bk-mall:     #B5839D;
+      --bk-federal:  #B9C1CD;
+      --bk-nonevent: #8F897F;
+    }
+  }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body {
     background: var(--bone);
-    color: var(--ink);
+    color: var(--label);
     font-family: var(--ui);
     font-size: 15px;
     line-height: 1.45;
@@ -70,11 +137,17 @@
   button, select, tr[data-rep] { -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
 
   /* ============================ MASTHEAD ============================ */
+  /* A translucent layer the page scrolls under. It sticks at minus the brand row's height, so the
+     brand row scrolls away and only the tabs stay (--brand-h is set from the script). */
   .masthead {
-    background: var(--ink);
+    background: var(--chrome-glass);
+    -webkit-backdrop-filter: blur(24px) saturate(170%); backdrop-filter: blur(24px) saturate(170%);
     color: var(--ivory);
-    position: sticky; top: 0; z-index: 50;
-    box-shadow: 0 1px 0 rgba(0,0,0,0.35);
+    position: sticky; top: calc(-1 * var(--brand-h, 0px)); z-index: 50;
+    box-shadow: none;
+  }
+  @media (prefers-reduced-transparency: reduce) {
+    .masthead { background: var(--chrome); -webkit-backdrop-filter: none; backdrop-filter: none; }
   }
   .masthead-inner {
     max-width: 1240px; margin: 0 auto; padding: 0 32px;
@@ -91,29 +164,29 @@
     line-height: 1.1; white-space: nowrap;
   }
   .brand-text .wordsub {
-    font-size: 11px; color: var(--ivory-dim); margin-top: 2px; white-space: nowrap;
+    font-size: 11px; color: var(--glass-dim); margin-top: 2px; white-space: nowrap;
   }
   .campaign {
     text-align: right; flex-shrink: 1; min-width: 0;
   }
   .campaign .cp-line {
-    font-size: 13px; font-weight: 600; color: #E8925D;
+    font-size: 13px; font-weight: 600; color: var(--glass-accent);
     white-space: nowrap;
   }
   .campaign .cp-meta {
-    font-size: 11px; color: var(--ivory-dim);
+    font-size: 11px; color: var(--glass-dim);
     margin-top: 3px; white-space: nowrap;
   }
   .sc-badge .b-sub { font-size: 11px; opacity: .6; margin-top: 3px; white-space: nowrap; }
   .cat-best { font-size: 13px; color: var(--ink-faint); margin: 6px 0 10px; }
-  .cat-best strong { color: var(--ink); }
+  .cat-best strong { color: var(--label); }
 
   /* Nav tabs */
   .nav { display: flex; gap: 4px; position: relative; --tab-inset: 12px; }
   .nav button {
     appearance: none; border: 0; background: transparent; cursor: pointer;
     font-family: var(--ui); font-size: 15px; font-weight: 600;
-    color: var(--ivory-dim); padding: 10px 14px 12px;
+    color: var(--glass-dim); padding: 10px 14px 12px;
     position: relative;
     transition: color 150ms ease-out, transform var(--spring-ms) var(--spring);
   }
@@ -124,7 +197,7 @@
     content: ''; position: absolute; left: 0; bottom: 0; height: 2.5px;
     width: calc(var(--tab-w, 0px) - 2 * var(--tab-inset));
     transform: translateX(calc(var(--tab-x, 0px) + var(--tab-inset)));
-    background: var(--ember); border-radius: 2px 2px 0 0;
+    background: var(--ember-on-dark); border-radius: 2px 2px 0 0;
     transition: transform var(--spring-ms) var(--spring), width var(--spring-ms) var(--spring);
   }
   .nav.instant::after { transition: none; }
@@ -140,7 +213,7 @@
   .view.active { display: block; animation: viewIn 120ms ease-out; }
   @keyframes viewIn { from { opacity: 0; } }
 
-  .section { margin-bottom: 36px; }
+  .section { margin-bottom: 48px; }
   .sec-head {
     display: flex; justify-content: space-between; align-items: flex-end;
     gap: 12px; margin-bottom: 14px; flex-wrap: wrap;
@@ -153,8 +226,9 @@
     white-space: nowrap; padding-bottom: 2px;
   }
 
+  /* Cards are white on the bone ground with no outline, like iOS grouped lists */
   .card {
-    background: var(--card); border: 1px solid var(--line);
+    background: var(--card);
     border-radius: var(--radius);
   }
 
@@ -179,7 +253,7 @@
   /* Stat cards */
   .stat-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; }
   .stat {
-    background: var(--card); border: 1px solid var(--line);
+    background: var(--card);
     border-radius: var(--radius); padding: 16px 18px 15px;
   }
   .stat .label {
@@ -197,7 +271,7 @@
   .ctl {
     appearance: none; -webkit-appearance: none;
     font-family: var(--ui); font-size: 13px; font-weight: 400;
-    color: var(--ink);
+    color: var(--label);
     background: var(--card) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='5'%3E%3Cpath d='M0 0l4 5 4-5z' fill='%23857f76'/%3E%3C/svg%3E") no-repeat right 9px center;
     border: 1px solid var(--line); border-radius: var(--radius-sm);
     padding: 6px 26px 6px 10px; cursor: pointer;
@@ -232,12 +306,12 @@
   table.leaderboard tbody tr:last-child td { border-bottom: 0; }
   table.leaderboard tbody tr { cursor: pointer; transition: background-color 120ms ease-out; }
   table.leaderboard tbody tr:active { background: var(--line-soft); transition: none; }
-  table.leaderboard tbody tr:hover { background: var(--bone); }
+  table.leaderboard tbody tr:hover { background: var(--fill-hover); }
   table.leaderboard td.rank {
     font-size: 13px; color: var(--ink-faint);
     width: 34px; text-align: center;
   }
-  tr.top3 td.rank { color: var(--ink); font-weight: 600; }
+  tr.top3 td.rank { color: var(--label); font-weight: 600; }
   table.leaderboard td.name { font-weight: 600; font-size: 15px; white-space: nowrap; }
   /* The name is a button so a keyboard can open the rep; the row's click handler does the work */
   .rep-link { all: unset; cursor: pointer; }
@@ -261,17 +335,13 @@
   table.leaderboard td.num.prior { color: var(--ink-faint); }
   table.leaderboard td.growth-cell { text-align: right; white-space: nowrap; }
   .growth-emph th.g-col { color: var(--ember); }
-  tr.is-self { background: var(--ember-tint); box-shadow: inset 3px 0 0 var(--ember); }
+  tr.is-self { background: var(--ember-tint); }
   tr.is-self:hover { background: var(--ember-tint) !important; }
   .lb-foot {
     font-size: 13px; color: var(--ink-faint);
     padding: 10px 0 12px;
   }
-  .lb-empty {
-    background: var(--bone); border: 1px dashed var(--line); color: var(--ink-faint);
-    padding: 28px; border-radius: var(--radius-sm); font-size: 13px; text-align: center;
-    margin: 12px 0 16px;
-  }
+  .lb-empty { color: var(--ink-faint); font-size: 13px; margin: 12px 0 16px; }
 
   /* Category mix */
   .mix-card { padding: 18px 20px 12px; }
@@ -283,10 +353,8 @@
   .mix-bar .seg { height: 100%; min-width: 3px; }
   .mix-rows { margin-top: 8px; }
   .mix-row {
-    display: flex; align-items: center; gap: 9px; padding: 8px 0;
-    border-bottom: 1px solid var(--line-soft); font-size: 15px;
+    display: flex; align-items: center; gap: 9px; padding: 8px 0; font-size: 15px;
   }
-  .mix-row:last-child { border-bottom: 0; }
   .swatch { width: 9px; height: 9px; border-radius: 2.5px; flex-shrink: 0; }
   .mix-row .m-name { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .mix-row .m-amt { font-size: 13px; font-weight: 600; text-align: right; }
@@ -305,13 +373,9 @@
     display: grid; grid-template-columns: 1.25fr 1fr; gap: 24px 40px;
     position: relative; overflow: hidden;
   }
-  .scorecard::after {
-    content: ''; position: absolute; inset: 0 0 auto 0; height: 3px;
-    background: linear-gradient(90deg, var(--ember), #E8925D 55%, transparent 90%);
-  }
   .sc-id { min-width: 0; display: flex; flex-direction: column; }
   .sc-kicker {
-    font-size: 13px; font-weight: 600; color: #E8925D;
+    font-size: 13px; font-weight: 600; color: var(--ember-on-dark);
     margin-bottom: 8px;
   }
   .name-select-wrap { display: flex; align-items: center; gap: 6px; margin-left: -8px; }
@@ -326,7 +390,7 @@
     transition: background-color 0.15s;
   }
   select.name-select:hover, select.name-select:focus { background-color: var(--panel-hi); }
-  select.name-select option { font-size: 15px; font-weight: 400; color: var(--ink); background: var(--card); }
+  select.name-select option { font-size: 15px; font-weight: 400; color: var(--label); background: var(--card); }
   .rep-step {
     appearance: none; border: 1px solid var(--ivory-line); background: transparent;
     color: var(--ivory-dim); width: 28px; height: 28px; border-radius: 7px;
@@ -349,8 +413,8 @@
     color: var(--ivory-dim); margin-bottom: 2px; white-space: nowrap;
   }
   .sc-badge .b-val { font-size: 15px; font-weight: 600; white-space: nowrap; }
-  .sc-badge .b-val .up { color: #86CFA0; }
-  .sc-badge .b-val .down { color: #F0A18F; }
+  .sc-badge .b-val .up { color: var(--pos-on-dark); }
+  .sc-badge .b-val .down { color: var(--neg-on-dark); }
   .sc-hero { text-align: right; display: flex; flex-direction: column; align-items: flex-end; justify-content: center; }
   .sc-hero .h-label {
     font-size: 13px; font-weight: 600; color: var(--ivory-dim);
@@ -364,8 +428,8 @@
     display: flex; align-items: baseline; gap: 9px; margin-top: 12px; flex-wrap: wrap; justify-content: flex-end;
   }
   .sc-hero .h-ctx { font-size: 13px; color: var(--ivory-dim); }
-  .chip.on-dark.pos { color: #8FD6A9; background: rgba(21,128,61,0.28); }
-  .chip.on-dark.neg { color: #F0A18F; background: rgba(180,35,24,0.30); }
+  .chip.on-dark.pos { color: var(--pos-on-dark); background: rgba(21,128,61,0.28); }
+  .chip.on-dark.neg { color: var(--neg-on-dark); background: rgba(180,35,24,0.30); }
   .chip.on-dark.na  { color: var(--ivory-dim); background: rgba(244,241,234,0.10); }
   .chip.on-dark.share { color: var(--ivory); background: rgba(244,241,234,0.14); }
 
@@ -381,20 +445,19 @@
   .callout .c-icon {
     flex-shrink: 0; width: 19px; height: 19px; border-radius: 50%;
     display: flex; align-items: center; justify-content: center;
-    font-size: 11px; font-weight: 700; color: #fff; margin-top: 1px;
+    font-size: 11px; font-weight: 700; color: var(--card); margin-top: 1px;
   }
   .callout.good .c-icon { background: var(--pos); }
-  .callout.watch .c-icon { background: #B45309; }
+  .callout.watch .c-icon { background: var(--warn); }
   .callout strong { display: block; font-size: 15px; font-weight: 600; margin-bottom: 1px; }
   .callout p { font-size: 13px; color: var(--ink-soft); line-height: 1.45; }
 
   .opp-panel {
-    margin-top: 16px; background: var(--card);
-    border: 1px solid var(--line); border-left: 4px solid var(--ember);
+    margin-top: 16px; background: var(--ember-tint);
     border-radius: var(--radius-sm); padding: 18px 22px 19px;
     display: grid; grid-template-columns: auto 1fr; gap: 6px 28px; align-items: start;
   }
-  .opp-figure { padding-right: 24px; border-right: 1px solid var(--line-soft); }
+  .opp-figure { padding-right: 4px; }
   .opp-kicker {
     font-size: 13px; font-weight: 600; color: var(--ember);
     margin-bottom: 6px; white-space: nowrap;
@@ -406,10 +469,7 @@
   .opp-uplift-sub { font-size: 13px; color: var(--ink-faint); margin-top: 6px; white-space: nowrap; }
   .opp-body strong { display: block; font-size: 15px; font-weight: 600; margin-bottom: 4px; }
   .opp-body p { font-size: 13px; color: var(--ink-soft); line-height: 1.55; }
-  .opp-none {
-    margin-top: 16px; border: 1px dashed var(--line); border-radius: var(--radius-sm);
-    padding: 13px 18px; font-size: 13px; color: var(--ink-faint);
-  }
+  .opp-none { margin-top: 16px; font-size: 13px; color: var(--ink-faint); }
 
   /* Composition */
   .comp-card { padding: 20px 24px 18px; }
@@ -424,7 +484,7 @@
   .comp-split-bar, .mix-bar { animation: reveal var(--spring-ms) var(--spring) both; }
   @keyframes reveal { from { clip-path: inset(0 100% 0 0); } }
   .comp-split-bar .seg .seg-label {
-    font-size: 11px; font-weight: 600; color: #fff;
+    font-size: 11px; font-weight: 600; color: var(--card);
     white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
   }
   .comp-split-legend { display: flex; gap: 22px; margin-top: 9px; flex-wrap: wrap; }
@@ -432,7 +492,7 @@
     display: flex; align-items: center; gap: 7px;
     font-size: 13px; color: var(--ink-soft);
   }
-  .comp-split-legend .cl-item .v { font-weight: 600; color: var(--ink); }
+  .comp-split-legend .cl-item .v { font-weight: 600; color: var(--label); }
   .comp-cats-label {
     font-size: 13px; font-weight: 600; color: var(--ink-soft); margin-bottom: 10px;
     padding-top: 16px; border-top: 1px solid var(--line-soft);
@@ -461,6 +521,14 @@
   .chart-x-label { font-size: 13px; font-weight: 600; }
   .chart-pt-label { font-size: 13px; font-weight: 600; fill: var(--ember-deep); }
   .chart-team-label { font-size: 11px; fill: var(--ink-faint); }
+  .chart-grid { stroke: var(--line-soft); stroke-dasharray: 2 4; }
+  .chart-axis { stroke: var(--axis); }
+  .chart-area { fill: var(--ember); fill-opacity: var(--area-alpha); }
+  .chart-team { stroke: var(--ink-faint); fill: none; }
+  .chart-team-dot { fill: var(--ink-faint); }
+  .chart-you { stroke: var(--ember); fill: none; }
+  .chart-you-dot { fill: var(--card); stroke: var(--ember); }
+  .bar-season { fill: var(--ember); } .bar-bench { fill: var(--bench); } .bar-other { fill: var(--bar-other); }
   .trend-foot {
     display: flex; justify-content: space-between; align-items: center; gap: 12px;
     margin-top: 10px; padding-top: 12px; border-top: 1px solid var(--line-soft); flex-wrap: wrap;
@@ -472,7 +540,7 @@
 
   /* Category detail */
   .headline-duo { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
-  .headline-card { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 18px 20px 14px; }
+  .headline-card { background: var(--card); border-radius: var(--radius); padding: 18px 20px 14px; }
   .headline-card .hc-top { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
   .headline-card .hc-name { font-size: 15px; font-weight: 600; display: flex; align-items: center; gap: 8px; }
   .headline-card .hc-sub { font-size: 11px; color: var(--ink-faint); }
@@ -483,7 +551,7 @@
   .hc-row .k { font-size: 13px; color: var(--ink-faint); }
   .hc-row .v { font-size: 13px; }
 
-  .cat-table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); }
+  .cat-table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; background: var(--card); border-radius: var(--radius); }
   table.cat-table { width: 100%; border-collapse: collapse; min-width: 660px; }
   table.cat-table th {
     text-align: right; font-weight: 600; font-size: 11px;
@@ -506,7 +574,7 @@
 
   /* Shifts */
   .shift-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
-  .shift-card { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 15px 17px 13px; }
+  .shift-card { background: var(--card); border-radius: var(--radius); padding: 15px 17px 13px; }
   .shift-card .s-name { font-size: 15px; font-weight: 600; margin-bottom: 2px; }
   .shift-card .s-scope { font-size: 11px; color: var(--ink-faint); margin-bottom: 10px; }
   .shift-card .s-val { font-size: 20px; font-weight: 700; letter-spacing: -0.012em; line-height: 1.1; margin-bottom: 8px; }
@@ -528,10 +596,11 @@
   .pace-proj {
     position: absolute; top: 0; bottom: 0;
     background: repeating-linear-gradient(-55deg, rgba(194,65,12,0.34) 0 5px, rgba(194,65,12,0.10) 5px 10px);
-    border: 1px dashed rgba(194,65,12,0.6); border-left: 0;
+    background: repeating-linear-gradient(-55deg, color-mix(in srgb, var(--ember) 34%, transparent) 0 5px, color-mix(in srgb, var(--ember) 10%, transparent) 5px 10px);
+    border: 1px dashed color-mix(in srgb, var(--ember) 60%, transparent); border-left: 0;
     border-radius: 0 6px 6px 0;
   }
-  .pace-tick { position: absolute; top: -7px; bottom: -7px; width: 2px; background: var(--ink); border-radius: 1px; }
+  .pace-tick { position: absolute; top: -7px; bottom: -7px; width: 2px; background: var(--label); border-radius: 1px; }
   .pace-tick.faint { background: var(--ink-faint); }
   .pace-tick .t-label {
     position: absolute; top: -18px; left: 50%; transform: translateX(-50%);
@@ -542,8 +611,8 @@
   .pace-legend .li { display: inline-flex; align-items: center; gap: 6px; }
   .pace-legend .sw { width: 14px; height: 9px; border-radius: 2px; display: inline-block; }
   .pace-legend .sw.actual { background: var(--ember); }
-  .pace-legend .sw.proj { background: repeating-linear-gradient(-55deg, rgba(194,65,12,0.34) 0 4px, rgba(194,65,12,0.10) 4px 8px); border: 1px dashed rgba(194,65,12,0.6); }
-  .pace-legend .sw.tick { width: 2px; height: 12px; background: var(--ink); border-radius: 1px; }
+  .pace-legend .sw.proj { background: repeating-linear-gradient(-55deg, color-mix(in srgb, var(--ember) 34%, transparent) 0 4px, color-mix(in srgb, var(--ember) 10%, transparent) 4px 8px); border: 1px dashed color-mix(in srgb, var(--ember) 60%, transparent); }
+  .pace-legend .sw.tick { width: 2px; height: 12px; background: var(--label); border-radius: 1px; }
   .pace-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--line-soft); }
   .pace-stat .p-label { font-size: 13px; font-weight: 600; color: var(--ink-faint); margin-bottom: 5px; }
   .pace-stat .p-val { font-size: 20px; font-weight: 700; letter-spacing: -0.012em; line-height: 1.1; }
@@ -565,7 +634,7 @@
     margin-top: 16px; padding: 12px 16px; background: var(--bone);
     border-radius: var(--radius-sm); font-size: 13px; color: var(--ink-soft); line-height: 1.55;
   }
-  .pace-summary strong { color: var(--ink); }
+  .pace-summary strong { color: var(--label); }
 
   /* ===================== PERIOD CARDS · TOGGLES · GRIDS (Phase 3) =====================
      Total = years, Campaigns = C1–C3. Layout borrowed from the Command Center's Campaigns tab,
@@ -575,13 +644,14 @@
   .period-cards.three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .pcard {
     appearance: none; text-align: left; font: inherit; color: inherit; cursor: pointer;
-    background: var(--card); border: 1px solid var(--line); border-radius: var(--radius);
+    background: var(--card); border: 0; border-radius: var(--radius);
     padding: 16px 18px 14px; display: flex; flex-direction: column; min-width: 0;
-    transition: border-color 150ms ease-out, box-shadow 150ms ease-out, transform var(--spring-ms) var(--spring);
+    transition: background-color 150ms ease-out, box-shadow 150ms ease-out, transform var(--spring-ms) var(--spring);
   }
-  .pcard:hover:not(:disabled) { border-color: var(--ink-faint); }
-  .pcard.active { border-color: var(--ink); box-shadow: inset 0 3px 0 var(--ember); }
-  .pcard:disabled { cursor: default; background: var(--bone); }
+  .pcard:hover:not(:disabled) { background: var(--card-hover); }
+  .pcard.active { box-shadow: inset 0 0 0 2px var(--ember); }
+  /* No campaign yet: it sits on the ground, so a 1px line keeps its edge */
+  .pcard:disabled { cursor: default; background: var(--bone); box-shadow: inset 0 0 0 1px var(--line); }
   .pcard:disabled .pc-val { color: var(--ink-faint); }
   .pc-top { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 4px 8px; margin-bottom: 10px; }
   .pc-name {
@@ -591,10 +661,10 @@
     font-size: 11px; color: var(--ink-faint); white-space: nowrap;
     border: 1px solid var(--line); border-radius: 20px; padding: 1px 7px;
   }
-  .pc-tag.open { color: var(--ember); border-color: rgba(194,65,12,0.45); background: var(--ember-tint); }
+  .pc-tag.open { color: var(--ember); border-color: color-mix(in srgb, var(--ember) 45%, transparent); background: var(--ember-tint); }
   .pc-val { font-size: 28px; font-weight: 700; letter-spacing: -0.02em; line-height: 1.1; margin-bottom: 6px; }
   .pc-sub { font-size: 13px; color: var(--ink-faint); line-height: 1.4; }
-  .pc-sub strong { color: var(--ink); font-weight: 600; }
+  .pc-sub strong { color: var(--label); font-weight: 600; }
   .pc-bar { height: 5px; background: var(--line-soft); border-radius: 3px; overflow: hidden; margin: 10px 0 0; }
   .pc-bar span { display: block; height: 100%; background: var(--ember); border-radius: 3px; transform-origin: left; animation: growIn 0.5s ease-out; }
   .pc-foot {
@@ -613,15 +683,15 @@
     color: var(--ink-soft); padding: 5px 12px; border-radius: 999px; white-space: nowrap; line-height: 1.25;
     transition: color 200ms ease-out, background-color 150ms ease-out, transform var(--spring-ms) var(--spring);
   }
-  .pills button:hover:not(:disabled):not(.active) { color: var(--ink); background: var(--bone); }
-  .pills button.active { background: var(--ink); color: var(--ivory); }
+  .pills button:hover:not(:disabled):not(.active) { color: var(--label); background: var(--fill-hover); }
+  .pills button.active { background: var(--selected); color: var(--ivory); }
   .pills button:disabled { opacity: 0.35; cursor: default; }
   /* Single-choice groups: one dark thumb slides to the chosen pill (syncThumb sets the --thumb-* values) */
   .pills.has-thumb::before {
     content: ''; position: absolute; z-index: -1; left: 0; top: 0;
     width: var(--thumb-w); height: var(--thumb-h);
     transform: translate(var(--thumb-x), var(--thumb-y));
-    background: var(--ink); border-radius: 999px;
+    background: var(--selected); border-radius: 999px;
     transition: transform var(--spring-ms) var(--spring), width var(--spring-ms) var(--spring);
   }
   .pills.has-thumb button.active { background: transparent; }
@@ -630,7 +700,7 @@
 
   table.cat-table.grid { min-width: 620px; }
   table.cat-table tr.subtotal td { font-weight: 700; border-top: 1px solid var(--line); }
-  table.cat-table tr.total td { font-weight: 700; border-top: 2px solid var(--ink); border-bottom: 0; }
+  table.cat-table tr.total td { font-weight: 700; border-top: 2px solid var(--label); border-bottom: 0; }
   table.cat-table th.sel, table.cat-table td.sel { background: var(--ember-tint); }
   table.cat-table th .th-sub {
     display: block; font-weight: 400; font-size: 11px;
@@ -641,7 +711,7 @@
   /* ===================== TOTAL: season overview (Phase 3b, Event Analyzer layout) ===================== */
   .ov-head { margin-bottom: 14px; }
   .ov-title { font-size: 28px; font-weight: 700; letter-spacing: -0.02em; line-height: 1.1; }
-  .ctlbar { display: flex; align-items: center; flex-wrap: wrap; gap: 10px 22px; padding: 10px 16px; margin-bottom: 18px; }
+  .ctlbar { display: flex; align-items: center; flex-wrap: wrap; gap: 10px 22px; margin-bottom: 18px; }
   .cb-group { display: flex; align-items: center; gap: 9px; }
   .cb-k { font-size: 13px; font-weight: 600; color: var(--ink-faint); white-space: nowrap; }
   .cb-v { font-size: 13px; font-weight: 600; white-space: nowrap; }
@@ -653,8 +723,8 @@
   }
   .switch:disabled { cursor: default; opacity: 0.5; }
   .sw-track { width: 34px; height: 19px; border-radius: 999px; background: var(--line); position: relative; transition: background-color 200ms ease-out; flex-shrink: 0; }
-  .sw-knob { position: absolute; top: 2px; left: 2px; width: 15px; height: 15px; border-radius: 50%; background: #fff; box-shadow: 0 1px 2px rgba(0,0,0,0.25); transition: transform var(--spring-ms) var(--spring); }
-  .switch.on .sw-track { background: var(--ink); }
+  .sw-knob { position: absolute; top: 2px; left: 2px; width: 15px; height: 15px; border-radius: 50%; background: var(--knob); box-shadow: 0 1px 2px rgba(0,0,0,0.25); transition: transform var(--spring-ms) var(--spring); }
+  .switch.on .sw-track { background: var(--selected); }
   .switch.on .sw-knob { transform: translateX(15px); }
   .headline { display: flex; align-items: baseline; flex-wrap: wrap; gap: 4px 12px; margin: 0 0 14px; }
   .hl-main { font-size: 20px; font-weight: 600; letter-spacing: -0.012em; line-height: 1.25; }
@@ -663,7 +733,7 @@
   .hl-delta.neg { color: var(--neg); }
   .hl-sub { font-size: 13px; color: var(--ink-faint); }
   .kcards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; margin-bottom: 18px; }
-  .kcard { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 16px 18px 8px; min-width: 0; }
+  .kcard { background: var(--card); border-radius: var(--radius); padding: 16px 18px 8px; min-width: 0; }
   .kc-top { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
   .kc-label { font-size: 13px; font-weight: 600; color: var(--ink-soft); }
   .kc-meta { font-size: 13px; color: var(--ink-faint); white-space: nowrap; }
@@ -672,18 +742,17 @@
   .kc-rows { border-top: 1px solid var(--line-soft); }
   .kc-row {
     display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 10px;
-    padding: 7px 0; border-bottom: 1px solid var(--line-soft); font-size: 13px;
+    padding: 7px 0; font-size: 13px;
   }
-  .kc-row:last-child { border-bottom: 0; }
   .kc-row .k { color: var(--ink-soft); white-space: nowrap; }
-  .kc-row.bench .k { color: var(--ink); font-weight: 600; }
+  .kc-row.bench .k { color: var(--label); font-weight: 600; }
   .kc-row .v { text-align: right; white-space: nowrap; }
   .kc-row .need { font-size: 11px; color: var(--ink-faint); text-align: right; }
   .dpill { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 600; padding: 1px 7px; border-radius: 5px; white-space: nowrap; }
   .dpill.pos { color: var(--pos); background: var(--pos-tint); }
   .dpill.neg { color: var(--neg); background: var(--neg-tint); }
   .dpill .dp-pct { font-weight: 400; opacity: 0.8; }
-  .shape-card { padding: 18px 20px 10px; margin-bottom: 36px; }
+  .shape-card { padding: 18px 20px 10px; margin-bottom: 48px; }
   .shape-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; flex-wrap: wrap; margin-bottom: 6px; }
   .shape-head h2 { font-size: 20px; font-weight: 600; letter-spacing: -0.012em; line-height: 1.25; }
   .shape-tools { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
@@ -710,7 +779,7 @@
   table.leaderboard tr.lb-missing td.name { font-weight: 400; }
   .lb-why { display: block; font-size: 11px; font-weight: 400; color: var(--ink-faint); margin-top: 1px; }
   .lb-controls { align-items: center; }
-  .lb-controls .ctl.active { border-color: var(--ink); color: var(--ink); font-weight: 600; }
+  .lb-controls .ctl.active { border-color: var(--label); color: var(--label); font-weight: 600; }
 
   .pills .sm, .sm-only { display: none; }
   .cat-table-wrap > .cat-best { padding: 12px 16px 0; margin: 0 0 6px; }
@@ -722,13 +791,12 @@
   /* one row per year: label · bar · value · change. The bars are the three-year trend. */
   .pl-row {
     display: grid; grid-template-columns: 62px minmax(24px, 1fr) auto 98px; align-items: center; gap: 10px;
-    padding: 7px 0; border-bottom: 1px solid var(--line-soft); font-size: 13px;
+    padding: 7px 0; font-size: 13px;
   }
-  .pl-row:last-child { border-bottom: 0; }
   .pl-row .k { color: var(--ink-soft); white-space: nowrap; }
   .pl-row .v { text-align: right; white-space: nowrap; min-width: 54px; }
   .pl-row .c { text-align: right; white-space: nowrap; }
-  .pl-row.cur .k { color: var(--ink); font-weight: 600; }
+  .pl-row.cur .k { color: var(--label); font-weight: 600; }
   .pl-row.cur .v { font-weight: 600; }
   .pl-track { height: 5px; background: var(--line-soft); border-radius: 3px; overflow: hidden; }
   .pl-fill { display: block; height: 100%; background: var(--ember); opacity: 0.42; border-radius: 3px; }
@@ -739,7 +807,7 @@
     appearance: none; border: 0; background: transparent; cursor: pointer; padding: 6px 0 6px 6px; margin: -6px 0;
     font: inherit; letter-spacing: inherit; text-transform: inherit; color: inherit; white-space: nowrap;
   }
-  .th-sort:hover { color: var(--ink); }
+  .th-sort:hover { color: var(--label); }
   .th-sort.on { color: var(--ember); }
   .th-arrow { display: inline-block; margin-left: 4px; font-size: 8.5px; opacity: 0.55; }
   .th-sort.on .th-arrow { opacity: 1; }
@@ -749,7 +817,6 @@
   @media (max-width: 680px) {
     .pl-cards { grid-template-columns: 1fr; gap: 10px; }
     .pl-row { grid-template-columns: 58px minmax(20px, 1fr) auto 92px; gap: 8px; }
-    #p-ctl .cb-show { grid-column: 1 / -1; justify-self: start; }
   }
 
   /* Footnote / methodology */
@@ -773,8 +840,8 @@
   /* Tapping an "i" opens this popover: a translucent material that grows out of the icon */
   #tip {
     inset: auto; margin: 0; max-width: 260px; padding: 10px 12px; border: 0; border-radius: 12px;
-    font: 400 13px/1.4 var(--ui); color: var(--ink);
-    background: rgba(255, 255, 255, 0.78);
+    font: 400 13px/1.4 var(--ui); color: var(--label);
+    background: var(--tip-glass);
     -webkit-backdrop-filter: blur(20px) saturate(180%); backdrop-filter: blur(20px) saturate(180%);
     box-shadow: 0 0 0 0.5px rgba(0,0,0,0.12), 0 8px 24px rgba(0,0,0,0.12);
     opacity: 0; transform: scale(0.92);
@@ -784,7 +851,7 @@
   #tip:popover-open { opacity: 1; transform: none; }
   @starting-style { #tip:popover-open { opacity: 0; transform: scale(0.92); } }
   @media (prefers-reduced-transparency: reduce) {
-    #tip { background: #fff; -webkit-backdrop-filter: none; backdrop-filter: none; }
+    #tip { background: var(--tip-solid); -webkit-backdrop-filter: none; backdrop-filter: none; }
   }
   .on-dark .info-i, .sc-badge .info-i { border-color: var(--ivory-dim); color: var(--ivory-dim); }
 
@@ -820,7 +887,7 @@
     .pills button { padding: 5px 9px; }
     .sec-tools { width: 100%; }
     .ov-title { font-size: 24px; }
-    .ctlbar { gap: 10px 16px; padding: 10px 12px; }
+    .ctlbar { gap: 10px 16px; }
     .cb-spacer { display: none; }
     .shape-card { padding: 14px 14px 8px; }
     .share-col { display: none; }
@@ -852,7 +919,7 @@
     .ctlbar .cb-season, .ctlbar .cb-bench { flex-direction: column; align-items: flex-start; gap: 4px; }
     .ctlbar .cb-season { order: 1; } .ctlbar .cb-bench { order: 2; }
     .ctlbar .cb-data { order: 3; grid-column: 1 / -1; }
-    .ctlbar .switch { order: 4; } .ctlbar .cb-show { order: 5; justify-self: end; }
+    .ctlbar .switch { order: 4; } .ctlbar .cb-show { order: 5; grid-column: 1 / -1; justify-self: start; }
     .kcards { gap: 10px; }
     .kcard { padding: 12px 14px 6px; }
     .kc-val { font-size: 24px; }
@@ -895,7 +962,7 @@
     .sc-badges { gap: 6px; }
     .sc-badge { padding: 6px 10px; }
     .opp-panel { grid-template-columns: 1fr; gap: 12px; }
-    .opp-figure { border-right: 0; border-bottom: 1px solid var(--line-soft); padding-right: 0; padding-bottom: 12px; }
+    .opp-figure { padding-right: 0; }
     .cat-bar-row { grid-template-columns: 108px 1fr 64px; }
     .cat-bar-row .cb-pct, .cat-bar-row .cb-growth { display: none; }
     .comp-split-bar { height: 26px; }
@@ -1006,7 +1073,7 @@
   <div class="ov-head">
     <h2 class="ov-title" id="t-title">Season performance</h2>
   </div>
-  <div class="card ctlbar" id="t-ctl"></div>
+  <div class="ctlbar" id="t-ctl"></div>
   <div class="headline" id="t-headline"></div>
   <div class="kcards" id="t-kpis"></div>
 
@@ -1088,7 +1155,7 @@
   <div class="ov-head">
     <h2 class="ov-title" id="p-title">Product growth</h2>
   </div>
-  <div class="card ctlbar" id="p-ctl"></div>
+  <div class="ctlbar" id="p-ctl"></div>
   <div class="headline" id="p-headline"></div>
   <div class="pl-cards" id="p-cards"></div>
   <div class="cat-note pl-note" id="p-note"></div>
@@ -1148,8 +1215,8 @@
       <div class="trend-canvas"><svg id="rep-chart-svg" viewBox="0 0 800 300" preserveAspectRatio="xMidYMid meet"></svg></div>
       <div class="trend-foot">
         <div class="trend-legend">
-          <span class="li"><svg width="26" height="6"><line x1="0" y1="3" x2="26" y2="3" stroke="#C2410C" stroke-width="2.5"/></svg> <span id="legend-you">You</span></span>
-          <span class="li"><svg width="26" height="6"><line x1="0" y1="3" x2="26" y2="3" stroke="#8B857C" stroke-width="1.5" stroke-dasharray="4,3"/></svg> Team average<button type="button" class="info-i" id="legend-team-tip">i</button></span>
+          <span class="li"><svg width="26" height="6"><line x1="0" y1="3" x2="26" y2="3" class="chart-you" stroke-width="2.5"/></svg> <span id="legend-you">You</span></span>
+          <span class="li"><svg width="26" height="6"><line x1="0" y1="3" x2="26" y2="3" class="chart-team" stroke-width="1.5" stroke-dasharray="4,3"/></svg> Team average<button type="button" class="info-i" id="legend-team-tip">i</button></span>
         </div>
         <div class="trend-insight" id="trend-insight"></div>
       </div>
@@ -2048,7 +2115,8 @@ function renderShape() {
   const mEl = document.getElementById('t-shape-metric');
   mEl.innerHTML = SHAPE_METRICS.map(([m, l]) => `<button type="button" data-m="${m}" class="${m === metric ? 'active' : ''}" aria-pressed="${m === metric}">${l}</button>`).join('');
   mEl.querySelectorAll('button').forEach(b => b.onclick = () => { STATE.shapeMetric = b.dataset.m; renderShape(); });
-  const colorOf = y => y === STATE.season ? '#C2410C' : y === STATE.bench ? '#3E4A5C' : '#B8B2A7';
+  const barClass = y => y === STATE.season ? 'bar-season' : y === STATE.bench ? 'bar-bench' : 'bar-other';
+  const colorOf = y => y === STATE.season ? 'var(--ember)' : y === STATE.bench ? 'var(--bench)' : 'var(--bar-other)';
   document.getElementById('t-shape-legend').innerHTML = years.map(y =>
     `<span class="li"><span class="sw" style="background:${colorOf(y)}"></span>${y}${y === STATE.season ? ' (season)' : ''}</span>`).join('');
 
@@ -2069,7 +2137,7 @@ function renderShape() {
   let html = '';
   for (let i = 0; i <= 4; i++) {
     const v = i * step, yy = yFn(v);
-    html += `<line x1="${padL}" y1="${yy}" x2="${W - padR}" y2="${yy}" stroke="${i ? '#ECE9E0' : '#D6D2C6'}" ${i ? 'stroke-dasharray="2,4"' : ''}/>`;
+    html += `<line x1="${padL}" y1="${yy}" x2="${W - padR}" y2="${yy}" class="${i ? 'chart-grid' : 'chart-axis'}"/>`;
     html += `<text x="${padL - 8}" y="${yy + 3}" text-anchor="end" class="chart-y-label">${fmtCurrencyShort(v)}</text>`;
   }
   const groupW = plotW / 3, inner = groupW * 0.72, gap = 4;
@@ -2083,7 +2151,7 @@ function renderShape() {
       if (v === undefined) { html += `<text x="${cx}" y="${yFn(0) - 5}" text-anchor="middle" class="shape-na">open</text>`; return; }
       if (v === null || v === 0) { html += `<text x="${cx}" y="${yFn(0) - 5}" text-anchor="middle" class="shape-na"><title>No ${metric === 'total_sales' ? 'Total Sales workbook' : 'data'} for C${n} ${y}</title>—</text>`; return; }
       const top = yFn(v);
-      html += `<rect x="${x}" y="${top}" width="${barW}" height="${yFn(0) - top}" rx="2.5" fill="${colorOf(y)}"><title>C${n} ${y}: ${fmtCurrency(v).replace(/<[^>]*>/g, '')}</title></rect>`;
+      html += `<rect x="${x}" y="${top}" width="${barW}" height="${yFn(0) - top}" rx="2.5" class="${barClass(y)}"><title>C${n} ${y}: ${fmtCurrency(v).replace(/<[^>]*>/g, '')}</title></rect>`;
       if (!narrow || y === STATE.season) html += `<text x="${cx}" y="${top - 5}" text-anchor="middle" class="shape-lbl${y === STATE.season ? ' season' : ''}">${fmtCurrencyShort(v)}</text>`;
     });
   });
@@ -2758,16 +2826,16 @@ function renderRepComposition() {
   } else {
     const evtPct = evtV / splitTotal * 100;
     const nonPct = nonV / splitTotal * 100;
-    const seg = (pct, color, label) => pct > 0 ?
-      `<div class="seg" style="background:${color}; width:${pct}%;" title="${label}: ${pct.toFixed(1)}%">${pct > 12 ? `<span class="seg-label">${label} · ${pct.toFixed(0)}%</span>` : ''}</div>` : '';
+    const seg = (pct, color, label, ink) => pct > 0 ?
+      `<div class="seg" style="background:${color}; width:${pct}%;" title="${label}: ${pct.toFixed(1)}%">${pct > 12 ? `<span class="seg-label" style="color:${ink}">${label} · ${pct.toFixed(0)}%</span>` : ''}</div>` : '';
     splitHtml = `
       <div class="comp-split">
         <div class="comp-split-bar">
-          ${seg(evtPct, 'var(--ink)', 'Event')}
-          ${seg(nonPct, 'var(--bk-nonevent)', 'Non-Event')}
+          ${seg(evtPct, 'var(--label)', 'Event', 'var(--card)')}
+          ${seg(nonPct, 'var(--bk-nonevent)', 'Non-Event', 'var(--on-fill)')}
         </div>
         <div class="comp-split-legend">
-          <span class="cl-item"><span class="swatch" style="background:var(--ink)"></span> Event CPO <span class="v">${fmtCurrencyShort(evtV)}</span><span class="ctx">${evtPct.toFixed(1)}%</span></span>
+          <span class="cl-item"><span class="swatch" style="background:var(--label)"></span> Event CPO <span class="v">${fmtCurrencyShort(evtV)}</span><span class="ctx">${evtPct.toFixed(1)}%</span></span>
           <span class="cl-item"><span class="swatch" style="background:var(--bk-nonevent)"></span> Non-Event (SC's / Marketing) <span class="v">${nonV > 0 ? fmtCurrencyShort(nonV) : '—'}</span><span class="ctx">${nonV > 0 ? nonPct.toFixed(1) + '%' : (nonEvt ? '' : 'no Total Sales for ' + p.label)}</span></span>
         </div>
       </div>`;
@@ -2828,9 +2896,9 @@ function renderRepBuckets() {
     `<span class="chip ${v >= 0 ? 'pos' : 'neg'}">${v >= 0 ? '+' : '−'}${Math.abs(v).toFixed(0)}% ${v >= 0 ? 'above' : 'below'}</span>`;
 
   const headlineCard = (name, sub, color, cur, prior, cmp, teamAv, vsTeam) => `
-    <div class="headline-card" style="border-top:3px solid ${color};">
+    <div class="headline-card">
       <div class="hc-top">
-        <span class="hc-name">${name}</span>
+        <span class="hc-name"><span class="swatch" style="background:${color}"></span>${name}</span>
         ${sub ? `<span class="hc-sub">${sub}</span>` : ''}
       </div>
       <div class="hc-val">${cur ? fmtCurrency(cur.cpo) : naSpan}</div>
@@ -2846,7 +2914,7 @@ function renderRepBuckets() {
     </div>`;
 
   document.getElementById('rep-buckets-top').innerHTML =
-    headlineCard('Total Event CPO', 'All six categories', 'var(--ink)', totEvtCur, totEvtPrior, cmpE, teamAvgTotEvt, vsTeamTotEvt) +
+    headlineCard('Total Event CPO', 'All six categories', 'var(--label)', totEvtCur, totEvtPrior, cmpE, teamAvgTotEvt, vsTeamTotEvt) +
     headlineCard('Non-Event CPO', "SC's / Marketing", 'var(--bk-nonevent)', nonEvtCur, nonEvtPrior, cmpS, teamAvgNonEvt, vsTeamNonEvt);
 
   // The intake delivers events per bucket; the category with the best CPO / event gets a callout.
@@ -3122,7 +3190,7 @@ function renderRepChart() {
     if (v > yMax) break;
     const yy = yFn(v);
     const isBase = i === 0;
-    html += `<line x1="${padL}" y1="${yy}" x2="${W - padR}" y2="${yy}" stroke="${isBase ? '#D6D2C6' : '#ECE9E0'}" stroke-width="1" ${isBase ? '' : 'stroke-dasharray="2,4"'}/>`;
+    html += `<line x1="${padL}" y1="${yy}" x2="${W - padR}" y2="${yy}" class="${isBase ? 'chart-axis' : 'chart-grid'}" stroke-width="1"/>`;
     html += `<text x="${padL - 10}" y="${yy + 3}" text-anchor="end" class="chart-y-label">${fmt(v)}</text>`;
   }
   // X-axis labels
@@ -3136,16 +3204,16 @@ function renderRepChart() {
     const base = yFn(0);
     const path = 'M ' + youPts.map(p => `${p.x} ${p.y}`).join(' L ') +
       ` L ${youPts[youPts.length - 1].x} ${base} L ${youPts[0].x} ${base} Z`;
-    html += `<path d="${path}" fill="rgba(194,65,12,0.07)"/>`;
+    html += `<path d="${path}" class="chart-area"/>`;
   }
 
   // Team average line
   const teamPts = teamVals.map((v, i) => v !== null && !isNaN(v) ? { x: xFn(i), y: yFn(v), v } : null).filter(Boolean);
   if (teamPts.length > 1) {
-    html += `<polyline points="${teamPts.map(p => `${p.x},${p.y}`).join(' ')}" fill="none" stroke="#8B857C" stroke-width="1.5" stroke-dasharray="4,3"/>`;
+    html += `<polyline points="${teamPts.map(p => `${p.x},${p.y}`).join(' ')}" class="chart-team" stroke-width="1.5" stroke-dasharray="4,3"/>`;
   }
   teamPts.forEach(p => {
-    html += `<circle cx="${p.x}" cy="${p.y}" r="2.5" fill="#8B857C"><title>Team avg: ${fmt(p.v)}</title></circle>`;
+    html += `<circle cx="${p.x}" cy="${p.y}" r="2.5" class="chart-team-dot"><title>Team avg: ${fmt(p.v)}</title></circle>`;
   });
   if (teamPts.length) {
     const last = teamPts[teamPts.length - 1];
@@ -3156,10 +3224,10 @@ function renderRepChart() {
   for (let j = 1; j < youPts.length; j++) {
     const a = youPts[j - 1], b = youPts[j];
     const partial = pts[b.i].open;
-    html += `<line x1="${a.x}" y1="${a.y}" x2="${b.x}" y2="${b.y}" stroke="#C2410C" stroke-width="2.5" stroke-linecap="round"${partial ? ' stroke-dasharray="6,5"' : ''}/>`;
+    html += `<line x1="${a.x}" y1="${a.y}" x2="${b.x}" y2="${b.y}" class="chart-you" stroke-width="2.5" stroke-linecap="round"${partial ? ' stroke-dasharray="6,5"' : ''}/>`;
   }
   youPts.forEach(p => {
-    html += `<circle cx="${p.x}" cy="${p.y}" r="4.5" fill="#fff" stroke="#C2410C" stroke-width="2.5"><title>You · ${pts[p.i].label}: ${fmt(p.v)}</title></circle>`;
+    html += `<circle cx="${p.x}" cy="${p.y}" r="4.5" class="chart-you-dot" stroke-width="2.5"><title>You · ${pts[p.i].label}: ${fmt(p.v)}</title></circle>`;
     // The first label hangs right of its point so it never runs into the y-axis labels
     const first = p.i === 0;
     html += `<text x="${first ? p.x - 6 : p.x}" y="${p.y - 13}" text-anchor="${first ? 'start' : 'middle'}" class="chart-pt-label">${fmt(p.v)}</text>`;
@@ -3431,7 +3499,8 @@ function renderProductLeaderboard() {
     STATE.selectedRep = tr.dataset.rep; STATE.chartMetric = null;
     renderAll(); switchView('rep', true);
     document.getElementById('rep-products-section').scrollIntoView({ block: 'start' });
-    window.scrollBy(0, -(document.querySelector('.masthead').offsetHeight + 12));
+    // By here the brand row has scrolled away; only the tab bar still covers the page
+    window.scrollBy(0, -(document.querySelector('.masthead').offsetHeight - brandRow.offsetHeight + 12));
   }));
 }
 
@@ -3563,6 +3632,17 @@ function syncThumb(g) {
 }
 new MutationObserver(() => document.querySelectorAll('.pills').forEach(syncThumb))
   .observe(document.body, { subtree: true, childList: true, attributes: true, attributeFilter: ['class'] });
+
+// The masthead sticks at minus the brand row's height, so the brand row scrolls away and the tabs stay.
+// The row's height changes with the window and with the campaign line (it wraps on a phone, and differs
+// per tab), so it is watched rather than measured once.
+const brandRow = document.querySelector('.brand-row');
+function syncBrandHeight() {
+  document.documentElement.style.setProperty('--brand-h', brandRow.offsetHeight + 'px');
+}
+syncBrandHeight();
+if (window.ResizeObserver) new ResizeObserver(syncBrandHeight).observe(brandRow);
+else window.addEventListener('resize', syncBrandHeight);
 
 // The tab underline slides to the active tab; it jumps on first paint and on resize.
 function syncTabUnderline(animate) {
