@@ -29,6 +29,61 @@ launchd `com.allinalan.rsd-intake`, Jan/May/Sep 8). It opens a PR here; merging 
 
 See `leader_walkthrough.md` for the full breakdown.
 
+## Design rules
+
+Set by the Apple HIG pass (PRs #13 and #14, October 2026). `index.html` is edited by hand, often by
+different sessions, so these are the rules that keep it one design. Reps read it on phones first.
+
+**Type**
+- Two families. Archivo (`--disp`) is for the wordmark and headings only. Everything else, numbers
+  included, uses the system font (`--ui`, SF Pro on Apple devices). No monospace.
+- Six sizes: 48 hero · 28 title · 20 headline · 15 body · 13 footnote · 11 caption (on phones: hero 40,
+  title 24). Nothing under 11px except icon glyphs (the sort arrow, the "i"). 16px appears only on
+  selects on touch screens, because anything smaller makes iOS zoom the page when a select is tapped.
+- Three weights: 400, 600, 700. 800 belongs to the wordmark alone.
+- Letter-spacing tightens only from 20px up (−0.012em headline, −0.02em title, −0.025em hero);
+  smaller text stays at 0. No uppercase labels; the wordmark is the one exception.
+- Columns of numbers line up through `font-variant-numeric: tabular-nums` on `body`.
+- One heading per section. No small label stacked on top of a title.
+
+**Color**
+- Every color is a token in `:root` with a dark value in the `prefers-color-scheme: dark` block. No
+  hex values in rules or in the script; chart colors are tokens too.
+- Text is `--label`, the masthead is `--chrome` / `--chrome-glass`, and a chosen pill or a switch
+  that is on is `--selected`. They are separate tokens because they flip differently in dark mode.
+- Secondary text (`--ink-soft`, `--ink-faint`) passes 4.5:1 on cards and on the page in both modes.
+  Check the contrast of any new text color before using it.
+
+**Surfaces**
+- Cards are white on the bone ground with no border. Space separates sections (48px), not lines.
+  Hairlines stay only between rows of the number tables, where they guide the eye across columns.
+- No decorative accent stripes. Selection is a tint or a single ring.
+- The masthead is translucent glass whose brand row scrolls away (`--brand-h`, set by the script).
+  `prefers-reduced-transparency` makes it solid.
+
+**Motion**
+- One curve: `--spring` (critically damped, settles in `--spring-ms`, 500ms, no overshoot), with a
+  cubic-bezier fallback where CSS `linear()` is unsupported. No bounce: nothing here is flicked or dragged.
+- Respond on press, not release: `:active` scales to 0.96 in 80ms and springs back.
+- Things move from where they are. Leaderboards re-render through `morph()`, so rows slide to their
+  new rank and bars change length in place. Single-choice pill groups get one sliding thumb
+  (`syncThumb`), and the tab underline slides (`syncTabUnderline`). Entrance animations play once per tab.
+- Animate `transform` and `opacity`; never move things with `left` or `top`.
+- `prefers-reduced-motion` turns off travel and growing bars and keeps fades and color changes.
+- In a MutationObserver callback, use `classList.toggle(name, force)`. `add` and `remove` rewrite the
+  attribute even when nothing changes, which wakes the observer again. That loop once froze the page.
+
+**Touch and focus**
+- Every control is at least 44×44pt on touch screens (`@media (pointer: coarse)`). Controls that
+  look small, like the pills and the "i", get an invisible larger hit area through `::after`.
+- An explanation a rep needs goes in the tap-to-open popover (`#tip`, via `data-tip`), not in
+  `title=`. A `title=` tooltip never appears on a phone.
+- Keyboard focus is always visible (the ember `:focus-visible` ring). Never `outline: none` without
+  a replacement.
+
+**Before merging a change to `index.html`:** open all four tabs at 1280px and 375px, in light and
+dark mode, and confirm there is no sideways scroll and no console error.
+
 ## Hosting
 
 GitHub Pages, public repo. URL-based privacy only (anyone with the URL can view).
