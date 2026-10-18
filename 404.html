@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>RSD Numbers</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<meta name="color-scheme" content="light dark">
+<!-- GitHub Pages serves this for any address under the site that has no page. A rep who types their first name
+     (/luke) or misspells their link lands here and goes on to ?rep=<what they typed>, where index.html finds them
+     or shows the names to pick from. Anything that looks like a file name stays here, as a plain "not found". -->
+<script>
+(function () {
+  var parts = location.pathname.split('/').filter(Boolean);
+  var base = '/';
+  if (parts[0] === 'rsd-events-dashboard') { base = '/rsd-events-dashboard/'; parts.shift(); }
+  var name = parts[0] || '';
+  window.SITE_BASE = base;
+  try { name = decodeURIComponent(name); } catch (e) { /* a stray % in the address: use it as typed */ }
+  if (name && name.indexOf('.') < 0) location.replace(base + '?rep=' + encodeURIComponent(name));
+})();
+</script>
+<style>
+  :root { --bone: #F4F2EC; --label: #191612; --soft: #57534E; --link: #9A3412; }
+  @media (prefers-color-scheme: dark) { :root { --bone: #0F0E0C; --label: #F2EFE8; --soft: #B8B2A7; --link: #F59A6B; } }
+  body { margin: 0; padding: 48px 16px; background: var(--bone); color: var(--label);
+    font: 15px/1.45 -apple-system, BlinkMacSystemFont, system-ui, 'Segoe UI', Roboto, sans-serif; }
+  main { max-width: 34rem; margin: 0 auto; }
+  h1 { font-size: 20px; font-weight: 600; margin: 0 0 8px; }
+  p { color: var(--soft); margin: 0; }
+  a { color: var(--link); font-weight: 600; text-decoration: none; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Nothing here.</h1>
+  <p>This address isn't part of the dashboard. <a id="home" href="/rsd-events-dashboard/">Open the dashboard</a></p>
+</main>
+<script>document.getElementById('home').href = window.SITE_BASE || '/rsd-events-dashboard/';</script>
+</body>
+</html>

@@ -9,6 +9,11 @@
 <meta name="theme-color" content="#2B2823" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#312E2A" media="(prefers-color-scheme: dark)">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23191612'/%3E%3Cpath d='M8 19a8 8 0 0 1 16 0Z' fill='%23C2410C'/%3E%3Crect x='6' y='21' width='20' height='2.4' rx='1.2' fill='%23F4F1EA'/%3E%3C/svg%3E">
+<!-- Add to Home Screen: the sun mark as the icon; a rep's own page renames it to them (personal mode, below) -->
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="apple-mobile-web-app-title" content="RSD Numbers">
+<!-- A rep's own link (?rep=matt-foss) hides the tabs before the first paint, so they never flash -->
+<script>if (/[?&]rep=/.test(location.search)) document.documentElement.classList.add('personal');</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&display=swap" rel="stylesheet">
@@ -834,6 +839,100 @@
     .pl-row { grid-template-columns: 58px minmax(20px, 1fr) auto 92px; gap: 8px; }
   }
 
+  /* ===================== PERSONAL LINKS (2026-10-18): a rep's own page ===================== */
+  /* ?rep=<name> opens one rep's Rep View with no tabs and no name picker. Nothing is private: the links are names. */
+  html.personal .nav { display: none; }
+  html.personal .brand-row { padding-bottom: 14px; }
+  html.choosing .footnote { display: none; }
+  .name-static {
+    font-family: var(--disp); font-weight: 700; font-stretch: 105%;
+    font-size: 28px; letter-spacing: -0.02em; line-height: 1.1; color: var(--ivory);
+    padding: 4px 0; overflow-wrap: anywhere;
+  }
+  /* Team page: the selected rep's own link, to copy and text */
+  .sc-link { display: flex; align-items: center; gap: 10px; margin-top: 10px; min-width: 0; }
+  .sc-url {
+    font-size: 13px; color: var(--ivory-dim); text-decoration: none;
+    min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  }
+  .sc-url:hover { color: var(--ivory); text-decoration: underline; }
+  .sc-copy, .hs-ok {
+    appearance: none; flex-shrink: 0; background: transparent; cursor: pointer;
+    font-family: var(--ui); font-size: 13px; font-weight: 600; line-height: 1.25;
+    padding: 5px 12px; border-radius: 999px;
+    transition: border-color 150ms ease-out, transform var(--spring-ms) var(--spring);
+  }
+  .sc-copy { border: 1px solid var(--ivory-line); color: var(--ivory); }
+  .sc-copy:hover { border-color: var(--ivory-dim); }
+  /* The one-time Add to Home Screen tip, on a rep's own page on a phone */
+  .hs-card { padding: 14px 16px 14px 20px; display: flex; align-items: center; gap: 14px; }
+  .hs-text { flex: 1; min-width: 0; font-size: 13px; color: var(--ink-soft); }
+  .hs-text strong { display: block; font-size: 15px; font-weight: 600; color: var(--label); margin-bottom: 2px; }
+  .hs-ok { border: 1px solid var(--line); color: var(--label); }
+  .hs-ok:hover { border-color: var(--ink-faint); }
+  /* A link that names nobody on the team: pick your name */
+  .chooser { max-width: 760px; padding: 4px 0 24px; }
+  .chooser-sub { color: var(--ink-soft); margin: 8px 0 20px; }
+  .chooser-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+  .chooser-name {
+    display: flex; align-items: center; min-height: 48px; padding: 10px 16px;
+    background: var(--card); border-radius: var(--radius); font-weight: 600; text-decoration: none;
+    transition: background-color 150ms ease-out, transform var(--spring-ms) var(--spring);
+  }
+  .chooser-name:hover { background: var(--card-hover); }
+  .fn-link { color: var(--ember-deep); font-weight: 600; text-decoration: none; }
+  .fn-link:hover { text-decoration: underline; }
+
+  /* Every campaign: C1 / C2 / C3 / Year down, the years across. A figure opens that period up top. */
+  table.cat-table.hist { min-width: 0; table-layout: fixed; }
+  table.cat-table.hist th:first-child, table.cat-table.hist td.cat-name { width: 150px; }
+  table.cat-table.hist td { padding-top: 11px; padding-bottom: 12px; vertical-align: top; }
+  table.cat-table.hist td.cat-name { font-size: 15px; }
+  .h-cell { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; }
+  .h-v {
+    appearance: none; border: 0; background: transparent; cursor: pointer; position: relative;
+    font-family: var(--ui); font-size: 15px; font-weight: 600; color: var(--label);
+    padding: 2px 6px; margin: -2px -6px; border-radius: 6px;
+    transition: background-color 150ms ease-out, transform var(--spring-ms) var(--spring);
+  }
+  .h-v:hover { background: var(--fill-hover); }
+  td.sel .h-v { color: var(--ember-deep); }
+  .h-bar { display: block; width: 100%; height: 4px; background: var(--line-soft); border-radius: 2px; overflow: hidden; }
+  .h-bar span { display: block; height: 100%; background: var(--ember); opacity: 0.42; border-radius: 2px; }
+  td.sel .h-bar span { opacity: 1; }
+  .h-off { font-size: 13px; color: var(--ink-faint); }
+
+  /* Plan next year */
+  .plan-card { padding: 18px 22px 18px; display: flex; align-items: center; gap: 12px 24px; flex-wrap: wrap; }
+  .plan-goal { display: flex; flex-direction: column; gap: 6px; }
+  .plan-goal label { font-size: 13px; font-weight: 600; color: var(--ink-soft); }
+  .plan-field {
+    display: inline-flex; align-items: center; align-self: flex-start;
+    border: 1px solid var(--line); border-radius: var(--radius-sm); background: var(--card);
+  }
+  .plan-field:focus-within { border-color: var(--ink-faint); }
+  .plan-step {
+    appearance: none; border: 0; background: transparent; cursor: pointer;
+    width: 40px; height: 44px; font-family: var(--ui); font-size: 20px; color: var(--ink-soft);
+    transition: color 150ms ease-out, transform var(--spring-ms) var(--spring);
+  }
+  .plan-step:hover { color: var(--label); }
+  .plan-input {
+    appearance: none; border: 0; background: transparent; width: 6.2em; text-align: center;
+    font-family: var(--ui); font-size: 28px; font-weight: 700; letter-spacing: -0.02em; color: var(--label);
+    padding: 4px 0;
+  }
+  .plan-ctx { flex: 1; min-width: 220px; font-size: 13px; color: var(--ink-faint); line-height: 1.45; }
+  .plan-ctx strong { color: var(--label); font-weight: 600; }
+  .plan-reset {
+    appearance: none; border: 0; background: transparent; cursor: pointer; position: relative;
+    font-family: var(--ui); font-size: 13px; font-weight: 600; color: var(--ember-deep); padding: 0;
+  }
+  .plan-reset:hover { text-decoration: underline; }
+  #plan-table-wrap { margin-top: 10px; }
+  table.cat-table.plan { min-width: 0; }
+  table.cat-table.plan td.best { color: var(--ink-soft); }
+
   /* Footnote / methodology */
   .footnote {
     margin-top: 52px; padding-top: 18px; border-top: 1px solid var(--line);
@@ -1012,17 +1111,34 @@
     table.leaderboard .yr-old, table.leaderboard .dlt-abs { display: none; }
     .team-grid { gap: 16px; }
 
-    /* Mobile narrative order: identity → coach's read → trajectory → supporting */
+    /* Mobile narrative order: identity → every campaign → coach's read → trajectory → next year → supporting */
     #rep-view .section.o-hero    { order: 1; }
-    #rep-view .section.o-summary { order: 2; }
-    #rep-view .section.o-pacing  { order: 3; }
-    #rep-view .section.o-minis   { order: 4; }
-    #rep-view .section.o-comp    { order: 5; }
-    #rep-view .section.o-trend   { order: 6; }
-    #rep-view .section.o-cats    { order: 7; }
-    #rep-view .section.o-products { order: 8; }
-    #rep-view .section.o-shifts  { order: 9; }
+    #rep-view .section.o-hstip   { order: 1; }
+    #rep-view .section.o-history { order: 2; }
+    #rep-view .section.o-summary { order: 3; }
+    #rep-view .section.o-pacing  { order: 4; }
+    #rep-view .section.o-plan    { order: 5; }
+    #rep-view .section.o-minis   { order: 6; }
+    #rep-view .section.o-comp    { order: 7; }
+    #rep-view .section.o-trend   { order: 8; }
+    #rep-view .section.o-cats    { order: 9; }
+    #rep-view .section.o-products { order: 10; }
+    #rep-view .section.o-shifts  { order: 11; }
     #rep-view > .section { margin-bottom: 24px; }
+    #rep-view .section.o-minis .mini-grid { margin-top: 0 !important; }
+    .name-static { font-size: 24px; }
+    html.personal .sc-kicker { padding-right: 0; }
+    .chooser-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    table.cat-table.hist th, table.cat-table.hist td { padding-left: 6px; padding-right: 6px; }
+    table.cat-table.hist th:first-child, table.cat-table.hist td.cat-name { width: 76px; padding-left: 12px; white-space: normal; }
+    table.cat-table.hist td.cat-name .lb-why { white-space: nowrap; }
+    table.cat-table.hist td.cat-name { font-size: 13px; }
+    table.cat-table.hist .h-v { font-size: 13px; }
+    table.cat-table.hist .chip, table.cat-table.plan .chip { font-size: 11px; padding: 1px 6px; }
+    .plan-card { padding: 16px 16px 14px; }
+    .plan-ctx { min-width: 0; flex-basis: 100%; }
+    table.cat-table.plan th, table.cat-table.plan td { padding-left: 6px; padding-right: 6px; white-space: normal; }
+    table.cat-table.plan th:first-child, table.cat-table.plan td.cat-name { padding-left: 12px; }
   }
 
   @media (max-width: 380px) {
@@ -1037,7 +1153,8 @@
 
   /* ===================== MOTION + TOUCH (Apple HIG pass, 2026-10-15) ===================== */
   /* Respond on press, not release: a quick press in, a spring back out */
-  .nav button:active, .pills button:active:not(:disabled):not([aria-disabled="true"]), .rep-step:active, .pcard:not(:disabled):active {
+  .nav button:active, .pills button:active:not(:disabled):not([aria-disabled="true"]), .rep-step:active, .pcard:not(:disabled):active,
+  .sc-copy:active, .hs-ok:active, .h-v:active, .plan-step:active, .chooser-name:active {
     transform: scale(0.96); transition-duration: 80ms;
   }
   /* Bars grow in the first time a tab is shown; after that they change in place (morph() in the script) */
@@ -1059,6 +1176,9 @@
     .info-i::after { content: ''; position: absolute; inset: -15px; }
     button.tip-u { position: relative; }
     button.tip-u::after { content: ''; position: absolute; inset: -12px -6px; }
+    .sc-copy, .hs-ok { min-height: 44px; padding: 0 16px; }
+    .h-v::after { content: ''; position: absolute; inset: -11px -8px; }
+    .plan-reset::after { content: ''; position: absolute; inset: -14px -8px; }
   }
   @media (pointer: coarse) and (max-width: 680px) {
     #rep-prev { right: 68px; }
@@ -1222,6 +1342,17 @@
     <div class="mini-grid" id="rep-minis" style="margin-top:-14px;"></div>
   </div>
 
+  <div class="section o-hstip" id="hs-tip" hidden></div>
+
+  <div class="section o-history" id="rep-history-section">
+    <div class="sec-head">
+      <div><h2>Every campaign</h2></div>
+      <div class="sec-tools" id="rh-tools"></div>
+    </div>
+    <div class="cat-table-wrap" id="rep-history"></div>
+    <div class="cat-note" id="rh-note"></div>
+  </div>
+
   <div class="section o-summary">
     <div class="card summary-card" id="rep-summary"></div>
   </div>
@@ -1294,6 +1425,16 @@
       <span class="scope">Projection · not a result</span>
     </div>
     <div class="card pace-card" id="rep-pacing"></div>
+  </div>
+
+  <div class="section o-plan" id="plan-section">
+    <div class="sec-head">
+      <div><h2 id="plan-title">Plan next year</h2></div>
+      <span class="scope">Saved on this device only</span>
+    </div>
+    <div class="card plan-card" id="plan-goal-card"></div>
+    <div class="cat-table-wrap" id="plan-table-wrap"></div>
+    <div class="cat-note" id="plan-note"></div>
   </div>
 </div>
 
@@ -1378,6 +1519,39 @@ const STATE = {
   pSort: null,                                    // Products leaderboard: qty / cpo / orders once a column head is tapped; null = follow Show
 };
 if (!REPS[STATE.selectedRep]) STATE.selectedRep = MASTER[0];
+
+// ==========================================================================
+// Personal links (Alan, 2026-10-18): every core rep has a link of their own, the dashboard address plus their
+// name (…/rsd-events-dashboard/matt-foss). That folder's index.html (tools/rep-pages.mjs) and 404.html send the
+// browser here with ?rep=<name>, which opens that rep's Rep View with no tabs and no name picker. Nothing is
+// private: names are the links, and anyone may open anyone's page ("I encourage it even").
+// ==========================================================================
+const slugOf = s => String(s).normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase()
+  .replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+// The full name first, then the same without hyphens, then a first or last name that only one rep has.
+function findRep(raw) {
+  const q = slugOf(raw || ''), flat = q.replace(/-/g, '');
+  if (!q) return null;
+  const one = list => list.length === 1 ? list[0] : null;
+  return MASTER.find(n => slugOf(n) === q) || MASTER.find(n => slugOf(n).replace(/-/g, '') === flat) ||
+    one(MASTER.filter(n => slugOf(n.split(' ')[0]) === q)) ||
+    one(MASTER.filter(n => slugOf(n.split(' ').slice(1).join(' ')) === q));
+}
+const REP_PARAM = new URLSearchParams(location.search).get('rep');   // null on the team page
+const PERSONAL = REP_PARAM === null ? null : findRep(REP_PARAM);     // the rep this link is for
+const CHOOSING = REP_PARAM !== null && !PERSONAL;                    // a link that names nobody: pick your name
+document.documentElement.classList.toggle('personal', REP_PARAM !== null);
+document.documentElement.classList.toggle('choosing', CHOOSING);
+if (PERSONAL) {
+  STATE.selectedRep = PERSONAL;
+  // Add to Home Screen saves this page under the rep's name (iOS fits about 12 characters under an icon)
+  document.title = `${PERSONAL} · RSD Numbers`;
+  document.querySelector('meta[name="apple-mobile-web-app-title"]').content = PERSONAL.length <= 12 ? PERSONAL : PERSONAL.split(' ')[0];
+}
+if (REP_PARAM !== null && 'scrollRestoration' in history) history.scrollRestoration = 'manual';   // opens at the top every time
+// The page at the dashboard's root (the team page), and a rep's own link as Alan would text it.
+const SITE_ROOT = new URL('.', location.href).href;
+const repLink = name => SITE_ROOT + slugOf(name);
 
 // Display labels for buckets (data keys stay as they are)
 const BUCKET_LABELS = { 'Realtor': 'Realtor / Team Mtg' };
@@ -2544,15 +2718,26 @@ function renderRepScorecard() {
   const vsTeamStr = !vsT ? '—' :
     `<span class="${vsT.dir > 0 ? 'up' : vsT.dir < 0 ? 'down' : ''}"${vsT.title ? ` title="${vsT.title}"` : ''}>${vsT.text}</span>`;
 
-  document.getElementById('rep-scorecard').innerHTML = `
-    <div class="sc-id">
-      <div class="sc-kicker">Rep Dashboard · ${p.label}</div>
+  // A rep's own link shows their name; the team page keeps the picker and offers that rep's link to copy.
+  const link = repLink(STATE.selectedRep);
+  const nameBlock = PERSONAL ? `<h1 class="name-static">${STATE.selectedRep}</h1>` : `
       <div class="name-select-wrap">
         <select class="name-select" id="rep-select" aria-label="Select rep">${opts}</select>
         <button class="rep-step" id="rep-prev" aria-label="Previous rep" title="Previous rep">‹</button>
         <button class="rep-step" id="rep-next" aria-label="Next rep" title="Next rep">›</button>
-      </div>
+      </div>`;
+  const linkRow = PERSONAL ? '' : `
+      <div class="sc-link">
+        <a class="sc-url" href="${link}">${link.replace(/^https?:\/\//, '')}</a>
+        <button type="button" class="sc-copy" id="rep-copy" aria-label="Copy ${STATE.selectedRep}'s link">Copy link</button>
+      </div>`;
+
+  document.getElementById('rep-scorecard').innerHTML = `
+    <div class="sc-id">
+      <div class="sc-kicker">${PERSONAL ? 'My numbers' : 'Rep Dashboard'} · ${p.label}</div>
+      ${nameBlock}
       <div class="sc-meta">${meta.join('<span class="sep">·</span>')}</div>
+      ${linkRow}
       <div class="sc-badges">
         <div class="sc-badge">
           <div class="b-label">Rank · ${hero.label}</div>
@@ -2576,6 +2761,15 @@ function renderRepScorecard() {
     </div>
   `;
 
+  if (PERSONAL) return;
+  // Copied as text; where the clipboard is off limits (an old browser, a page not served over https) the
+  // link comes up selected in a prompt instead, so it can still be copied by hand.
+  document.getElementById('rep-copy').onclick = async e => {
+    const b = e.currentTarget;
+    try { await navigator.clipboard.writeText(link); } catch (err) { window.prompt('Copy this link', link); return; }
+    b.textContent = 'Copied';
+    setTimeout(() => { if (b.isConnected) b.textContent = 'Copy link'; }, 1800);
+  };
   const selectRep = name => { STATE.selectedRep = name; renderRepView(); renderLeaderboard('c'); renderTotalLeaderboard(); renderHeader(); };
   document.getElementById('rep-select').onchange = e => selectRep(e.target.value);
   const step = dir => {
@@ -3107,29 +3301,33 @@ function repMultiplierInfo(rep, y, k) {
   return { multiplier, share, isPersonal, basis, isCapped: k < 3 && Math.abs(rawMult - multiplier) > 0.01, rawMult };
 }
 
+// The year in progress for one rep: YTD Total Sales and the projected finish (the pacing block, and the
+// plan's "this year's pace"). Counted through the last campaign this rep has Total Sales for. A rep whose
+// individual report stops short of the team's (C1 on file, C2 pending) is projected from what is on file
+// with that campaign's multiplier, never as if one campaign were two.
+function repPace(r, y) {
+  const kAll = campaignsForYear(y).length;
+  let k = 0; while (k < kAll && repTotalSales(r, y, k + 1)) k++;
+  const short = k > 0 && k < kAll;
+  if (!k) k = kAll;
+  const ytd = ytdSales(r, y, k), minfo = repMultiplierInfo(r, y, k);
+  return { k, short, ytd, minfo, projected: ytd.cpo !== null ? ytd.cpo * minfo.multiplier : null };
+}
+
 function renderRepPacing() {
   const p = repPeriod();
-  const y = LAST_YEAR, kAll = campaignsForYear(y).length;
+  const y = LAST_YEAR;
   // Only the year in progress has a trajectory.
   const show = !yearClosed(y) && p.kind !== 'all' && p.year === y;
   document.getElementById('pace-section').style.display = show ? '' : 'none';
   if (!show) return;
 
   const r = REPS[STATE.selectedRep];
-  // Counted through the last campaign this rep has Total Sales for. A rep whose individual report
-  // stops short of the team's (C1 on file, C2 pending) is projected from what is on file with that
-  // campaign's multiplier, never as if one campaign were two.
-  let k = 0; while (k < kAll && repTotalSales(r, y, k + 1)) k++;
-  const short = k > 0 && k < kAll;
-  if (!k) k = kAll;
-  const ytd = ytdSales(r, y, k);
+  const { k, short, ytd, minfo, projected } = repPace(r, y);
   const fy_1 = repFYSales(r, y - 1);
   const fy_2 = repFYSales(r, y - 2);
   const remaining = short ? `C${k + 1}${k + 1 < 3 ? ' and C3' : ''} not counted yet` : k === 1 ? 'C2 and C3 still to come' : 'only C3 still to come';
-
-  const minfo = repMultiplierInfo(r, y, k);
   const multiplier = minfo.multiplier;
-  const projected = ytd.cpo !== null ? ytd.cpo * multiplier : null;
   document.getElementById('pace-title').textContent = `Where I'm heading in ${y}`;
 
   let basisLabel;
@@ -3209,6 +3407,260 @@ function renderRepPacing() {
     </div>
     <div class="pace-summary">${summary}</div>
   `;
+}
+
+// ==========================================================================
+// Every campaign (2026-10-18): C1 / C2 / C3 / Year down, the years across, one measure at a time. Each figure
+// carries its change against the same campaign (or the year at the same point) the year before, and tapping it
+// opens that period at the top of Rep View. Alan: "people can see their individual stats for every single campaign".
+// ==========================================================================
+const HIST_MEASURES = [
+  { key: 'sales',  label: 'Total CPO', sm: 'Total' },
+  { key: 'event',  label: 'Event CPO', sm: 'Event' },
+  { key: 'orders', label: 'Orders',    sm: 'Orders' },
+  { key: 'avg',    label: 'Avg order', sm: 'Avg' },
+  { key: 'events', label: 'Events',    sm: 'Events' },
+];
+STATE.histMeasure = 'sales';
+const histFamily = m => (m === 'event' || m === 'events') ? 'event' : 'sales';
+// Orders and average order go with Total CPO (every order); Events counts the events with event sales.
+const histStats = (r, p, m) => histFamily(m) === 'event' ? pEvent(r, p) : pSales(r, p);
+function histValue(s, m) {
+  if (!s) return null;
+  if (m === 'sales' || m === 'event') return s.cpo;
+  if (m === 'orders') return ordersOf(s);
+  if (m === 'avg') return avgOrder(s);
+  return s.events || null;
+}
+// What a dash in the grid means, for the tap-to-open tip.
+function histWhyNone(r, p, m) {
+  if (histFamily(m) === 'event') return `No event sales on file for ${p.label}`;
+  const s = pSales(r, p);
+  if (s && s.blind) return 'The home office reports this rep\'s Total CPO without an order count';
+  const miss = p.parts.filter(c => !salesLoaded(c.year, c.n)).map(c => `C${c.n} ${c.year}`);
+  if (miss.length && !(p.kind === 'year' && p.closed && yearHasFY(p.year))) return `No Total Sales workbook for ${miss.join(', ')}`;
+  return PENDING.includes(r.name) ? 'Total Sales pending for this rep' : `No Total Sales on file for ${p.label}`;
+}
+function histChange(r, p, v, m) {
+  const cmp = v === null ? null : compareFor(p, histFamily(m));
+  if (!cmp) return '';
+  const ps = histStats(r, cmp.period, m), pv = histValue(ps, m), base = ordersOf(ps);
+  if (pv === null) return '';   // nothing on file the year before (a new rep): no change to show
+  if (cmp.mode === 'share' && m !== 'avg') return shareChip(v, pv, cmp.period.year);
+  if (pv !== null && m !== 'events' && base !== null && base < MIN_GROWTH_ORDERS) return smallBaseChip(base);
+  return chipYoY(v, pv);
+}
+function renderRepHistory() {
+  const r = REPS[STATE.selectedRep], m = STATE.histMeasure;
+  const tools = document.getElementById('rh-tools');
+  tools.innerHTML = segHtml(HIST_MEASURES.map(x => ({ value: x.key, active: x.key === m,
+    label: `<span class="lg">${x.label}</span><span class="sm">${x.sm}</span>` })), 'data-hm', 'Measure');
+  tools.querySelectorAll('[data-hm]').forEach(b => b.addEventListener('click', () => { STATE.histMeasure = b.dataset.hm; renderRepHistory(); }));
+
+  const at = p => ({ p, v: histValue(histStats(r, p, m), m) });
+  const campRows = [1, 2, 3].map(n => CAMP_YEARS.map(y => campaignsForYear(y).includes(n) ? at(periodCamp(y, n)) : { p: null, y, n }));
+  const yearRow = CAMP_YEARS.map(y => at(periodYear(y)));
+  const maxOf = cells => Math.max(0, ...cells.filter(c => c.p && c.v !== null).map(c => c.v));
+  const campMax = maxOf(campRows.flat()), yearMax = maxOf(yearRow);
+  const isSel = p => STATE.repMode === 'camp' ? p.kind === 'camp' && p.year === STATE.camp.year && p.n === STATE.camp.n
+    : p.kind === 'year' && p.year === STATE.year;
+  const fmt = v => (m === 'orders' || m === 'events') ? fmtInt(v) : fmtCurrency(v);
+  const cell = (c, max) => {
+    if (!c.p) return `<td><div class="h-cell">${tipBtn('h-off', '—', `C${c.n} ${c.y} closes ${CAMP_ENDS[c.n]}; its numbers land ${CAMP_LANDS[c.n]}`, `C${c.n} ${c.y}`)}</div></td>`;
+    const val = c.v === null ? tipBtn('h-off', '—', histWhyNone(r, c.p, m), c.p.label)
+      : `<button type="button" class="h-v" data-hy="${c.p.year}" data-hn="${c.p.kind === 'camp' ? c.p.n : ''}" aria-label="${c.p.label}: ${fmt(c.v)}. Opens it at the top">${fmt(c.v)}</button>`;
+    const bar = c.v !== null && max > 0 ? `<span class="h-bar"><span style="width:${Math.max(2, c.v / max * 100).toFixed(1)}%"></span></span>` : '';
+    return `<td class="${isSel(c.p) ? 'sel' : ''}"><div class="h-cell">${val}${bar}${histChange(r, c.p, c.v, m)}</div></td>`;
+  };
+  const wrap = document.getElementById('rep-history');
+  wrap.innerHTML = `
+    <table class="cat-table hist">
+      <thead><tr><th>Campaign</th>${CAMP_YEARS.map(y => `<th>${y}${yearClosed(y) ? '' : '<span class="th-sub">so far</span>'}</th>`).join('')}</tr></thead>
+      <tbody>
+        ${[1, 2, 3].map((n, i) => `<tr><td class="cat-name">C${n}<span class="lb-why">${CAMP_WINDOWS[n]}</span></td>${campRows[i].map(c => cell(c, campMax)).join('')}</tr>`).join('')}
+        <tr class="total"><td class="cat-name">Year</td>${yearRow.map(c => cell(c, yearMax)).join('')}</tr>
+      </tbody>
+    </table>`;
+  wrap.querySelectorAll('.h-v').forEach(b => b.addEventListener('click', () => {
+    const y = +b.dataset.hy, n = +b.dataset.hn;
+    STATE.chartMetric = null;
+    if (n) { STATE.repMode = 'camp'; STATE.camp = { year: y, n }; } else { STATE.repMode = 'year'; STATE.year = y; }
+    renderAll();
+    window.scrollTo({ top: 0, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+  }));
+  document.getElementById('rh-note').textContent = 'Each change is against the same campaign the year before' +
+    (yearClosed(LAST_YEAR) ? '' : `, and ${LAST_YEAR} so far against ${LAST_YEAR - 1} at the same point`) + '. Tap a figure to open it at the top.';
+}
+
+// ==========================================================================
+// Plan next year (2026-10-18). From the day C2 closes until next year's C1 closes, the rep types a goal for
+// next year (prefilled with this year's pace + 10%). The page splits it by their own campaign mix, shows their
+// best of each campaign, and works out about how many shifts each campaign takes. The goal stays in this
+// browser: nothing is sent anywhere.
+// ==========================================================================
+const PLAN_YEAR = LATEST.campaign >= 2 ? LATEST.year + 1 : null;
+const PLAN_STEP = 10000;
+const round5k = v => Math.round(v / 5000) * 5000;
+const planKey = name => `rsd-plan:${PLAN_YEAR}:${slugOf(name)}`;
+const planGoals = {};   // this visit's goals by rep: they outlast a re-render even where storage is blocked
+function planStored(name) {
+  try { const v = localStorage.getItem(planKey(name)); return v === null ? null : +v; } catch (e) { return null; }
+}
+function planStore(name, v) {
+  try { if (v === null) localStorage.removeItem(planKey(name)); else localStorage.setItem(planKey(name), String(v)); }
+  catch (e) { /* storage blocked (a private window): the goal lasts until the page closes */ }
+}
+// What the suggestion builds on: this year's projected finish, or its actual finish once it has closed.
+function planBase(r) {
+  const y = LAST_YEAR;
+  if (yearClosed(y)) { const s = pSales(r, periodYear(y)); return s ? { cpo: s.cpo, text: `You finished ${y} at` } : null; }
+  const pace = repPace(r, y);
+  return pace.projected ? { cpo: pace.projected, text: `Your ${y} pace is ≈` } : null;
+}
+// The rep's average share of each campaign over the closed years that have all three; event sales when Total
+// Sales by campaign is missing; the team's split with no closed year of their own. A year where one campaign
+// is under 5% of it (a rep who started partway through, like Kendall Gooch's $134 C1 2025) says nothing about
+// how their year falls, so it is left out.
+const PLAN_MIN_SHARE = 0.05;
+function planSplit(r) {
+  const closed = CAMP_YEARS.filter(yearClosed);
+  const averaged = get => {
+    const shares = [], years = [];
+    for (const y of closed) {
+      const v = [1, 2, 3].map(n => get(y, n));
+      if (v.some(x => x === null)) continue;
+      const t = v[0] + v[1] + v[2];
+      if (t > 0 && v.every(x => x / t >= PLAN_MIN_SHARE)) { shares.push(v.map(x => x / t)); years.push(y); }
+    }
+    return shares.length ? { share: [0, 1, 2].map(i => shares.reduce((a, s) => a + s[i], 0) / shares.length), years } : null;
+  };
+  const cpo = s => s ? s.cpo : null;
+  let s = averaged((y, n) => cpo(repTotalSales(r, y, n)));
+  if (s) return { ...s, basis: 'sales' };
+  s = averaged((y, n) => cpo(repTotalEvent(r, y, n)));
+  if (s) return { ...s, basis: 'event' };
+  s = averaged((y, n) => cpo(teamStats(periodCamp(y, n), 'total_sales')));
+  return s ? { ...s, basis: 'team' } : { share: [1 / 3, 1 / 3, 1 / 3], years: [], basis: 'even' };
+}
+// The rep's highest Total CPO for one campaign (or full year, n = null) in any year on file.
+function planBest(r, n) {
+  let best = null;
+  for (const y of CAMP_YEARS) {
+    const s = n ? repTotalSales(r, y, n) : yearClosed(y) ? pSales(r, periodYear(y)) : null;
+    if (s && (!best || s.cpo > best.cpo)) best = { cpo: s.cpo, year: y };
+  }
+  return best;
+}
+// Shifts: the latest closed year with both a shift record and a full-year Total CPO. Shift data is annual, so
+// every campaign uses that year's average and that year's share of sales that came from shifts.
+function planShifts(r) {
+  for (const y of CAMP_YEARS.filter(yearClosed).reverse()) {
+    const c = (repShifts(r, y) || {}).combined, fy = pSales(r, periodYear(y));
+    if (c && c.shifts && c.avg && fy && fy.cpo > 0) return { year: y, avg: c.avg, ratio: c.cpo / fy.cpo };
+  }
+  return null;
+}
+function renderRepPlan() {
+  document.getElementById('plan-section').style.display = PLAN_YEAR ? '' : 'none';
+  if (!PLAN_YEAR) return;
+  const name = STATE.selectedRep, r = REPS[name];
+  document.getElementById('plan-title').textContent = `Plan ${PLAN_YEAR}`;
+  const base = planBase(r), suggested = base ? round5k(base.cpo * 1.1) : null;
+  const split = planSplit(r), shifts = planShifts(r);
+  const goal = () => name in planGoals ? planGoals[name] : (planStored(name) ?? suggested);
+  const money = v => v === null ? '' : '$' + Math.round(v).toLocaleString();
+  document.getElementById('plan-goal-card').innerHTML = `
+    <div class="plan-goal">
+      <label for="plan-goal">My ${PLAN_YEAR} goal · Total CPO</label>
+      <div class="plan-field">
+        <button type="button" class="plan-step" data-step="-1" aria-label="Lower the goal by ${money(PLAN_STEP)}">−</button>
+        <input id="plan-goal" class="plan-input" type="text" inputmode="numeric" autocomplete="off" placeholder="$0" value="${money(goal())}">
+        <button type="button" class="plan-step" data-step="1" aria-label="Raise the goal by ${money(PLAN_STEP)}">+</button>
+      </div>
+    </div>
+    <div class="plan-ctx" id="plan-ctx" aria-live="polite"></div>`;
+  const input = document.getElementById('plan-goal');
+  // A goal equal to the suggestion is not stored, so it follows the suggestion when the numbers refresh.
+  const set = (v, rewrite) => {
+    planGoals[name] = v;
+    planStore(name, v === suggested ? null : v);
+    if (rewrite) input.value = money(v);
+    paint();
+  };
+  input.addEventListener('input', () => { const d = input.value.replace(/[^0-9]/g, ''); set(d ? +d : null, false); });
+  input.addEventListener('blur', () => { input.value = money(goal()); });
+  document.querySelectorAll('#plan-goal-card .plan-step').forEach(b => b.addEventListener('click', () =>
+    set(Math.max(0, (goal() || 0) + PLAN_STEP * +b.dataset.step), true)));
+
+  function paint() {
+    const g = goal();
+    let ctx = base ? `${base.text} <strong>${fmtCurrencyShort(base.cpo)}</strong>` : `No ${LAST_YEAR} Total CPO on file yet, so there is no suggestion.`;
+    if (base && g !== null) {
+      const d = g - base.cpo, pct = d / base.cpo * 100;
+      ctx += `, so this goal is <strong>${d >= 0 ? '+' : '−'}${fmtCurrencyShort(Math.abs(d))} (${d >= 0 ? '+' : '−'}${Math.abs(pct).toFixed(0)}%)</strong>.`;
+    } else if (base) ctx += '.';
+    if (g === null) ctx += ' Type a goal to see what each campaign takes.';
+    if (suggested !== null && g !== suggested) ctx += ` <button type="button" class="plan-reset" id="plan-reset">Use the suggestion, ${fmtCurrencyShort(suggested)}</button>`;
+    document.getElementById('plan-ctx').innerHTML = ctx;
+    const reset = document.getElementById('plan-reset');
+    if (reset) reset.onclick = () => { delete planGoals[name]; planStore(name, null); input.value = money(suggested); paint(); };
+
+    const noShifts = tipBtn('cb-v', '—', 'No full year of shifts on file to go by', 'No shift figure');
+    const shiftCount = t => shifts && t !== null ? Math.round(t * shifts.ratio / shifts.avg) : null;
+    const counts = [0, 1, 2].map(i => shiftCount(g === null ? null : g * split.share[i]));
+    const bestCell = (b, what) => b ? `${fmtCurrency(b.cpo)}<span class="lb-why">${b.year}</span>`
+      : tipBtn('cb-v', '—', `No Total CPO on file for ${what}`, `No best for ${what}`);
+    const row = (label, sub, target, best, what, count, cls) => `
+      <tr class="${cls || ''}">
+        <td class="cat-name">${label}<span class="lb-why">${sub}</span></td>
+        <td class="cur">${target === null ? naSpan : fmtCurrency(target)}</td>
+        <td class="best">${bestCell(best, what)}</td>
+        <td>${count === null ? (shifts ? naSpan : noShifts) : '≈ ' + count}</td>
+      </tr>`;
+    const total = counts.every(c => c !== null) ? counts[0] + counts[1] + counts[2] : null;
+    // Whole percents that add up to 100: the largest remainders get the leftover points
+    const pcts = split.share.map(s => Math.floor(s * 100));
+    split.share.map((s, i) => ({ i, rest: s * 100 - pcts[i] })).sort((a, b) => b.rest - a.rest)
+      .slice(0, 100 - pcts.reduce((a, b) => a + b, 0)).forEach(x => { pcts[x.i]++; });
+    document.getElementById('plan-table-wrap').innerHTML = `
+      <table class="cat-table plan">
+        <thead><tr>
+          <th>Campaign</th><th>Target</th><th>My best${infoI('Your highest Total CPO for that campaign in any year on file')}</th>
+          <th>Shifts${infoI(shifts ? `About how many shifts the target takes at your ${shifts.year} average of ${fmtCurrencyShort(shifts.avg)} a shift, if shifts bring in ${Math.round(shifts.ratio * 100)}% of your sales as they did in ${shifts.year}` : 'No full year of shifts on file to go by')}</th>
+        </tr></thead>
+        <tbody>
+          ${[1, 2, 3].map((n, i) => row(`C${n}`, `${CAMP_WINDOWS[n]} · ${pcts[i]}%`,
+            g === null ? null : g * split.share[i], planBest(r, n), `C${n}`, counts[i])).join('')}
+          ${row('Year', `${PLAN_YEAR}`, g, planBest(r, null), 'a full year', total, 'total')}
+        </tbody>
+      </table>`;
+    const yrs = split.years.join(' and ');
+    document.getElementById('plan-note').textContent = {
+      sales: `Split the way your Total CPO fell across C1, C2 and C3 in ${yrs}.`,
+      event: `Split the way your event sales fell across C1, C2 and C3 in ${yrs} (no Total CPO by campaign on file).`,
+      team: 'Split the way the team\'s Total CPO falls across C1, C2 and C3 (not enough of your own history yet).',
+      even: 'Split evenly: no campaign history to go by yet.',
+    }[split.basis] + ' The goal stays in this browser; nobody else sees it.';
+  }
+  paint();
+}
+
+// A rep's own page on a phone: one tip, once, on keeping the page on the home screen.
+function renderHsTip() {
+  const el = document.getElementById('hs-tip');
+  let show = !!PERSONAL && matchMedia('(pointer: coarse)').matches &&
+    !matchMedia('(display-mode: standalone)').matches && !navigator.standalone;
+  try { if (localStorage.getItem('rsd-hs-tip') === 'done') show = false; } catch (e) { /* no storage: the tip shows each visit */ }
+  el.hidden = !show;
+  if (!show) return;
+  const how = /Android/i.test(navigator.userAgent) ? 'In Chrome, tap ⋮ and then Add to Home screen.' : 'Tap the Share button, then Add to Home Screen.';
+  el.innerHTML = `<div class="card hs-card">
+    <div class="hs-text"><strong>Keep your numbers one tap away</strong>${how} Your page gets its own icon.</div>
+    <button type="button" class="hs-ok">Got it</button></div>`;
+  el.querySelector('.hs-ok').onclick = () => {
+    try { localStorage.setItem('rsd-hs-tip', 'done'); } catch (e) { /* no storage: hidden for this visit only */ }
+    el.hidden = true;
+  };
 }
 
 // ==========================================================================
@@ -3348,6 +3800,7 @@ function renderRepView() {
   renderRepScopeBar();
   renderRepScorecard();
   renderRepMinis();
+  renderRepHistory();
   renderRepSummary();
   renderRepComposition();
   renderRepChart();
@@ -3355,12 +3808,14 @@ function renderRepView() {
   renderRepProducts();
   renderRepShifts();
   renderRepPacing();
+  renderRepPlan();
 }
 
 // ==========================================================================
 // View orchestration
 // ==========================================================================
 function renderHeader() {
+  if (CHOOSING) { document.getElementById('cp-line').textContent = 'Pick your name'; return; }
   let txt;
   if (STATE.view === 'campaigns') {
     const p = campPeriodSel(), c = compareFor(p, 'event');
@@ -3819,6 +4274,7 @@ const VIEWS = PRODUCTS ? ['total', 'campaigns', 'products', 'rep'] : ['total', '
 const SCROLL_BY_VIEW = {};
 let _navPainted = false;
 function switchView(view, toTop) {
+  if (REP_PARAM !== null) view = 'rep';   // a rep's own link has no other tabs
   if (!VIEWS.includes(view)) view = 'total';
   if (STATE.view !== view) SCROLL_BY_VIEW[STATE.view] = window.scrollY;
   document.querySelectorAll('.nav button').forEach(b => {
@@ -3838,7 +4294,8 @@ function switchView(view, toTop) {
   if (view === 'rep') renderRepChart();
   if (view === 'total') renderShape();
   renderHeader();
-  try { history.replaceState(null, '', '#' + view); } catch (e) { /* file:// or sandboxed: the hash is a convenience */ }
+  // A rep's own link stays as it was opened (?rep=<name>), so Add to Home Screen saves exactly that
+  if (REP_PARAM === null) try { history.replaceState(null, '', '#' + view); } catch (e) { /* file:// or sandboxed: the hash is a convenience */ }
   window.scrollTo(0, toTop ? 0 : SCROLL_BY_VIEW[view] || 0);
 }
 
@@ -3869,11 +4326,35 @@ document.getElementById('rep-chart-metric').addEventListener('change', e => {
   renderRepChart();
 });
 
+// A link that names nobody on the team (a typo, a first name two reps share): the names to pick from.
+// The name the link carried goes in as text, never as HTML.
+if (CHOOSING) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  const box = document.createElement('div');
+  box.className = 'chooser';
+  box.innerHTML = `<h2 class="ov-title">Pick your name</h2><p class="chooser-sub"></p>
+    <nav class="chooser-grid" aria-label="Core team">${MASTER.map(n => `<a class="chooser-name" href="?rep=${slugOf(n)}">${n}</a>`).join('')}</nav>`;
+  const asked = REP_PARAM.trim(), q = slugOf(asked);
+  const shared = q ? MASTER.filter(n => slugOf(n).split('-').includes(q)).length : 0;   // /adam: two Adams
+  box.querySelector('.chooser-sub').textContent = (!asked ? '' : shared > 1 ? `${shared} reps go by “${asked}”. `
+    : `No one on the team has a page called “${asked}”. `) + 'Tap your name to open your numbers.';
+  document.querySelector('.page').prepend(box);
+}
+// A rep's own page points back to the team page at the foot.
+if (REP_PARAM !== null) {
+  const a = document.createElement('a');
+  a.className = 'fn-link'; a.href = SITE_ROOT; a.textContent = 'Open the team dashboard';
+  document.getElementById('fn-universe').append(' ', a);
+}
+
 // Initial render. #total / #campaigns / #products / #rep open that tab (#team from Phase 2 links opens Total).
+// A rep's own link opens their Rep View at the top.
 buildLeaderboard('c');
 buildGridToggles();
 renderAll();
-switchView((location.hash || '').slice(1) || 'total');
+if (CHOOSING) renderHeader();
+else switchView(PERSONAL ? 'rep' : (location.hash || '').slice(1) || 'total', !!PERSONAL);
+renderHsTip();
 </script>
 
 </body>

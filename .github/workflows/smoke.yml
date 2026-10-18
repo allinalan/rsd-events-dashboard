@@ -35,7 +35,7 @@ jobs:
           npm install --no-save --no-package-lock --no-audit --no-fund playwright@1.63.0
           npx playwright install --with-deps --only-shell chromium
 
-      - name: Open every tab at 1280x900 and 375x812
+      - name: Open every tab at 1280x900 and 375x812, and every rep's own link
         run: node tools/smoke.mjs --out smoke-screenshots
 
       - name: Upload screenshots
