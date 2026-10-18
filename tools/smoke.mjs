@@ -141,23 +141,36 @@ async function shoot(page, name) {
 // One tab, opened straight from its link, as a rep opening #rep would see it. Screenshot kept.
 const checkTab = (browser, vp, tab) => inPage(browser, vp, `index.html#${tab}`, `${size(vp)} #${tab}`, async (page, problems) => {
   problems.push(...stateProblems(await settle(page), tab));
-  if (tab === 'rep' && !(await page.$('#rep-copy'))) problems.push('Rep View on the team page has no Copy link button');
+  if (tab === 'rep') {
+    if (!(await page.$('#rep-copy'))) problems.push('Rep View on the team page has no Copy link button');
+    const shut = await page.$$eval('#rep-more details', ds => ds.filter(d => !d.open && d.style.display !== 'none').length);
+    if (shut) problems.push(`${shut} section(s) of More about my numbers start closed on the team page`);
+  }
   await shoot(page, `${size(vp)}-${tab}`);
 });
 
-// A rep's own page: personal mode on, no tabs, that rep's name, and the Every campaign grid filled in.
+// A rep's own page: personal mode on, no tabs, that rep's name, the 10-second card whole (a number, a sentence,
+// three facts), the campaign grid filled in, and More about my numbers closed.
 async function personalProblems(page, name) {
   const s = await within(ANSWER_MS, 'the page', page.evaluate(() => ({
     personal: document.documentElement.classList.contains('personal'),
     tabs: !!document.querySelector('.nav').offsetParent,
     name: (document.querySelector('.name-static') || {}).textContent || null,
+    big: ((document.querySelector('.g-big') || {}).textContent || '').trim(),
+    read: ((document.querySelector('.g-read') || {}).textContent || '').trim(),
+    facts: document.querySelectorAll('.g-facts .g-fact').length,
     grid: document.querySelectorAll('#rep-history tbody tr').length,
+    open: document.querySelectorAll('#rep-more details[open]').length,
   })));
   const problems = [];
   if (!s.personal) problems.push('personal mode is off');
   if (s.tabs) problems.push('the team tabs show');
   if (s.name !== name) problems.push(`opened ${s.name || 'no one'} instead of ${name}`);
-  if (s.grid !== 4) problems.push(`the Every campaign grid has ${s.grid} rows, not 4 (C1, C2, C3, Year)`);
+  if (!/^\$[\d,]+$/.test(s.big)) problems.push(`the big number reads "${s.big || 'nothing'}"`);
+  if (!s.read) problems.push('the sentence under the big number is empty');
+  if (s.facts !== 3) problems.push(`the first screen has ${s.facts} facts, not 3`);
+  if (s.grid !== 4) problems.push(`the My campaigns grid has ${s.grid} rows, not 4 (C1, C2, C3, Year)`);
+  if (s.open) problems.push(`${s.open} section(s) of More about my numbers start open on a rep's own page`);
   return problems;
 }
 // The link exactly as it gets texted: /<name>, through that folder's page, to ?rep=<name>.

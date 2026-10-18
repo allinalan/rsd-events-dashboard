@@ -843,6 +843,7 @@
   /* ?rep=<name> opens one rep's Rep View with no tabs and no name picker. Nothing is private: the links are names. */
   html.personal .nav { display: none; }
   html.personal .brand-row { padding-bottom: 14px; }
+  html.personal .campaign .cp-meta { display: none; }   /* the freshness line above says it plainly */
   html.choosing .footnote { display: none; }
   .name-static {
     font-family: var(--disp); font-weight: 700; font-stretch: 105%;
@@ -883,7 +884,50 @@
   .fn-link { color: var(--ember-deep); font-weight: 600; text-decoration: none; }
   .fn-link:hover { text-decoration: underline; }
 
-  /* Every campaign: C1 / C2 / C3 / Year down, the years across. A figure opens that period up top. */
+  /* The 10-second screen: one number, one line, one sentence, three facts (2026-10-18) */
+  .scorecard.glance { grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); align-items: end; }
+  .g-big { font-size: 48px; font-weight: 700; letter-spacing: -0.025em; line-height: 1; margin-top: 16px; }
+  .g-delta { font-size: 15px; font-weight: 600; margin-top: 10px; color: var(--ivory); }
+  .g-delta.up { color: var(--pos-on-dark); }
+  .g-delta.down { color: var(--neg-on-dark); }
+  .g-delta span { font-weight: 400; color: var(--ivory-dim); }
+  .g-read { font-size: 15px; line-height: 1.45; color: var(--ivory); margin-top: 12px; max-width: 34em; }
+  .g-facts { display: grid; grid-template-columns: 1fr; border-left: 1px solid var(--ivory-line); }
+  .g-fact { padding: 12px 0 12px 24px; border-bottom: 1px solid var(--ivory-line); min-width: 0; }
+  .g-fact:last-child { border-bottom: 0; }
+  .g-fact .fv { font-size: 20px; font-weight: 700; letter-spacing: -0.012em; line-height: 1.2; white-space: nowrap; }
+  .g-fact .fv small { font-size: 13px; font-weight: 600; color: var(--ivory-dim); letter-spacing: 0; }
+  .g-fact .fl { font-size: 13px; color: var(--ivory-dim); margin-top: 2px; }
+  @media (max-width: 1000px) {
+    .scorecard.glance { grid-template-columns: 1fr; gap: 18px; }
+    .g-facts { grid-template-columns: repeat(3, minmax(0, 1fr)); border-left: 0; border-top: 1px solid var(--ivory-line); padding-top: 14px; }
+    .g-fact { padding: 0 12px; border-bottom: 0; border-left: 1px solid var(--ivory-line); }
+    .g-fact:first-child { padding-left: 0; border-left: 0; }
+  }
+
+  /* More about my numbers: one row per section, closed until tapped */
+  .more-list { display: flex; flex-direction: column; gap: 8px; }
+  .more-item > summary {
+    list-style: none; cursor: pointer; display: flex; align-items: center; gap: 12px;
+    min-height: 52px; padding: 14px 20px; background: var(--card); border-radius: var(--radius);
+    transition: background-color 150ms ease-out;
+  }
+  .more-item > summary::-webkit-details-marker { display: none; }
+  .more-item > summary:hover { background: var(--card-hover); }
+  .more-item > summary::after {
+    content: '›'; font-size: 20px; line-height: 1; color: var(--ink-faint); transform: rotate(0deg);
+    transition: transform var(--spring-ms) var(--spring);
+  }
+  .more-item[open] > summary::after { transform: rotate(90deg); }
+  .mi-t { flex: 1; min-width: 0; font-size: 15px; font-weight: 600; }
+  .mi-v { font-size: 13px; color: var(--ink-faint); white-space: nowrap; }
+  .more-body { padding: 10px 0 18px; animation: viewIn 120ms ease-out; }
+  .more-scope { font-size: 13px; color: var(--ink-faint); margin: 0 0 8px 2px; }
+  .more-body .sec-head { margin-bottom: 8px; }
+  .more-body .trend-head { justify-content: flex-end; }
+  .more-body .mini-grid { margin-top: 0; }
+
+  /* My campaigns: C1 / C2 / C3 / Year down, the years across. A figure opens that period in More, below. */
   table.cat-table.hist { min-width: 0; table-layout: fixed; }
   table.cat-table.hist th:first-child, table.cat-table.hist td.cat-name { width: 150px; }
   table.cat-table.hist td { padding-top: 11px; padding-bottom: 12px; vertical-align: top; }
@@ -1111,22 +1155,16 @@
     table.leaderboard .yr-old, table.leaderboard .dlt-abs { display: none; }
     .team-grid { gap: 16px; }
 
-    /* Mobile narrative order: identity → every campaign → coach's read → trajectory → next year → supporting */
-    #rep-view .section.o-hero    { order: 1; }
-    #rep-view .section.o-hstip   { order: 1; }
-    #rep-view .section.o-history { order: 2; }
-    #rep-view .section.o-summary { order: 3; }
-    #rep-view .section.o-pacing  { order: 4; }
-    #rep-view .section.o-plan    { order: 5; }
-    #rep-view .section.o-minis   { order: 6; }
-    #rep-view .section.o-comp    { order: 7; }
-    #rep-view .section.o-trend   { order: 8; }
-    #rep-view .section.o-cats    { order: 9; }
-    #rep-view .section.o-products { order: 10; }
-    #rep-view .section.o-shifts  { order: 11; }
+    /* Rep View reads top to bottom the same on a phone: first screen, campaigns, plan, more */
     #rep-view > .section { margin-bottom: 24px; }
-    #rep-view .section.o-minis .mini-grid { margin-top: 0 !important; }
     .name-static { font-size: 24px; }
+    .g-big { font-size: 40px; }
+    .g-facts { gap: 0; }
+    .g-fact { padding: 0 8px; }
+    .g-fact .fv { font-size: 15px; }
+    .g-fact .fv small { font-size: 11px; }
+    .g-fact .fl { font-size: 11px; }
+    .more-item > summary { padding: 13px 14px; }
     html.personal .sc-kicker { padding-right: 0; }
     .chooser-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     table.cat-table.hist th, table.cat-table.hist td { padding-left: 6px; padding-right: 6px; }
@@ -1333,98 +1371,20 @@
 <!-- ============================== REP VIEW ============================== -->
 <div id="rep-view" class="view">
 
+  <!-- The 10-second screen (Alan, 2026-10-18): name, one number, one line, one sentence, three facts. Always this year. -->
   <div class="section o-hero" id="rep-scorecard-section">
-    <div class="scope-bar" id="rep-scope-bar"></div>
-    <div class="scorecard" id="rep-scorecard"></div>
-  </div>
-
-  <div class="section o-minis">
-    <div class="mini-grid" id="rep-minis" style="margin-top:-14px;"></div>
+    <div class="scorecard glance" id="rep-scorecard"></div>
   </div>
 
   <div class="section o-hstip" id="hs-tip" hidden></div>
 
   <div class="section o-history" id="rep-history-section">
     <div class="sec-head">
-      <div><h2>Every campaign</h2></div>
+      <div><h2>My campaigns</h2></div>
       <div class="sec-tools" id="rh-tools"></div>
     </div>
     <div class="cat-table-wrap" id="rep-history"></div>
     <div class="cat-note" id="rh-note"></div>
-  </div>
-
-  <div class="section o-summary">
-    <div class="card summary-card" id="rep-summary"></div>
-  </div>
-
-  <div class="section o-comp">
-    <div class="sec-head">
-      <div><h2>CPO Composition</h2></div>
-      <span class="scope" id="comp-scope"></span>
-    </div>
-    <div class="card comp-card" id="rep-comp"></div>
-  </div>
-
-  <div class="section o-trend">
-    <div class="card trend-card">
-      <div class="trend-head">
-        <div><h2>How I'm trending</h2></div>
-        <select class="ctl" id="rep-chart-metric" aria-label="Chart metric">
-          <option value="total_sales">Total CPO</option>
-          <option value="total_event">Total Event CPO</option>
-          <option value="bucket:Event (Traditional)">Event (Traditional)</option>
-          <option value="bucket:Service Event">Service Event</option>
-          <option value="bucket:Industry Event">Industry Event</option>
-          <option value="bucket:Non-Event CPO">Non-Event CPO</option>
-          <option value="avg_order">Avg Order</option>
-        </select>
-      </div>
-      <div class="trend-canvas"><svg id="rep-chart-svg" viewBox="0 0 800 300" preserveAspectRatio="xMidYMid meet"></svg></div>
-      <div class="trend-foot">
-        <div class="trend-legend">
-          <span class="li"><svg width="26" height="6"><line x1="0" y1="3" x2="26" y2="3" class="chart-you" stroke-width="2.5"/></svg> <span id="legend-you">You</span></span>
-          <span class="li"><svg width="26" height="6"><line x1="0" y1="3" x2="26" y2="3" class="chart-team" stroke-width="1.5" stroke-dasharray="4,3"/></svg> Team average<button type="button" class="info-i" id="legend-team-tip">i</button></span>
-        </div>
-        <div class="trend-insight" id="trend-insight"></div>
-      </div>
-    </div>
-  </div>
-
-  <div class="section o-cats">
-    <div class="sec-head">
-      <div><h2>Where I win · what needs work</h2></div>
-      <span class="scope" id="cats-scope"></span>
-    </div>
-    <div class="headline-duo" id="rep-buckets-top"></div>
-    <div id="rep-buckets-sub"></div>
-  </div>
-
-  <div class="section o-products" id="rep-products-section">
-    <div class="sec-head">
-      <div><h2>What I'm selling</h2></div>
-      <div class="sec-tools">
-        <span class="scope" id="rp-scope"></span>
-        <div class="sec-tools" id="rp-tools"></div>
-      </div>
-    </div>
-    <div class="cat-table-wrap" id="rep-products"></div>
-    <div class="cat-note" id="rp-note"></div>
-  </div>
-
-  <div class="section o-shifts">
-    <div class="sec-head">
-      <div><h2>Shifts Breakdown</h2></div>
-      <span class="scope" id="shifts-scope">Full year</span>
-    </div>
-    <div class="shift-grid" id="rep-shifts"></div>
-  </div>
-
-  <div class="section o-pacing" id="pace-section">
-    <div class="sec-head">
-      <div><h2 id="pace-title">Where I'm heading</h2></div>
-      <span class="scope">Projection · not a result</span>
-    </div>
-    <div class="card pace-card" id="rep-pacing"></div>
   </div>
 
   <div class="section o-plan" id="plan-section">
@@ -1435,6 +1395,78 @@
     <div class="card plan-card" id="plan-goal-card"></div>
     <div class="cat-table-wrap" id="plan-table-wrap"></div>
     <div class="cat-note" id="plan-note"></div>
+  </div>
+
+  <!-- Everything else, one tap away. Closed on a rep's own link, open on the team page. The period buttons
+       pick what these show; the first screen above always shows this year. -->
+  <div class="section o-more" id="rep-more">
+    <div class="sec-head">
+      <div><h2>More about my numbers</h2></div>
+    </div>
+    <div class="scope-bar" id="rep-scope-bar"></div>
+    <div class="more-list">
+      <details class="more-item" data-more="summary">
+        <summary><span class="mi-t">Coach's read</span><span class="mi-v" id="mv-summary"></span></summary>
+        <div class="more-body"><div class="card summary-card" id="rep-summary"></div></div>
+      </details>
+      <details class="more-item" id="pace-section" data-more="pace">
+        <summary><span class="mi-t" id="pace-title">Where I'm heading</span><span class="mi-v" id="mv-pace"></span></summary>
+        <div class="more-body"><div class="more-scope">Projection · not a result</div><div class="card pace-card" id="rep-pacing"></div></div>
+      </details>
+      <details class="more-item" data-more="minis">
+        <summary><span class="mi-t">Orders and averages</span><span class="mi-v" id="mv-minis"></span></summary>
+        <div class="more-body"><div class="mini-grid" id="rep-minis"></div></div>
+      </details>
+      <details class="more-item" id="more-comp" data-more="comp">
+        <summary><span class="mi-t">Where my sales come from</span><span class="mi-v" id="mv-comp"></span></summary>
+        <div class="more-body"><div class="more-scope" id="comp-scope"></div><div class="card comp-card" id="rep-comp"></div></div>
+      </details>
+      <details class="more-item" id="more-trend" data-more="trend">
+        <summary><span class="mi-t">How I'm trending</span><span class="mi-v" id="mv-trend"></span></summary>
+        <div class="more-body">
+          <div class="card trend-card">
+            <div class="trend-head">
+              <select class="ctl" id="rep-chart-metric" aria-label="Chart metric">
+                <option value="total_sales">Total CPO</option>
+                <option value="total_event">Total Event CPO</option>
+                <option value="bucket:Event (Traditional)">Event (Traditional)</option>
+                <option value="bucket:Service Event">Service Event</option>
+                <option value="bucket:Industry Event">Industry Event</option>
+                <option value="bucket:Non-Event CPO">Non-Event CPO</option>
+                <option value="avg_order">Avg Order</option>
+              </select>
+            </div>
+            <div class="trend-canvas"><svg id="rep-chart-svg" viewBox="0 0 800 300" preserveAspectRatio="xMidYMid meet"></svg></div>
+            <div class="trend-foot">
+              <div class="trend-legend">
+                <span class="li"><svg width="26" height="6"><line x1="0" y1="3" x2="26" y2="3" class="chart-you" stroke-width="2.5"/></svg> <span id="legend-you">You</span></span>
+                <span class="li"><svg width="26" height="6"><line x1="0" y1="3" x2="26" y2="3" class="chart-team" stroke-width="1.5" stroke-dasharray="4,3"/></svg> Team average<button type="button" class="info-i" id="legend-team-tip">i</button></span>
+              </div>
+              <div class="trend-insight" id="trend-insight"></div>
+            </div>
+          </div>
+        </div>
+      </details>
+      <details class="more-item" data-more="cats">
+        <summary><span class="mi-t">Events and everything else</span><span class="mi-v" id="mv-cats"></span></summary>
+        <div class="more-body"><div class="more-scope" id="cats-scope"></div><div class="headline-duo" id="rep-buckets-top"></div><div id="rep-buckets-sub"></div></div>
+      </details>
+      <details class="more-item" id="rep-products-section" data-more="products">
+        <summary><span class="mi-t">What I'm selling</span><span class="mi-v" id="mv-products"></span></summary>
+        <div class="more-body">
+          <div class="sec-head">
+            <span class="scope" id="rp-scope"></span>
+            <div class="sec-tools" id="rp-tools"></div>
+          </div>
+          <div class="cat-table-wrap" id="rep-products"></div>
+          <div class="cat-note" id="rp-note"></div>
+        </div>
+      </details>
+      <details class="more-item" data-more="shifts">
+        <summary><span class="mi-t">Shifts</span><span class="mi-v" id="mv-shifts"></span></summary>
+        <div class="more-body"><div class="more-scope" id="shifts-scope">Full year</div><div class="shift-grid" id="rep-shifts"></div></div>
+      </details>
+    </div>
   </div>
 </div>
 
@@ -1617,17 +1649,17 @@ function fmtNumber(n, decimals = 1) {
   return n.toFixed(decimals);
 }
 // Percent delta as a chip. onDark for the scorecard.
-function chipYoY(cur, prior, onDark) {
+function chipYoY(cur, prior, onDark, digits = 1) {
   const dark = onDark ? ' on-dark' : '';
   if (cur === null || prior === null || cur === undefined || prior === undefined || prior === 0) {
     return `<span class="chip na${dark}" title="${NA_TIP}">—</span>`;
   }
   const pct = ((cur - prior) / prior) * 100;
   // A change that rounds to nothing is no change: no arrow, no colour (as fmtYoY does)
-  if (+Math.abs(pct).toFixed(1) === 0) return `<span class="chip na${dark}" title="${pct >= 0 ? '+' : '−'}${Math.abs(pct).toFixed(2)}%">0%</span>`;
+  if (+Math.abs(pct).toFixed(digits) === 0) return `<span class="chip na${dark}" title="${pct >= 0 ? '+' : '−'}${Math.abs(pct).toFixed(2)}%">0%</span>`;
   const cls = pct >= 0 ? 'pos' : 'neg';
   const arrow = pct >= 0 ? '▲' : '▼';
-  return `<span class="chip ${cls}${dark}">${arrow} ${pct >= 0 ? '+' : '−'}${Math.abs(pct).toFixed(1)}%</span>`;
+  return `<span class="chip ${cls}${dark}">${arrow} ${pct >= 0 ? '+' : '−'}${Math.abs(pct).toFixed(digits)}%</span>`;
 }
 // Against the team average: "+56% above", "−12% below", or "even" when the gap rounds to 0%
 // (it used to print "−0% below" for a hair under the average).
@@ -2667,58 +2699,66 @@ function renderRepScopeBar() {
   el.querySelectorAll('[data-n]').forEach(b => b.addEventListener('click', () => setCamp(STATE.camp.year, +b.dataset.n)));
 }
 
+// ===== The 10-second screen (Alan, 2026-10-18: "in the first 10 seconds that they see it and they look away, they
+// remember what they see"). Always this year, whatever the period buttons in More say: the rep's name, one number,
+// one line against last year, one plain sentence and three facts. Fixed rules, no model.
+const campsLeft = y => { const k = campaignsForYear(y).length; return [1, 2, 3].filter(n => n > k); };
+const andList = xs => xs.length < 2 ? xs.join('') : `${xs.slice(0, -1).join(', ')} and ${xs[xs.length - 1]}`;
+function glanceSentence(r, y, hero, cur) {
+  if (cur === null) return `No ${y} sales on file yet.`;
+  if (hero.fallback) {
+    const miss = campaignsForYear(y).filter(n => !repTotalSales(r, y, n)).map(n => `C${n}`);
+    return `Your ${andList(miss)} Total Sales ${miss.length > 1 ? "haven't" : "hasn't"} come in yet, so this shows event sales.`;
+  }
+  const prev = pSales(r, periodYear(y - 1));   // last year's Total CPO (its year-end figure once closed)
+  if (yearClosed(y)) {
+    if (!prev) return PLAN_YEAR ? `Your ${PLAN_YEAR} plan is below.` : `That's your ${y}.`;
+    const d = cur - prev.cpo;
+    return `${d >= 0 ? 'Up' : 'Down'} ${fmtCurrencyShort(Math.abs(d))} on ${y - 1}.${PLAN_YEAR ? ` Your ${PLAN_YEAR} plan is below.` : ''}`;
+  }
+  const left = campsLeft(y), leftTxt = andList(left.map(n => `C${n}`));
+  if (!prev) return `Your first year on the dashboard, with ${leftTxt} still to come.`;
+  if (cur >= prev.cpo) return `Already past all of ${y - 1} (${fmtCurrencyShort(prev.cpo)}), with ${leftTxt} still to come.`;
+  const pace = repPace(r, y).projected;
+  if (pace && pace >= prev.cpo) return `On pace to beat ${y - 1} (${fmtCurrencyShort(prev.cpo)}) by about ${fmtCurrencyShort(pace - prev.cpo)}.`;
+  const lastLeft = strictSum(left.map(n => ({ year: y - 1, n })), c => repTotalSales(r, c.year, c.n));
+  return lastLeft ? `${leftTxt} brought in ${fmtCurrencyShort(lastLeft.cpo)} last year. That's your chance to close the gap.`
+    : `${y - 1} finished at ${fmtCurrencyShort(prev.cpo)}, with ${leftTxt} still to come.`;
+}
+function glanceFacts(r, y, hero) {
+  const rank = repRank(r.name, hero.metric, periodYear(y));
+  const prev = pSales(r, periodYear(y - 1));
+  const pace = yearClosed(y) ? null : repPace(r, y).projected;
+  let best = null;
+  for (const c of CAMPAIGNS_AVAILABLE) {
+    const s = repTotalSales(r, c.year, c.n);
+    if (s && (!best || s.cpo > best.cpo)) best = { cpo: s.cpo, label: `C${c.n} ${c.year}` };
+  }
+  const fact = (v, l) => `<div class="g-fact"><div class="fv">${v}</div><div class="fl">${l}</div></div>`;
+  return fact(rank ? `#${rank.rank} <small>of ${rank.total}</small>` : '—', hero.fallback ? 'Team rank, event sales' : 'Team rank') +
+    (yearClosed(y) ? fact(prev ? fmtCurrencyShort(prev.cpo) : '—', `${y - 1} total`)
+      : fact(pace ? '≈ ' + fmtCurrencyShort(pace) : '—', 'On pace for')) +
+    fact(best ? fmtCurrencyShort(best.cpo) : '—', best ? `Best campaign, ${best.label}` : 'Best campaign');
+}
 function renderRepScorecard() {
-  const r = REPS[STATE.selectedRep];
-  const p = repPeriod(), hero = repHero(r, p);
-  const cmp = compareFor(p, metricFamily(hero.metric));
+  const r = REPS[STATE.selectedRep], y = LAST_YEAR, p = periodYear(y), hero = repHero(r, p);
   const cur = hero.stats ? hero.stats.cpo : null;
-  const prior = cmp ? getMetric(r, cmp.period, hero.metric) : null;
-  const rank = repRank(STATE.selectedRep, hero.metric, p);
-  const pc = prevCampaignOf(p);
-  const prevVal = pc ? getMetric(r, pc, hero.metric) : null;
-  const prevRank = pc ? repRank(STATE.selectedRep, hero.metric, pc) : null;
-  const tAvg = teamAvg(hero.metric, p);
-  const vsTeamPct = (cur !== null && tAvg) ? ((cur - tAvg) / tAvg * 100) : null;
-
-  const meta = [];
-  if (r.title) meta.push(r.title);
-  if (r.office) meta.push(r.office.replace(/^\d+\s*-\s*/, ''));
-  if (r.contract_date) meta.push('Since ' + r.contract_date.slice(0, 4));
-  if (r.career_cpo) meta.push('Career ' + fmtCurrencyShort(r.career_cpo));
-
-  const opts = MASTER.map(n =>
-    `<option value="${n}"${n === STATE.selectedRep ? ' selected' : ''}>${n}</option>`).join('');
-
-  // Against the comparison period (growth, or share of last year while this year is open)
-  let lines = '';
-  if (cmp && cur !== null) {
-    if (prior === null) {
-      lines += `<div class="h-delta"><span class="chip na on-dark">—</span><span class="h-ctx">no ${cmp.period.label} ${hero.label} loaded</span></div>`;
-    } else if (cmp.mode === 'share') {
-      lines += `<div class="h-delta">${shareChip(cur, prior, cmp.period.year, true)}<span class="h-ctx">of ${cmp.period.year}'s full year (${fmtCurrencyShort(prior)})</span></div>`;
+  const cmp = compareFor(p, metricFamily(hero.metric));
+  const prior = cmp && cur !== null ? getMetric(r, cmp.period, hero.metric) : null;
+  let delta = '';
+  if (prior) {
+    if (cmp.mode === 'share') {
+      delta = `<div class="g-delta">${Math.round(cur / prior * 100)}% <span>of all of ${cmp.period.year}</span></div>`;
     } else {
-      const d = cur - prior;
-      lines += `<div class="h-delta">${chipYoY(cur, prior, true)}<span class="h-ctx">${d >= 0 ? '+' : '−'}$${Math.abs(Math.round(d)).toLocaleString()} vs ${cmp.period.label} (${fmtCurrencyShort(prior)})</span></div>`;
+      const pct = Math.round((cur - prior) / prior * 100), vs = p.closed ? cmp.period.year : 'this time last year';
+      const what = pct > 0 ? 'Up' : pct < 0 ? 'Down' : 'Even';
+      delta = `<div class="g-delta ${pct > 0 ? 'up' : pct < 0 ? 'down' : ''}" aria-label="${what}${pct ? ' ' + Math.abs(pct) + '%' : ''} vs ${vs}">` +
+        `${pct ? `${pct > 0 ? '▲' : '▼'} ${Math.abs(pct)}%` : 'Even'} <span>vs ${vs}</span></div>`;
     }
   }
-  // When Total CPO has no like-for-like comparison, event sales always do.
-  if (hero.metric === 'total_sales' && cmp && (prior === null || cmp.mode === 'share')) {
-    const cmpE = compareFor(p, 'event'), e = pEvent(r, p), ep = cmpE ? pEvent(r, cmpE.period) : null;
-    if (e && cmpE) lines += `<div class="h-delta">${chipYoY(e.cpo, ep && ep.cpo, true)}<span class="h-ctx">Event CPO ${fmtCurrencyShort(e.cpo)} vs ${cmpE.period.label} ${ep ? fmtCurrencyShort(ep.cpo) : '—'}</span></div>`;
-  }
-  // "vs last campaign" (review D1): C2 vs C1 is what the rep just lived through.
-  if (pc && prevVal !== null && cur !== null) {
-    lines += `<div class="h-delta">${chipYoY(cur, prevVal, true)}<span class="h-ctx">vs last campaign · ${pc.label} (${fmtCurrencyShort(prevVal)})</span></div>`;
-  }
-  if (hero.fallback) {
-    lines += `<div class="h-delta"><span class="h-ctx">${PENDING.includes(STATE.selectedRep) ? 'Total Sales pending for this rep' : `No Total Sales workbook for ${p.label}`} · showing event sales</span></div>`;
-  }
-
-  const vsT = vsTeamPct === null ? null : vsTeamParts(vsTeamPct);
-  const vsTeamStr = !vsT ? '—' :
-    `<span class="${vsT.dir > 0 ? 'up' : vsT.dir < 0 ? 'down' : ''}"${vsT.title ? ` title="${vsT.title}"` : ''}>${vsT.text}</span>`;
 
   // A rep's own link shows their name; the team page keeps the picker and offers that rep's link to copy.
+  const opts = MASTER.map(n => `<option value="${n}"${n === STATE.selectedRep ? ' selected' : ''}>${n}</option>`).join('');
   const link = repLink(STATE.selectedRep);
   const nameBlock = PERSONAL ? `<h1 class="name-static">${STATE.selectedRep}</h1>` : `
       <div class="name-select-wrap">
@@ -2734,31 +2774,14 @@ function renderRepScorecard() {
 
   document.getElementById('rep-scorecard').innerHTML = `
     <div class="sc-id">
-      <div class="sc-kicker">${PERSONAL ? 'My numbers' : 'Rep Dashboard'} · ${p.label}</div>
+      <div class="sc-kicker">${p.label} · ${hero.label}</div>
       ${nameBlock}
-      <div class="sc-meta">${meta.join('<span class="sep">·</span>')}</div>
       ${linkRow}
-      <div class="sc-badges">
-        <div class="sc-badge">
-          <div class="b-label">Rank · ${hero.label}</div>
-          <div class="b-val">${rank ? `#${rank.rank} <span style="opacity:.55;">of ${rank.total}</span>` : naSpan}</div>
-          ${prevRank ? `<div class="b-sub">was #${prevRank.rank} in ${pc.label}</div>` : ''}
-        </div>
-        <div class="sc-badge">
-          <div class="b-label">Team Avg${infoI(UNIVERSE_TIP)}</div>
-          <div class="b-val">${fmtCurrency(tAvg)}</div>
-        </div>
-        <div class="sc-badge">
-          <div class="b-label">vs Team Avg</div>
-          <div class="b-val">${vsTeamStr}</div>
-        </div>
-      </div>
+      <div class="g-big">${cur !== null ? fmtCurrency(cur) : naSpan}</div>
+      ${delta}
+      <p class="g-read">${glanceSentence(r, y, hero, cur)}</p>
     </div>
-    <div class="sc-hero">
-      <div class="h-label">${hero.label} · ${p.label}</div>
-      <div class="h-val">${cur !== null ? fmtCurrency(cur) : naSpan}</div>
-      ${lines}
-    </div>
+    <div class="g-facts">${glanceFacts(r, y, hero)}</div>
   `;
 
   if (PERSONAL) return;
@@ -3055,7 +3078,6 @@ function renderRepSummary() {
 
   document.getElementById('rep-summary').innerHTML = `
     <div class="summary-head">
-      <div><h2>Coach's read</h2></div>
       <span class="scope">${p.label}${cmp ? ' vs ' + cmpTxt : ''}</span>
     </div>
     <div class="callout-grid">
@@ -3414,23 +3436,19 @@ function renderRepPacing() {
 // carries its change against the same campaign (or the year at the same point) the year before, and tapping it
 // opens that period at the top of Rep View. Alan: "people can see their individual stats for every single campaign".
 // ==========================================================================
+// Three measures (2026-10-18: Avg order and Events were the least clear; they live in More).
 const HIST_MEASURES = [
   { key: 'sales',  label: 'Total CPO', sm: 'Total' },
   { key: 'event',  label: 'Event CPO', sm: 'Event' },
   { key: 'orders', label: 'Orders',    sm: 'Orders' },
-  { key: 'avg',    label: 'Avg order', sm: 'Avg' },
-  { key: 'events', label: 'Events',    sm: 'Events' },
 ];
 STATE.histMeasure = 'sales';
-const histFamily = m => (m === 'event' || m === 'events') ? 'event' : 'sales';
-// Orders and average order go with Total CPO (every order); Events counts the events with event sales.
+const histFamily = m => m === 'event' ? 'event' : 'sales';
+// Orders go with Total CPO: every order, not only event orders.
 const histStats = (r, p, m) => histFamily(m) === 'event' ? pEvent(r, p) : pSales(r, p);
 function histValue(s, m) {
   if (!s) return null;
-  if (m === 'sales' || m === 'event') return s.cpo;
-  if (m === 'orders') return ordersOf(s);
-  if (m === 'avg') return avgOrder(s);
-  return s.events || null;
+  return m === 'orders' ? ordersOf(s) : s.cpo;
 }
 // What a dash in the grid means, for the tap-to-open tip.
 function histWhyNone(r, p, m) {
@@ -3446,9 +3464,9 @@ function histChange(r, p, v, m) {
   if (!cmp) return '';
   const ps = histStats(r, cmp.period, m), pv = histValue(ps, m), base = ordersOf(ps);
   if (pv === null) return '';   // nothing on file the year before (a new rep): no change to show
-  if (cmp.mode === 'share' && m !== 'avg') return shareChip(v, pv, cmp.period.year);
-  if (pv !== null && m !== 'events' && base !== null && base < MIN_GROWTH_ORDERS) return smallBaseChip(base);
-  return chipYoY(v, pv);
+  if (cmp.mode === 'share') return shareChip(v, pv, cmp.period.year);
+  if (base !== null && base < MIN_GROWTH_ORDERS) return smallBaseChip(base);
+  return chipYoY(v, pv, false, 0);   // whole percents: 134%, not 133.6%
 }
 function renderRepHistory() {
   const r = REPS[STATE.selectedRep], m = STATE.histMeasure;
@@ -3464,11 +3482,11 @@ function renderRepHistory() {
   const campMax = maxOf(campRows.flat()), yearMax = maxOf(yearRow);
   const isSel = p => STATE.repMode === 'camp' ? p.kind === 'camp' && p.year === STATE.camp.year && p.n === STATE.camp.n
     : p.kind === 'year' && p.year === STATE.year;
-  const fmt = v => (m === 'orders' || m === 'events') ? fmtInt(v) : fmtCurrency(v);
+  const fmt = v => m === 'orders' ? fmtInt(v) : fmtCurrency(v);
   const cell = (c, max) => {
     if (!c.p) return `<td><div class="h-cell">${tipBtn('h-off', '—', `C${c.n} ${c.y} closes ${CAMP_ENDS[c.n]}; its numbers land ${CAMP_LANDS[c.n]}`, `C${c.n} ${c.y}`)}</div></td>`;
     const val = c.v === null ? tipBtn('h-off', '—', histWhyNone(r, c.p, m), c.p.label)
-      : `<button type="button" class="h-v" data-hy="${c.p.year}" data-hn="${c.p.kind === 'camp' ? c.p.n : ''}" aria-label="${c.p.label}: ${fmt(c.v)}. Opens it at the top">${fmt(c.v)}</button>`;
+      : `<button type="button" class="h-v" data-hy="${c.p.year}" data-hn="${c.p.kind === 'camp' ? c.p.n : ''}" aria-label="${c.p.label}: ${fmt(c.v)}. Opens its breakdown below">${fmt(c.v)}</button>`;
     const bar = c.v !== null && max > 0 ? `<span class="h-bar"><span style="width:${Math.max(2, c.v / max * 100).toFixed(1)}%"></span></span>` : '';
     return `<td class="${isSel(c.p) ? 'sel' : ''}"><div class="h-cell">${val}${bar}${histChange(r, c.p, c.v, m)}</div></td>`;
   };
@@ -3481,15 +3499,20 @@ function renderRepHistory() {
         <tr class="total"><td class="cat-name">Year</td>${yearRow.map(c => cell(c, yearMax)).join('')}</tr>
       </tbody>
     </table>`;
+  // A figure opens that campaign (or year) in More: the period buttons there move to it, and where it comes
+  // from opens if nothing there is open yet.
   wrap.querySelectorAll('.h-v').forEach(b => b.addEventListener('click', () => {
     const y = +b.dataset.hy, n = +b.dataset.hn;
     STATE.chartMetric = null;
     if (n) { STATE.repMode = 'camp'; STATE.camp = { year: y, n }; } else { STATE.repMode = 'year'; STATE.year = y; }
     renderAll();
-    window.scrollTo({ top: 0, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+    const more = document.getElementById('rep-more');
+    if (!more.querySelector('details[open]')) document.getElementById('more-comp').open = true;
+    const masthead = document.querySelector('.masthead').getBoundingClientRect().bottom;
+    window.scrollTo({ top: more.getBoundingClientRect().top + scrollY - masthead - 12,
+      behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
   }));
-  document.getElementById('rh-note').textContent = 'Each change is against the same campaign the year before' +
-    (yearClosed(LAST_YEAR) ? '' : `, and ${LAST_YEAR} so far against ${LAST_YEAR - 1} at the same point`) + '. Tap a figure to open it at the top.';
+  document.getElementById('rh-note').textContent = 'Each change is against the same campaign a year earlier. Tap a figure to see it broken down below.';
 }
 
 // ==========================================================================
@@ -3796,6 +3819,25 @@ function niceCeil(v) {
   return 10 * mag;
 }
 
+// The short line at the right of each row in More: what that section says, before it is opened.
+function renderMorePreviews() {
+  const r = REPS[STATE.selectedRep], p = repPeriod(), set = (id, txt) => { document.getElementById(id).textContent = txt || ''; };
+  const sum = document.getElementById('rep-summary');
+  const good = sum.querySelectorAll('.callout.good').length, opp = !!sum.querySelector('.opp-panel');
+  set('mv-summary', [good ? `${good} strength${good > 1 ? 's' : ''}` : '', opp ? '1 to work on' : ''].filter(Boolean).join(' · '));
+  const pace = repPace(r, LAST_YEAR).projected;
+  set('mv-pace', !yearClosed(LAST_YEAR) && pace ? `≈ ${fmtCurrencyShort(pace)}` : '');
+  const hero = repHero(r, p), orders = ordersOf(hero.stats);
+  set('mv-minis', orders === null ? '' : `${orders.toLocaleString()} ${hero.fallback ? 'event ' : ''}orders`);
+  const s = pSales(r, p), e = pEvent(r, p);
+  set('mv-comp', s && e && s.cpo > 0 ? `${Math.round(e.cpo / s.cpo * 100)}% at events` : '');
+  set('mv-trend', `${FIRST_YEAR}–${LAST_YEAR}`);
+  set('mv-cats', e ? `${fmtCurrencyShort(e.cpo)} at events` : '');
+  set('mv-products', PRODUCTS ? `Report of ${pAsOf()}` : '');
+  const sh = pShifts(r, p), c = sh && sh.combined;
+  set('mv-shifts', c && c.shifts ? `${c.shifts} shifts · ${fmtCurrencyShort(c.avg)} a shift` : '');
+}
+
 function renderRepView() {
   renderRepScopeBar();
   renderRepScorecard();
@@ -3809,6 +3851,7 @@ function renderRepView() {
   renderRepShifts();
   renderRepPacing();
   renderRepPlan();
+  renderMorePreviews();
 }
 
 // ==========================================================================
@@ -3816,6 +3859,12 @@ function renderRepView() {
 // ==========================================================================
 function renderHeader() {
   if (CHOOSING) { document.getElementById('cp-line').textContent = 'Pick your name'; return; }
+  // A rep's own page: how fresh the numbers are, instead of the period line (the intake lands 8 days after a close)
+  if (PERSONAL) {
+    document.getElementById('cp-line').textContent =
+      `Numbers through ${CAMP_ENDS[LATEST.campaign]}, ${LATEST.year} · next update ${CAMP_LANDS[LATEST.campaign % 3 + 1]}`;
+    return;
+  }
   let txt;
   if (STATE.view === 'campaigns') {
     const p = campPeriodSel(), c = compareFor(p, 'event');
@@ -4349,6 +4398,8 @@ if (REP_PARAM !== null) {
 
 // Initial render. #total / #campaigns / #products / #rep open that tab (#team from Phase 2 links opens Total).
 // A rep's own link opens their Rep View at the top.
+document.querySelectorAll('#rep-more details').forEach(d => { d.open = REP_PARAM === null; });
+document.getElementById('more-trend').addEventListener('toggle', e => { if (e.target.open) renderRepChart(); });
 buildLeaderboard('c');
 buildGridToggles();
 renderAll();

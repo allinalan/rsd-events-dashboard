@@ -71,3 +71,23 @@ links are for convenience. They are not a lock.
 ## Left to the builder
 
 The exact layout and wording, within the README's design rules, and the order of sections on phones.
+
+## Round two: the 10-second page (same day)
+
+Alan, after looking again as a rep: "in the first 10 seconds that they see it and they look away, they remember what
+they see ... a confused mind never looks at it." Before: 11 sections open at once, about 8 phone screens and 870
+words, six period buttons above the rep's name, the big number below three badges, and for a rep near the bottom
+"−69% below" as the first thing in color. He took every default:
+
+1. The first screen: name, one number, one line against this time last year, one plain sentence, and three facts:
+   Team rank · On pace for · Best campaign ever.
+2. Rank stays on it.
+3. Cut from it: the Team Avg and vs Team Avg badges, the office / career line, and the masthead's period line, which
+   becomes "Numbers through Aug 31, 2026 · next update Jan 8".
+4. Everything else folds under "More about my numbers", closed until tapped, with the period buttons inside.
+5. The campaign grid offers Total CPO, Event CPO and Orders (Avg order and Events left; they live in More).
+6. Plain numbers wherever a rep looks first: whole percents, "vs this time last year", no multipliers or footnotes.
+7. The team page's Rep View has the same layout, with More open.
+
+After: about 3 phone screens and 345 words; the big number sits about 200px from the top of a phone.
+`docs/screenshots/2026-10-18-rep-first-screen-before-after.png` shows Charity Campbell and Matt Foss before and after.

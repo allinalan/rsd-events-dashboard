@@ -1,7 +1,7 @@
 # RSD Rep Dashboard
 
 Single-page dashboard for the RSD Events Team (CUTCO Rising Sun Division).
-Four tabs: **Total** (one season against the earlier years you pick, Event Analyzer layout), **Campaigns** (one campaign compared across years, plus a full-year leaderboard), **Products** (the home office's product report: nine lines, three years, a rep leaderboard per line), **Rep View** (year or campaign, every campaign in one grid, a plan for next year, plus the rep's product mix).
+Four tabs: **Total** (one season against the earlier years you pick, Event Analyzer layout), **Campaigns** (one campaign compared across years, plus a full-year leaderboard), **Products** (the home office's product report: nine lines, three years, a rep leaderboard per line), **Rep View** (a first screen a rep takes in at a glance, every campaign in one grid, a plan for next year, and everything else folded under "More about my numbers").
 
 Every core rep also has a **link of their own**: the dashboard address plus their name, for example
 `https://allinalan.github.io/rsd-events-dashboard/matt-foss`. It opens their Rep View with no tabs and no name
@@ -36,17 +36,29 @@ not privacy: names are the links, and anyone can open anyone's page ("I encourag
   it from that folder's `index.html`, which sends the browser to `?rep=<first>-<last>`. `index.html` matches the
   full name, then the name without hyphens, then a first or last name only one rep has. Anything else shows the
   names to pick from (the typed text goes in as text, never HTML).
-- **A rep's page** (`?rep=`): no tabs, their name in place of the picker, "My numbers" on the scorecard, a link
-  back to the team page at the foot. The page title and `apple-mobile-web-app-title` are the rep's name, so Add to
-  Home Screen saves their own page under their name. On a phone, a one-time tip says how.
+- **A rep's page** (`?rep=`): no tabs, their name in place of the picker, a masthead that says how fresh the numbers
+  are ("Numbers through Aug 31, 2026 · next update Jan 8"), a link back to the team page at the foot. The page title
+  and `apple-mobile-web-app-title` are the rep's name, so Add to Home Screen saves their own page under their name.
+  On a phone, a one-time tip says how.
+- **The 10-second screen** (Alan, 2026-10-18: what a rep remembers after one look is the bar): always this year,
+  whatever the period buttons say. Name, one big number (Total CPO; event sales while a rep's Total Sales report is
+  still out), one line against this time last year in whole percents, one plain sentence, and three facts: Team rank,
+  On pace for, Best campaign. The sentence follows fixed rules (`glanceSentence`): already past last year's total;
+  else on pace to beat it; else what the campaigns still to come brought in last year ("That's your chance to close
+  the gap"); for a pending report, which campaign's Total Sales hasn't come in. No team average on this screen: rank
+  says it.
 - **The team page** shows the selected rep's link in Rep View with a **Copy link** button.
 - **Print every link:** `node tools/rep-pages.mjs --list`.
 - **When the core team changes** (`roster.json` in the intake, so `meta.master_list` in `data.js`): run
   `node tools/rep-pages.mjs`. It writes a page for each new rep and takes down the pages of reps who left. Until it
   runs, the smoke check stays red and says who is missing. A rep who left gets the name list, never anyone's numbers.
-- **Every campaign** (Rep View, everyone's): C1 / C2 / C3 / Year by year, for Total CPO, Event CPO, Orders, Avg
-  order or Events, each figure with its change against the same campaign the year before. Tapping a figure opens
-  that campaign or year at the top.
+- **My campaigns** (Rep View, everyone's): C1 / C2 / C3 / Year by year, for Total CPO, Event CPO or Orders, each
+  figure with its change against the same campaign a year earlier (whole percents). Tapping a figure moves the period
+  buttons in More to it and opens "Where my sales come from" if nothing there is open.
+- **More about my numbers**: the period buttons, then one row per section (Coach's read, Where I'm heading, Orders
+  and averages, Where my sales come from, How I'm trending, Events and everything else, What I'm selling, Shifts),
+  each with a one-line preview. Closed on a rep's own link; open on the team page, so Alan sees everything at once.
+  The smoke check holds both.
 - **Plan next year** (Rep View, everyone's): shows from the day C2 closes until next year's C1 closes. The goal is
   prefilled with this year's pace + 10% (rounded to $5K), split by the rep's own C1 / C2 / C3 mix (skipping any year
   where one campaign is under 5% of it; event sales, then the team's split, when that leaves nothing), with their
