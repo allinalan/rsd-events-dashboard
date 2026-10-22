@@ -91,3 +91,21 @@ words, six period buttons above the rep's name, the big number below three badge
 
 After: about 3 phone screens and 345 words; the big number sits about 200px from the top of a phone.
 `docs/screenshots/2026-10-18-rep-first-screen-before-after.png` shows Charity Campbell and Matt Foss before and after.
+
+## Round three: the plan, shows held steady (2026-10-22)
+
+Alan: "Not a fan of the 2027 plan section ... feels a bit too basic/generic. And I don't want them discouraged if
+they try to go after bigger numbers ... we don't want to offer any suggestions ... just shows them what they would
+have to sell each campaign to make that happen", then "assume the amount of shows don't change for them btw. so to
+increase their sales will have to come outside of the booth." All defaults. This replaces *Plan math* above.
+
+- The goal starts empty. Gone: the pace + 10% prefill, "Use the suggestion", the pace comparison, "My best", shifts.
+- My shows, per campaign: the shows and event sales of the last time that campaign was worked.
+- Outside the booth = goal − my shows, spread the way the rep's outside sales usually fall (years with all three
+  campaigns on file; the team's otherwise), counted in orders at their average outside order across all campaigns
+  (the team's under 10 orders; dollars only without order counts).
+- Any campaign's total can be changed; the year is then the sum. A goal below the shows: "Your shows cover this goal".
+- Saved only in the browser. The smoke check holds the empty start.
+
+`docs/screenshots/2026-10-22-plan-outside-the-booth.png` shows Alan before typing and at $500,000, Kendall at
+$100,000 (team outside mix) and Jeremy at $600,000 (dollars only).

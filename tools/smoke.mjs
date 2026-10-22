@@ -161,6 +161,9 @@ async function personalProblems(page, name) {
     facts: document.querySelectorAll('.g-facts .g-fact').length,
     grid: document.querySelectorAll('#rep-history tbody tr').length,
     open: document.querySelectorAll('#rep-more details[open]').length,
+    plan: !!document.getElementById('plan-section').offsetParent,
+    planGoal: (document.getElementById('plan-goal') || {}).value,
+    planCamps: document.querySelectorAll('#plan-camps .plan-camp').length,
   })));
   const problems = [];
   if (!s.personal) problems.push('personal mode is off');
@@ -171,6 +174,9 @@ async function personalProblems(page, name) {
   if (s.facts !== 3) problems.push(`the first screen has ${s.facts} facts, not 3`);
   if (s.grid !== 4) problems.push(`the My campaigns grid has ${s.grid} rows, not 4 (C1, C2, C3, Year)`);
   if (s.open) problems.push(`${s.open} section(s) of More about my numbers start open on a rep's own page`);
+  // Alan, 2026-10-22: no suggestions. A fresh browser must find the goal empty, with one card per campaign.
+  if (s.plan && s.planGoal !== '') problems.push(`the Plan goal starts filled in ("${s.planGoal}"); it must start empty`);
+  if (s.plan && s.planCamps !== 3) problems.push(`the Plan shows ${s.planCamps} campaign cards, not 3`);
   return problems;
 }
 // The link exactly as it gets texted: /<name>, through that folder's page, to ?rep=<name>.
