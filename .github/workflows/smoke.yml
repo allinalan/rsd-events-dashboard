@@ -30,10 +30,14 @@ jobs:
         with:
           node-version: 24
 
+      # No --with-deps: the runner image already carries Chrome's system libraries, and re-installing them (plus a
+      # dozen font packages) through Ubuntu's mirror stalled for 9 minutes on 2026-10-22 and again on 2026-10-27, so
+      # the job hit its time limit before the check began. A missing library fails the launch loudly in the next step.
       - name: Install Playwright and headless Chromium
+        timeout-minutes: 4
         run: |
           npm install --no-save --no-package-lock --no-audit --no-fund playwright@1.63.0
-          npx playwright install --with-deps --only-shell chromium
+          npx playwright install --only-shell chromium
 
       - name: Open every tab at 1280x900 and 375x812, and every rep's own link
         run: node tools/smoke.mjs --out smoke-screenshots
