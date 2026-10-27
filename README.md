@@ -63,8 +63,9 @@ not privacy: names are the links, and anyone can open anyone's page ("I encourag
   closes. The goal starts empty: no suggestion, no pace, no best, no percent anywhere in the block (Alan: "we don't
   want to offer any suggestions", and no rep discouraged for going after a bigger number). Shows are held steady:
   "My shows" per campaign are the shows and event sales of the last time that campaign was worked (for 2027: C1 and
-  C2 of 2026, C3 of 2025). Whatever the goal needs beyond that is sold outside the booth, spread the way the rep's
-  outside sales fell in the years with all three campaigns on file (the team's when there are none), and counted in
+  C2 of 2026, C3 of 2025). Whatever the goal needs beyond that is sold outside the booth, spread by each campaign's
+  average outside sales over every finished campaign on file, this year's included (averages, so C3 isn't shortchanged
+  for having one fewer year; the team's when a rep has no outside figure for one of the three), and counted in
   orders at their average outside order (the team's under 10 orders; dollars only when their Total Sales comes from
   the home office without order counts). Any campaign's total can be changed and the year adds up; "Split my goal the
   usual way again" undoes it. A goal below what the shows bring in says "Your shows cover this goal". Saved only in

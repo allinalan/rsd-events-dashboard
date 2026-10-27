@@ -3565,24 +3565,25 @@ function planShows(r) {
     return { n, year, shows: e ? e.events || 0 : 0, cpo: e ? round100(e.cpo) : 0 };
   });
 }
-// How outside-the-booth sales usually fall across C1, C2 and C3: the years with all three on file. Without one
-// (a new rep, or Total Sales from individual reports), the team's.
+// How outside-the-booth sales usually fall across C1, C2 and C3: each campaign's average over every finished
+// campaign on file, the year in progress included (Alan, 2026-10-27: "count this year's finished campaigns too, not
+// only full years"). Averages, not sums: in the fall C3 has one fewer year on file than C1 and C2, and a sum would
+// shrink its share. A rep with no outside figure for one of the three (a new rep, or Total Sales from individual
+// reports), the team's.
 function planOutsideMix(r) {
   const mix = get => {
-    const sum = [0, 0, 0], years = [];
-    for (const y of CAMP_YEARS) {
-      const v = [1, 2, 3].map(n => get(y, n));
-      if (v.some(x => x === null)) continue;
-      v.forEach((x, i) => { sum[i] += Math.max(0, x); });
-      years.push(y);
-    }
-    const t = sum[0] + sum[1] + sum[2];
-    return t > 0 ? { share: sum.map(x => x / t), years } : null;
+    const mean = [1, 2, 3].map(n => {
+      const v = CAMP_YEARS.filter(y => campaignsForYear(y).includes(n)).map(y => get(y, n)).filter(x => x !== null);
+      return v.length ? v.reduce((a, x) => a + Math.max(0, x), 0) / v.length : null;
+    });
+    if (mean.some(x => x === null)) return null;
+    const t = mean[0] + mean[1] + mean[2];
+    return t > 0 ? { share: mean.map(x => x / t) } : null;
   };
   const own = mix((y, n) => { const b = repBucket(r, y, 'Non-Event CPO', n); return b ? b.cpo : null; });
   if (own) return { ...own, team: false };
   const team = mix((y, n) => { const t = teamStats(periodCamp(y, n), 'bucket:Non-Event CPO'); return t ? t.cpo : null; });
-  return team ? { ...team, team: true } : { share: [1 / 3, 1 / 3, 1 / 3], years: [], team: true };
+  return team ? { ...team, team: true } : { share: [1 / 3, 1 / 3, 1 / 3], team: true };
 }
 // Their average outside order over every campaign with an order count. Too few orders: the team's. Outside sales
 // with no order counts at all (Total Sales from an individual report, CPO only): null, so the plan shows dollars.
@@ -3696,7 +3697,7 @@ function renderRepPlan() {
 
   const notes = [`My shows are the shows and sales of your last ${andList(byYear)}.`];
   notes.push(mix.team ? 'Outside the booth is spread the way the team\'s falls across C1, C2 and C3 (not enough of your own campaigns on file yet).'
-    : `Outside the booth is spread the way yours fell in ${andList(mix.years.map(String))}.`);
+    : `Outside the booth is spread the way yours usually falls (each campaign's average, counting everything through C${LATEST.campaign} ${LATEST.year}).`);
   if (!order) notes.push('Your Total Sales comes from the home office without order counts, so outside the booth shows dollars only.');
   else if (order.team) notes.push('Orders use the team\'s average order until you have more of your own on file.');
   notes.push('Your plan stays in this browser; nobody else sees it.');
