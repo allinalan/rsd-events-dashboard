@@ -946,36 +946,42 @@
   td.sel .h-bar span { opacity: 1; }
   .h-off { font-size: 13px; color: var(--ink-faint); }
 
-  /* Plan next year */
-  .plan-card { padding: 18px 22px 18px; display: flex; align-items: center; gap: 12px 24px; flex-wrap: wrap; }
+  /* Plan next year (2026-10-22): shows held steady, the rest sold outside the booth */
+  .plan-card { padding: 18px 22px; }
   .plan-goal { display: flex; flex-direction: column; gap: 6px; }
   .plan-goal label { font-size: 13px; font-weight: 600; color: var(--ink-soft); }
-  .plan-field {
-    display: inline-flex; align-items: center; align-self: flex-start;
-    border: 1px solid var(--line); border-radius: var(--radius-sm); background: var(--card);
-  }
-  .plan-field:focus-within { border-color: var(--ink-faint); }
-  .plan-step {
-    appearance: none; border: 0; background: transparent; cursor: pointer;
-    width: 40px; height: 44px; font-family: var(--ui); font-size: 20px; color: var(--ink-soft);
-    transition: color 150ms ease-out, transform var(--spring-ms) var(--spring);
-  }
-  .plan-step:hover { color: var(--label); }
   .plan-input {
-    appearance: none; border: 0; background: transparent; width: 6.2em; text-align: center;
+    appearance: none; align-self: flex-start; width: 100%; max-width: 11em;
     font-family: var(--ui); font-size: 28px; font-weight: 700; letter-spacing: -0.02em; color: var(--label);
-    padding: 4px 0;
+    background: var(--card); border: 1px solid var(--line); border-radius: var(--radius-sm); padding: 6px 12px;
   }
-  .plan-ctx { flex: 1; min-width: 220px; font-size: 13px; color: var(--ink-faint); line-height: 1.45; }
-  .plan-ctx strong { color: var(--label); font-weight: 600; }
+  .plan-input:hover, .plan-input:focus { border-color: var(--ink-faint); }
+  .plan-input::placeholder, .pc-input::placeholder { color: var(--ink-faint); font-weight: 400; font-size: 17px; letter-spacing: 0; }
+  .plan-sum { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin-top: 14px; }
+  .ps { background: var(--fill-hover); border-radius: var(--radius-sm); padding: 10px 14px 11px; min-width: 0; }
+  .ps-v { font-size: 20px; font-weight: 700; letter-spacing: -0.012em; line-height: 1.25; }
+  .ps-v small { font-size: 15px; font-weight: 600; letter-spacing: 0; }
+  .ps-l { font-size: 13px; color: var(--ink-soft); line-height: 1.35; margin-top: 2px; }
+  .plan-camps { display: flex; flex-direction: column; gap: 8px; margin-top: 10px; }
+  .plan-camp { background: var(--card); border-radius: var(--radius); padding: 12px 20px 8px; }
+  .pc-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-bottom: 10px; border-bottom: 1px solid var(--line-soft); }
+  .pc-name { font-size: 15px; font-weight: 600; }
+  .pc-input {
+    appearance: none; width: 8.5em; text-align: right;
+    font-family: var(--ui); font-size: 20px; font-weight: 700; color: var(--label);
+    background: var(--card); border: 1px solid var(--line); border-radius: var(--radius-sm); padding: 5px 10px;
+  }
+  .pc-input:hover, .pc-input:focus { border-color: var(--ink-faint); }
+  .pc-row { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; padding: 8px 0; font-size: 13px; }
+  .pc-row + .pc-row { border-top: 1px solid var(--line-soft); }
+  .pc-row .k { color: var(--ink-soft); }
+  .pc-row .v { font-weight: 600; text-align: right; }
+  .pc-row .v small { font-size: 13px; font-weight: 400; color: var(--ink-faint); }
   .plan-reset {
     appearance: none; border: 0; background: transparent; cursor: pointer; position: relative;
-    font-family: var(--ui); font-size: 13px; font-weight: 600; color: var(--ember-deep); padding: 0;
+    font-family: var(--ui); font-size: 13px; font-weight: 600; color: var(--ember-deep); padding: 0; margin-top: 10px;
   }
   .plan-reset:hover { text-decoration: underline; }
-  #plan-table-wrap { margin-top: 10px; }
-  table.cat-table.plan { min-width: 0; }
-  table.cat-table.plan td.best { color: var(--ink-soft); }
 
   /* Footnote / methodology */
   .footnote {
@@ -1172,11 +1178,10 @@
     table.cat-table.hist td.cat-name .lb-why { white-space: nowrap; }
     table.cat-table.hist td.cat-name { font-size: 13px; }
     table.cat-table.hist .h-v { font-size: 13px; }
-    table.cat-table.hist .chip, table.cat-table.plan .chip { font-size: 11px; padding: 1px 6px; }
+    table.cat-table.hist .chip { font-size: 11px; padding: 1px 6px; }
     .plan-card { padding: 16px 16px 14px; }
-    .plan-ctx { min-width: 0; flex-basis: 100%; }
-    table.cat-table.plan th, table.cat-table.plan td { padding-left: 6px; padding-right: 6px; white-space: normal; }
-    table.cat-table.plan th:first-child, table.cat-table.plan td.cat-name { padding-left: 12px; }
+    .plan-sum { grid-template-columns: 1fr; }
+    .plan-camp { padding: 12px 16px 6px; }
   }
 
   @media (max-width: 380px) {
@@ -1192,7 +1197,7 @@
   /* ===================== MOTION + TOUCH (Apple HIG pass, 2026-10-15) ===================== */
   /* Respond on press, not release: a quick press in, a spring back out */
   .nav button:active, .pills button:active:not(:disabled):not([aria-disabled="true"]), .rep-step:active, .pcard:not(:disabled):active,
-  .sc-copy:active, .hs-ok:active, .h-v:active, .plan-step:active, .chooser-name:active {
+  .sc-copy:active, .hs-ok:active, .h-v:active, .chooser-name:active {
     transform: scale(0.96); transition-duration: 80ms;
   }
   /* Bars grow in the first time a tab is shown; after that they change in place (morph() in the script) */
@@ -1393,7 +1398,7 @@
       <span class="scope">Saved on this device only</span>
     </div>
     <div class="card plan-card" id="plan-goal-card"></div>
-    <div class="cat-table-wrap" id="plan-table-wrap"></div>
+    <div class="plan-camps" id="plan-camps"></div>
     <div class="cat-note" id="plan-note"></div>
   </div>
 
@@ -3516,155 +3521,186 @@ function renderRepHistory() {
 }
 
 // ==========================================================================
-// Plan next year (2026-10-18). From the day C2 closes until next year's C1 closes, the rep types a goal for
-// next year (prefilled with this year's pace + 10%). The page splits it by their own campaign mix, shows their
-// best of each campaign, and works out about how many shifts each campaign takes. The goal stays in this
-// browser: nothing is sent anywhere.
+// Plan next year (reworked 2026-10-22). Alan: "we don't want to offer any suggestions ... just shows them what
+// they would have to sell each campaign to make that happen", and "assume the amount of shows don't change for
+// them ... to increase their sales will have to come outside of the booth". Shown from the day C2 closes until
+// next year's C1 closes. The goal starts empty: no suggestion, no pace, no best, no percent anywhere in the block.
+// My shows = the shows and sales of the last time each campaign was worked. Whatever the goal needs beyond that
+// is sold outside the booth, spread the way the rep's outside sales usually fall and counted in orders at their
+// average outside order. Any campaign's total can be changed; the year is then the sum. Kept in this browser only.
 // ==========================================================================
 const PLAN_YEAR = LATEST.campaign >= 2 ? LATEST.year + 1 : null;
-const PLAN_STEP = 10000;
-const round5k = v => Math.round(v / 5000) * 5000;
+const PLAN_MIN_ORDERS = 10;   // fewer outside orders than this on file, and the team's average order stands in
 const planKey = name => `rsd-plan:${PLAN_YEAR}:${slugOf(name)}`;
-const planGoals = {};   // this visit's goals by rep: they outlast a re-render even where storage is blocked
-function planStored(name) {
-  try { const v = localStorage.getItem(planKey(name)); return v === null ? null : +v; } catch (e) { return null; }
+const planState = {};          // this visit's plan by rep: outlasts a re-render even where storage is blocked
+const round100 = v => Math.round(v / 100) * 100;
+// { goal, camps }: camps holds all three campaign totals once the rep has changed one, else null (split the goal).
+function planLoad(name) {
+  if (name in planState) return planState[name];
+  let s = { goal: null, camps: null };
+  try {
+    const raw = localStorage.getItem(planKey(name));
+    const v = raw === null ? null : JSON.parse(raw);
+    if (typeof v === 'number' && v > 0) s.goal = v;   // the first version of the plan saved the goal alone
+    else if (v && typeof v === 'object') {
+      s.goal = Number.isFinite(v.goal) ? v.goal : null;
+      s.camps = v.camps && [1, 2, 3].every(n => Number.isFinite(v.camps[n])) ? v.camps : null;
+    }
+  } catch (e) { /* storage blocked or unreadable: start empty */ }
+  return (planState[name] = s);
 }
-function planStore(name, v) {
-  try { if (v === null) localStorage.removeItem(planKey(name)); else localStorage.setItem(planKey(name), String(v)); }
-  catch (e) { /* storage blocked (a private window): the goal lasts until the page closes */ }
+function planSave(name, s) {
+  planState[name] = s;
+  try {
+    if (s.goal === null && !s.camps) localStorage.removeItem(planKey(name));
+    else localStorage.setItem(planKey(name), JSON.stringify(s));
+  } catch (e) { /* storage blocked (a private window): the plan lasts until the page closes */ }
 }
-// What the suggestion builds on: this year's projected finish, or its actual finish once it has closed.
-function planBase(r) {
-  const y = LAST_YEAR;
-  if (yearClosed(y)) { const s = pSales(r, periodYear(y)); return s ? { cpo: s.cpo, text: `You finished ${y} at` } : null; }
-  const pace = repPace(r, y);
-  return pace.projected ? { cpo: pace.projected, text: `Your ${y} pace is ≈` } : null;
+// My shows: per campaign, the shows and event sales of the last time that campaign was worked (for 2027: C1 and
+// C2 of 2026, C3 of 2025). Held steady: more sales come from outside the booth, never from more shows.
+function planShows(r) {
+  return [1, 2, 3].map(n => {
+    const year = CAMP_YEARS.filter(y => campaignsForYear(y).includes(n)).pop();
+    const e = year ? repTotalEvent(r, year, n) : null;
+    return { n, year, shows: e ? e.events || 0 : 0, cpo: e ? round100(e.cpo) : 0 };
+  });
 }
-// The rep's average share of each campaign over the closed years that have all three; event sales when Total
-// Sales by campaign is missing; the team's split with no closed year of their own. A year where one campaign
-// is under 5% of it (a rep who started partway through, like Kendall Gooch's $134 C1 2025) says nothing about
-// how their year falls, so it is left out.
-const PLAN_MIN_SHARE = 0.05;
-function planSplit(r) {
-  const closed = CAMP_YEARS.filter(yearClosed);
-  const averaged = get => {
-    const shares = [], years = [];
-    for (const y of closed) {
+// How outside-the-booth sales usually fall across C1, C2 and C3: the years with all three on file. Without one
+// (a new rep, or Total Sales from individual reports), the team's.
+function planOutsideMix(r) {
+  const mix = get => {
+    const sum = [0, 0, 0], years = [];
+    for (const y of CAMP_YEARS) {
       const v = [1, 2, 3].map(n => get(y, n));
       if (v.some(x => x === null)) continue;
-      const t = v[0] + v[1] + v[2];
-      if (t > 0 && v.every(x => x / t >= PLAN_MIN_SHARE)) { shares.push(v.map(x => x / t)); years.push(y); }
+      v.forEach((x, i) => { sum[i] += Math.max(0, x); });
+      years.push(y);
     }
-    return shares.length ? { share: [0, 1, 2].map(i => shares.reduce((a, s) => a + s[i], 0) / shares.length), years } : null;
+    const t = sum[0] + sum[1] + sum[2];
+    return t > 0 ? { share: sum.map(x => x / t), years } : null;
   };
-  const cpo = s => s ? s.cpo : null;
-  let s = averaged((y, n) => cpo(repTotalSales(r, y, n)));
-  if (s) return { ...s, basis: 'sales' };
-  s = averaged((y, n) => cpo(repTotalEvent(r, y, n)));
-  if (s) return { ...s, basis: 'event' };
-  s = averaged((y, n) => cpo(teamStats(periodCamp(y, n), 'total_sales')));
-  return s ? { ...s, basis: 'team' } : { share: [1 / 3, 1 / 3, 1 / 3], years: [], basis: 'even' };
+  const own = mix((y, n) => { const b = repBucket(r, y, 'Non-Event CPO', n); return b ? b.cpo : null; });
+  if (own) return { ...own, team: false };
+  const team = mix((y, n) => { const t = teamStats(periodCamp(y, n), 'bucket:Non-Event CPO'); return t ? t.cpo : null; });
+  return team ? { ...team, team: true } : { share: [1 / 3, 1 / 3, 1 / 3], years: [], team: true };
 }
-// The rep's highest Total CPO for one campaign (or full year, n = null) in any year on file.
-function planBest(r, n) {
-  let best = null;
-  for (const y of CAMP_YEARS) {
-    const s = n ? repTotalSales(r, y, n) : yearClosed(y) ? pSales(r, periodYear(y)) : null;
-    if (s && (!best || s.cpo > best.cpo)) best = { cpo: s.cpo, year: y };
-  }
-  return best;
+// Their average outside order over every campaign with an order count. Too few orders: the team's. Outside sales
+// with no order counts at all (Total Sales from an individual report, CPO only): null, so the plan shows dollars.
+function planOrderAvg(r) {
+  const tally = rep => {
+    let cpo = 0, orders = 0, blind = 0;
+    for (const c of CAMPAIGNS_AVAILABLE) {
+      const b = repBucket(rep, c.year, 'Non-Event CPO', c.n);
+      if (!b) continue;
+      if (b.orders === null || b.orders === undefined) blind += b.cpo; else { cpo += b.cpo; orders += b.orders; }
+    }
+    return { cpo, orders, blind };
+  };
+  const own = tally(r);
+  if (own.orders >= PLAN_MIN_ORDERS && own.cpo > 0) return { avg: own.cpo / own.orders, team: false };
+  if (!own.orders && own.blind > 0) return null;
+  let cpo = 0, orders = 0;
+  for (const rep of masterListReps()) { const t = tally(rep); cpo += t.cpo; orders += t.orders; }
+  return orders > 0 && cpo > 0 ? { avg: cpo / orders, team: true } : null;
 }
-// Shifts: the latest closed year with both a shift record and a full-year Total CPO. Shift data is annual, so
-// every campaign uses that year's average and that year's share of sales that came from shifts.
-function planShifts(r) {
-  for (const y of CAMP_YEARS.filter(yearClosed).reverse()) {
-    const c = (repShifts(r, y) || {}).combined, fy = pSales(r, periodYear(y));
-    if (c && c.shifts && c.avg && fy && fy.cpo > 0) return { year: y, avg: c.avg, ratio: c.cpo / fy.cpo };
-  }
-  return null;
+// Whole hundreds that add up to the total: the largest remainders get the leftover hundreds.
+function splitToHundreds(parts, total) {
+  const floors = parts.map(v => Math.floor(v / 100) * 100);
+  let left = Math.round((total - floors.reduce((a, b) => a + b, 0)) / 100);
+  parts.map((v, i) => ({ i, rest: v - floors[i] })).sort((a, b) => b.rest - a.rest)
+    .forEach(x => { if (left > 0) { floors[x.i] += 100; left--; } });
+  return floors;
 }
 function renderRepPlan() {
   document.getElementById('plan-section').style.display = PLAN_YEAR ? '' : 'none';
   if (!PLAN_YEAR) return;
   const name = STATE.selectedRep, r = REPS[name];
   document.getElementById('plan-title').textContent = `Plan ${PLAN_YEAR}`;
-  const base = planBase(r), suggested = base ? round5k(base.cpo * 1.1) : null;
-  const split = planSplit(r), shifts = planShifts(r);
-  const goal = () => name in planGoals ? planGoals[name] : (planStored(name) ?? suggested);
+  const shows = planShows(r), mix = planOutsideMix(r), order = planOrderAvg(r);
+  const showsYear = shows.reduce((a, c) => a + c.cpo, 0), showCount = shows.reduce((a, c) => a + c.shows, 0);
   const money = v => v === null ? '' : '$' + Math.round(v).toLocaleString();
+  const parse = el => { const d = el.value.replace(/[^0-9]/g, ''); return d ? +d : null; };
+  // "$500,000" while it is typed, not "500000"; the cursor stays at the end
+  const reformat = el => { const v = parse(el); el.value = money(v); el.setSelectionRange(el.value.length, el.value.length); return v; };
+  const plural = (n, w) => `${n.toLocaleString()} ${w}${n === 1 ? '' : 's'}`;
+  // "my last C1 and C2 (2026) and C3 (2025)": the campaigns my shows come from, grouped by year
+  const byYear = [...new Set(shows.map(c => c.year))].map(y => `${andList(shows.filter(c => c.year === y).map(c => `C${c.n}`))} (${y})`);
+
   document.getElementById('plan-goal-card').innerHTML = `
     <div class="plan-goal">
       <label for="plan-goal">My ${PLAN_YEAR} goal · Total CPO</label>
-      <div class="plan-field">
-        <button type="button" class="plan-step" data-step="-1" aria-label="Lower the goal by ${money(PLAN_STEP)}">−</button>
-        <input id="plan-goal" class="plan-input" type="text" inputmode="numeric" autocomplete="off" placeholder="$0" value="${money(goal())}">
-        <button type="button" class="plan-step" data-step="1" aria-label="Raise the goal by ${money(PLAN_STEP)}">+</button>
-      </div>
+      <input id="plan-goal" class="plan-input" type="text" inputmode="numeric" autocomplete="off" placeholder="Type your goal">
     </div>
-    <div class="plan-ctx" id="plan-ctx" aria-live="polite"></div>`;
-  const input = document.getElementById('plan-goal');
-  // A goal equal to the suggestion is not stored, so it follows the suggestion when the numbers refresh.
-  const set = (v, rewrite) => {
-    planGoals[name] = v;
-    planStore(name, v === suggested ? null : v);
-    if (rewrite) input.value = money(v);
-    paint();
+    <div class="plan-sum">
+      <div class="ps"><div class="ps-v">${fmtCurrencyShort(showsYear)}</div>
+        <div class="ps-l">${showCount ? `from my shows: ${plural(showCount, 'show')}, same as my last C1, C2 and C3` : 'from my shows: none in my last C1, C2 and C3'}</div></div>
+      <div class="ps"><div class="ps-v" id="ps-out"></div><div class="ps-l" id="ps-out-l"></div></div>
+    </div>
+    <button type="button" class="plan-reset" id="plan-resplit" hidden>Split my goal the usual way again</button>`;
+  document.getElementById('plan-camps').innerHTML = shows.map(c => `
+    <div class="plan-camp">
+      <div class="pc-head">
+        <span class="pc-name">C${c.n}<span class="lb-why">${CAMP_WINDOWS[c.n]}</span></span>
+        <input class="pc-input" data-n="${c.n}" type="text" inputmode="numeric" autocomplete="off" aria-label="My C${c.n} ${PLAN_YEAR} total">
+      </div>
+      <div class="pc-row"><span class="k">My shows · ${plural(c.shows, 'show')}</span><span class="v">${money(c.cpo)}</span></div>
+      <div class="pc-row"><span class="k">Outside the booth</span><span class="v" id="pc-out-${c.n}"></span></div>
+    </div>`).join('');
+
+  const goalEl = document.getElementById('plan-goal'), campEls = [...document.querySelectorAll('#plan-camps .pc-input')];
+  // The three campaign totals: the rep's own, or the goal split as shows + a share of what is left over.
+  const targets = s => {
+    if (s.camps) return [1, 2, 3].map(n => s.camps[n]);
+    if (s.goal === null) return null;
+    const extra = Math.max(0, s.goal - showsYear);
+    if (!extra) return shows.map(c => c.cpo);
+    return splitToHundreds(shows.map((c, i) => c.cpo + extra * mix.share[i]), round100(s.goal));
   };
-  input.addEventListener('input', () => { const d = input.value.replace(/[^0-9]/g, ''); set(d ? +d : null, false); });
-  input.addEventListener('blur', () => { input.value = money(goal()); });
-  document.querySelectorAll('#plan-goal-card .plan-step').forEach(b => b.addEventListener('click', () =>
-    set(Math.max(0, (goal() || 0) + PLAN_STEP * +b.dataset.step), true)));
+  const outsideText = (dollars, ordersN, showsCpo) => dollars <= 0 ? (showsCpo > 0 ? 'covered by my shows' : '$0')
+    : `${money(dollars)}${ordersN === null ? '' : ` <small>· ≈ ${plural(ordersN, 'order')}</small>`}`;
 
   function paint() {
-    const g = goal();
-    let ctx = base ? `${base.text} <strong>${fmtCurrencyShort(base.cpo)}</strong>` : `No ${LAST_YEAR} Total CPO on file yet, so there is no suggestion.`;
-    if (base && g !== null) {
-      const d = g - base.cpo, pct = d / base.cpo * 100;
-      ctx += `, so this goal is <strong>${d >= 0 ? '+' : '−'}${fmtCurrencyShort(Math.abs(d))} (${d >= 0 ? '+' : '−'}${Math.abs(pct).toFixed(0)}%)</strong>.`;
-    } else if (base) ctx += '.';
-    if (g === null) ctx += ' Type a goal to see what each campaign takes.';
-    if (suggested !== null && g !== suggested) ctx += ` <button type="button" class="plan-reset" id="plan-reset">Use the suggestion, ${fmtCurrencyShort(suggested)}</button>`;
-    document.getElementById('plan-ctx').innerHTML = ctx;
-    const reset = document.getElementById('plan-reset');
-    if (reset) reset.onclick = () => { delete planGoals[name]; planStore(name, null); input.value = money(suggested); paint(); };
-
-    const noShifts = tipBtn('cb-v', '—', 'No full year of shifts on file to go by', 'No shift figure');
-    const shiftCount = t => shifts && t !== null ? Math.round(t * shifts.ratio / shifts.avg) : null;
-    const counts = [0, 1, 2].map(i => shiftCount(g === null ? null : g * split.share[i]));
-    const bestCell = (b, what) => b ? `${fmtCurrency(b.cpo)}<span class="lb-why">${b.year}</span>`
-      : tipBtn('cb-v', '—', `No Total CPO on file for ${what}`, `No best for ${what}`);
-    const row = (label, sub, target, best, what, count, cls) => `
-      <tr class="${cls || ''}">
-        <td class="cat-name">${label}<span class="lb-why">${sub}</span></td>
-        <td class="cur">${target === null ? naSpan : fmtCurrency(target)}</td>
-        <td class="best">${bestCell(best, what)}</td>
-        <td>${count === null ? (shifts ? naSpan : noShifts) : '≈ ' + count}</td>
-      </tr>`;
-    const total = counts.every(c => c !== null) ? counts[0] + counts[1] + counts[2] : null;
-    // Whole percents that add up to 100: the largest remainders get the leftover points
-    const pcts = split.share.map(s => Math.floor(s * 100));
-    split.share.map((s, i) => ({ i, rest: s * 100 - pcts[i] })).sort((a, b) => b.rest - a.rest)
-      .slice(0, 100 - pcts.reduce((a, b) => a + b, 0)).forEach(x => { pcts[x.i]++; });
-    document.getElementById('plan-table-wrap').innerHTML = `
-      <table class="cat-table plan">
-        <thead><tr>
-          <th>Campaign</th><th>Target</th><th>My best${infoI('Your highest Total CPO for that campaign in any year on file')}</th>
-          <th>Shifts${infoI(shifts ? `About how many shifts the target takes at your ${shifts.year} average of ${fmtCurrencyShort(shifts.avg)} a shift, if shifts bring in ${Math.round(shifts.ratio * 100)}% of your sales as they did in ${shifts.year}` : 'No full year of shifts on file to go by')}</th>
-        </tr></thead>
-        <tbody>
-          ${[1, 2, 3].map((n, i) => row(`C${n}`, `${CAMP_WINDOWS[n]} · ${pcts[i]}%`,
-            g === null ? null : g * split.share[i], planBest(r, n), `C${n}`, counts[i])).join('')}
-          ${row('Year', `${PLAN_YEAR}`, g, planBest(r, null), 'a full year', total, 'total')}
-        </tbody>
-      </table>`;
-    const yrs = split.years.join(' and ');
-    document.getElementById('plan-note').textContent = {
-      sales: `Split the way your Total CPO fell across C1, C2 and C3 in ${yrs}.`,
-      event: `Split the way your event sales fell across C1, C2 and C3 in ${yrs} (no Total CPO by campaign on file).`,
-      team: 'Split the way the team\'s Total CPO falls across C1, C2 and C3 (not enough of your own history yet).',
-      even: 'Split evenly: no campaign history to go by yet.',
-    }[split.basis] + ' The goal stays in this browser; nobody else sees it.';
+    const s = planLoad(name), t = targets(s);
+    const year = s.camps ? t.reduce((a, b) => a + b, 0) : s.goal;
+    if (document.activeElement !== goalEl) goalEl.value = money(year);
+    const outs = t ? t.map((v, i) => Math.max(0, v - shows[i].cpo)) : null;
+    const orders = outs && order ? outs.map(o => Math.round(o / order.avg)) : null;
+    campEls.forEach((el, i) => {
+      if (document.activeElement !== el) el.value = t ? money(t[i]) : '';
+      document.getElementById(`pc-out-${i + 1}`).innerHTML = outs ? outsideText(outs[i], orders && orders[i], shows[i].cpo) : '—';
+    });
+    const outTotal = outs ? outs.reduce((a, b) => a + b, 0) : null;
+    const ordTotal = orders ? orders.reduce((a, b) => a + b, 0) : null;
+    const outV = document.getElementById('ps-out'), outL = document.getElementById('ps-out-l');
+    if (outTotal === null) { outV.textContent = '—'; outL.textContent = 'Type a goal to see what to sell outside the booth'; }
+    else if (outTotal <= 0) { outV.textContent = '$0'; outL.textContent = 'Your shows cover this goal'; }
+    else {
+      outV.innerHTML = `${fmtCurrencyShort(outTotal)}${ordTotal === null ? '' : ` <small>· ≈ ${plural(ordTotal, 'order')}</small>`}`;
+      outL.textContent = !order ? 'to sell outside the booth'
+        : order.team ? `to sell outside the booth, at the team's ${money(order.avg)} average order`
+        : `to sell outside the booth, at my ${money(order.avg)} average order`;
+    }
+    document.getElementById('plan-resplit').hidden = !s.camps;
   }
+  // Typing the goal splits it; typing a campaign keeps the other two as they are and the year adds up.
+  goalEl.addEventListener('input', () => { planSave(name, { goal: reformat(goalEl), camps: null }); paint(); });
+  campEls.forEach((el, i) => el.addEventListener('input', () => {
+    const now = targets(planLoad(name)) || shows.map(c => c.cpo);
+    const camps = { 1: now[0], 2: now[1], 3: now[2] };
+    camps[i + 1] = reformat(el) || 0;
+    planSave(name, { goal: camps[1] + camps[2] + camps[3], camps });
+    paint();
+  }));
+  [goalEl, ...campEls].forEach(el => el.addEventListener('blur', paint));
+  document.getElementById('plan-resplit').onclick = () => { const s = planLoad(name); planSave(name, { goal: s.goal, camps: null }); paint(); };
+
+  const notes = [`My shows are the shows and sales of your last ${andList(byYear)}.`];
+  notes.push(mix.team ? 'Outside the booth is spread the way the team\'s falls across C1, C2 and C3 (not enough of your own campaigns on file yet).'
+    : `Outside the booth is spread the way yours fell in ${andList(mix.years.map(String))}.`);
+  if (!order) notes.push('Your Total Sales comes from the home office without order counts, so outside the booth shows dollars only.');
+  else if (order.team) notes.push('Orders use the team\'s average order until you have more of your own on file.');
+  notes.push('Your plan stays in this browser; nobody else sees it.');
+  document.getElementById('plan-note').textContent = notes.join(' ');
   paint();
 }
 

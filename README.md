@@ -59,10 +59,16 @@ not privacy: names are the links, and anyone can open anyone's page ("I encourag
   and averages, Where my sales come from, How I'm trending, Events and everything else, What I'm selling, Shifts),
   each with a one-line preview. Closed on a rep's own link; open on the team page, so Alan sees everything at once.
   The smoke check holds both.
-- **Plan next year** (Rep View, everyone's): shows from the day C2 closes until next year's C1 closes. The goal is
-  prefilled with this year's pace + 10% (rounded to $5K), split by the rep's own C1 / C2 / C3 mix (skipping any year
-  where one campaign is under 5% of it; event sales, then the team's split, when that leaves nothing), with their
-  best of each campaign and about how many shifts each takes. The goal is saved only in that browser (`localStorage`).
+- **Plan next year** (Rep View, everyone's; reworked 2026-10-22): shows from the day C2 closes until next year's C1
+  closes. The goal starts empty: no suggestion, no pace, no best, no percent anywhere in the block (Alan: "we don't
+  want to offer any suggestions", and no rep discouraged for going after a bigger number). Shows are held steady:
+  "My shows" per campaign are the shows and event sales of the last time that campaign was worked (for 2027: C1 and
+  C2 of 2026, C3 of 2025). Whatever the goal needs beyond that is sold outside the booth, spread the way the rep's
+  outside sales fell in the years with all three campaigns on file (the team's when there are none), and counted in
+  orders at their average outside order (the team's under 10 orders; dollars only when their Total Sales comes from
+  the home office without order counts). Any campaign's total can be changed and the year adds up; "Split my goal the
+  usual way again" undoes it. A goal below what the shows bring in says "Your shows cover this goal". Saved only in
+  that browser (`localStorage`, `rsd-plan:<year>:<name>`). The smoke check fails if a fresh page shows a goal.
 
 ## Architecture
 
