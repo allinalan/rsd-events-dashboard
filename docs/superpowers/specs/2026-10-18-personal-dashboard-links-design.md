@@ -109,3 +109,9 @@ increase their sales will have to come outside of the booth." All defaults. This
 
 `docs/screenshots/2026-10-22-plan-outside-the-booth.png` shows Alan before typing and at $500,000, Kendall at
 $100,000 (team outside mix) and Jeremy at $600,000 (dollars only).
+
+Follow-up, 2026-10-27 (Alan: "count this year's finished campaigns too, not only full years"): the outside-the-booth
+split now uses each campaign's average over every finished campaign on file, the year in progress included, instead
+of only years with all three campaigns. Averages rather than sums, so C3 isn't shortchanged in the fall. Matt Foss at
+$1.3M moved from C3-heavy ($457,700 outside in C3) to C2-heavy ($289,900 in C2, $251,000 in C3), matching his 2026.
+Kendall Gooch now gets her own split instead of the team's.
