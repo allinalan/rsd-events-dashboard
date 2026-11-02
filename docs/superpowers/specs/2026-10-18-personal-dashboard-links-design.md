@@ -115,3 +115,33 @@ split now uses each campaign's average over every finished campaign on file, the
 of only years with all three campaigns. Averages rather than sums, so C3 isn't shortchanged in the fall. Matt Foss at
 $1.3M moved from C3-heavy ($457,700 outside in C3) to C2-heavy ($289,900 in C2, $251,000 in C3), matching his 2026.
 Kendall Gooch now gets her own split instead of the team's.
+
+## Round four: the page tells a story (2026-11-02)
+
+Alan: "make sure that the important items are the first thing they see, it's easy to get to different sections without
+having to scroll so much ... as you scroll down your stats should tell a story from beginning to end", then "Utilize the
+Apple Design Skill as well as you are creating this." Before: the order ran this year, every campaign, next year's plan,
+then back to why; Coach's read started about 3 screens down; no way to jump; two pairs of sections overlapped. Defaults taken:
+
+1. Order: Now → How I got here → What's behind it → What's next → My plan.
+2. A jump bar on a rep's page (Now · Campaigns · Why · Next · Plan), in the masthead's tab row.
+3. One plain sentence opens each chapter, from fixed rules.
+4. "Events and everything else" folds into "Where my sales come from"; "Orders and averages" and "Shifts" become "Orders and
+   shifts". Eight rows become six.
+5. One Showing dropdown, inside What's behind it, and only that chapter follows it.
+6. Plan at the end; its campaign cards wait for a goal.
+
+From the Apple guidance: wayfinding (the bar always answers where am I, where can I go); response on press (the underline moves
+as the page starts to, a row highlights on touch-down); interruptibility (a jump never locks out the rep's own scrolling);
+grouping and mapping (Showing sits right above what it changes); materials (the bar is the masthead's existing glass, with
+content scrolling under it); simplicity, not minimalism (the common path first, detail one level deeper); reduced motion gets
+fades and instant jumps.
+
+"Best" says "your best since 2024", not "ever": the data starts in 2024 and these reps go back years before that.
+
+Fixed along the way: Total Sales with no event row now counts as all outside the booth (intake parser; eight campaigns were blank,
+Charity Campbell's $28,543 C2 2026 among them); "gap narrowing" said to reps falling further behind; "Fall is historically the
+biggest campaign" said without checking the rep's own numbers; the products table cut off on a phone; returns read "$-4K" and
+"-127%".
+
+`docs/screenshots/2026-11-02-rep-page-chapters.png` shows each tap of the jump bar for Matt Foss and Charity Campbell.

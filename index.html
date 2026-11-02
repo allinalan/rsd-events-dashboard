@@ -841,7 +841,8 @@
 
   /* ===================== PERSONAL LINKS (2026-10-18): a rep's own page ===================== */
   /* ?rep=<name> opens one rep's Rep View with no tabs and no name picker. Nothing is private: the links are names. */
-  html.personal .nav { display: none; }
+  html.personal #team-nav, #chapter-nav, html.choosing #chapter-nav { display: none; }
+  html.personal:not(.choosing) #chapter-nav { display: flex; }
   html.personal .brand-row { padding-bottom: 14px; }
   html.personal .campaign .cp-meta { display: none; }   /* the freshness line above says it plainly */
   html.choosing .footnote { display: none; }
@@ -905,8 +906,16 @@
     .g-fact:first-child { padding-left: 0; border-left: 0; }
   }
 
-  /* More about my numbers: one row per section, closed until tapped */
-  .more-list { display: flex; flex-direction: column; gap: 8px; }
+  /* Chapters: a heading, one plain sentence, then what is behind it. Space separates them. */
+  #rep-view > .chapter { margin-bottom: 48px; }
+  .ch-head { margin-bottom: 14px; }
+  .ch-head h2 { font-size: 20px; font-weight: 600; letter-spacing: -0.012em; line-height: 1.25; }
+  .ch-say { font-size: 15px; line-height: 1.45; color: var(--label); margin-top: 4px; max-width: 40em; }
+  .ch-tools { margin-bottom: 10px; }
+  .showing { display: flex; align-items: center; flex-wrap: wrap; gap: 8px 14px; }
+
+  /* The rows under a chapter: one per section, closed until tapped */
+  .more-list { display: flex; flex-direction: column; gap: 8px; margin-top: 10px; }
   .more-item > summary {
     list-style: none; cursor: pointer; display: flex; align-items: center; gap: 12px;
     min-height: 52px; padding: 14px 20px; background: var(--card); border-radius: var(--radius);
@@ -914,6 +923,7 @@
   }
   .more-item > summary::-webkit-details-marker { display: none; }
   .more-item > summary:hover { background: var(--card-hover); }
+  .more-item > summary:active { background: var(--fill-hover); transition-duration: 0ms; }   /* answers on press, not release */
   .more-item > summary::after {
     content: '›'; font-size: 20px; line-height: 1; color: var(--ink-faint); transform: rotate(0deg);
     transition: transform var(--spring-ms) var(--spring);
@@ -921,7 +931,14 @@
   .more-item[open] > summary::after { transform: rotate(90deg); }
   .mi-t { flex: 1; min-width: 0; font-size: 15px; font-weight: 600; }
   .mi-v { font-size: 13px; color: var(--ink-faint); white-space: nowrap; }
-  .more-body { padding: 10px 0 18px; animation: viewIn 120ms ease-out; }
+  /* Opens out of its row: a short fade and a small settle down from it */
+  .more-body { padding: 10px 0 18px; animation: moreIn var(--spring-ms) var(--spring); }
+  @keyframes moreIn { from { opacity: 0; transform: translateY(-6px); } }
+  .more-body .headline-duo { margin: 10px 0; }
+  #rep-comp .comp-split { margin-bottom: 0; }
+  #rep-comp-cats .comp-cats-label { margin-top: 0; padding-top: 0; border-top: 0; }
+  .more-body .shift-grid { margin-bottom: 0; }
+  .more-body .mini-grid + .more-scope { margin-top: 14px; }
   .more-scope { font-size: 13px; color: var(--ink-faint); margin: 0 0 8px 2px; }
   .more-body .sec-head { margin-bottom: 8px; }
   .more-body .trend-head { justify-content: flex-end; }
@@ -962,7 +979,8 @@
   .ps-v { font-size: 20px; font-weight: 700; letter-spacing: -0.012em; line-height: 1.25; }
   .ps-v small { font-size: 15px; font-weight: 600; letter-spacing: 0; }
   .ps-l { font-size: 13px; color: var(--ink-soft); line-height: 1.35; margin-top: 2px; }
-  .plan-camps { display: flex; flex-direction: column; gap: 8px; margin-top: 10px; }
+  .plan-camps { display: flex; flex-direction: column; gap: 8px; margin-top: 10px; animation: moreIn var(--spring-ms) var(--spring); }
+  .plan-camps[hidden] { display: none; }
   .plan-camp { background: var(--card); border-radius: var(--radius); padding: 12px 20px 8px; }
   .pc-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-bottom: 10px; border-bottom: 1px solid var(--line-soft); }
   .pc-name { font-size: 15px; font-weight: 600; }
@@ -1134,6 +1152,7 @@
     .nav { display: flex; width: 100%; }
     .nav { --tab-inset: 8px; }
     .nav button { flex: 1; text-align: center; padding: 9px 4px 11px; }
+    .nav.chapters button { flex: 1 1 auto; padding-left: 8px; padding-right: 8px; }   /* "Campaigns" takes the room it needs */
     .stat-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
     .stat { padding: 13px 14px 12px; }
     .stat .val { font-size: 24px; }
@@ -1161,8 +1180,9 @@
     table.leaderboard .yr-old, table.leaderboard .dlt-abs { display: none; }
     .team-grid { gap: 16px; }
 
-    /* Rep View reads top to bottom the same on a phone: first screen, campaigns, plan, more */
+    /* Rep View reads top to bottom the same on a phone */
     #rep-view > .section { margin-bottom: 24px; }
+    #rep-view > .chapter { margin-bottom: 36px; }
     .name-static { font-size: 24px; }
     .g-big { font-size: 40px; }
     .g-facts { gap: 0; }
@@ -1231,6 +1251,7 @@
   /* Reduced motion: no travel, no growing bars. Fades and color changes stay; they help comprehension. */
   @media (prefers-reduced-motion: reduce) {
     .lb-fill, .seg, .cb-fill, .pace-actual, .pc-bar span, .comp-split-bar, .mix-bar { animation: none; }
+    .more-body, .plan-camps { animation: viewIn 120ms ease-out; }   /* a fade, no travel */
     *, *::before, *::after { transition-property: opacity, color, background-color, border-color !important; }
   }
 </style>
@@ -1256,7 +1277,9 @@
         <div class="cp-meta" id="meta-line">Loading…</div>
       </div>
     </div>
-    <nav class="nav" role="tablist">
+    <!-- A rep's own link has the jump bar instead of the tabs. Same place, same look: it stays when the brand row scrolls away. -->
+    <nav class="nav chapters" id="chapter-nav" aria-label="Jump to a section"></nav>
+    <nav class="nav" id="team-nav" role="tablist">
       <button data-view="total" class="active" role="tab" aria-selected="true">Total</button>
       <button data-view="campaigns" role="tab" aria-selected="false">Campaigns</button>
       <button data-view="products" role="tab" aria-selected="false">Products</button>
@@ -1376,57 +1399,27 @@
 <!-- ============================== REP VIEW ============================== -->
 <div id="rep-view" class="view">
 
-  <!-- The 10-second screen (Alan, 2026-10-18): name, one number, one line, one sentence, three facts. Always this year. -->
-  <div class="section o-hero" id="rep-scorecard-section">
+  <!-- The page reads as a story (Alan, 2026-11-02): where I stand, how I got here, what's behind it, what's next, my plan.
+       Every chapter opens with one plain sentence. The first screen is always this year; so is everything else
+       except "What's behind it", whose Showing control sits right above the rows it changes. -->
+
+  <!-- Now: the 10-second screen (2026-10-18): name, one number, one line, one sentence, three facts -->
+  <section class="section chapter" id="ch-now" data-chapter="Now">
     <div class="scorecard glance" id="rep-scorecard"></div>
-  </div>
+  </section>
 
-  <div class="section o-hstip" id="hs-tip" hidden></div>
+  <div class="section" id="hs-tip" hidden></div>
 
-  <div class="section o-history" id="rep-history-section">
-    <div class="sec-head">
-      <div><h2>My campaigns</h2></div>
-      <div class="sec-tools" id="rh-tools"></div>
+  <section class="section chapter" id="ch-how" data-chapter="Campaigns">
+    <div class="ch-head">
+      <h2>How I got here</h2>
+      <p class="ch-say" id="say-how"></p>
     </div>
+    <div class="sec-tools ch-tools" id="rh-tools"></div>
     <div class="cat-table-wrap" id="rep-history"></div>
     <div class="cat-note" id="rh-note"></div>
-  </div>
-
-  <div class="section o-plan" id="plan-section">
-    <div class="sec-head">
-      <div><h2 id="plan-title">Plan next year</h2></div>
-      <span class="scope">Saved on this device only</span>
-    </div>
-    <div class="card plan-card" id="plan-goal-card"></div>
-    <div class="plan-camps" id="plan-camps"></div>
-    <div class="cat-note" id="plan-note"></div>
-  </div>
-
-  <!-- Everything else, one tap away. Closed on a rep's own link, open on the team page. The period buttons
-       pick what these show; the first screen above always shows this year. -->
-  <div class="section o-more" id="rep-more">
-    <div class="sec-head">
-      <div><h2>More about my numbers</h2></div>
-    </div>
-    <div class="scope-bar" id="rep-scope-bar"></div>
     <div class="more-list">
-      <details class="more-item" data-more="summary">
-        <summary><span class="mi-t">Coach's read</span><span class="mi-v" id="mv-summary"></span></summary>
-        <div class="more-body"><div class="card summary-card" id="rep-summary"></div></div>
-      </details>
-      <details class="more-item" id="pace-section" data-more="pace">
-        <summary><span class="mi-t" id="pace-title">Where I'm heading</span><span class="mi-v" id="mv-pace"></span></summary>
-        <div class="more-body"><div class="more-scope">Projection · not a result</div><div class="card pace-card" id="rep-pacing"></div></div>
-      </details>
-      <details class="more-item" data-more="minis">
-        <summary><span class="mi-t">Orders and averages</span><span class="mi-v" id="mv-minis"></span></summary>
-        <div class="more-body"><div class="mini-grid" id="rep-minis"></div></div>
-      </details>
-      <details class="more-item" id="more-comp" data-more="comp">
-        <summary><span class="mi-t">Where my sales come from</span><span class="mi-v" id="mv-comp"></span></summary>
-        <div class="more-body"><div class="more-scope" id="comp-scope"></div><div class="card comp-card" id="rep-comp"></div></div>
-      </details>
-      <details class="more-item" id="more-trend" data-more="trend">
+      <details class="more-item" id="more-trend">
         <summary><span class="mi-t">How I'm trending</span><span class="mi-v" id="mv-trend"></span></summary>
         <div class="more-body">
           <div class="card trend-card">
@@ -1452,11 +1445,35 @@
           </div>
         </div>
       </details>
-      <details class="more-item" data-more="cats">
-        <summary><span class="mi-t">Events and everything else</span><span class="mi-v" id="mv-cats"></span></summary>
-        <div class="more-body"><div class="more-scope" id="cats-scope"></div><div class="headline-duo" id="rep-buckets-top"></div><div id="rep-buckets-sub"></div></div>
+    </div>
+  </section>
+
+  <section class="section chapter" id="ch-why" data-chapter="Why">
+    <div class="ch-head">
+      <h2>What's behind it</h2>
+      <p class="ch-say" id="say-why"></p>
+    </div>
+    <div class="ch-tools showing" id="rep-showing-bar"></div>
+    <div class="more-list">
+      <details class="more-item" id="more-comp">
+        <summary><span class="mi-t">Where my sales come from</span><span class="mi-v" id="mv-comp"></span></summary>
+        <div class="more-body">
+          <div class="more-scope" id="comp-scope"></div>
+          <div class="card comp-card" id="rep-comp"></div>
+          <div class="headline-duo" id="rep-buckets-top"></div>
+          <div class="card comp-card" id="rep-comp-cats"></div>
+          <div id="rep-buckets-sub"></div>
+        </div>
       </details>
-      <details class="more-item" id="rep-products-section" data-more="products">
+      <details class="more-item" id="more-orders">
+        <summary><span class="mi-t">Orders and shifts</span><span class="mi-v" id="mv-orders"></span></summary>
+        <div class="more-body">
+          <div class="mini-grid" id="rep-minis"></div>
+          <div class="more-scope" id="shifts-scope">Full year</div>
+          <div class="shift-grid" id="rep-shifts"></div>
+        </div>
+      </details>
+      <details class="more-item" id="rep-products-section">
         <summary><span class="mi-t">What I'm selling</span><span class="mi-v" id="mv-products"></span></summary>
         <div class="more-body">
           <div class="sec-head">
@@ -1467,12 +1484,35 @@
           <div class="cat-note" id="rp-note"></div>
         </div>
       </details>
-      <details class="more-item" data-more="shifts">
-        <summary><span class="mi-t">Shifts</span><span class="mi-v" id="mv-shifts"></span></summary>
-        <div class="more-body"><div class="more-scope" id="shifts-scope">Full year</div><div class="shift-grid" id="rep-shifts"></div></div>
+    </div>
+  </section>
+
+  <section class="section chapter" id="ch-next" data-chapter="Next">
+    <div class="ch-head">
+      <h2>What's next</h2>
+      <p class="ch-say" id="say-next"></p>
+    </div>
+    <div class="more-list">
+      <details class="more-item" id="pace-section">
+        <summary><span class="mi-t" id="pace-title">Where I'm heading</span><span class="mi-v" id="mv-pace"></span></summary>
+        <div class="more-body"><div class="more-scope">Projection · not a result</div><div class="card pace-card" id="rep-pacing"></div></div>
+      </details>
+      <details class="more-item" id="more-summary">
+        <summary><span class="mi-t">Coach's read</span><span class="mi-v" id="mv-summary"></span></summary>
+        <div class="more-body"><div class="card summary-card" id="rep-summary"></div></div>
       </details>
     </div>
-  </div>
+  </section>
+
+  <section class="section chapter" id="plan-section" data-chapter="Plan">
+    <div class="ch-head">
+      <h2 id="plan-title">My plan</h2>
+      <p class="ch-say">Type your goal. Your shows stay the same; the rest comes from outside the booth.</p>
+    </div>
+    <div class="card plan-card" id="plan-goal-card"></div>
+    <div class="plan-camps" id="plan-camps" hidden></div>
+    <div class="cat-note" id="plan-note" hidden></div>
+  </section>
 </div>
 
 <div class="footnote">
@@ -1637,13 +1677,14 @@ const smallBaseChip = base => tipBtn('chip na', '—', `Base under ${MIN_GROWTH_
 function fmtCurrency(n) {
   if (n === null || n === undefined || isNaN(n)) return naSpan;
   if (n === 0) return '$0';
-  return '$' + Math.round(n).toLocaleString();
+  return (n < 0 ? '−' : '') + '$' + Math.abs(Math.round(n)).toLocaleString();   // returns read −$4,000, not $-4,000
 }
 function fmtCurrencyShort(n) {
   if (n === null || n === undefined || isNaN(n)) return '—';
-  if (Math.abs(n) >= 1000000) return '$' + (n / 1000000).toFixed(2) + 'M';
-  if (Math.abs(n) >= 1000) return '$' + Math.round(n / 1000) + 'K';
-  return '$' + Math.round(n);
+  const sign = n < 0 ? '−' : '', a = Math.abs(n);
+  if (a >= 1000000) return sign + '$' + (a / 1000000).toFixed(2) + 'M';
+  if (a >= 1000) return sign + '$' + Math.round(a / 1000) + 'K';
+  return sign + '$' + Math.round(a);
 }
 function fmtInt(n) {
   if (n === null || n === undefined || isNaN(n)) return naSpan;
@@ -2680,28 +2721,27 @@ function prevCampaignOf(p) {
   return campaignsForYear(p.year - 1).includes(3) ? periodCamp(p.year - 1, 3) : null;
 }
 
-function renderRepScopeBar() {
-  const el = document.getElementById('rep-scope-bar');
-  let html = segHtml([{ value: 'year', label: 'Year total', active: STATE.repMode === 'year' },
-    { value: 'camp', label: 'By campaign', active: STATE.repMode === 'camp' }], 'data-mode', 'Rep scope');
-  if (STATE.repMode === 'year') {
-    html += segHtml([...CAMP_YEARS, 'all'].map(v => ({ value: v, label: v === 'all' ? 'All years' : periodYear(v).label, active: v === STATE.year })), 'data-year', 'Year');
-  } else {
-    const ns = campaignsForYear(STATE.camp.year);
-    html += segHtml(CAMP_YEARS.map(y => ({ value: y, label: String(y), active: y === STATE.camp.year })), 'data-cyear', 'Year') +
-      segHtml([1, 2, 3].map(n => ({ value: n, label: `C${n}`, active: n === STATE.camp.n, disabled: !ns.includes(n),
-        title: ns.includes(n) ? CAMP_WINDOWS[n] : `C${n} ${STATE.camp.year} has not closed yet` })), 'data-n', 'Campaign');
-  }
-  el.innerHTML = html;
-  el.querySelectorAll('[data-mode]').forEach(b => b.addEventListener('click', () => {
-    if (STATE.repMode === b.dataset.mode) return;
-    STATE.repMode = b.dataset.mode; STATE.chartMetric = null; renderAll();
-  }));
-  el.querySelectorAll('[data-year]').forEach(b => b.addEventListener('click', () => {
-    STATE.year = b.dataset.year === 'all' ? 'all' : +b.dataset.year; renderAll();
-  }));
-  el.querySelectorAll('[data-cyear]').forEach(b => b.addEventListener('click', () => setCamp(+b.dataset.cyear, STATE.camp.n)));
-  el.querySelectorAll('[data-n]').forEach(b => b.addEventListener('click', () => setCamp(STATE.camp.year, +b.dataset.n)));
+// What's behind it follows one control (2026-11-02): this year unless the rep picks another year or campaign. It sits
+// right above the rows it changes, and nothing else on the page moves with it.
+function renderRepShowing() {
+  const here = periodYear(LAST_YEAR);
+  const value = STATE.repMode === 'camp' ? `c:${STATE.camp.year}:${STATE.camp.n}` : STATE.year === 'all' ? 'all' : `y:${STATE.year}`;
+  const opt = (v, label) => `<option value="${v}"${v === value ? ' selected' : ''}>${label}</option>`;
+  const years = CAMP_YEARS.slice().reverse().map(y => opt(`y:${y}`, periodYear(y).label)).join('') + opt('all', periodAll().label);
+  const camps = CAMPAIGNS_AVAILABLE.slice().reverse().map(c => opt(`c:${c.year}:${c.n}`, `C${c.n} ${c.year}`)).join('');
+  const el = document.getElementById('rep-showing-bar');
+  el.innerHTML = `<span class="cb-group"><label class="cb-k" for="rep-showing">Showing</label>
+      <select class="ctl ctl-strong" id="rep-showing"><optgroup label="Years">${years}</optgroup><optgroup label="Campaigns">${camps}</optgroup></select></span>
+    ${value === `y:${LAST_YEAR}` ? '' : `<button type="button" class="plan-reset" id="rep-showing-back">Back to ${here.label}</button>`}`;
+  const show = v => {
+    const [k, y, n] = v.split(':');
+    if (k === 'c') { STATE.repMode = 'camp'; STATE.camp = { year: +y, n: +n }; }
+    else { STATE.repMode = 'year'; STATE.year = k === 'all' ? 'all' : +y; }
+    renderAll();
+  };
+  document.getElementById('rep-showing').onchange = e => show(e.target.value);
+  const back = document.getElementById('rep-showing-back');
+  if (back) back.onclick = () => show(`y:${LAST_YEAR}`);
 }
 
 // ===== The 10-second screen (Alan, 2026-10-18: "in the first 10 seconds that they see it and they look away, they
@@ -2944,7 +2984,7 @@ function findBiggestOpportunity(rep, p, hero) {
         opps.push({
           type: 'non_event',
           uplift,
-          title: 'Grow Non-Event Sales',
+          title: 'Grow Sales Outside the Booth',
           body: `Your ${p.label} Non-Event CPO (SC's / Marketing) is $${Math.round(nonEvt.cpo).toLocaleString()} vs core-team peers at $${Math.round(peerNonEvt).toLocaleString()}. There's ~$${Math.round(uplift).toLocaleString()} of room in what you're doing OUTSIDE the event work — in-home customers, service calls, marketing follow-up.`
         });
       }
@@ -2969,7 +3009,7 @@ function findBiggestOpportunity(rep, p, hero) {
 
 function renderRepSummary() {
   const r = REPS[STATE.selectedRep];
-  const p = repPeriod(), hero = repHero(r, p);
+  const p = periodYear(LAST_YEAR), hero = repHero(r, p);   // part of What's next: always this year
   const cmp = compareFor(p, metricFamily(hero.metric));
   const cmpTxt = cmp ? cmpLabel(cmp, 'sales') : '';
   const cur = hero.stats ? hero.stats.cpo : null;
@@ -3100,7 +3140,7 @@ function renderRepSummary() {
 function renderRepComposition() {
   const r = REPS[STATE.selectedRep];
   const p = repPeriod(), cmpE = compareFor(p, 'event');
-  document.getElementById('comp-scope').textContent = p.label;
+  document.getElementById('comp-scope').textContent = `${p.label}${cmpE ? ' vs ' + cmpE.period.label : ''}`;
 
   const totEvt = pEvent(r, p);
   const nonEvt = pNonEvent(r, p);
@@ -3115,17 +3155,14 @@ function renderRepComposition() {
     const evtPct = evtV / splitTotal * 100;
     const nonPct = nonV / splitTotal * 100;
     const seg = (pct, color, label, ink) => pct > 0 ?
-      `<div class="seg" style="background:${color}; width:${pct}%;" title="${label}: ${pct.toFixed(1)}%">${pct > 12 ? `<span class="seg-label" style="color:${ink}">${label} · ${pct.toFixed(0)}%</span>` : ''}</div>` : '';
+      `<div class="seg" style="background:${color}; width:${pct}%;" title="${label}: ${pct.toFixed(1)}%">${pct >= 25 ? `<span class="seg-label" style="color:${ink}">${label} · ${pct.toFixed(0)}%</span>` : ''}</div>` : '';
     splitHtml = `
       <div class="comp-split">
         <div class="comp-split-bar">
-          ${seg(evtPct, 'var(--label)', 'Event', 'var(--card)')}
-          ${seg(nonPct, 'var(--bk-nonevent)', 'Non-Event', 'var(--on-fill)')}
+          ${seg(evtPct, 'var(--label)', 'Events', 'var(--card)')}
+          ${seg(nonPct, 'var(--bk-nonevent)', 'Outside', 'var(--on-fill)')}
         </div>
-        <div class="comp-split-legend">
-          <span class="cl-item"><span class="swatch" style="background:var(--label)"></span> Event CPO <span class="v">${fmtCurrencyShort(evtV)}</span><span class="ctx">${evtPct.toFixed(1)}%</span></span>
-          <span class="cl-item"><span class="swatch" style="background:var(--bk-nonevent)"></span> Non-Event (SC's / Marketing) <span class="v">${nonV > 0 ? fmtCurrencyShort(nonV) : '—'}</span><span class="ctx">${nonV > 0 ? nonPct.toFixed(1) + '%' : (nonEvt ? '' : 'no Total Sales for ' + p.label)}</span></span>
-        </div>
+        ${nonEvt ? '' : `<div class="comp-split-legend"><span class="cl-item"><span class="ctx">Outside the booth: no Total Sales on file for ${p.label}</span></span></div>`}
       </div>`;
   }
 
@@ -3159,7 +3196,8 @@ function renderRepComposition() {
     </div>`;
   }).join('');
 
-  document.getElementById('rep-comp').innerHTML = splitHtml + `
+  document.getElementById('rep-comp').innerHTML = splitHtml;
+  document.getElementById('rep-comp-cats').innerHTML = `
     <div class="comp-cats-label">Event CPO by category${cmpE ? ` · growth vs ${cmpE.period.label}` : ''}</div>
     ${rows}`;
 }
@@ -3168,7 +3206,6 @@ function renderRepComposition() {
 function renderRepBuckets() {
   const r = REPS[STATE.selectedRep];
   const p = repPeriod(), cmpE = compareFor(p, 'event'), cmpS = compareFor(p, 'sales');
-  document.getElementById('cats-scope').textContent = `${p.label}${cmpE ? ' vs ' + cmpE.period.label : ''}`;
 
   const totEvtCur = pEvent(r, p);
   const totEvtPrior = cmpE ? pEvent(r, cmpE.period) : null;
@@ -3205,8 +3242,8 @@ function renderRepBuckets() {
     </div>`;
 
   document.getElementById('rep-buckets-top').innerHTML =
-    headlineCard('Total Event CPO', 'All six categories', 'var(--label)', totEvtCur, totEvtPrior, cmpE, teamAvgTotEvt, vsTeamTotEvt) +
-    headlineCard('Non-Event CPO', "SC's / Marketing", 'var(--bk-nonevent)', nonEvtCur, nonEvtPrior, cmpS, teamAvgNonEvt, vsTeamNonEvt);
+    headlineCard('At events', 'Event CPO', 'var(--label)', totEvtCur, totEvtPrior, cmpE, teamAvgTotEvt, vsTeamTotEvt) +
+    headlineCard('Outside the booth', "Non-Event: SC's / Marketing", 'var(--bk-nonevent)', nonEvtCur, nonEvtPrior, cmpS, teamAvgNonEvt, vsTeamNonEvt);
 
   // The intake delivers events per bucket; the category with the best CPO / event gets a callout.
   let best = null;
@@ -3342,10 +3379,9 @@ function repPace(r, y) {
 }
 
 function renderRepPacing() {
-  const p = repPeriod();
   const y = LAST_YEAR;
-  // Only the year in progress has a trajectory.
-  const show = !yearClosed(y) && p.kind !== 'all' && p.year === y;
+  // Only the year in progress has a trajectory. Part of What's next: it doesn't follow the Showing control.
+  const show = !yearClosed(y);
   document.getElementById('pace-section').style.display = show ? '' : 'none';
   if (!show) return;
 
@@ -3381,7 +3417,11 @@ function renderRepPacing() {
     } else if (vs2 > 0) {
       summary = `Tracking ahead of ${y - 2} (${fmtCurrencyShort(fy_2.cpo)}) but short of ${y - 1}. <strong>${remaining.charAt(0).toUpperCase() + remaining.slice(1)} — time to close the gap.</strong>`;
     } else {
-      summary = `Projected below both prior years with ${remaining}. Fall is historically the biggest campaign — room to recover.`;
+      // What the campaigns still to come brought in last year, from this rep's own numbers
+      const left = [1, 2, 3].filter(n => n > k);
+      const lastLeft = strictSum(left.map(n => ({ year: y - 1, n })), c => repTotalSales(r, c.year, c.n));
+      summary = `Projected below both prior years with ${remaining}.` +
+        (lastLeft ? ` ${andList(left.map(n => `C${n}`))} brought in ${fmtCurrencyShort(lastLeft.cpo)} last year.` : '');
     }
   } else if (fy_1) {
     summary = `Comparison vs ${y - 1} finish only — ${y - 2} data unavailable.`;
@@ -3504,18 +3544,15 @@ function renderRepHistory() {
         <tr class="total"><td class="cat-name">Year</td>${yearRow.map(c => cell(c, yearMax)).join('')}</tr>
       </tbody>
     </table>`;
-  // A figure opens that campaign (or year) in More: the period buttons there move to it, and where it comes
+  // A figure opens that campaign (or year) in What's behind it: Showing moves to it, and where the sales came
   // from opens if nothing there is open yet.
   wrap.querySelectorAll('.h-v').forEach(b => b.addEventListener('click', () => {
     const y = +b.dataset.hy, n = +b.dataset.hn;
     STATE.chartMetric = null;
     if (n) { STATE.repMode = 'camp'; STATE.camp = { year: y, n }; } else { STATE.repMode = 'year'; STATE.year = y; }
     renderAll();
-    const more = document.getElementById('rep-more');
-    if (!more.querySelector('details[open]')) document.getElementById('more-comp').open = true;
-    const masthead = document.querySelector('.masthead').getBoundingClientRect().bottom;
-    window.scrollTo({ top: more.getBoundingClientRect().top + scrollY - masthead - 12,
-      behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+    if (!document.querySelector('#ch-why details[open]')) document.getElementById('more-comp').open = true;
+    jumpTo('ch-why');
   }));
   document.getElementById('rh-note').textContent = 'Each change is against the same campaign a year earlier. Tap a figure to see it broken down below.';
 }
@@ -3616,7 +3653,7 @@ function renderRepPlan() {
   document.getElementById('plan-section').style.display = PLAN_YEAR ? '' : 'none';
   if (!PLAN_YEAR) return;
   const name = STATE.selectedRep, r = REPS[name];
-  document.getElementById('plan-title').textContent = `Plan ${PLAN_YEAR}`;
+  document.getElementById('plan-title').textContent = `My ${PLAN_YEAR} plan`;
   const shows = planShows(r), mix = planOutsideMix(r), order = planOrderAvg(r);
   const showsYear = shows.reduce((a, c) => a + c.cpo, 0), showCount = shows.reduce((a, c) => a + c.shows, 0);
   const money = v => v === null ? '' : '$' + Math.round(v).toLocaleString();
@@ -3673,7 +3710,10 @@ function renderRepPlan() {
     const outTotal = outs ? outs.reduce((a, b) => a + b, 0) : null;
     const ordTotal = orders ? orders.reduce((a, b) => a + b, 0) : null;
     const outV = document.getElementById('ps-out'), outL = document.getElementById('ps-out-l');
-    if (outTotal === null) { outV.textContent = '—'; outL.textContent = 'Type a goal to see what to sell outside the booth'; }
+    // The campaign cards and the note wait for a goal: until then the block is one box and two lines
+    document.getElementById('plan-camps').hidden = !t;
+    document.getElementById('plan-note').hidden = !t;
+    if (outTotal === null) { outV.textContent = '—'; outL.textContent = 'to sell outside the booth'; }
     else if (outTotal <= 0) { outV.textContent = '$0'; outL.textContent = 'Your shows cover this goal'; }
     else {
       outV.innerHTML = `${fmtCurrencyShort(outTotal)}${ordTotal === null ? '' : ` <small>· ≈ ${plural(ordTotal, 'order')}</small>`}`;
@@ -3724,24 +3764,19 @@ function renderHsTip() {
 }
 
 // ==========================================================================
-// Performance Over Time chart: by year (Year total) or the same campaign each year (By campaign)
+// How I'm trending: by year, always (part of How I got here; the campaign grid above it has the campaigns)
 // ==========================================================================
 function chartMetric() {
-  return STATE.chartMetric || (STATE.repMode === 'camp' ? 'total_event' : 'total_sales');
+  return STATE.chartMetric || 'total_sales';
 }
 function chartPoints() {
-  if (STATE.repMode === 'camp') {
-    const n = STATE.camp.n;
-    return CAMP_YEARS.filter(y => campaignsForYear(y).includes(n))
-      .map(y => ({ label: `C${n} ${y}`, period: periodCamp(y, n), open: false }));
-  }
   return CAMP_YEARS.map(y => { const p = periodYear(y); return { label: p.closed ? `${y}` : `${y} YTD`, period: p, open: !p.closed }; });
 }
 function renderRepChart() {
   const r = REPS[STATE.selectedRep];
   const metric = chartMetric();
   document.getElementById('rep-chart-metric').value = metric;
-  document.getElementById('legend-you').textContent = STATE.repMode === 'camp' ? `You (C${STATE.camp.n} each year)` : 'You (by year)';
+  document.getElementById('legend-you').textContent = 'You (by year)';
   const pts = chartPoints();
   const youVals = pts.map(pt => getMetric(r, pt.period, metric));
   const teamVals = pts.map(pt => teamAvg(metric, pt.period));
@@ -3834,7 +3869,11 @@ function renderRepChart() {
       const diff = ratio - priorRatio;
       const was = pts[n - 2].label;
       if (Math.abs(diff) >= 0.05) {
-        txt += diff > 0 ? ` — gap widening (was ${priorRatio.toFixed(1)}× in ${was})` : ` — gap narrowing (was ${priorRatio.toFixed(1)}× in ${was})`;
+        // Above the average a rising ratio is a growing lead; below it, a rising ratio is a closing gap
+        const word = ratio >= 1 && priorRatio >= 1 ? (diff > 0 ? 'lead growing' : 'lead shrinking')
+          : ratio < 1 && priorRatio < 1 ? (diff > 0 ? 'gap narrowing' : 'gap widening')
+          : (diff > 0 ? 'now above the average' : 'now below the average');
+        txt += ` — ${word} (was ${priorRatio.toFixed(1)}× in ${was})`;
       } else {
         txt += ` — holding steady vs ${was}`;
       }
@@ -3856,27 +3895,75 @@ function niceCeil(v) {
   return 10 * mag;
 }
 
-// The short line at the right of each row in More: what that section says, before it is opened.
-function renderMorePreviews() {
+// One plain sentence opens each chapter, so scrolling alone reads as a story, with nothing opened. Fixed rules, no model.
+function storyHow(r) {
+  const y = LAST_YEAR, hero = repHero(r, periodYear(y));
+  const val = (yy, n) => { const s = hero.fallback ? repTotalEvent(r, yy, n) : repTotalSales(r, yy, n); return s ? s.cpo : null; };
+  const ns = campaignsForYear(y).filter(n => val(y, n) !== null);
+  if (!ns.length) return `No ${y} campaigns on file yet.`;
+  const L = ns.filter(n => val(y - 1, n) !== null);
+  if (!L.length) return `This is your first year on file, so there's no last year to compare with yet.`;
+  const names = xs => andList(xs.map(n => `C${n}`));
+  const in_ = hero.fallback ? ' in event sales' : '';
+  // "Best" only reaches back as far as the data does, so it says how far
+  const best = L.every(n => CAMP_YEARS.filter(yy => yy < y).every(yy => { const v = val(yy, n); return v === null || val(y, n) >= v; }));
+  if (best) return L.length === 3 ? `All three campaigns were your best since ${FIRST_YEAR}${in_}.`
+    : L.length === 2 ? `${names(L)} were both your best since ${FIRST_YEAR}${in_}.` : `${names(L)} was your best since ${FIRST_YEAR}${in_}.`;
+  const ups = L.filter(n => val(y, n) >= val(y - 1, n)), downs = L.filter(n => val(y, n) < val(y - 1, n));
+  const whole = (xs, v) => xs.length === 3 ? `All three campaigns ${v}` : xs.length === 2 ? `${names(xs)} both ${v}` : `${names(xs)} ${v}`;
+  if (!downs.length) return `${whole(ups, 'beat last year')}${in_}.`;
+  if (!ups.length) return `${whole(downs, 'came in under last year')}${in_}.`;
+  return `${names(ups)} beat last year; ${names(downs)} came in under${in_}.`;
+}
+function storyWhy(r) {
+  const p = repPeriod(), s = pSales(r, p), e = pEvent(r, p), ne = pNonEvent(r, p);
+  const lead = p.kind === 'year' && p.year === LAST_YEAR ? '' : `In ${p.label}, `;
+  if (!s) return e ? `${lead}${fmtCurrencyShort(e.cpo)} at events. Outside the booth shows once your Total Sales comes in.` : `No sales on file for ${p.label}.`;
+  const evPct = s.cpo > 0 ? Math.min(100, Math.round((e ? e.cpo : 0) / s.cpo * 100)) : 0;
+  const mostly = evPct >= 50 ? 'Events' : 'Outside the booth';
+  let say = `${lead}${evPct >= 50 ? `${evPct}% of your sales came at events.` : `${100 - evPct}% of your sales came from outside the booth.`}`;
+  // Which side grew, against the same stretch of the year before
+  const cE = compareFor(p, 'event'), cS = compareFor(p, 'sales');
+  if (cE && cS && cS.mode === 'growth' && e && ne) {
+    const pe = pEvent(r, cE.period), pn = pNonEvent(r, cS.period);
+    const up = [['Events', e.cpo, pe && pe.cpo], ['Outside the booth', ne.cpo, pn && pn.cpo]]
+      .filter(x => x[2] !== null && x[2] !== undefined && x[1] - x[2] >= 1000).sort((a, b) => (b[1] - b[2]) - (a[1] - a[2]));
+    if (up.length) say += up[0][0] === mostly ? ` That's ${fmtCurrencyShort(up[0][1])}, up from ${fmtCurrencyShort(up[0][2])}.`
+      : ` ${up[0][0]} grew${up.length > 1 ? ' the most' : ''}: ${fmtCurrencyShort(up[0][1])}, up from ${fmtCurrencyShort(up[0][2])}.`;
+  }
+  return say;
+}
+function storyNext(r) {
+  const p = periodYear(LAST_YEAR), opp = findBiggestOpportunity(r, p, repHero(r, p));
+  if (!opp) {
+    const prev = pSales(r, periodYear(LAST_YEAR - 1)), pace = yearClosed(LAST_YEAR) ? null : repPace(r, LAST_YEAR).projected;
+    return pace && prev && pace < prev.cpo ? "No standout gap against the team, so the push is more of what's already working."
+      : "No standout gap right now. Keep doing what's working.";
+  }
+  const what = { orders_per_shift: 'more orders per shift', shift_avg: 'lifting your shift average', non_event: 'growing your sales outside the booth' }[opp.type]
+    || `a bigger average order ${opp.title.replace(/^Lift Avg Order in /, 'in ')}`;
+  return `Your biggest opportunity: ${what}, worth about ${fmtCurrencyShort(opp.uplift)}.`;
+}
+// The short line at the right of each row: what that section says, before it is opened.
+function renderRepStory() {
   const r = REPS[STATE.selectedRep], p = repPeriod(), set = (id, txt) => { document.getElementById(id).textContent = txt || ''; };
+  set('say-how', storyHow(r));
+  set('say-why', storyWhy(r));
+  set('say-next', storyNext(r));
   const sum = document.getElementById('rep-summary');
   const good = sum.querySelectorAll('.callout.good').length, opp = !!sum.querySelector('.opp-panel');
   set('mv-summary', [good ? `${good} strength${good > 1 ? 's' : ''}` : '', opp ? '1 to work on' : ''].filter(Boolean).join(' · '));
   const pace = repPace(r, LAST_YEAR).projected;
   set('mv-pace', !yearClosed(LAST_YEAR) && pace ? `≈ ${fmtCurrencyShort(pace)}` : '');
-  const hero = repHero(r, p), orders = ordersOf(hero.stats);
-  set('mv-minis', orders === null ? '' : `${orders.toLocaleString()} ${hero.fallback ? 'event ' : ''}orders`);
-  const s = pSales(r, p), e = pEvent(r, p);
-  set('mv-comp', s && e && s.cpo > 0 ? `${Math.round(e.cpo / s.cpo * 100)}% at events` : '');
   set('mv-trend', `${FIRST_YEAR}–${LAST_YEAR}`);
-  set('mv-cats', e ? `${fmtCurrencyShort(e.cpo)} at events` : '');
-  set('mv-products', PRODUCTS ? `Report of ${pAsOf()}` : '');
-  const sh = pShifts(r, p), c = sh && sh.combined;
-  set('mv-shifts', c && c.shifts ? `${c.shifts} shifts · ${fmtCurrencyShort(c.avg)} a shift` : '');
+  const e = pEvent(r, p), ne = pNonEvent(r, p);
+  set('mv-comp', ne && (!e || ne.cpo > e.cpo) ? `${fmtCurrencyShort(ne.cpo)} outside` : e ? `${fmtCurrencyShort(e.cpo)} at events` : '');
+  const hero = repHero(r, p), orders = ordersOf(hero.stats), sh = pShifts(r, p), c = sh && sh.combined;
+  set('mv-orders', [orders === null ? '' : `${orders.toLocaleString()} ${hero.fallback ? 'event ' : ''}orders`, c && c.shifts ? `${c.shifts} shift${c.shifts === 1 ? '' : 's'}` : ''].filter(Boolean).join(' · '));
 }
 
 function renderRepView() {
-  renderRepScopeBar();
+  renderRepShowing();
   renderRepScorecard();
   renderRepMinis();
   renderRepHistory();
@@ -3888,7 +3975,7 @@ function renderRepView() {
   renderRepShifts();
   renderRepPacing();
   renderRepPlan();
-  renderMorePreviews();
+  renderRepStory();
 }
 
 // ==========================================================================
@@ -3992,6 +4079,8 @@ function pDiff(cur, prior) {
 }
 function pPct(cur, prior) {
   if (cur === null || cur === undefined || prior === null || prior === undefined || prior === 0) return `<span class="chip na" title="${NA_TIP}">—</span>`;
+  // More came back than sold: a percent change means nothing there, so it says what happened
+  if (cur < 0 || prior < 0) return tipBtn('chip na', '—', 'Returns outweighed sales on this line, so a percent change would not mean anything', 'No change figure');
   const pct = (cur - prior) / prior * 100, up = pct >= 0, digits = compactGrid() ? 0 : 1;   // whole percents on a phone
   // No change at the precision shown is no change: no arrow, no colour (as chipYoY and fmtYoY do)
   if (+Math.abs(pct).toFixed(digits) === 0) return `<span class="chip na" title="${up ? '+' : '−'}${Math.abs(pct).toFixed(2)}%">0%</span>`;
@@ -4211,13 +4300,14 @@ function renderRepProducts() {
   };
   // Units and CPO side by side: the year shown, the Compare to year, then +/- units and % change in CPO.
   const cmpHead = m => `${m === 'cpo' ? '%' : '+/−'} vs ${by}`;
+  // On a phone the Compare to year's columns give way (.xtra): the change next to them says it, and the table fits
   const group = (m, name, first) => `<th class="${first ? '' : 'grp'}">${pYearLabel(y)}<span class="th-sub">${name}</span></th>` +
-    (by ? `<th class="${first ? '' : 'xtra'}">${by}<span class="th-sub">${name}</span></th>
+    (by ? `<th class="xtra">${by}<span class="th-sub">${name}</span></th>
            <th>${cmpHead(m)}<span class="th-sub">${name}</span></th>` : '');
   const cells = (l, m, first) => {
     const cur = pVal(mine(l, y), m), prior = by ? pVal(mine(l, by), m) : null;
     return `<td class="cur${first ? '' : ' grp'}">${pNum(cur, m)}</td>` +
-      (by ? `<td class="prior${first ? '' : ' xtra'}">${pNum(prior, m)}</td><td>${pChange(cur, prior, m)}</td>` : '');
+      (by ? `<td class="prior xtra">${pNum(prior, m)}</td><td>${pChange(cur, prior, m)}</td>` : '');
   };
   const rows = PRODUCT_LINES.map(l => {
     const empty = years.every(yy => !pVal(mine(l, yy), 'qty') && !pVal(mine(l, yy), 'cpo'));
@@ -4243,7 +4333,7 @@ function renderRepProducts() {
 
 // The Products tab only exists when the intake has published a product report.
 (function () {
-  if (!PRODUCTS) { document.querySelector('.nav button[data-view="products"]').style.display = 'none'; return; }
+  if (!PRODUCTS) { document.querySelector('#team-nav button[data-view="products"]').style.display = 'none'; return; }
 })();
 
 function renderAll() {
@@ -4309,7 +4399,7 @@ else window.addEventListener('resize', syncBrandHeight);
 
 // The tab underline slides to the active tab; it jumps on first paint and on resize.
 function syncTabUnderline(animate) {
-  const a = document.querySelector('.nav button.active');
+  const a = document.querySelector(`${REP_PARAM === null ? '#team-nav' : '#chapter-nav'} button.active`);
   if (!a) return;
   const nav = a.parentElement;
   if (!animate) nav.classList.add('instant');
@@ -4363,7 +4453,7 @@ function switchView(view, toTop) {
   if (REP_PARAM !== null) view = 'rep';   // a rep's own link has no other tabs
   if (!VIEWS.includes(view)) view = 'total';
   if (STATE.view !== view) SCROLL_BY_VIEW[STATE.view] = window.scrollY;
-  document.querySelectorAll('.nav button').forEach(b => {
+  document.querySelectorAll('#team-nav button').forEach(b => {
     const active = b.dataset.view === view;
     b.classList.toggle('active', active);
     b.setAttribute('aria-selected', active);
@@ -4396,7 +4486,7 @@ window.addEventListener('resize', () => {
   }, 150);
 });
 
-document.querySelectorAll('.nav button').forEach(btn => {
+document.querySelectorAll('#team-nav button').forEach(btn => {
   btn.addEventListener('click', () => {
     // Tapping the tab you are on goes back to its top, as on iOS
     if (btn.dataset.view === STATE.view) window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -4411,6 +4501,50 @@ document.getElementById('rep-chart-metric').addEventListener('change', e => {
   STATE.chartMetric = e.target.value;
   renderRepChart();
 });
+
+// The jump bar on a rep's own page (2026-11-02): every chapter one tap away, and it always says where you are. Wayfinding,
+// in the masthead's own tab bar. It answers on press: the underline moves as the page starts to, and the rep's own
+// scrolling takes over at any moment (nothing is locked out during a jump).
+const stickyBar = () => document.getElementById(REP_PARAM === null ? 'team-nav' : 'chapter-nav');
+let spyHold = null;
+const spyRelease = () => { clearTimeout(spyHold); spyHold = null; };
+function jumpTo(id) {
+  const el = document.getElementById(id);
+  const top = id === 'ch-now' ? 0 : el.getBoundingClientRect().top + scrollY - stickyBar().offsetHeight - 12;
+  window.scrollTo({ top, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+}
+function setChapter(id, animate) {
+  document.querySelectorAll('#chapter-nav button').forEach(b => {
+    const on = b.dataset.to === id;
+    b.classList.toggle('active', on);
+    if (on) b.setAttribute('aria-current', 'true'); else b.removeAttribute('aria-current');
+  });
+  syncTabUnderline(animate);
+}
+function buildChapterNav() {
+  const nav = document.getElementById('chapter-nav');
+  const shown = [...document.querySelectorAll('#rep-view .chapter')].filter(c => c.offsetParent);
+  nav.innerHTML = shown.map(c => `<button type="button" data-to="${c.id}">${c.dataset.chapter}</button>`).join('');
+  nav.querySelectorAll('button').forEach(b => b.addEventListener('click', () => {
+    setChapter(b.dataset.to, true);
+    spyRelease(); spyHold = setTimeout(spyRelease, 1200);   // the bar stays on the chapter asked for while the page travels
+    jumpTo(b.dataset.to);
+  }));
+  // The chapter whose top has passed just under the bar; at the very bottom, the last one
+  const spy = () => {
+    if (spyHold) return;
+    const line = nav.getBoundingClientRect().bottom + 40;
+    let cur = shown[0].id;
+    for (const c of shown) if (c.getBoundingClientRect().top <= line) cur = c.id;
+    if (innerHeight + scrollY >= document.documentElement.scrollHeight - 2) cur = shown[shown.length - 1].id;
+    if (!document.querySelector(`#chapter-nav button.active[data-to="${cur}"]`)) setChapter(cur, true);
+  };
+  let frame = 0;
+  window.addEventListener('scroll', () => { if (!frame) frame = requestAnimationFrame(() => { frame = 0; spy(); }); }, { passive: true });
+  window.addEventListener('scrollend', () => { spyRelease(); spy(); });
+  ['wheel', 'touchstart'].forEach(ev => window.addEventListener(ev, spyRelease, { passive: true }));   // their own scroll always wins
+  setChapter(shown[0].id, false);
+}
 
 // A link that names nobody on the team (a typo, a first name two reps share): the names to pick from.
 // The name the link carried goes in as text, never as HTML.
@@ -4435,13 +4569,14 @@ if (REP_PARAM !== null) {
 
 // Initial render. #total / #campaigns / #products / #rep open that tab (#team from Phase 2 links opens Total).
 // A rep's own link opens their Rep View at the top.
-document.querySelectorAll('#rep-more details').forEach(d => { d.open = REP_PARAM === null; });
+document.querySelectorAll('#rep-view details').forEach(d => { d.open = REP_PARAM === null; });
 document.getElementById('more-trend').addEventListener('toggle', e => { if (e.target.open) renderRepChart(); });
 buildLeaderboard('c');
 buildGridToggles();
 renderAll();
 if (CHOOSING) renderHeader();
 else switchView(PERSONAL ? 'rep' : (location.hash || '').slice(1) || 'total', !!PERSONAL);
+if (PERSONAL) buildChapterNav();
 renderHsTip();
 </script>
 
