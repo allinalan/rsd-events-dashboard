@@ -1,7 +1,7 @@
 # RSD Rep Dashboard
 
 Single-page dashboard for the RSD Events Team (CUTCO Rising Sun Division).
-Four tabs: **Total** (one season against the earlier years you pick, Event Analyzer layout), **Campaigns** (one campaign compared across years, plus a full-year leaderboard), **Products** (the home office's product report: nine lines, three years, a rep leaderboard per line), **Rep View** (a first screen a rep takes in at a glance, every campaign in one grid, a plan for next year, and everything else folded under "More about my numbers").
+Four tabs: **Total** (one season against the earlier years you pick, Event Analyzer layout), **Campaigns** (one campaign compared across years, plus a full-year leaderboard), **Products** (the home office's product report: nine lines, three years, a rep leaderboard per line), **Rep View** (reads as a story: where I stand, how I got here, what's behind it, what's next, my plan for next year).
 
 Every core rep also has a **link of their own**: the dashboard address plus their name, for example
 `https://allinalan.github.io/rsd-events-dashboard/matt-foss`. It opens their Rep View with no tabs and no name
@@ -52,13 +52,22 @@ not privacy: names are the links, and anyone can open anyone's page ("I encourag
 - **When the core team changes** (`roster.json` in the intake, so `meta.master_list` in `data.js`): run
   `node tools/rep-pages.mjs`. It writes a page for each new rep and takes down the pages of reps who left. Until it
   runs, the smoke check stays red and says who is missing. A rep who left gets the name list, never anyone's numbers.
-- **My campaigns** (Rep View, everyone's): C1 / C2 / C3 / Year by year, for Total CPO, Event CPO or Orders, each
-  figure with its change against the same campaign a year earlier (whole percents). Tapping a figure moves the period
-  buttons in More to it and opens "Where my sales come from" if nothing there is open.
-- **More about my numbers**: the period buttons, then one row per section (Coach's read, Where I'm heading, Orders
-  and averages, Where my sales come from, How I'm trending, Events and everything else, What I'm selling, Shifts),
-  each with a one-line preview. Closed on a rep's own link; open on the team page, so Alan sees everything at once.
-  The smoke check holds both.
+- **The story** (Alan, 2026-11-02: "as you scroll down your stats should tell a story from beginning to end"). Rep View is
+  five chapters, on a rep's page and the team page alike: **Now** (the 10-second screen), **How I got here** (the My
+  campaigns grid, How I'm trending), **What's behind it** (Where my sales come from, Orders and shifts, What I'm selling),
+  **What's next** (Where I'm heading, Coach's read), **My <next year> plan**. Each opens with one plain sentence from fixed
+  rules (`storyHow`, `storyWhy`, `storyNext`), so scrolling alone reads as the story with nothing opened. The smoke check
+  fails a rep page with an empty sentence.
+- **The jump bar** (a rep's page): the masthead's tab row becomes Now · Campaigns · Why · Next · Plan. It stays when the brand
+  row scrolls away, marks the chapter you are in, and one tap jumps there (`jumpTo`). It answers on press, and the rep's own
+  scrolling takes over at any moment. Reduced motion jumps without travel. The team page keeps its tabs.
+- **The rows** under a chapter stay closed on a rep's link and open on the team page, each with a one-line preview. The smoke
+  check holds both, and taps through the jump bar.
+- **My campaigns**: C1 / C2 / C3 / Year by year, for Total CPO, Event CPO or Orders, each figure with its change against the
+  same campaign a year earlier (whole percents). Tapping a figure moves Showing to it and opens "Where my sales come from" if
+  nothing in that chapter is open.
+- **Showing**: one dropdown above the rows of What's behind it, and the only chapter it changes. Now, the trend, What's next
+  and the plan are always this year.
 - **Plan next year** (Rep View, everyone's; reworked 2026-10-22): shows from the day C2 closes until next year's C1
   closes. The goal starts empty: no suggestion, no pace, no best, no percent anywhere in the block (Alan: "we don't
   want to offer any suggestions", and no rep discouraged for going after a bigger number). Shows are held steady:
@@ -68,8 +77,9 @@ not privacy: names are the links, and anyone can open anyone's page ("I encourag
   for having one fewer year; the team's when a rep has no outside figure for one of the three), and counted in
   orders at their average outside order (the team's under 10 orders; dollars only when their Total Sales comes from
   the home office without order counts). Any campaign's total can be changed and the year adds up; "Split my goal the
-  usual way again" undoes it. A goal below what the shows bring in says "Your shows cover this goal". Saved only in
-  that browser (`localStorage`, `rsd-plan:<year>:<name>`). The smoke check fails if a fresh page shows a goal.
+  usual way again" undoes it. A goal below what the shows bring in says "Your shows cover this goal". The campaign cards
+  wait for a goal. Saved only in that browser (`localStorage`, `rsd-plan:<year>:<name>`). The smoke check fails if a fresh
+  page shows a goal or its cards.
 
 ## Architecture
 

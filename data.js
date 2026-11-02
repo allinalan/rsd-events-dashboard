@@ -4357,9 +4357,9 @@ window.DASHBOARD_DATA = {
                 "events": null
               },
               "Non-Event CPO": {
-                "cpo": null,
-                "orders": null,
-                "events": null
+                "cpo": 28543,
+                "orders": 59,
+                "events": 0
               }
             },
             "total_event": {
@@ -4991,9 +4991,9 @@ window.DASHBOARD_DATA = {
                 "events": null
               },
               "Non-Event CPO": {
-                "cpo": null,
-                "orders": null,
-                "events": null
+                "cpo": 179,
+                "orders": 1,
+                "events": 0
               }
             },
             "total_event": {
@@ -9457,9 +9457,9 @@ window.DASHBOARD_DATA = {
                 "events": null
               },
               "Non-Event CPO": {
-                "cpo": null,
-                "orders": null,
-                "events": null
+                "cpo": 134,
+                "orders": 1,
+                "events": 0
               }
             },
             "total_event": {
@@ -9748,9 +9748,9 @@ window.DASHBOARD_DATA = {
             "events": null
           },
           "Non-Event CPO": {
-            "cpo": null,
-            "orders": null,
-            "events": null
+            "cpo": 134,
+            "orders": 1,
+            "events": 0
           }
         },
         "2026": {
@@ -11628,9 +11628,9 @@ window.DASHBOARD_DATA = {
                 "events": null
               },
               "Non-Event CPO": {
-                "cpo": null,
-                "orders": null,
-                "events": null
+                "cpo": 11853,
+                "orders": 40,
+                "events": 0
               }
             },
             "total_event": {
@@ -11678,9 +11678,9 @@ window.DASHBOARD_DATA = {
                 "events": null
               },
               "Non-Event CPO": {
-                "cpo": null,
-                "orders": null,
-                "events": null
+                "cpo": 9734,
+                "orders": 25,
+                "events": 0
               }
             },
             "total_event": {
@@ -13931,9 +13931,9 @@ window.DASHBOARD_DATA = {
                 "events": null
               },
               "Non-Event CPO": {
-                "cpo": null,
-                "orders": null,
-                "events": null
+                "cpo": 19285,
+                "orders": 33,
+                "events": 0
               }
             },
             "total_event": {
@@ -14235,9 +14235,9 @@ window.DASHBOARD_DATA = {
                 "events": null
               },
               "Non-Event CPO": {
-                "cpo": null,
-                "orders": null,
-                "events": null
+                "cpo": 14521,
+                "orders": 28,
+                "events": 0
               }
             },
             "total_event": {
@@ -14854,9 +14854,9 @@ window.DASHBOARD_DATA = {
                 "events": null
               },
               "Non-Event CPO": {
-                "cpo": null,
-                "orders": null,
-                "events": null
+                "cpo": 1929,
+                "orders": 3,
+                "events": 0
               }
             },
             "total_event": {

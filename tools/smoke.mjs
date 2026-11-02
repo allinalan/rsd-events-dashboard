@@ -143,27 +143,30 @@ const checkTab = (browser, vp, tab) => inPage(browser, vp, `index.html#${tab}`, 
   problems.push(...stateProblems(await settle(page), tab));
   if (tab === 'rep') {
     if (!(await page.$('#rep-copy'))) problems.push('Rep View on the team page has no Copy link button');
-    const shut = await page.$$eval('#rep-more details', ds => ds.filter(d => !d.open && d.style.display !== 'none').length);
-    if (shut) problems.push(`${shut} section(s) of More about my numbers start closed on the team page`);
+    const shut = await page.$$eval('#rep-view details', ds => ds.filter(d => !d.open && d.style.display !== 'none').length);
+    if (shut) problems.push(`${shut} Rep View section(s) start closed on the team page`);
   }
   await shoot(page, `${size(vp)}-${tab}`);
 });
 
-// A rep's own page: personal mode on, no tabs, that rep's name, the 10-second card whole (a number, a sentence,
-// three facts), the campaign grid filled in, and More about my numbers closed.
+// A rep's own page: personal mode on, the jump bar instead of the tabs, that rep's name, the 10-second card whole (a
+// number, a sentence, three facts), a sentence on every chapter, the campaign grid filled in, and the rows closed.
 async function personalProblems(page, name) {
   const s = await within(ANSWER_MS, 'the page', page.evaluate(() => ({
     personal: document.documentElement.classList.contains('personal'),
-    tabs: !!document.querySelector('.nav').offsetParent,
+    tabs: !!document.getElementById('team-nav').offsetParent,
     name: (document.querySelector('.name-static') || {}).textContent || null,
     big: ((document.querySelector('.g-big') || {}).textContent || '').trim(),
     read: ((document.querySelector('.g-read') || {}).textContent || '').trim(),
     facts: document.querySelectorAll('.g-facts .g-fact').length,
     grid: document.querySelectorAll('#rep-history tbody tr').length,
-    open: document.querySelectorAll('#rep-more details[open]').length,
+    open: document.querySelectorAll('#rep-view details[open]').length,
+    jump: [...document.querySelectorAll('#chapter-nav button')].filter(b => b.offsetParent).map(b => b.textContent),
+    silent: [...document.querySelectorAll('#rep-view .chapter .ch-say')].filter(e => e.offsetParent && !e.textContent.trim()).length,
     plan: !!document.getElementById('plan-section').offsetParent,
     planGoal: (document.getElementById('plan-goal') || {}).value,
     planCamps: document.querySelectorAll('#plan-camps .plan-camp').length,
+    planCampsShown: !!document.getElementById('plan-camps').offsetParent,
   })));
   const problems = [];
   if (!s.personal) problems.push('personal mode is off');
@@ -173,16 +176,40 @@ async function personalProblems(page, name) {
   if (!s.read) problems.push('the sentence under the big number is empty');
   if (s.facts !== 3) problems.push(`the first screen has ${s.facts} facts, not 3`);
   if (s.grid !== 4) problems.push(`the My campaigns grid has ${s.grid} rows, not 4 (C1, C2, C3, Year)`);
-  if (s.open) problems.push(`${s.open} section(s) of More about my numbers start open on a rep's own page`);
-  // Alan, 2026-10-22: no suggestions. A fresh browser must find the goal empty, with one card per campaign.
+  if (s.open) problems.push(`${s.open} section(s) start open on a rep's own page`);
+  if (s.jump.length < 4) problems.push(`the jump bar shows ${s.jump.length} chapters (${s.jump.join(', ') || 'none'})`);
+  if (s.silent) problems.push(`${s.silent} chapter(s) have an empty sentence`);
+  // Alan, 2026-10-22: no suggestions. A fresh browser must find the goal empty; the three campaign cards wait for one.
   if (s.plan && s.planGoal !== '') problems.push(`the Plan goal starts filled in ("${s.planGoal}"); it must start empty`);
-  if (s.plan && s.planCamps !== 3) problems.push(`the Plan shows ${s.planCamps} campaign cards, not 3`);
+  if (s.plan && s.planCamps !== 3) problems.push(`the Plan has ${s.planCamps} campaign cards, not 3`);
+  if (s.plan && s.planCampsShown) problems.push('the Plan shows its campaign cards before a goal is typed');
   return problems;
 }
 // The link exactly as it gets texted: /<name>, through that folder's page, to ?rep=<name>.
 const checkRepLink = (browser, vp, name) => inPage(browser, vp, slugOf(name), `${size(vp)} /${slugOf(name)}`, async (page, problems) => {
   problems.push(...stateProblems(await settle(page), 'rep'), ...await personalProblems(page, name));
   await shoot(page, `${size(vp)}-rep-${slugOf(name)}`);
+}, { lands: `?rep=${slugOf(name)}` });
+// The jump bar, tapped the way a rep would: each chapter's top lands just under the bar (or the page has run out of
+// scroll), the bar marks that chapter, and the chapters run in the order the bar lists them.
+const checkJumpBar = (browser, vp, name) => inPage(browser, vp, slugOf(name), `${size(vp)} /${slugOf(name)} jump bar`, async (page, problems) => {
+  await settle(page);
+  const ids = await page.$$eval('#chapter-nav button', bs => bs.map(b => b.dataset.to));
+  const order = await page.$$eval('#rep-view .chapter', cs => cs.filter(c => c.offsetParent).map(c => c.id));
+  if (ids.join() !== order.join()) problems.push(`the jump bar (${ids.join()}) and the page (${order.join()}) disagree on the order`);
+  for (const id of [...ids.slice(1).reverse(), ids[0]]) {
+    await page.click(`#chapter-nav button[data-to="${id}"]`, { timeout: LOAD_MS });
+    await sleep(1300);
+    const s = await within(ANSWER_MS, 'the page', page.evaluate(id => {
+      const nav = document.getElementById('chapter-nav').getBoundingClientRect(), top = document.getElementById(id).getBoundingClientRect().top;
+      return { off: Math.round(top - nav.bottom), bottom: innerHeight + scrollY >= document.documentElement.scrollHeight - 2, y: Math.round(scrollY),
+        cur: (document.querySelector('#chapter-nav button[aria-current="true"]') || {}).textContent || null,
+        want: document.querySelector(`#chapter-nav button[data-to="${id}"]`).textContent, navShown: nav.height > 0 };
+    }, id));
+    if (s.cur !== s.want) problems.push(`tapping ${s.want} left the bar on ${s.cur || 'nothing'}`);
+    if (!s.navShown) problems.push(`the jump bar is gone after tapping ${s.want}`);
+    if (id === ids[0] ? s.y !== 0 : (!s.bottom && Math.abs(s.off - 12) > 6)) problems.push(`tapping ${s.want} stopped ${s.off}px under the bar (scrollY ${s.y})`);
+  }
 }, { lands: `?rep=${slugOf(name)}` });
 // A first name only one rep has, typed by hand: 404.html passes it on and the page finds that rep.
 const checkFirstName = (browser, vp, first, name) => inPage(browser, vp, first, `${size(vp)} /${first} (typed first name)`, async (page, problems) => {
@@ -250,6 +277,7 @@ try {
   const [phone, desktop] = [VIEWPORTS[1], VIEWPORTS[0]];
   for (const name of team) await checkRepLink(browser, phone, name);
   await checkRepLink(browser, desktop, team[0]);
+  await checkJumpBar(browser, phone, team[0]);
   const firsts = team.map(n => slugOf(n.split(' ')[0]));
   const solo = team.find((n, i) => firsts.indexOf(firsts[i]) === firsts.lastIndexOf(firsts[i]));
   if (solo) await checkFirstName(browser, phone, slugOf(solo.split(' ')[0]), solo);
