@@ -1589,8 +1589,8 @@ function campaignsForYear(y) { return CAMPAIGNS_AVAILABLE.filter(c => c.year ===
 // from the campaign's first day through last month, with the same months of each earlier year. It is never in
 // CAMPAIGNS_AVAILABLE. It joins the year as a "so far" part (n 's'): the year in progress counts it (Alan: "the full
 // year math should take into account the YTD structure"), and so does each earlier year's same point, so every year is
-// measured through the same month the same way. Its Total Sales is its event sales by definition (outside-the-booth
-// sales for those months arrive with the campaign's workbook at its close), so its Non-Event is 0.
+// measured through the same month the same way. Its Total Sales is its event sales (Non-Event 0) until every year's
+// Total Sales export for those months is on file (meta.so_far.total_sales); then it is the real Total.
 const SO_FAR = META.so_far || null;
 const soFarIs = (y, n) => !!SO_FAR && SO_FAR.year === y && SO_FAR.campaign === n;
 function repSoFar(r, y) { const s = r && r.so_far && r.so_far[y]; return s && s.total_event && s.total_event.cpo !== null ? s.total_event : null; }
@@ -1787,7 +1787,11 @@ function repCampaign(rep, year, n) {
     if (!hasSoFar(year)) return null;
     const s = (rep.so_far && rep.so_far[year]) || null, Z = { cpo: 0, orders: 0, events: 0 };
     const te = s && s.total_event && s.total_event.cpo !== null ? s.total_event : Z;
-    return { buckets: { ...((s && s.buckets) || {}), 'Non-Event CPO': Z }, total_event: te, total_sales: te };
+    // With every year's Rep Order Summary for these months on file (meta.so_far.total_sales, Wes Frank's exports through
+    // the monthly request, 2026-11-04) Total is the real Total and Non-Event the rest; until then both mean event sales.
+    const ts = SO_FAR.total_sales && s && s.total_sales && s.total_sales.cpo !== null ? s.total_sales : te;
+    const ne = ts === te ? Z : { cpo: Math.max(0, ts.cpo - te.cpo), orders: ts.orders !== null && te.orders !== null ? Math.max(0, ts.orders - te.orders) : null, events: 0 };
+    return { buckets: { ...((s && s.buckets) || {}), 'Non-Event CPO': ne }, total_event: te, total_sales: ts };
   }
   if (rep.campaigns && rep.campaigns[year] && rep.campaigns[year][n]) return rep.campaigns[year][n];
   if (n === 1 && rep.c1 && rep.c1[year]) {
@@ -3522,7 +3526,7 @@ function renderRepPacing() {
   } else {
     basisLabel = `Based on the team's average pace through ${point} (not enough personal history yet)`;
   }
-  if (sf) basisLabel += ` · ${SO_FAR.months} counts event sales; outside the booth lands ${CAMP_LANDS[SO_FAR.campaign]}`;
+  if (sf && !SO_FAR.total_sales) basisLabel += ` · ${SO_FAR.months} counts event sales; outside the booth lands ${CAMP_LANDS[SO_FAR.campaign]}`;
   if (ytd.cpo !== null && ytd.missing.length) basisLabel += ` · C${ytd.missing.join(', C')} ${y} Total Sales not loaded yet`;
   if (short) basisLabel += ` · C${k + 1} ${y} Total Sales pending, so this runs from ${k === 1 ? 'C1' : 'C1–C' + k}`;
 
@@ -3653,11 +3657,12 @@ function renderRepHistory() {
   const cell = (c, max) => {
     // The open campaign so far: its figure on every measure (Total and Orders count its event sales; 2026-11-04)
     if (!c.p && soFarIs(c.y, c.n) && hasSoFar(c.y)) {
-      const st = repCampaign(r, c.y, 's').total_event, v = m === 'orders' ? st.orders : st.cpo;
-      const pst = hasSoFar(c.y - 1) ? repCampaign(r, c.y - 1, 's').total_event : null, pv = pst ? (m === 'orders' ? pst.orders : pst.cpo) : null;
+      const pick = sc => (m === 'event' ? sc.total_event : sc.total_sales);   // Total and Orders: the real Total once it is on file
+      const st = pick(repCampaign(r, c.y, 's')), v = m === 'orders' ? st.orders : st.cpo;
+      const pst = hasSoFar(c.y - 1) ? pick(repCampaign(r, c.y - 1, 's')) : null, pv = pst ? (m === 'orders' ? pst.orders : pst.cpo) : null;
       const chg = !pv ? '' : pst.orders !== null && pst.orders < MIN_GROWTH_ORDERS ? smallBaseChip(pst.orders) : chipYoY(v, pv, false, 0);
       const fmtV = m === 'orders' ? fmtInt(v) : fmtCurrency(v);
-      return `<td><div class="h-cell">${tipBtn('h-sf', fmtV, `C${c.n} ${c.y} so far (${SO_FAR.months}), event sales through last month${pv !== null && pst ? `, against ${m === 'orders' ? fmtInt(pv) + ' orders' : fmtCurrency(pv)} in the same months of ${c.y - 1}` : ''}. Outside-the-booth sales and the whole campaign land ${CAMP_LANDS[c.n]}.`, `C${c.n} ${c.y} so far`)}<span class="h-sf-tag">so far · ${SO_FAR.months}</span>${chg}</div></td>`;
+      return `<td><div class="h-cell">${tipBtn('h-sf', fmtV, `C${c.n} ${c.y} so far (${SO_FAR.months}), ${m === 'event' ? 'event sales' : SO_FAR.total_sales ? 'Total Sales' : 'event sales'} through last month${pv !== null && pst ? `, against ${m === 'orders' ? fmtInt(pv) + ' orders' : fmtCurrency(pv)} in the same months of ${c.y - 1}` : ''}.${SO_FAR.total_sales || m === 'event' ? '' : ' Outside-the-booth sales for these months come with the Total Sales report.'} The whole campaign lands ${CAMP_LANDS[c.n]}.`, `C${c.n} ${c.y} so far`)}<span class="h-sf-tag">so far · ${SO_FAR.months}</span>${chg}</div></td>`;
     }
     if (!c.p) return `<td><div class="h-cell">${tipBtn('h-off', '—', `C${c.n} ${c.y} closes ${CAMP_ENDS[c.n]}; its numbers land ${CAMP_LANDS[c.n]}`, `C${c.n} ${c.y}`)}</div></td>`;
     const val = c.v === null ? tipBtn('h-off', '—', histWhyNone(r, c.p, m), c.p.label)
