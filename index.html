@@ -4117,10 +4117,10 @@ function renderRepView() {
 function renderHeader() {
   if (CHOOSING) { document.getElementById('cp-line').textContent = 'Pick your name'; return; }
   // A rep's own page: how fresh the numbers are, instead of the period line. The intake runs the 8th of every month
-  // (2026-11-04): numbers through the end of a month land on the 8th of the next, so the next update is a month later.
+  // (2026-11-04), so the next update is the next 8th (on the 8th itself, a month on: that day's run is the one just in).
   if (PERSONAL) {
     const thru = SO_FAR ? new Date(SO_FAR.end + 'T12:00:00') : new Date(`${CAMP_ENDS[LATEST.campaign]}, ${LATEST.year} 12:00`);
-    const next = new Date(thru.getFullYear(), thru.getMonth() + 2, 8);
+    const now = new Date(), next = new Date(now.getFullYear(), now.getMonth() + (now.getDate() >= 8 ? 1 : 0), 8);   // the next 8th
     document.getElementById('cp-line').textContent =
       `Numbers through ${thru.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })} · next update ${next.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}`;
     return;
