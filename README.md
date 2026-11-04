@@ -27,10 +27,16 @@ launchd `com.allinalan.rsd-intake`, the 8th of every month since 2026-11-04). It
 publishes, and a newer intake PR closes an older unmerged one (it carries everything). Jan/May/Sep 8 are the
 close runs (the whole campaign, as before). Every other month adds **the campaign so far**: `meta.so_far` and
 `reps[name].so_far[year]`, event sales from the campaign's first day through last month, with the same months of
-each earlier year. The page shows it in three places only (the open campaign's card on Campaigns, a "so far"
-leaderboard under the cards, and the open cell of the rep's How I got here table under Event CPO, with a line
-under that table); it is never in `campaigns_available`, so full years, pace, projections and Plan never count a
-campaign in progress.
+each earlier year. It is never in `campaigns_available`; the page adds it as a "so far" part of the year (Alan,
+2026-11-04: "the full year math should take into account the YTD structure"). The year in progress counts it
+everywhere (a rep's headline number, sentence, rank, On pace for, Where I'm heading, the Total tab, Plan's pace),
+and every earlier year is compared at the same point (C1–C2 + Sep–Oct against C1–C2 + Sep–Oct). Those months count
+their event sales as their Total (outside-the-booth sales for them land with the campaign's workbook at its close),
+measured the same way in every year. The projection divides the year so far by the share of the year the rep
+usually has done by the end of that month (their own last two years, else the team's), never less than what is
+sold; the months count only on top of every closed campaign a rep has Total Sales for. Also: the open campaign's
+card on Campaigns, a "so far" leaderboard under the cards, and the open cell of How I got here. The rep page's
+masthead reads "Numbers through Oct 31 · next update Dec 8".
 `index.html` is edited by hand and never touched by the intake.
 Every PR (the intake's too) and every push to main runs the **Dashboard smoke check** (`.github/workflows/smoke.yml`, `tools/smoke.mjs`): it opens each tab at desktop and phone size, then every rep's own link on a phone, and goes red on a console error, the load-error message, an empty Total leaderboard, a frozen page, a core rep without a page (or a page for someone off the team), or a link that opens anyone but that rep. Its `dashboard-screenshots` artifact shows what will publish, every rep's page included; don't merge a red one.
 

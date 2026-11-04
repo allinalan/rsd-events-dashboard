@@ -1585,13 +1585,12 @@ const MIN_GROWTH_ORDERS = 16;   // growth sort / chips need this many prior-peri
 const MIN_ORDERS_FOR_AVG_RANK = 15;
 
 function campaignsForYear(y) { return CAMPAIGNS_AVAILABLE.filter(c => c.year === y).map(c => c.n).sort((a, b) => a - b); }
-const CAMP_YEARS = YEARS.filter(y => campaignsForYear(y).length > 0);
-const FIRST_YEAR = CAMP_YEARS[0], LAST_YEAR = CAMP_YEARS[CAMP_YEARS.length - 1];
-const yearClosed = y => campaignsForYear(y).length === 3;
-
 // The open campaign so far (month to month, Alan 2026-11-04): meta.so_far + reps[name].so_far[year], EVENT sales only,
 // from the campaign's first day through last month, with the same months of each earlier year. It is never in
-// CAMPAIGNS_AVAILABLE, so full years, pace, projections and Plan never count it; only the so-far pieces read it.
+// CAMPAIGNS_AVAILABLE. It joins the year as a "so far" part (n 's'): the year in progress counts it (Alan: "the full
+// year math should take into account the YTD structure"), and so does each earlier year's same point, so every year is
+// measured through the same month the same way. Its Total Sales is its event sales by definition (outside-the-booth
+// sales for those months arrive with the campaign's workbook at its close), so its Non-Event is 0.
 const SO_FAR = META.so_far || null;
 const soFarIs = (y, n) => !!SO_FAR && SO_FAR.year === y && SO_FAR.campaign === n;
 function repSoFar(r, y) { const s = r && r.so_far && r.so_far[y]; return s && s.total_event && s.total_event.cpo !== null ? s.total_event : null; }
@@ -1600,6 +1599,22 @@ function teamSoFar(y) {
   for (const name of MASTER) { const s = repSoFar(REPS[name], y); if (s) { any = true; cpo += s.cpo; orders += s.orders || 0; } }
   return any ? { cpo, orders } : null;
 }
+const SF_K = SO_FAR ? SO_FAR.campaign - 1 : null;      // closed campaigns before the open one
+const SF_MONTHS = SO_FAR ? Number(SO_FAR.end.slice(5, 7)) - Number(SO_FAR.start.slice(5, 7)) + 1 : 0;
+const hasSoFar = y => !!SO_FAR && SO_FAR.years.includes(y);
+const MON3 = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+// What is still to come in the so-far year: the open campaign's months after the window, then the later campaigns.
+function soFarLeft() {
+  const from = Number(SO_FAR.end.slice(5, 7)) + 1, to = SO_FAR.campaign * 4;
+  const rest = from === to ? MON3[to - 1] : `${MON3[from - 1]}–${MON3[to - 1]}`;
+  return [rest, ...[1, 2, 3].filter(n => n > SO_FAR.campaign).map(n => `C${n}`)];
+}
+// A year is on the page once it has a closed campaign, or when it is the so-far year (Feb-Apr: C1 so far, nothing closed).
+const CAMP_YEARS = [...new Set([...YEARS, ...(SO_FAR ? [SO_FAR.year] : [])])].sort((a, b) => a - b)
+  .filter(y => campaignsForYear(y).length > 0 || (SO_FAR && y === SO_FAR.year));
+const FIRST_YEAR = CAMP_YEARS[0], LAST_YEAR = CAMP_YEARS[CAMP_YEARS.length - 1];
+const yearClosed = y => campaignsForYear(y).length === 3;
+
 
 // Phase 3 (2026-09-24): Total (a year, or all years) · Campaigns (one campaign) · Rep View (either).
 const STATE = {
@@ -1768,6 +1783,12 @@ function shareChip(cur, full, year, onDark) {
 // the campaigns block existed.
 function repCampaign(rep, year, n) {
   if (!rep) return null;
+  if (n === 's') {
+    if (!hasSoFar(year)) return null;
+    const s = (rep.so_far && rep.so_far[year]) || null, Z = { cpo: 0, orders: 0, events: 0 };
+    const te = s && s.total_event && s.total_event.cpo !== null ? s.total_event : Z;
+    return { buckets: { ...((s && s.buckets) || {}), 'Non-Event CPO': Z }, total_event: te, total_sales: te };
+  }
   if (rep.campaigns && rep.campaigns[year] && rep.campaigns[year][n]) return rep.campaigns[year][n];
   if (n === 1 && rep.c1 && rep.c1[year]) {
     return { buckets: rep.c1[year], total_event: (rep.c1_total_event && rep.c1_total_event[year]) || null,
@@ -1833,16 +1854,26 @@ const salesK = p => (p.closed && yearHasFY(p.year)) ? 3 : salesThruK(p.year);
 function periodCamp(y, n) {
   return { kind: 'camp', year: y, n, parts: [{ year: y, n }], label: `C${n} ${y}`, long: `${CAMP_NAMES[n]} ${y}` };
 }
-function periodThru(y, k) {
+function periodThru(y, k, sf) {
   const parts = []; for (let n = 1; n <= k; n++) parts.push({ year: y, n });
-  return { kind: 'thru', year: y, k, parts, label: k === 1 ? `C1 ${y}` : `${y} C1–C${k}` };
+  if (sf) parts.push({ year: y, n: 's' });
+  return { kind: 'thru', year: y, k, sf: !!sf, parts, label: sf ? `${y} ${thruText(k, true)}` : k === 1 ? `C1 ${y}` : `${y} C1–C${k}` };
+}
+// The year in progress counts its months so far once every campaign before the open one has closed.
+function yearSoFar(y) { return !!SO_FAR && y === SO_FAR.year && campaignsForYear(y).length === SF_K && hasSoFar(y); }
+// "C1–C2", or with the months so far "C1–C2 + Sep–Oct" (sf defaults to: k is the so-far year's point).
+function thruText(k, sf = !!SO_FAR && k === SF_K && yearSoFar(SO_FAR.year)) {
+  const base = k === 0 ? '' : k === 1 ? 'C1' : `C1–C${k}`;
+  return sf ? (base ? `${base} + ${SO_FAR.months}` : SO_FAR.months) : base;
 }
 function periodYear(y) {
-  const ns = campaignsForYear(y), closed = ns.length === 3;
-  return { kind: 'year', year: y, k: ns.length, closed, parts: ns.map(n => ({ year: y, n })),
+  const ns = campaignsForYear(y), closed = ns.length === 3, sf = !closed && yearSoFar(y);
+  return { kind: 'year', year: y, k: ns.length, closed, sf, parts: [...ns.map(n => ({ year: y, n })), ...(sf ? [{ year: y, n: 's' }] : [])],
     label: closed ? `${y}` : `${y} so far`,
-    long: closed ? `Full year ${y}` : `${y} so far · ${ns.length === 1 ? 'C1' : 'C1–C' + ns.length}` };
+    long: closed ? `Full year ${y}` : `${y} so far · ${thruText(ns.length, sf)}` };
 }
+// The same point in an earlier year as an open period p: its campaigns through p.k, plus the same months when p has them.
+function samePoint(py, p) { return periodThru(py, p.k, p.sf && hasSoFar(py)); }
 function periodAll() {
   const open = !yearClosed(LAST_YEAR);
   return { kind: 'all', years: CAMP_YEARS, parts: CAMPAIGNS_AVAILABLE.slice(),
@@ -1887,10 +1918,15 @@ function pSales(rep, p) {
   if (p.kind === 'thru') return strictSum(p.parts, ts);
   if (p.kind === 'year') {
     if (p.closed && yearHasFY(p.year)) return repFYSales(rep, p.year);
-    const k = salesThruK(p.year);
-    return k ? strictSum(p.parts.slice(0, k), ts) : null;
+    return strictSum(openParts(p), ts);
   }
   let acc = null; for (const y of p.years) acc = addStats(acc, pSales(rep, periodYear(y))); return acc;
+}
+// An open year's parts that carry Total Sales: C1..Ck with workbooks, then the months so far only when k reaches the
+// open campaign (never "C1 + Sep–Oct" with a C2 workbook missing). [] = nothing yet (strictSum gives null).
+function openParts(p) {
+  const closedParts = p.parts.filter(c => c.n !== 's'), k = salesThruK(p.year);
+  return [...closedParts.slice(0, k), ...(p.sf && k === closedParts.length ? p.parts.filter(c => c.n === 's') : [])];
 }
 // Non-Event = Total Sales − event sales. A closed year: its year-end figure minus that year's event
 // sales, left null if that would go negative (an event total restated after the year-end figure).
@@ -1906,8 +1942,7 @@ function pNonEvent(rep, p) {
       const orders = (fy.orders === null || fy.orders === undefined) ? null : fy.orders - (ev.orders || 0);
       return { cpo, orders: orders !== null && orders >= 0 ? orders : null, events: 0 };
     }
-    const k = salesThruK(p.year);
-    return k ? strictSum(p.parts.slice(0, k), ne) : null;
+    return strictSum(openParts(p), ne);
   }
   let acc = null; for (const y of p.years) acc = addStats(acc, pNonEvent(rep, periodYear(y))); return acc;
 }
@@ -1969,12 +2004,13 @@ function compareFor(p, fam) {
   if (!CAMP_YEARS.includes(py)) return null;
   if (fam === 'annual') return { period: periodYear(py), mode: 'growth' };
   if (p.kind === 'camp') return { period: periodCamp(py, p.n), mode: 'growth' };
-  if (p.kind === 'thru') return { period: periodThru(py, p.k), mode: 'growth' };
-  if (fam === 'event') return p.closed ? { period: periodYear(py), mode: 'growth' } : { period: periodThru(py, p.k), mode: 'growth' };
+  if (p.kind === 'thru') return { period: samePoint(py, p), mode: 'growth' };
+  if (fam === 'event') return p.closed ? { period: periodYear(py), mode: 'growth' } : { period: samePoint(py, p), mode: 'growth' };
   // Total Sales: full year vs full year; otherwise the same point last year if it has workbooks,
   // else a share of last year's full year.
   const k = salesK(p);
   if (k === 3) return { period: periodYear(py), mode: 'growth' };
+  if (p.sf && k === p.k && salesThruK(py) >= k) return { period: samePoint(py, p), mode: 'growth' };
   if (k && salesThruK(py) >= k) return { period: periodThru(py, k), mode: 'growth' };
   return { period: periodYear(py), mode: 'share' };
 }
@@ -2326,13 +2362,13 @@ const seasonP = () => periodYear(STATE.season);
 const earlierYears = () => CAMP_YEARS.filter(y => y < STATE.season);
 // Years on the page, oldest first: the season plus the compare chips that are on.
 const shownYears = () => CAMP_YEARS.filter(y => y === STATE.season || (y < STATE.season && STATE.compare.has(y)));
-const thruText = k => k === 1 ? 'C1' : `C1–C${k}`;
+
 // The period each year is shown at: the season as it stands; an earlier year at the same point while
 // the season is open and the toggle is on, otherwise its full year.
 function viewPeriod(y) {
   const s = seasonP();
   if (y === STATE.season) return s;
-  return (!s.closed && STATE.samePoint) ? periodThru(y, s.k) : periodYear(y);
+  return (!s.closed && STATE.samePoint) ? samePoint(y, s) : periodYear(y);
 }
 // An open season against full prior years is progress ("70% of 2025"), not growth. Averages still compare.
 const shareMode = metric => { const s = seasonP(); return !s.closed && !STATE.samePoint && !isAvgMetric(metric); };
@@ -2369,7 +2405,7 @@ function renderTotalControls() {
   const opt = (list, sel) => list.map(y => `<option value="${y}"${y === sel ? ' selected' : ''}>${y}</option>`).join('');
   el.innerHTML = `
     <div class="cb-group cb-season"><span class="cb-k">Season</span><select class="ctl ctl-strong" id="t-season" aria-label="Season">${opt(CAMP_YEARS, STATE.season)}</select></div>
-    <div class="cb-group cb-data"><span class="cb-k">Data through</span><span class="cb-v">${s.closed ? 'C3 · full year' : `C${s.k} · ${s.k} of 3 campaigns`}</span></div>
+    <div class="cb-group cb-data"><span class="cb-k">Data through</span><span class="cb-v">${s.closed ? 'C3 · full year' : s.sf ? thruText(s.k) : `C${s.k} · ${s.k} of 3 campaigns`}</span></div>
     <div class="cb-group cb-bench"><span class="cb-k">Compare to</span>${earlier.length
       ? `<select class="ctl" id="t-bench" aria-label="Compare to">${opt(earlier, STATE.bench)}</select>`
       : tipBtn('cb-v', '—', 'Nothing earlier on file', 'Nothing to compare with')}</div>
@@ -2661,7 +2697,7 @@ function setCamp(y, n) {
 }
 function renderCampYears() {
   const el = document.getElementById('c-years');
-  el.innerHTML = unwrapSeg(segHtml(CAMP_YEARS.map(y => ({ value: y, label: String(y), active: y === STATE.camp.year })), 'data-year'));
+  el.innerHTML = unwrapSeg(segHtml(CAMP_YEARS.filter(y => campaignsForYear(y).length).map(y => ({ value: y, label: String(y), active: y === STATE.camp.year })), 'data-year'));
   el.querySelectorAll('button').forEach(b => b.addEventListener('click', () => setCamp(+b.dataset.year, STATE.camp.n)));
 }
 function renderCampCards() {
@@ -2836,12 +2872,12 @@ function glanceSentence(r, y, hero, cur) {
     const d = cur - prev.cpo;
     return `${d >= 0 ? 'Up' : 'Down'} ${fmtCurrencyShort(Math.abs(d))} on ${y - 1}.${PLAN_YEAR ? ` Your ${PLAN_YEAR} plan is below.` : ''}`;
   }
-  const left = campsLeft(y), leftTxt = andList(left.map(n => `C${n}`));
+  const sfY = periodYear(y).sf, left = campsLeft(y), leftTxt = sfY ? andList(soFarLeft()) : andList(left.map(n => `C${n}`));
   if (!prev) return `Your first year on the dashboard, with ${leftTxt} still to come.`;
   if (cur >= prev.cpo) return `Already past all of ${y - 1} (${fmtCurrencyShort(prev.cpo)}), with ${leftTxt} still to come.`;
   const pace = repPace(r, y).projected;
   if (pace && pace >= prev.cpo) return `On pace to beat ${y - 1} (${fmtCurrencyShort(prev.cpo)}) by about ${fmtCurrencyShort(pace - prev.cpo)}.`;
-  const lastLeft = strictSum(left.map(n => ({ year: y - 1, n })), c => repTotalSales(r, c.year, c.n));
+  const lastLeft = sfY ? null : strictSum(left.map(n => ({ year: y - 1, n })), c => repTotalSales(r, c.year, c.n));
   return lastLeft ? `${leftTxt} brought in ${fmtCurrencyShort(lastLeft.cpo)} last year. That's your chance to close the gap.`
     : `${y - 1} finished at ${fmtCurrencyShort(prev.cpo)}, with ${leftTxt} still to come.`;
 }
@@ -3382,10 +3418,11 @@ function renderRepShifts() {
 }
 
 // ---- Pacing: the year in progress, through its last closed campaign (review A2) ----
-// YTD = Σ Total Sales over C1..Ck of a year (null if none present; lists campaigns still missing).
-function ytdSales(rep, year, k) {
+// YTD = Σ Total Sales over C1..Ck of a year (null if none present; lists campaigns still missing), plus the months
+// so far of the open campaign when sf (event sales, the so-far part; 2026-11-04).
+function ytdSales(rep, year, k, sf) {
   let cpo = 0, orders = 0, blind = 0, have = 0; const missing = [];
-  for (let n = 1; n <= k; n++) {
+  for (const n of [...Array.from({ length: k }, (_, i) => i + 1), ...(sf ? ['s'] : [])]) {
     const t = repTotalSales(rep, year, n);
     if (!t) { missing.push(n); continue; }
     cpo += t.cpo; orders += t.orders || 0; have++;
@@ -3393,9 +3430,9 @@ function ytdSales(rep, year, k) {
   }
   return { cpo: have ? cpo : null, orders, blind, missing };
 }
-function ytdEvent(rep, year, k) {
+function ytdEvent(rep, year, k, sf) {
   let cpo = 0, have = 0; const missing = [];
-  for (let n = 1; n <= k; n++) {
+  for (const n of [...Array.from({ length: k }, (_, i) => i + 1), ...(sf ? ['s'] : [])]) {
     const t = repTotalEvent(rep, year, n);
     if (!t) { missing.push(n); continue; }
     cpo += t.cpo; have++;
@@ -3405,39 +3442,43 @@ function ytdEvent(rep, year, k) {
 // Share of the year done through campaign k, measured on a prior year. Prefers Total Sales
 // (needs every campaign ≤k plus the full-year figure); otherwise event sales across the
 // year's three campaigns, which the intake always has.
-function ytdShareFor(rep, year, k) {
-  const ts = ytdSales(rep, year, k), fy = repFYSales(rep, year);
+// With sf, through the same months of the open campaign (that year's so-far window), measured the same way as this year.
+function ytdShareFor(rep, year, k, sf) {
+  if (sf && !hasSoFar(year)) return null;
+  const ts = ytdSales(rep, year, k, sf), fy = repFYSales(rep, year);
   if (ts.cpo !== null && ts.missing.length === 0 && fy && fy.cpo > 0) return { share: ts.cpo / fy.cpo, basis: 'sales' };
-  const ev = ytdEvent(rep, year, k), fyEv = ytdEvent(rep, year, 3);
+  const ev = ytdEvent(rep, year, k, sf), fyEv = ytdEvent(rep, year, 3);
   if (ev.cpo !== null && ev.missing.length === 0 && fyEv.missing.length === 0 && fyEv.cpo > 0) return { share: ev.cpo / fyEv.cpo, basis: 'event' };
   return null;
 }
 const _teamShareCache = {};
-function teamYtdShare(y, k) {
-  const key = `${y}-${k}`;
+function teamYtdShare(y, k, sf) {
+  const key = `${y}-${k}${sf ? 's' : ''}`;
   if (_teamShareCache[key] !== undefined) return _teamShareCache[key];
   const shares = [];
   for (const rep of masterListReps()) for (const yy of [y - 2, y - 1]) {
-    const s = ytdShareFor(rep, yy, k); if (s) shares.push(s.share);
+    const s = ytdShareFor(rep, yy, k, sf); if (s) shares.push(s.share);
   }
-  _teamShareCache[key] = shares.length ? shares.reduce((a, b) => a + b, 0) / shares.length : k / 3;
+  _teamShareCache[key] = shares.length ? shares.reduce((a, b) => a + b, 0) / shares.length : kDone(k, sf) / 3;
   return _teamShareCache[key];
 }
 // Multiplier safety bounds scale with how much of the year is done: C1 keeps the original
 // ×2.0–×4.5 band; C2 allows ×1.2–×2.25; after C3 there is nothing to project.
+// k may carry the months so far: Sep–Oct of C3 counts as half a campaign (2 of its 4 months), so C1–C2 + Sep–Oct is 2.5.
 function multiplierCaps(k) { const nominal = 3 / k; return { low: Math.max(1, nominal * 0.6), high: nominal * 1.5 }; }
-function repMultiplierInfo(rep, y, k) {
+const kDone = (k, sf) => k + (sf ? SF_MONTHS / 4 : 0);
+function repMultiplierInfo(rep, y, k, sf) {
   const personal = []; let basis = 'sales';
   for (const yy of [y - 2, y - 1]) {
-    const s = ytdShareFor(rep, yy, k);
+    const s = ytdShareFor(rep, yy, k, sf);
     if (s) { personal.push(s.share); if (s.basis === 'event') basis = 'event'; }
   }
   const isPersonal = personal.length >= 2;
-  const share = isPersonal ? personal.reduce((a, b) => a + b, 0) / personal.length : teamYtdShare(y, k);
-  const rawMult = share > 0 ? 1 / share : 1 / Math.max(0.001, teamYtdShare(y, k));
-  const caps = multiplierCaps(k);
-  const multiplier = k >= 3 ? 1 : Math.max(caps.low, Math.min(caps.high, rawMult));
-  return { multiplier, share, isPersonal, basis, isCapped: k < 3 && Math.abs(rawMult - multiplier) > 0.01, rawMult };
+  const share = isPersonal ? personal.reduce((a, b) => a + b, 0) / personal.length : teamYtdShare(y, k, sf);
+  const rawMult = share > 0 ? 1 / share : 1 / Math.max(0.001, teamYtdShare(y, k, sf));
+  const kd = kDone(k, sf), caps = multiplierCaps(kd);
+  const multiplier = kd >= 3 ? 1 : Math.max(caps.low, Math.min(caps.high, rawMult));
+  return { multiplier, share, isPersonal, basis, isCapped: kd < 3 && Math.abs(rawMult - multiplier) > 0.01, rawMult };
 }
 
 // The year in progress for one rep: YTD Total Sales and the projected finish (the pacing block, and the
@@ -3449,8 +3490,11 @@ function repPace(r, y) {
   let k = 0; while (k < kAll && repTotalSales(r, y, k + 1)) k++;
   const short = k > 0 && k < kAll;
   if (!k) k = kAll;
-  const ytd = ytdSales(r, y, k), minfo = repMultiplierInfo(r, y, k);
-  return { k, short, ytd, minfo, projected: ytd.cpo !== null ? ytd.cpo * minfo.multiplier : null };
+  // The months so far count once this rep's Total Sales reach the open campaign (2026-11-04): a rep who sells a year's
+  // worth in Sep–Oct is projected from it right away. The multiplier is at least 1, so never below what is sold.
+  const sf = !short && periodYear(y).sf && ytdSales(r, y, k).missing.length === 0;   // never Sep–Oct alone in place of missing campaigns
+  const ytd = ytdSales(r, y, k, sf), minfo = repMultiplierInfo(r, y, k, sf);
+  return { k, sf, short, ytd, minfo, projected: ytd.cpo !== null ? ytd.cpo * minfo.multiplier : null };
 }
 
 function renderRepPacing() {
@@ -3461,21 +3505,24 @@ function renderRepPacing() {
   if (!show) return;
 
   const r = REPS[STATE.selectedRep];
-  const { k, short, ytd, minfo, projected } = repPace(r, y);
+  const { k, sf, short, ytd, minfo, projected } = repPace(r, y);
   const fy_1 = repFYSales(r, y - 1);
   const fy_2 = repFYSales(r, y - 2);
-  const remaining = short ? `C${k + 1}${k + 1 < 3 ? ' and C3' : ''} not counted yet` : k === 1 ? 'C2 and C3 still to come' : 'only C3 still to come';
+  const point = thruText(k, sf);   // "C1–C2", or "C1–C2 + Sep–Oct" with the months so far
+  const remaining = short ? `C${k + 1}${k + 1 < 3 ? ' and C3' : ''} not counted yet` : sf ? `${andList(soFarLeft())} still to come`
+    : k === 1 ? 'C2 and C3 still to come' : 'only C3 still to come';
   const multiplier = minfo.multiplier;
   document.getElementById('pace-title').textContent = `Where I'm heading in ${y}`;
 
   let basisLabel;
   if (minfo.isPersonal) {
-    basisLabel = `Based on your ${y - 2}–${y - 1} pace: ${(minfo.share * 100).toFixed(1)}% of the year done by the end of C${k}`;
+    basisLabel = `Based on your ${y - 2}–${y - 1} pace: ${(minfo.share * 100).toFixed(1)}% of the year done by the end of ${sf ? MON3[Number(SO_FAR.end.slice(5, 7)) - 1] : `C${k}`}`;
     if (minfo.basis === 'event') basisLabel += ' · measured on event sales';
     if (minfo.isCapped) basisLabel += ` · capped from ×${minfo.rawMult.toFixed(2)}`;
   } else {
-    basisLabel = `Based on the team's average pace through C${k} (not enough personal history yet)`;
+    basisLabel = `Based on the team's average pace through ${point} (not enough personal history yet)`;
   }
+  if (sf) basisLabel += ` · ${SO_FAR.months} counts event sales; outside the booth lands ${CAMP_LANDS[SO_FAR.campaign]}`;
   if (ytd.cpo !== null && ytd.missing.length) basisLabel += ` · C${ytd.missing.join(', C')} ${y} Total Sales not loaded yet`;
   if (short) basisLabel += ` · C${k + 1} ${y} Total Sales pending, so this runs from ${k === 1 ? 'C1' : 'C1–C' + k}`;
 
@@ -3486,15 +3533,15 @@ function renderRepPacing() {
     const vs1 = projected - fy_1.cpo;
     const vs2 = projected - fy_2.cpo;
     if (vs1 > 0 && vs2 > 0) {
-      summary = `On your pace through C${k}, you'd project above both ${y - 2} (${fmtCurrencyShort(fy_2.cpo)}) and ${y - 1} (${fmtCurrencyShort(fy_1.cpo)}). <strong>Strong ${k === 1 ? 'start' : 'position'}.</strong>`;
+      summary = `On your pace through ${point}, you'd project above both ${y - 2} (${fmtCurrencyShort(fy_2.cpo)}) and ${y - 1} (${fmtCurrencyShort(fy_1.cpo)}). <strong>Strong ${k === 1 ? 'start' : 'position'}.</strong>`;
     } else if (vs1 > 0) {
-      summary = `Projected above ${y - 2} but behind ${y - 1} (${fmtCurrencyShort(fy_1.cpo)}). To beat ${y - 1} you'd need to outperform your typical ${k === 1 ? 'C2 + C3' : 'C3'}.`;
+      summary = `Projected above ${y - 2} but behind ${y - 1} (${fmtCurrencyShort(fy_1.cpo)}). To beat ${y - 1} you'd need to outperform your typical ${sf ? andList(soFarLeft()) : k === 1 ? 'C2 + C3' : 'C3'}.`;
     } else if (vs2 > 0) {
       summary = `Tracking ahead of ${y - 2} (${fmtCurrencyShort(fy_2.cpo)}) but short of ${y - 1}. <strong>${remaining.charAt(0).toUpperCase() + remaining.slice(1)} — time to close the gap.</strong>`;
     } else {
       // What the campaigns still to come brought in last year, from this rep's own numbers
       const left = [1, 2, 3].filter(n => n > k);
-      const lastLeft = strictSum(left.map(n => ({ year: y - 1, n })), c => repTotalSales(r, c.year, c.n));
+      const lastLeft = sf ? null : strictSum(left.map(n => ({ year: y - 1, n })), c => repTotalSales(r, c.year, c.n));
       summary = `Projected below both prior years with ${remaining}.` +
         (lastLeft ? ` ${andList(left.map(n => `C${n}`))} brought in ${fmtCurrencyShort(lastLeft.cpo)} last year.` : '');
     }
@@ -3518,14 +3565,14 @@ function renderRepPacing() {
     vizHtml = `
       <div class="pace-viz">
         <div class="pace-track">
-          ${piece('pace-actual', `width:${actualPct.toFixed(2)}%`, `${y} through C${k}, actual: ${fmtCurrencyShort(ytd.cpo)}`)}
+          ${piece('pace-actual', `width:${actualPct.toFixed(2)}%`, `${y} through ${point}, actual: ${fmtCurrencyShort(ytd.cpo)}`)}
           ${piece('pace-proj', `left:${actualPct.toFixed(2)}%; width:${(projPct - actualPct).toFixed(2)}%`, `Projected finish ≈${fmtCurrencyShort(projected)}: an estimate from your pace, not a result`)}
           ${tick(fy_1 && fy_1.cpo, "'" + String(y - 1).slice(2), false, y - 1)}
           ${tick(fy_2 && fy_2.cpo, "'" + String(y - 2).slice(2), true, y - 2)}
         </div>
       </div>
       <div class="pace-legend">
-        <span class="li"><span class="sw actual"></span> ${y} through C${k} actual</span>
+        <span class="li"><span class="sw actual"></span> ${y} through ${point} actual</span>
         <span class="li"><span class="sw proj"></span> Projected remainder</span>
         <span class="li"><span class="sw tick"></span> Prior full-year finishes</span>
       </div>`;
@@ -3542,7 +3589,7 @@ function renderRepPacing() {
     <div class="pace-basis">${basisLabel}</div>
     ${vizHtml}
     <div class="pace-stats">
-      ${stat(`${y} through C${k} · Actual`, ytd.cpo !== null ? fmtCurrencyShort(ytd.cpo) : '—', ytd.cpo !== null && !ytd.blind ? ytd.orders + ' orders' : '')}
+      ${stat(`${y} through ${point} · Actual`, ytd.cpo !== null ? fmtCurrencyShort(ytd.cpo) : '—', ytd.cpo !== null && !ytd.blind ? ytd.orders + ' orders' : '')}
       ${stat(`Projected ${y}<span class="proj-tag">Projection</span>`, projected ? '≈' + fmtCurrencyShort(projected) : '—', `×${multiplier.toFixed(2)} · ${remaining}`, 'projected')}
       ${stat(`FY ${y - 1} · Actual`, fy_1 ? fmtCurrencyShort(fy_1.cpo) : '—', ordersOf(fy_1) === null ? '' : fy_1.orders + ' orders')}
       ${stat(`FY ${y - 2} · Actual`, fy_2 ? fmtCurrencyShort(fy_2.cpo) : '—', ordersOf(fy_2) === null ? '' : fy_2.orders + ' orders')}
@@ -3604,13 +3651,14 @@ function renderRepHistory() {
     : p.kind === 'year' && p.year === STATE.year;
   const fmt = v => m === 'orders' ? fmtInt(v) : fmtCurrency(v);
   const cell = (c, max) => {
-    const sf = !c.p && soFarIs(c.y, c.n) ? repSoFar(r, c.y) : null;
-    if (sf && m === 'event') {
-      const pv = repSoFar(r, c.y - 1);
-      const chg = !pv ? '' : pv.orders !== null && pv.orders < MIN_GROWTH_ORDERS ? smallBaseChip(pv.orders) : chipYoY(sf.cpo, pv.cpo, false, 0);
-      return `<td><div class="h-cell">${tipBtn('h-sf', fmtCurrency(sf.cpo), `C${c.n} ${c.y} so far (${SO_FAR.months}): event sales through last month${pv ? `, against ${fmtCurrency(pv.cpo)} in the same months of ${c.y - 1}` : ''}. The whole campaign lands ${CAMP_LANDS[c.n]}.`, `C${c.n} ${c.y} so far`)}<span class="h-sf-tag">so far · ${SO_FAR.months}</span>${chg}</div></td>`;
+    // The open campaign so far: its figure on every measure (Total and Orders count its event sales; 2026-11-04)
+    if (!c.p && soFarIs(c.y, c.n) && hasSoFar(c.y)) {
+      const st = repCampaign(r, c.y, 's').total_event, v = m === 'orders' ? st.orders : st.cpo;
+      const pst = hasSoFar(c.y - 1) ? repCampaign(r, c.y - 1, 's').total_event : null, pv = pst ? (m === 'orders' ? pst.orders : pst.cpo) : null;
+      const chg = !pv ? '' : pst.orders !== null && pst.orders < MIN_GROWTH_ORDERS ? smallBaseChip(pst.orders) : chipYoY(v, pv, false, 0);
+      const fmtV = m === 'orders' ? fmtInt(v) : fmtCurrency(v);
+      return `<td><div class="h-cell">${tipBtn('h-sf', fmtV, `C${c.n} ${c.y} so far (${SO_FAR.months}), event sales through last month${pv !== null && pst ? `, against ${m === 'orders' ? fmtInt(pv) + ' orders' : fmtCurrency(pv)} in the same months of ${c.y - 1}` : ''}. Outside-the-booth sales and the whole campaign land ${CAMP_LANDS[c.n]}.`, `C${c.n} ${c.y} so far`)}<span class="h-sf-tag">so far · ${SO_FAR.months}</span>${chg}</div></td>`;
     }
-    if (sf) return `<td><div class="h-cell">${tipBtn('h-off', '—', `C${c.n} ${c.y} so far (${SO_FAR.months}): ${fmtCurrency(sf.cpo)} in event sales. ${HIST_MEASURES.find(x => x.key === m).label} for C${c.n} lands ${CAMP_LANDS[c.n]}; switch to Event CPO to see it so far.`, `C${c.n} ${c.y}`)}</div></td>`;
     if (!c.p) return `<td><div class="h-cell">${tipBtn('h-off', '—', `C${c.n} ${c.y} closes ${CAMP_ENDS[c.n]}; its numbers land ${CAMP_LANDS[c.n]}`, `C${c.n} ${c.y}`)}</div></td>`;
     const val = c.v === null ? tipBtn('h-off', '—', histWhyNone(r, c.p, m), c.p.label)
       : `<button type="button" class="h-v" data-hy="${c.p.year}" data-hn="${c.p.kind === 'camp' ? c.p.n : ''}" aria-label="${c.p.label}: ${fmt(c.v)}. Opens its breakdown below">${fmt(c.v)}</button>`;
@@ -3638,7 +3686,7 @@ function renderRepHistory() {
   }));
   const sfNow = SO_FAR ? repSoFar(r, SO_FAR.year) : null, sfPrior = SO_FAR ? repSoFar(r, SO_FAR.year - 1) : null;
   document.getElementById('rh-note').textContent = (sfNow
-    ? `C${SO_FAR.campaign} ${SO_FAR.year} so far (${SO_FAR.months}): ${fmtCurrency(sfNow.cpo)} in event sales${sfPrior ? `, ${sfNow.cpo >= sfPrior.cpo ? 'up' : 'down'} from ${fmtCurrency(sfPrior.cpo)} in the same months of ${SO_FAR.year - 1}` : ''}. `
+    ? `C${SO_FAR.campaign} ${SO_FAR.year} so far (${SO_FAR.months}): ${fmtCurrency(sfNow.cpo)} in event sales${sfPrior ? `, ${sfNow.cpo >= sfPrior.cpo ? 'up' : 'down'} from ${fmtCurrency(sfPrior.cpo)} in the same months of ${SO_FAR.year - 1}` : ''}; ${SO_FAR.year}'s Year counts it, and each earlier Year it is compared with stops at the same point. `
     : '') + 'Each change is against the same campaign a year earlier. Tap a figure to see it broken down below.';
 }
 
@@ -4068,10 +4116,13 @@ function renderRepView() {
 // ==========================================================================
 function renderHeader() {
   if (CHOOSING) { document.getElementById('cp-line').textContent = 'Pick your name'; return; }
-  // A rep's own page: how fresh the numbers are, instead of the period line (the intake lands 8 days after a close)
+  // A rep's own page: how fresh the numbers are, instead of the period line. The intake runs the 8th of every month
+  // (2026-11-04): numbers through the end of a month land on the 8th of the next, so the next update is a month later.
   if (PERSONAL) {
+    const thru = SO_FAR ? new Date(SO_FAR.end + 'T12:00:00') : new Date(`${CAMP_ENDS[LATEST.campaign]}, ${LATEST.year} 12:00`);
+    const next = new Date(thru.getFullYear(), thru.getMonth() + 2, 8);
     document.getElementById('cp-line').textContent =
-      `Numbers through ${CAMP_ENDS[LATEST.campaign]}, ${LATEST.year} · next update ${CAMP_LANDS[LATEST.campaign % 3 + 1]}`;
+      `Numbers through ${thru.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })} · next update ${next.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}`;
     return;
   }
   let txt;
