@@ -962,6 +962,10 @@
   .h-bar span { display: block; height: 100%; background: var(--ember); opacity: 0.42; border-radius: 2px; }
   td.sel .h-bar span { opacity: 1; }
   .h-off { font-size: 13px; color: var(--ink-faint); }
+  /* The open campaign so far (2026-11-04): the figure is a tip, not a link (it has no breakdown yet), and says so */
+  .h-sf { appearance: none; border: 0; background: transparent; cursor: help; font-family: var(--ui); font-size: 15px;
+    font-weight: 600; color: var(--ink-faint); padding: 2px 6px; margin: -2px -6px; border-radius: 6px; }
+  .h-sf-tag { font-size: 11px; color: var(--ink-faint); white-space: nowrap; }
 
   /* Plan next year (2026-10-22): shows held steady, the rest sold outside the booth */
   .plan-card { padding: 18px 22px; }
@@ -1197,7 +1201,7 @@
     table.cat-table.hist th:first-child, table.cat-table.hist td.cat-name { width: 76px; padding-left: 12px; white-space: normal; }
     table.cat-table.hist td.cat-name .lb-why { white-space: nowrap; }
     table.cat-table.hist td.cat-name { font-size: 13px; }
-    table.cat-table.hist .h-v { font-size: 13px; }
+    table.cat-table.hist .h-v, table.cat-table.hist .h-sf { font-size: 13px; }
     table.cat-table.hist .chip { font-size: 11px; padding: 1px 6px; }
     .plan-card { padding: 16px 16px 14px; }
     .plan-sum { grid-template-columns: 1fr; }
@@ -1346,6 +1350,17 @@
     <div class="period-cards three" id="c-cards" role="tablist" aria-label="Campaign"></div>
   </div>
 
+  <!-- The open campaign so far (month to month, 2026-11-04): event sales through last month, against the same
+       months of last year. Hidden when data.js carries no so-far window. -->
+  <div class="card lb-card section" id="sf-lb" hidden>
+    <div class="lb-top">
+      <div class="lb-title">
+        <h2 id="sf-title">So far</h2>
+        <div class="lb-context" id="sf-context"></div>
+      </div>
+    </div>
+    <div id="sf-body"></div>
+  </div>
   <div class="section">
     <div class="sec-head">
       <div><h2 id="x-title">Year over Year</h2></div>
@@ -1573,6 +1588,18 @@ function campaignsForYear(y) { return CAMPAIGNS_AVAILABLE.filter(c => c.year ===
 const CAMP_YEARS = YEARS.filter(y => campaignsForYear(y).length > 0);
 const FIRST_YEAR = CAMP_YEARS[0], LAST_YEAR = CAMP_YEARS[CAMP_YEARS.length - 1];
 const yearClosed = y => campaignsForYear(y).length === 3;
+
+// The open campaign so far (month to month, Alan 2026-11-04): meta.so_far + reps[name].so_far[year], EVENT sales only,
+// from the campaign's first day through last month, with the same months of each earlier year. It is never in
+// CAMPAIGNS_AVAILABLE, so full years, pace, projections and Plan never count it; only the so-far pieces read it.
+const SO_FAR = META.so_far || null;
+const soFarIs = (y, n) => !!SO_FAR && SO_FAR.year === y && SO_FAR.campaign === n;
+function repSoFar(r, y) { const s = r && r.so_far && r.so_far[y]; return s && s.total_event && s.total_event.cpo !== null ? s.total_event : null; }
+function teamSoFar(y) {
+  let cpo = 0, orders = 0, any = false;
+  for (const name of MASTER) { const s = repSoFar(REPS[name], y); if (s) { any = true; cpo += s.cpo; orders += s.orders || 0; } }
+  return any ? { cpo, orders } : null;
+}
 
 // Phase 3 (2026-09-24): Total (a year, or all years) · Campaigns (one campaign) · Rep View (either).
 const STATE = {
@@ -2641,6 +2668,15 @@ function renderCampCards() {
   const y = STATE.camp.year, ns = campaignsForYear(y);
   const el = document.getElementById('c-cards');
   el.innerHTML = [1, 2, 3].map(n => {
+    if (!ns.includes(n) && soFarIs(y, n)) {
+      const cur = teamSoFar(y), prior = teamSoFar(y - 1);
+      return `<button type="button" class="pcard" disabled>
+        <div class="pc-top"><span class="pc-name">${CAMP_NAMES[n]}</span><span class="pc-tag open">${SO_FAR.months} · so far</span></div>
+        <div class="pc-val">${cur ? fmtCurrencyShort(cur.cpo) : '—'}</div>
+        <div class="pc-sub">Event CPO so far · ${cur ? fmtInt(cur.orders) + ' orders' : '—'}<br>Closes ${CAMP_ENDS[n]} · full numbers after ${CAMP_LANDS[n]}</div>
+        <div class="pc-foot">${cur && prior ? `${chipYoY(cur.cpo, prior.cpo)}<span>vs ${SO_FAR.months} ${y - 1} · ${fmtCurrencyShort(prior.cpo)}</span>` : '<span>first year on file</span>'}</div>
+      </button>`;
+    }
     if (!ns.includes(n)) {
       return `<button type="button" class="pcard" disabled>
         <div class="pc-top"><span class="pc-name">${CAMP_NAMES[n]}</span><span class="pc-tag open">${CAMP_WINDOWS[n]} · open</span></div>
@@ -2697,10 +2733,49 @@ function renderCompareGrid() {
   notes.push(reconcileNote(cols.map(c => c.period)));
   document.getElementById('x-grid-note').textContent = notes.join(' ');
 }
+// The so-far leaderboard: every core rep's event CPO this campaign so far, against the same months a year earlier.
+function renderSoFar() {
+  const card = document.getElementById('sf-lb');
+  card.hidden = !SO_FAR;
+  if (!SO_FAR) return;
+  const y = SO_FAR.year, n = SO_FAR.campaign, py = y - 1, hasPrior = SO_FAR.years.includes(py);
+  document.getElementById('sf-title').textContent = `${CAMP_NAMES[n]} ${y} so far`;
+  const rows = MASTER.map(name => ({ rep: REPS[name], cur: repSoFar(REPS[name], y), prior: repSoFar(REPS[name], py) }))
+    .filter(x => x.rep && x.cur && x.cur.cpo > 0).sort((a, b) => b.cur.cpo - a.cur.cpo);
+  const team = teamSoFar(y), tPrior = hasPrior ? teamSoFar(py) : null;
+  document.getElementById('sf-context').innerHTML =
+    `<strong>Event CPO</strong> · ${SO_FAR.months} ${y}${hasPrior ? ` vs ${SO_FAR.months} ${py}` : ''} · ${rows.length} of ${MASTER.length} reps`;
+  const body = document.getElementById('sf-body');
+  if (!rows.length) { body.innerHTML = `<div class="lb-empty">No event sales on file for ${SO_FAR.months} ${y} yet.</div>`; return; }
+  const max = rows[0].cur.cpo;
+  let html = `<div class="lb-scroll"><table class="leaderboard"><thead><tr>
+    <th style="text-align:center;">#</th><th>Rep</th><th class="bar-h"></th>
+    <th class="num">${SO_FAR.months} ${y}</th>
+    ${hasPrior ? `<th class="num prior-h">${SO_FAR.months} ${py}</th><th class="num g-col">Growth</th>` : ''}
+  </tr></thead><tbody>`;
+  rows.forEach((x, i) => {
+    const base = x.prior ? x.prior.orders : null;
+    const delta = !x.prior ? '' : base !== null && base < MIN_GROWTH_ORDERS ? smallBaseChip(base) : fmtYoY(x.cur.cpo, x.prior.cpo);
+    html += `<tr class="${[x.rep.name === STATE.selectedRep ? 'is-self' : '', i < 3 ? 'top3' : ''].filter(Boolean).join(' ')}" data-rep="${x.rep.name}" title="Open ${x.rep.name} in Rep View">
+      <td class="rank">${i + 1}</td>
+      <td class="name"><button type="button" class="rep-link">${x.rep.name}</button></td>
+      <td class="bar-cell"><div class="lb-track"><div class="lb-fill" style="width:${Math.max(1.5, x.cur.cpo / max * 100).toFixed(1)}%"></div></div></td>
+      <td class="num cur">${fmtCurrency(x.cur.cpo)}</td>
+      ${hasPrior ? `<td class="num prior">${x.prior ? fmtCurrency(x.prior.cpo) : '—'}</td><td class="growth-cell">${delta}</td>` : ''}
+    </tr>`;
+  });
+  html += `</tbody></table></div>
+    <div class="lb-foot">Team: ${fmtCurrency(team ? team.cpo : 0)} event CPO so far${tPrior ? `, ${fmtYoY(team.cpo, tPrior.cpo)} vs the same months of ${py}` : ''}. Event sales only, from VectorConnect through ${new Date(SO_FAR.end + 'T12:00:00').toLocaleDateString('en-US', { month: 'long', day: 'numeric' })}; refreshed on the 8th of every month. Total CPO and the full campaign land ${CAMP_LANDS[n]}.</div>`;
+  morph(body, () => { body.innerHTML = html; });
+  body.querySelectorAll('tbody tr').forEach(tr => tr.addEventListener('click', () => {
+    STATE.selectedRep = tr.dataset.rep; STATE.chartMetric = null; renderAll(); switchView('rep', true);
+  }));
+}
 function renderCampaignsView() {
   document.getElementById('c-title').textContent = `Campaigns · ${STATE.camp.year}`;
   renderCampYears();
   renderCampCards();
+  renderSoFar();
   renderCompareGrid();
   renderLeaderboard('c');
   renderCategoryMix('c', campPeriodSel());
@@ -3529,6 +3604,13 @@ function renderRepHistory() {
     : p.kind === 'year' && p.year === STATE.year;
   const fmt = v => m === 'orders' ? fmtInt(v) : fmtCurrency(v);
   const cell = (c, max) => {
+    const sf = !c.p && soFarIs(c.y, c.n) ? repSoFar(r, c.y) : null;
+    if (sf && m === 'event') {
+      const pv = repSoFar(r, c.y - 1);
+      const chg = !pv ? '' : pv.orders !== null && pv.orders < MIN_GROWTH_ORDERS ? smallBaseChip(pv.orders) : chipYoY(sf.cpo, pv.cpo, false, 0);
+      return `<td><div class="h-cell">${tipBtn('h-sf', fmtCurrency(sf.cpo), `C${c.n} ${c.y} so far (${SO_FAR.months}): event sales through last month${pv ? `, against ${fmtCurrency(pv.cpo)} in the same months of ${c.y - 1}` : ''}. The whole campaign lands ${CAMP_LANDS[c.n]}.`, `C${c.n} ${c.y} so far`)}<span class="h-sf-tag">so far · ${SO_FAR.months}</span>${chg}</div></td>`;
+    }
+    if (sf) return `<td><div class="h-cell">${tipBtn('h-off', '—', `C${c.n} ${c.y} so far (${SO_FAR.months}): ${fmtCurrency(sf.cpo)} in event sales. ${HIST_MEASURES.find(x => x.key === m).label} for C${c.n} lands ${CAMP_LANDS[c.n]}; switch to Event CPO to see it so far.`, `C${c.n} ${c.y}`)}</div></td>`;
     if (!c.p) return `<td><div class="h-cell">${tipBtn('h-off', '—', `C${c.n} ${c.y} closes ${CAMP_ENDS[c.n]}; its numbers land ${CAMP_LANDS[c.n]}`, `C${c.n} ${c.y}`)}</div></td>`;
     const val = c.v === null ? tipBtn('h-off', '—', histWhyNone(r, c.p, m), c.p.label)
       : `<button type="button" class="h-v" data-hy="${c.p.year}" data-hn="${c.p.kind === 'camp' ? c.p.n : ''}" aria-label="${c.p.label}: ${fmt(c.v)}. Opens its breakdown below">${fmt(c.v)}</button>`;
@@ -3554,7 +3636,10 @@ function renderRepHistory() {
     if (!document.querySelector('#ch-why details[open]')) document.getElementById('more-comp').open = true;
     jumpTo('ch-why');
   }));
-  document.getElementById('rh-note').textContent = 'Each change is against the same campaign a year earlier. Tap a figure to see it broken down below.';
+  const sfNow = SO_FAR ? repSoFar(r, SO_FAR.year) : null, sfPrior = SO_FAR ? repSoFar(r, SO_FAR.year - 1) : null;
+  document.getElementById('rh-note').textContent = (sfNow
+    ? `C${SO_FAR.campaign} ${SO_FAR.year} so far (${SO_FAR.months}): ${fmtCurrency(sfNow.cpo)} in event sales${sfPrior ? `, ${sfNow.cpo >= sfPrior.cpo ? 'up' : 'down'} from ${fmtCurrency(sfPrior.cpo)} in the same months of ${SO_FAR.year - 1}` : ''}. `
+    : '') + 'Each change is against the same campaign a year earlier. Tap a figure to see it broken down below.';
 }
 
 // ==========================================================================
