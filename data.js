@@ -76,6 +76,17 @@ window.DASHBOARD_DATA = {
       "total_sales": true
     },
     "universe": "master-list",
+    "standings": {
+      "tab_week": "202644",
+      "week_date": "2026-11-06",
+      "year": 2026,
+      "reps": [
+        "Craig Coker",
+        "Jeremy Katen",
+        "Rob Lord",
+        "Roman Earhart"
+      ]
+    },
     "products": {
       "file": "product_growth-2026-09-28.xlsx",
       "as_of": "2026-09-28",
@@ -6450,6 +6461,14 @@ window.DASHBOARD_DATA = {
             "events": 0
           }
         }
+      },
+      "standings_ytd": {
+        "2026": {
+          "cpo": 2843.25,
+          "tab_week": "202644",
+          "week_date": "2026-11-06",
+          "list": "CSP Candidates"
+        }
       }
     },
     "Eli Camacho": {
@@ -9198,6 +9217,14 @@ window.DASHBOARD_DATA = {
             "events": 4
           },
           "source": "rep-pass"
+        }
+      },
+      "standings_ytd": {
+        "2026": {
+          "cpo": 356227,
+          "tab_week": "202644",
+          "week_date": "2026-11-06",
+          "list": "CSPs Combined"
         }
       }
     },
@@ -15339,6 +15366,14 @@ window.DASHBOARD_DATA = {
           },
           "source": "rep-pass"
         }
+      },
+      "standings_ytd": {
+        "2026": {
+          "cpo": 52071,
+          "tab_week": "202644",
+          "week_date": "2026-11-06",
+          "list": "CSPs Combined"
+        }
       }
     },
     "Roman Earhart": {
@@ -16226,6 +16261,14 @@ window.DASHBOARD_DATA = {
             "events": 4
           },
           "source": "rep-pass"
+        }
+      },
+      "standings_ytd": {
+        "2026": {
+          "cpo": 148167.25,
+          "tab_week": "202644",
+          "week_date": "2026-11-06",
+          "list": "CSPs Combined"
         }
       }
     },
