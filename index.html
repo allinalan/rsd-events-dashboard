@@ -1577,6 +1577,20 @@ const INDIVIDUAL = (META.intake && META.intake.individual_total_sales && META.in
 // while every other figure ends with a month.
 const STANDINGS = META.standings || null;
 function repStandings(r, y) { const s = r && r.standings_ytd && r.standings_ytd[y]; return s && typeof s.cpo === 'number' ? s : null; }
+// The rep's own page (Alan, 2026-11-09: "his normal page ... should show his total sales (even if i do not have their
+// campaign 2 sales) ... what he sold outside the booth for this year"): for a year with no Total Sales on file, the
+// standings figure stands in as that year's Total, and outside the booth is it minus the event sales on file. Only the
+// rep page calls these; team totals, rankings and team averages keep pSales / pNonEvent, so the figure stays out of them.
+function repStYear(r, p) { return p && p.kind === 'year' && !pSales(r, p) ? repStandings(r, p.year) : null; }
+function rSales(r, p) {
+  const s = pSales(r, p); if (s) return s;
+  const st = repStYear(r, p); return st ? { cpo: st.cpo, orders: null, events: 0, standings: st } : null;
+}
+function rNonEvent(r, p) {
+  const st = repStYear(r, p); if (!st) return pNonEvent(r, p);
+  const ev = pEvent(r, p), cpo = st.cpo - (ev ? ev.cpo : 0);
+  return cpo >= 0 ? { cpo, orders: null, events: 0, standings: st } : null;   // event sales above it: say nothing
+}
 const stWeek = s => { const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec((s && s.week_date) || ''); return m ? `${['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'][+m[2] - 1]} ${+m[3]}` : `tab week ${s && s.tab_week}`; };
 
 // Campaigns present in data.js (written by the intake), e.g. ["2024-C1", …, "2026-C2"].
@@ -2841,6 +2855,8 @@ function renderCampaignsView() {
 function repHero(r, p) {
   const s = pSales(r, p);
   if (s) return { metric: 'total_sales', label: 'Total CPO', stats: s };
+  const st = rSales(r, p);
+  if (st) return { metric: 'total_sales', label: `Total CPO · VectorConnect, week of ${stWeek(st.standings)}`, stats: st, standings: st.standings };
   return { metric: 'total_event', label: 'Event CPO', stats: pEvent(r, p), fallback: true };
 }
 function prevCampaignOf(p) {
@@ -2879,6 +2895,11 @@ const campsLeft = y => { const k = campaignsForYear(y).length; return [1, 2, 3].
 const andList = xs => xs.length < 2 ? xs.join('') : `${xs.slice(0, -1).join(', ')} and ${xs[xs.length - 1]}`;
 function glanceSentence(r, y, hero, cur) {
   if (cur === null) return `No ${y} sales on file yet.`;
+  if (hero.standings) {
+    const ev = pEvent(r, periodYear(y)), ne = rNonEvent(r, periodYear(y));
+    return `Your ${y} Total so far, from VectorConnect's CSP standings: ` +
+      (ne ? `${fmtCurrencyShort(ev ? ev.cpo : 0)} at events and ${fmtCurrencyShort(ne.cpo)} outside the booth.` : `${fmtCurrencyShort(ev ? ev.cpo : 0)} of it at events.`);
+  }
   if (hero.fallback) {
     const miss = campaignsForYear(y).filter(n => !repTotalSales(r, y, n)).map(n => `C${n}`);
     const st = repStandings(r, y);
@@ -2901,7 +2922,7 @@ function glanceSentence(r, y, hero, cur) {
     : `${y - 1} finished at ${fmtCurrencyShort(prev.cpo)}, with ${leftTxt} still to come.`;
 }
 function glanceFacts(r, y, hero) {
-  const rank = repRank(r.name, hero.metric, periodYear(y));
+  const rank = repRank(r.name, hero.standings ? 'total_event' : hero.metric, periodYear(y));   // the standings figure is never ranked
   const prev = pSales(r, periodYear(y - 1));
   const pace = yearClosed(y) ? null : repPace(r, y).projected;
   let best = null;
@@ -2910,7 +2931,7 @@ function glanceFacts(r, y, hero) {
     if (s && (!best || s.cpo > best.cpo)) best = { cpo: s.cpo, label: `C${c.n} ${c.year}` };
   }
   const fact = (v, l) => `<div class="g-fact"><div class="fv">${v}</div><div class="fl">${l}</div></div>`;
-  return fact(rank ? `#${rank.rank} <small>of ${rank.total}</small>` : '—', hero.fallback ? 'Team rank, event sales' : 'Team rank') +
+  return fact(rank ? `#${rank.rank} <small>of ${rank.total}</small>` : '—', hero.fallback || hero.standings ? 'Team rank, event sales' : 'Team rank') +
     (yearClosed(y) ? fact(prev ? fmtCurrencyShort(prev.cpo) : '—', `${y - 1} total`)
       : fact(pace ? '≈ ' + fmtCurrencyShort(pace) : '—', 'On pace for')) +
     fact(best ? fmtCurrencyShort(best.cpo) : '—', best ? `Best campaign, ${best.label}` : 'Best campaign');
@@ -2980,7 +3001,8 @@ function renderRepScorecard() {
 
 function renderRepMinis() {
   const r = REPS[STATE.selectedRep];
-  const p = repPeriod(), hero = repHero(r, p);
+  const p = repPeriod(), hero0 = repHero(r, p);
+  const hero = hero0.standings ? { metric: 'total_event', label: 'Event CPO', stats: pEvent(r, p), fallback: true } : hero0;   // no order count in the standings
   const cmp = compareFor(p, metricFamily(hero.metric));
   const cur = hero.stats;
   const priorS = cmp ? metricStats(r, cmp.period, hero.metric) : null;
@@ -3139,7 +3161,9 @@ function findBiggestOpportunity(rep, p, hero) {
 
 function renderRepSummary() {
   const r = REPS[STATE.selectedRep];
-  const p = periodYear(LAST_YEAR), hero = repHero(r, p);   // part of What's next: always this year
+  const p = periodYear(LAST_YEAR), hero0 = repHero(r, p);   // part of What's next: always this year
+  // the standings Total is never ranked or set against the team: these notes read event sales for that rep
+  const hero = hero0.standings ? { metric: 'total_event', label: 'Event CPO', stats: pEvent(r, p), fallback: true } : hero0;
   const cmp = compareFor(p, metricFamily(hero.metric));
   const cmpTxt = cmp ? cmpLabel(cmp, 'sales') : '';
   const cur = hero.stats ? hero.stats.cpo : null;
@@ -3211,12 +3235,16 @@ function renderRepSummary() {
     }
   }
 
+  // The standings stand in for this year's Total (2026-11-09): say where it comes from
+  if (hero0.standings) {
+    const st = hero0.standings, miss = campaignsForYear(p.year).filter(n => !repTotalSales(r, p.year, n)).map(n => `C${n}`);
+    callouts.push({ type: 'watch', title: `${p.year} Total from VectorConnect: ${fmtMoneyFit(st.cpo)}`, body: `Your Total here is from VectorConnect's CSP standings (week of ${stWeek(st)}), and outside the booth is that minus your event sales on file. Your ${andList(miss) || 'campaign'} Total Sales hasn't come in yet, so there's no order count for it.` });
+  }
   // Pending uploads note
   if (PENDING.includes(STATE.selectedRep)) {
     // All years adds up what is on file, so say which year it is missing.
     const gap = p.kind === 'all' ? p.years.filter(y => !pSales(r, periodYear(y)) && pEvent(r, periodYear(y))) : [];
-    const st = repStandings(r, p.year || STATE.season);
-    if (!pSales(r, p) && st) callouts.push({ type: 'watch', title: `${p.year || STATE.season} year to date: ${fmtMoneyFit(st.cpo)}`, body: `That is your Total on VectorConnect's CSP standings (week of ${stWeek(st)}). Your Total Sales by campaign is still pending, so Total CPO and Non-Event CPO here stay blank until it arrives; the standings keep no earlier years to compare with.` });
+    if (hero0.standings) { /* said above */ }
     else if (!pSales(r, p)) callouts.push({ type: 'watch', title: 'Total Sales pending', body: `Your Total Sales for ${p.label} is pending individual upload. Total CPO and Non-Event CPO will render once it arrives.` });
     else if (gap.length) callouts.push({ type: 'watch', title: 'Total Sales pending', body: `Total CPO here leaves out ${gap.join(' and ')}: your Total Sales for ${gap.length > 1 ? 'those years' : 'that year'} is pending individual upload.` });
   }
@@ -3275,7 +3303,7 @@ function renderRepComposition() {
   document.getElementById('comp-scope').textContent = `${p.label}${cmpE ? ' vs ' + cmpE.period.label : ''}`;
 
   const totEvt = pEvent(r, p);
-  const nonEvt = pNonEvent(r, p);
+  const nonEvt = rNonEvent(r, p);
   const evtV = (totEvt && totEvt.cpo) || 0;
   const nonV = (nonEvt && nonEvt.cpo) || 0;
   const splitTotal = evtV + nonV;
@@ -3344,7 +3372,7 @@ function renderRepBuckets() {
   const teamAvgTotEvt = teamAvg('total_event', p);
   const vsTeamTotEvt = (totEvtCur && teamAvgTotEvt) ? ((totEvtCur.cpo - teamAvgTotEvt) / teamAvgTotEvt * 100) : null;
 
-  const nonEvtCur = pNonEvent(r, p);
+  const nonEvtCur = rNonEvent(r, p);
   const nonEvtPrior = cmpS ? pNonEvent(r, cmpS.period) : null;
   const teamAvgNonEvt = teamAvg('bucket:Non-Event CPO', p);
   const vsTeamNonEvt = (nonEvtCur && teamAvgNonEvt) ? ((nonEvtCur.cpo - teamAvgNonEvt) / teamAvgNonEvt * 100) : null;
@@ -4053,13 +4081,13 @@ function niceCeil(v) {
 // One plain sentence opens each chapter, so scrolling alone reads as a story, with nothing opened. Fixed rules, no model.
 function storyHow(r) {
   const y = LAST_YEAR, hero = repHero(r, periodYear(y));
-  const val = (yy, n) => { const s = hero.fallback ? repTotalEvent(r, yy, n) : repTotalSales(r, yy, n); return s ? s.cpo : null; };
+  const val = (yy, n) => { const s = hero.fallback || hero.standings ? repTotalEvent(r, yy, n) : repTotalSales(r, yy, n); return s ? s.cpo : null; };
   const ns = campaignsForYear(y).filter(n => val(y, n) !== null);
   if (!ns.length) return `No ${y} campaigns on file yet.`;
   const L = ns.filter(n => val(y - 1, n) !== null);
   if (!L.length) return `This is your first year on file, so there's no last year to compare with yet.`;
   const names = xs => andList(xs.map(n => `C${n}`));
-  const in_ = hero.fallback ? ' in event sales' : '';
+  const in_ = hero.fallback || hero.standings ? ' in event sales' : '';
   // "Best" only reaches back as far as the data does, so it says how far
   const best = L.every(n => CAMP_YEARS.filter(yy => yy < y).every(yy => { const v = val(yy, n); return v === null || val(y, n) >= v; }));
   if (best) return L.length === 3 ? `All three campaigns were your best since ${FIRST_YEAR}${in_}.`
@@ -4071,7 +4099,7 @@ function storyHow(r) {
   return `${names(ups)} beat last year; ${names(downs)} came in under${in_}.`;
 }
 function storyWhy(r) {
-  const p = repPeriod(), s = pSales(r, p), e = pEvent(r, p), ne = pNonEvent(r, p);
+  const p = repPeriod(), s = rSales(r, p), e = pEvent(r, p), ne = rNonEvent(r, p);
   const lead = p.kind === 'year' && p.year === LAST_YEAR ? '' : `In ${p.label}, `;
   if (!s) return e ? `${lead}${fmtCurrencyShort(e.cpo)} at events. Outside the booth shows once your Total Sales comes in.` : `No sales on file for ${p.label}.`;
   const evPct = s.cpo > 0 ? Math.min(100, Math.round((e ? e.cpo : 0) / s.cpo * 100)) : 0;
@@ -4111,10 +4139,10 @@ function renderRepStory() {
   const pace = repPace(r, LAST_YEAR).projected;
   set('mv-pace', !yearClosed(LAST_YEAR) && pace ? `≈ ${fmtCurrencyShort(pace)}` : '');
   set('mv-trend', `${FIRST_YEAR}–${LAST_YEAR}`);
-  const e = pEvent(r, p), ne = pNonEvent(r, p);
+  const e = pEvent(r, p), ne = rNonEvent(r, p);
   set('mv-comp', ne && (!e || ne.cpo > e.cpo) ? `${fmtCurrencyShort(ne.cpo)} outside` : e ? `${fmtCurrencyShort(e.cpo)} at events` : '');
-  const hero = repHero(r, p), orders = ordersOf(hero.stats), sh = pShifts(r, p), c = sh && sh.combined;
-  set('mv-orders', [orders === null ? '' : `${orders.toLocaleString()} ${hero.fallback ? 'event ' : ''}orders`, c && c.shifts ? `${c.shifts} shift${c.shifts === 1 ? '' : 's'}` : ''].filter(Boolean).join(' · '));
+  const hero = repHero(r, p), ev = hero.standings, orders = ordersOf(ev ? e : hero.stats), sh = pShifts(r, p), c = sh && sh.combined;
+  set('mv-orders', [orders === null ? '' : `${orders.toLocaleString()} ${hero.fallback || ev ? 'event ' : ''}orders`, c && c.shifts ? `${c.shifts} shift${c.shifts === 1 ? '' : 's'}` : ''].filter(Boolean).join(' · '));
 }
 
 function renderRepView() {
