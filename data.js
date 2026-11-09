@@ -1,6 +1,6 @@
 window.DASHBOARD_DATA = {
   "meta": {
-    "generated_at": "2026-09-08T23:46:03",
+    "generated_at": "2026-11-08T06:07:52",
     "master_list": [
       "Adam Conroy",
       "Adam Jeffrey",
@@ -60,6 +60,21 @@ window.DASHBOARD_DATA = {
       "2026-C1",
       "2026-C2"
     ],
+    "so_far": {
+      "year": 2026,
+      "campaign": 3,
+      "through": "2026-10",
+      "start": "2026-09-01",
+      "end": "2026-10-31",
+      "months": "Sep–Oct",
+      "years": [
+        2024,
+        2025,
+        2026
+      ],
+      "pulled_at": "2026-11-08T06:02:47-07:00",
+      "total_sales": true
+    },
     "universe": "master-list",
     "products": {
       "file": "product_growth-2026-09-28.xlsx",
@@ -932,6 +947,143 @@ window.DASHBOARD_DATA = {
             "orders": 7
           }
         }
+      },
+      "so_far": {
+        "2024": {
+          "buckets": {
+            "Event (Traditional)": {
+              "cpo": 35571.5,
+              "orders": 55,
+              "events": 9
+            },
+            "Service Event": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Industry Event": {
+              "cpo": 22500,
+              "orders": 12,
+              "events": 3
+            },
+            "Realtor": {
+              "cpo": 2406,
+              "orders": 4,
+              "events": 3
+            },
+            "Mall": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Federal": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            }
+          },
+          "total_event": {
+            "cpo": 60477.5,
+            "orders": 71,
+            "events": 15
+          },
+          "source": "rep-pass",
+          "total_sales": {
+            "cpo": 108923.25,
+            "orders": 108,
+            "events": 0
+          }
+        },
+        "2025": {
+          "buckets": {
+            "Event (Traditional)": {
+              "cpo": 20463.25,
+              "orders": 38,
+              "events": 6
+            },
+            "Service Event": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Industry Event": {
+              "cpo": 43988,
+              "orders": 16,
+              "events": 7
+            },
+            "Realtor": {
+              "cpo": 4952,
+              "orders": 4,
+              "events": 2
+            },
+            "Mall": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Federal": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            }
+          },
+          "total_event": {
+            "cpo": 69403.25,
+            "orders": 58,
+            "events": 15
+          },
+          "source": "rep-pass",
+          "total_sales": {
+            "cpo": 152828.5,
+            "orders": 90,
+            "events": 0
+          }
+        },
+        "2026": {
+          "buckets": {
+            "Event (Traditional)": {
+              "cpo": 10409,
+              "orders": 16,
+              "events": 5
+            },
+            "Service Event": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Industry Event": {
+              "cpo": 39161,
+              "orders": 20,
+              "events": 11
+            },
+            "Realtor": {
+              "cpo": 8768,
+              "orders": 7,
+              "events": 3
+            },
+            "Mall": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Federal": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            }
+          },
+          "total_event": {
+            "cpo": 58338,
+            "orders": 43,
+            "events": 19
+          },
+          "source": "rep-pass",
+          "total_sales": {
+            "cpo": 91007,
+            "orders": 65,
+            "events": 0
+          }
+        }
       }
     },
     "Adam Jeffrey": {
@@ -1726,6 +1878,143 @@ window.DASHBOARD_DATA = {
             "qty": 5,
             "cpo": 1508,
             "orders": 4
+          }
+        }
+      },
+      "so_far": {
+        "2024": {
+          "buckets": {
+            "Event (Traditional)": {
+              "cpo": 9341,
+              "orders": 15,
+              "events": 5
+            },
+            "Service Event": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Industry Event": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Realtor": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Mall": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Federal": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            }
+          },
+          "total_event": {
+            "cpo": 9341,
+            "orders": 15,
+            "events": 5
+          },
+          "source": "division-pass",
+          "total_sales": {
+            "cpo": 16604,
+            "orders": 26,
+            "events": 0
+          }
+        },
+        "2025": {
+          "buckets": {
+            "Event (Traditional)": {
+              "cpo": 11288.5,
+              "orders": 18,
+              "events": 4
+            },
+            "Service Event": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Industry Event": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Realtor": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Mall": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Federal": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            }
+          },
+          "total_event": {
+            "cpo": 11288.5,
+            "orders": 18,
+            "events": 4
+          },
+          "source": "division-pass",
+          "total_sales": {
+            "cpo": 11487.5,
+            "orders": 22,
+            "events": 0
+          }
+        },
+        "2026": {
+          "buckets": {
+            "Event (Traditional)": {
+              "cpo": 22156,
+              "orders": 23,
+              "events": 7
+            },
+            "Service Event": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Industry Event": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Realtor": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Mall": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Federal": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            }
+          },
+          "total_event": {
+            "cpo": 22156,
+            "orders": 23,
+            "events": 7
+          },
+          "source": "division-pass",
+          "total_sales": {
+            "cpo": 27464,
+            "orders": 28,
+            "events": 0
           }
         }
       }
@@ -2524,6 +2813,143 @@ window.DASHBOARD_DATA = {
             "orders": 13
           }
         }
+      },
+      "so_far": {
+        "2024": {
+          "buckets": {
+            "Event (Traditional)": {
+              "cpo": 39301.75,
+              "orders": 79,
+              "events": 10
+            },
+            "Service Event": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Industry Event": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Realtor": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Mall": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Federal": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            }
+          },
+          "total_event": {
+            "cpo": 39301.75,
+            "orders": 79,
+            "events": 10
+          },
+          "source": "rep-pass",
+          "total_sales": {
+            "cpo": 46713.75,
+            "orders": 97,
+            "events": 0
+          }
+        },
+        "2025": {
+          "buckets": {
+            "Event (Traditional)": {
+              "cpo": 31952.75,
+              "orders": 50,
+              "events": 8
+            },
+            "Service Event": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Industry Event": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Realtor": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Mall": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Federal": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            }
+          },
+          "total_event": {
+            "cpo": 31952.75,
+            "orders": 50,
+            "events": 8
+          },
+          "source": "rep-pass",
+          "total_sales": {
+            "cpo": 73590.25,
+            "orders": 80,
+            "events": 0
+          }
+        },
+        "2026": {
+          "buckets": {
+            "Event (Traditional)": {
+              "cpo": 40711,
+              "orders": 57,
+              "events": 7
+            },
+            "Service Event": {
+              "cpo": 1053,
+              "orders": 4,
+              "events": 2
+            },
+            "Industry Event": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Realtor": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Mall": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Federal": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            }
+          },
+          "total_event": {
+            "cpo": 41764,
+            "orders": 61,
+            "events": 9
+          },
+          "source": "rep-pass",
+          "total_sales": {
+            "cpo": 63960,
+            "orders": 71,
+            "events": 0
+          }
+        }
       }
     },
     "Alec Luyendyk": {
@@ -3320,6 +3746,143 @@ window.DASHBOARD_DATA = {
             "orders": 7
           }
         }
+      },
+      "so_far": {
+        "2024": {
+          "buckets": {
+            "Event (Traditional)": {
+              "cpo": 55786,
+              "orders": 73,
+              "events": 9
+            },
+            "Service Event": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Industry Event": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Realtor": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Mall": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Federal": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            }
+          },
+          "total_event": {
+            "cpo": 55786,
+            "orders": 73,
+            "events": 9
+          },
+          "source": "rep-pass",
+          "total_sales": {
+            "cpo": 66018,
+            "orders": 82,
+            "events": 0
+          }
+        },
+        "2025": {
+          "buckets": {
+            "Event (Traditional)": {
+              "cpo": 20500,
+              "orders": 23,
+              "events": 3
+            },
+            "Service Event": {
+              "cpo": 131,
+              "orders": 1,
+              "events": 1
+            },
+            "Industry Event": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Realtor": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Mall": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Federal": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            }
+          },
+          "total_event": {
+            "cpo": 20631,
+            "orders": 24,
+            "events": 4
+          },
+          "source": "rep-pass",
+          "total_sales": {
+            "cpo": 46411.25,
+            "orders": 59,
+            "events": 0
+          }
+        },
+        "2026": {
+          "buckets": {
+            "Event (Traditional)": {
+              "cpo": 5885,
+              "orders": 11,
+              "events": 5
+            },
+            "Service Event": {
+              "cpo": 9814,
+              "orders": 14,
+              "events": 3
+            },
+            "Industry Event": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Realtor": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Mall": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Federal": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            }
+          },
+          "total_event": {
+            "cpo": 15699,
+            "orders": 25,
+            "events": 8
+          },
+          "source": "rep-pass",
+          "total_sales": {
+            "cpo": 24347,
+            "orders": 49,
+            "events": 0
+          }
+        }
       }
     },
     "Cameron Couts": {
@@ -3956,6 +4519,143 @@ window.DASHBOARD_DATA = {
             "cpo": 17216,
             "orders": 43,
             "avg": 956.4444444444445
+          }
+        }
+      },
+      "so_far": {
+        "2024": {
+          "buckets": {
+            "Event (Traditional)": {
+              "cpo": 5203,
+              "orders": 11,
+              "events": 6
+            },
+            "Service Event": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Industry Event": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Realtor": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Mall": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Federal": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            }
+          },
+          "total_event": {
+            "cpo": 5203,
+            "orders": 11,
+            "events": 6
+          },
+          "source": "rep-pass",
+          "total_sales": {
+            "cpo": 21176,
+            "orders": 39,
+            "events": 0
+          }
+        },
+        "2025": {
+          "buckets": {
+            "Event (Traditional)": {
+              "cpo": 11240,
+              "orders": 21,
+              "events": 3
+            },
+            "Service Event": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Industry Event": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Realtor": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Mall": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Federal": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            }
+          },
+          "total_event": {
+            "cpo": 11240,
+            "orders": 21,
+            "events": 3
+          },
+          "source": "rep-pass",
+          "total_sales": {
+            "cpo": 25107.75,
+            "orders": 43,
+            "events": 0
+          }
+        },
+        "2026": {
+          "buckets": {
+            "Event (Traditional)": {
+              "cpo": 16320.5,
+              "orders": 36,
+              "events": 5
+            },
+            "Service Event": {
+              "cpo": 191,
+              "orders": 1,
+              "events": 1
+            },
+            "Industry Event": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Realtor": {
+              "cpo": 166,
+              "orders": 1,
+              "events": 1
+            },
+            "Mall": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Federal": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            }
+          },
+          "total_event": {
+            "cpo": 16677.5,
+            "orders": 38,
+            "events": 7
+          },
+          "source": "rep-pass",
+          "total_sales": {
+            "cpo": 20487.5,
+            "orders": 49,
+            "events": 0
           }
         }
       }
@@ -4744,6 +5444,143 @@ window.DASHBOARD_DATA = {
             "orders": 12
           }
         }
+      },
+      "so_far": {
+        "2024": {
+          "buckets": {
+            "Event (Traditional)": {
+              "cpo": 6752,
+              "orders": 14,
+              "events": 1
+            },
+            "Service Event": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Industry Event": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Realtor": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Mall": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Federal": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            }
+          },
+          "total_event": {
+            "cpo": 6752,
+            "orders": 14,
+            "events": 1
+          },
+          "source": "division-pass",
+          "total_sales": {
+            "cpo": 42176.75,
+            "orders": 62,
+            "events": 0
+          }
+        },
+        "2025": {
+          "buckets": {
+            "Event (Traditional)": {
+              "cpo": 9551,
+              "orders": 13,
+              "events": 1
+            },
+            "Service Event": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Industry Event": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Realtor": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Mall": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Federal": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            }
+          },
+          "total_event": {
+            "cpo": 9551,
+            "orders": 13,
+            "events": 1
+          },
+          "source": "division-pass",
+          "total_sales": {
+            "cpo": 23373.75,
+            "orders": 47,
+            "events": 0
+          }
+        },
+        "2026": {
+          "buckets": {
+            "Event (Traditional)": {
+              "cpo": 0,
+              "orders": 0,
+              "events": 0
+            },
+            "Service Event": {
+              "cpo": 0,
+              "orders": 0,
+              "events": 0
+            },
+            "Industry Event": {
+              "cpo": 0,
+              "orders": 0,
+              "events": 0
+            },
+            "Realtor": {
+              "cpo": 0,
+              "orders": 0,
+              "events": 0
+            },
+            "Mall": {
+              "cpo": 0,
+              "orders": 0,
+              "events": 0
+            },
+            "Federal": {
+              "cpo": 0,
+              "orders": 0,
+              "events": 0
+            }
+          },
+          "total_event": {
+            "cpo": 0,
+            "orders": 0,
+            "events": 0
+          },
+          "source": "no-events",
+          "total_sales": {
+            "cpo": 15439.75,
+            "orders": 20,
+            "events": 0
+          }
+        }
       }
     },
     "Craig Coker": {
@@ -5474,6 +6311,143 @@ window.DASHBOARD_DATA = {
             "qty": 0,
             "cpo": 0,
             "orders": 0
+          }
+        }
+      },
+      "so_far": {
+        "2024": {
+          "buckets": {
+            "Event (Traditional)": {
+              "cpo": 5617,
+              "orders": 10,
+              "events": 5
+            },
+            "Service Event": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Industry Event": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Realtor": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Mall": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Federal": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            }
+          },
+          "total_event": {
+            "cpo": 5617,
+            "orders": 10,
+            "events": 5
+          },
+          "source": "division-pass",
+          "total_sales": {
+            "cpo": 7499,
+            "orders": 11,
+            "events": 0
+          }
+        },
+        "2025": {
+          "buckets": {
+            "Event (Traditional)": {
+              "cpo": 1879.5,
+              "orders": 3,
+              "events": 2
+            },
+            "Service Event": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Industry Event": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Realtor": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Mall": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Federal": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            }
+          },
+          "total_event": {
+            "cpo": 1879.5,
+            "orders": 3,
+            "events": 2
+          },
+          "source": "division-pass",
+          "total_sales": {
+            "cpo": 1300.5,
+            "orders": 2,
+            "events": 0
+          }
+        },
+        "2026": {
+          "buckets": {
+            "Event (Traditional)": {
+              "cpo": 95.25,
+              "orders": 1,
+              "events": 1
+            },
+            "Service Event": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Industry Event": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Realtor": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Mall": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Federal": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            }
+          },
+          "total_event": {
+            "cpo": 95.25,
+            "orders": 1,
+            "events": 1
+          },
+          "source": "division-pass",
+          "total_sales": {
+            "cpo": 95.25,
+            "orders": 1,
+            "events": 0
           }
         }
       }
@@ -6272,6 +7246,143 @@ window.DASHBOARD_DATA = {
             "orders": 8
           }
         }
+      },
+      "so_far": {
+        "2024": {
+          "buckets": {
+            "Event (Traditional)": {
+              "cpo": 31570,
+              "orders": 51,
+              "events": 8
+            },
+            "Service Event": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Industry Event": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Realtor": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Mall": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Federal": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            }
+          },
+          "total_event": {
+            "cpo": 31570,
+            "orders": 51,
+            "events": 8
+          },
+          "source": "rep-pass",
+          "total_sales": {
+            "cpo": 37766,
+            "orders": 61,
+            "events": 0
+          }
+        },
+        "2025": {
+          "buckets": {
+            "Event (Traditional)": {
+              "cpo": 29472,
+              "orders": 30,
+              "events": 5
+            },
+            "Service Event": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Industry Event": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Realtor": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Mall": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Federal": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            }
+          },
+          "total_event": {
+            "cpo": 29472,
+            "orders": 30,
+            "events": 5
+          },
+          "source": "rep-pass",
+          "total_sales": {
+            "cpo": 39094,
+            "orders": 52,
+            "events": 0
+          }
+        },
+        "2026": {
+          "buckets": {
+            "Event (Traditional)": {
+              "cpo": 21423,
+              "orders": 20,
+              "events": 7
+            },
+            "Service Event": {
+              "cpo": 1354,
+              "orders": 5,
+              "events": 1
+            },
+            "Industry Event": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Realtor": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Mall": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Federal": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            }
+          },
+          "total_event": {
+            "cpo": 22777,
+            "orders": 25,
+            "events": 8
+          },
+          "source": "rep-pass",
+          "total_sales": {
+            "cpo": 45656,
+            "orders": 52,
+            "events": 0
+          }
+        }
       }
     },
     "Jason Jeffrey": {
@@ -7068,6 +8179,143 @@ window.DASHBOARD_DATA = {
             "orders": 24
           }
         }
+      },
+      "so_far": {
+        "2024": {
+          "buckets": {
+            "Event (Traditional)": {
+              "cpo": 18158.25,
+              "orders": 24,
+              "events": 10
+            },
+            "Service Event": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Industry Event": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Realtor": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Mall": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Federal": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            }
+          },
+          "total_event": {
+            "cpo": 18158.25,
+            "orders": 24,
+            "events": 10
+          },
+          "source": "rep-pass",
+          "total_sales": {
+            "cpo": 21697.25,
+            "orders": 32,
+            "events": 0
+          }
+        },
+        "2025": {
+          "buckets": {
+            "Event (Traditional)": {
+              "cpo": 16613,
+              "orders": 27,
+              "events": 7
+            },
+            "Service Event": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Industry Event": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Realtor": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Mall": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Federal": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            }
+          },
+          "total_event": {
+            "cpo": 16613,
+            "orders": 27,
+            "events": 7
+          },
+          "source": "rep-pass",
+          "total_sales": {
+            "cpo": 66451,
+            "orders": 69,
+            "events": 0
+          }
+        },
+        "2026": {
+          "buckets": {
+            "Event (Traditional)": {
+              "cpo": 54060,
+              "orders": 59,
+              "events": 6
+            },
+            "Service Event": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Industry Event": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Realtor": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Mall": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Federal": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            }
+          },
+          "total_event": {
+            "cpo": 54060,
+            "orders": 59,
+            "events": 6
+          },
+          "source": "rep-pass",
+          "total_sales": {
+            "cpo": 67708,
+            "orders": 71,
+            "events": 0
+          }
+        }
       }
     },
     "Jeremy Katen": {
@@ -7828,6 +9076,128 @@ window.DASHBOARD_DATA = {
             "cpo": 377,
             "orders": 4
           }
+        }
+      },
+      "so_far": {
+        "2024": {
+          "buckets": {
+            "Event (Traditional)": {
+              "cpo": 27435,
+              "orders": 29,
+              "events": 5
+            },
+            "Service Event": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Industry Event": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Realtor": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Mall": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Federal": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            }
+          },
+          "total_event": {
+            "cpo": 27435,
+            "orders": 29,
+            "events": 5
+          },
+          "source": "rep-pass"
+        },
+        "2025": {
+          "buckets": {
+            "Event (Traditional)": {
+              "cpo": 23872,
+              "orders": 19,
+              "events": 5
+            },
+            "Service Event": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Industry Event": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Realtor": {
+              "cpo": 785,
+              "orders": 1,
+              "events": 1
+            },
+            "Mall": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Federal": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            }
+          },
+          "total_event": {
+            "cpo": 24657,
+            "orders": 20,
+            "events": 6
+          },
+          "source": "rep-pass"
+        },
+        "2026": {
+          "buckets": {
+            "Event (Traditional)": {
+              "cpo": 21211,
+              "orders": 9,
+              "events": 3
+            },
+            "Service Event": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Industry Event": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Realtor": {
+              "cpo": 2774,
+              "orders": 2,
+              "events": 1
+            },
+            "Mall": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Federal": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            }
+          },
+          "total_event": {
+            "cpo": 23985,
+            "orders": 11,
+            "events": 4
+          },
+          "source": "rep-pass"
         }
       }
     },
@@ -8625,6 +9995,143 @@ window.DASHBOARD_DATA = {
             "orders": 4
           }
         }
+      },
+      "so_far": {
+        "2024": {
+          "buckets": {
+            "Event (Traditional)": {
+              "cpo": 31919,
+              "orders": 43,
+              "events": 5
+            },
+            "Service Event": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Industry Event": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Realtor": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Mall": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Federal": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            }
+          },
+          "total_event": {
+            "cpo": 31919,
+            "orders": 43,
+            "events": 5
+          },
+          "source": "rep-pass",
+          "total_sales": {
+            "cpo": 38218.25,
+            "orders": 56,
+            "events": 0
+          }
+        },
+        "2025": {
+          "buckets": {
+            "Event (Traditional)": {
+              "cpo": 15174,
+              "orders": 28,
+              "events": 6
+            },
+            "Service Event": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Industry Event": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Realtor": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Mall": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Federal": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            }
+          },
+          "total_event": {
+            "cpo": 15174,
+            "orders": 28,
+            "events": 6
+          },
+          "source": "rep-pass",
+          "total_sales": {
+            "cpo": 41994.5,
+            "orders": 59,
+            "events": 0
+          }
+        },
+        "2026": {
+          "buckets": {
+            "Event (Traditional)": {
+              "cpo": 12518.5,
+              "orders": 22,
+              "events": 3
+            },
+            "Service Event": {
+              "cpo": 1799,
+              "orders": 5,
+              "events": 1
+            },
+            "Industry Event": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Realtor": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Mall": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Federal": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            }
+          },
+          "total_event": {
+            "cpo": 14317.5,
+            "orders": 27,
+            "events": 4
+          },
+          "source": "rep-pass",
+          "total_sales": {
+            "cpo": 25062.5,
+            "orders": 38,
+            "events": 0
+          }
+        }
       }
     },
     "Johnathan Parker": {
@@ -9412,6 +10919,143 @@ window.DASHBOARD_DATA = {
             "orders": 9
           }
         }
+      },
+      "so_far": {
+        "2024": {
+          "buckets": {
+            "Event (Traditional)": {
+              "cpo": 32080,
+              "orders": 43,
+              "events": 6
+            },
+            "Service Event": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Industry Event": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Realtor": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Mall": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Federal": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            }
+          },
+          "total_event": {
+            "cpo": 32080,
+            "orders": 43,
+            "events": 6
+          },
+          "source": "rep-pass",
+          "total_sales": {
+            "cpo": 34389,
+            "orders": 38,
+            "events": 0
+          }
+        },
+        "2025": {
+          "buckets": {
+            "Event (Traditional)": {
+              "cpo": 61905.75,
+              "orders": 94,
+              "events": 6
+            },
+            "Service Event": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Industry Event": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Realtor": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Mall": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Federal": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            }
+          },
+          "total_event": {
+            "cpo": 61905.75,
+            "orders": 94,
+            "events": 6
+          },
+          "source": "rep-pass",
+          "total_sales": {
+            "cpo": 69625.25,
+            "orders": 97,
+            "events": 0
+          }
+        },
+        "2026": {
+          "buckets": {
+            "Event (Traditional)": {
+              "cpo": 58607,
+              "orders": 93,
+              "events": 9
+            },
+            "Service Event": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Industry Event": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Realtor": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Mall": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Federal": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            }
+          },
+          "total_event": {
+            "cpo": 58607,
+            "orders": 93,
+            "events": 9
+          },
+          "source": "rep-pass",
+          "total_sales": {
+            "cpo": 61592,
+            "orders": 105,
+            "events": 0
+          }
+        }
       }
     },
     "Kendall Gooch": {
@@ -9999,6 +11643,98 @@ window.DASHBOARD_DATA = {
             "qty": 6,
             "cpo": 2262,
             "orders": 6
+          }
+        }
+      },
+      "so_far": {
+        "2025": {
+          "buckets": {
+            "Event (Traditional)": {
+              "cpo": 298,
+              "orders": 4,
+              "events": 1
+            },
+            "Service Event": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Industry Event": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Realtor": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Mall": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Federal": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            }
+          },
+          "total_event": {
+            "cpo": 298,
+            "orders": 4,
+            "events": 1
+          },
+          "source": "division-pass",
+          "total_sales": {
+            "cpo": 4701,
+            "orders": 14,
+            "events": 0
+          }
+        },
+        "2026": {
+          "buckets": {
+            "Event (Traditional)": {
+              "cpo": 5151,
+              "orders": 15,
+              "events": 5
+            },
+            "Service Event": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Industry Event": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Realtor": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Mall": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Federal": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            }
+          },
+          "total_event": {
+            "cpo": 5151,
+            "orders": 15,
+            "events": 5
+          },
+          "source": "division-pass",
+          "total_sales": {
+            "cpo": 11592,
+            "orders": 39,
+            "events": 0
           }
         }
       }
@@ -10785,6 +12521,143 @@ window.DASHBOARD_DATA = {
             "qty": 6,
             "cpo": 1874,
             "orders": 6
+          }
+        }
+      },
+      "so_far": {
+        "2024": {
+          "buckets": {
+            "Event (Traditional)": {
+              "cpo": 12835,
+              "orders": 14,
+              "events": 6
+            },
+            "Service Event": {
+              "cpo": 12124,
+              "orders": 8,
+              "events": 3
+            },
+            "Industry Event": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Realtor": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Mall": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Federal": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            }
+          },
+          "total_event": {
+            "cpo": 24959,
+            "orders": 22,
+            "events": 9
+          },
+          "source": "rep-pass",
+          "total_sales": {
+            "cpo": 70980.5,
+            "orders": 83,
+            "events": 0
+          }
+        },
+        "2025": {
+          "buckets": {
+            "Event (Traditional)": {
+              "cpo": 13943.25,
+              "orders": 23,
+              "events": 4
+            },
+            "Service Event": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Industry Event": {
+              "cpo": 154,
+              "orders": 1,
+              "events": 1
+            },
+            "Realtor": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Mall": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Federal": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            }
+          },
+          "total_event": {
+            "cpo": 14097.25,
+            "orders": 24,
+            "events": 5
+          },
+          "source": "rep-pass",
+          "total_sales": {
+            "cpo": 77235.25,
+            "orders": 72,
+            "events": 0
+          }
+        },
+        "2026": {
+          "buckets": {
+            "Event (Traditional)": {
+              "cpo": 49379,
+              "orders": 58,
+              "events": 3
+            },
+            "Service Event": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Industry Event": {
+              "cpo": 2402,
+              "orders": 4,
+              "events": 1
+            },
+            "Realtor": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Mall": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Federal": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            }
+          },
+          "total_event": {
+            "cpo": 51781,
+            "orders": 62,
+            "events": 4
+          },
+          "source": "rep-pass",
+          "total_sales": {
+            "cpo": 104854,
+            "orders": 95,
+            "events": 0
           }
         }
       }
@@ -11583,6 +13456,143 @@ window.DASHBOARD_DATA = {
             "orders": 23
           }
         }
+      },
+      "so_far": {
+        "2024": {
+          "buckets": {
+            "Event (Traditional)": {
+              "cpo": 108919.5,
+              "orders": 152,
+              "events": 9
+            },
+            "Service Event": {
+              "cpo": 23643.75,
+              "orders": 36,
+              "events": 8
+            },
+            "Industry Event": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Realtor": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Mall": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Federal": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            }
+          },
+          "total_event": {
+            "cpo": 132563.25,
+            "orders": 188,
+            "events": 17
+          },
+          "source": "rep-pass",
+          "total_sales": {
+            "cpo": 141272,
+            "orders": 200,
+            "events": 0
+          }
+        },
+        "2025": {
+          "buckets": {
+            "Event (Traditional)": {
+              "cpo": 110506.75,
+              "orders": 121,
+              "events": 3
+            },
+            "Service Event": {
+              "cpo": 19340.75,
+              "orders": 27,
+              "events": 7
+            },
+            "Industry Event": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Realtor": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Mall": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Federal": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            }
+          },
+          "total_event": {
+            "cpo": 129847.5,
+            "orders": 148,
+            "events": 10
+          },
+          "source": "rep-pass",
+          "total_sales": {
+            "cpo": 127909,
+            "orders": 154,
+            "events": 0
+          }
+        },
+        "2026": {
+          "buckets": {
+            "Event (Traditional)": {
+              "cpo": 135045,
+              "orders": 170,
+              "events": 8
+            },
+            "Service Event": {
+              "cpo": 41960,
+              "orders": 46,
+              "events": 9
+            },
+            "Industry Event": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Realtor": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Mall": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Federal": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            }
+          },
+          "total_event": {
+            "cpo": 177005,
+            "orders": 216,
+            "events": 17
+          },
+          "source": "rep-pass",
+          "total_sales": {
+            "cpo": 220942,
+            "orders": 241,
+            "events": 0
+          }
+        }
       }
     },
     "Matthew Aragon": {
@@ -12307,6 +14317,143 @@ window.DASHBOARD_DATA = {
             "qty": 4,
             "cpo": 1508,
             "orders": 4
+          }
+        }
+      },
+      "so_far": {
+        "2024": {
+          "buckets": {
+            "Event (Traditional)": {
+              "cpo": 0,
+              "orders": 0,
+              "events": 0
+            },
+            "Service Event": {
+              "cpo": 0,
+              "orders": 0,
+              "events": 0
+            },
+            "Industry Event": {
+              "cpo": 0,
+              "orders": 0,
+              "events": 0
+            },
+            "Realtor": {
+              "cpo": 0,
+              "orders": 0,
+              "events": 0
+            },
+            "Mall": {
+              "cpo": 0,
+              "orders": 0,
+              "events": 0
+            },
+            "Federal": {
+              "cpo": 0,
+              "orders": 0,
+              "events": 0
+            }
+          },
+          "total_event": {
+            "cpo": 0,
+            "orders": 0,
+            "events": 0
+          },
+          "source": "no-events",
+          "total_sales": {
+            "cpo": 2929,
+            "orders": 7,
+            "events": 0
+          }
+        },
+        "2025": {
+          "buckets": {
+            "Event (Traditional)": {
+              "cpo": 8663.25,
+              "orders": 13,
+              "events": 4
+            },
+            "Service Event": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Industry Event": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Realtor": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Mall": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Federal": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            }
+          },
+          "total_event": {
+            "cpo": 8663.25,
+            "orders": 13,
+            "events": 4
+          },
+          "source": "division-pass",
+          "total_sales": {
+            "cpo": 19162.25,
+            "orders": 23,
+            "events": 0
+          }
+        },
+        "2026": {
+          "buckets": {
+            "Event (Traditional)": {
+              "cpo": 13390,
+              "orders": 22,
+              "events": 7
+            },
+            "Service Event": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Industry Event": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Realtor": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Mall": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Federal": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            }
+          },
+          "total_event": {
+            "cpo": 13390,
+            "orders": 22,
+            "events": 7
+          },
+          "source": "division-pass",
+          "total_sales": {
+            "cpo": 22700,
+            "orders": 34,
+            "events": 0
           }
         }
       }
@@ -13069,6 +15216,128 @@ window.DASHBOARD_DATA = {
             "cpo": 0,
             "orders": 0
           }
+        }
+      },
+      "so_far": {
+        "2024": {
+          "buckets": {
+            "Event (Traditional)": {
+              "cpo": 28505,
+              "orders": 64,
+              "events": 7
+            },
+            "Service Event": {
+              "cpo": 175,
+              "orders": 1,
+              "events": 1
+            },
+            "Industry Event": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Realtor": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Mall": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Federal": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            }
+          },
+          "total_event": {
+            "cpo": 28680,
+            "orders": 65,
+            "events": 8
+          },
+          "source": "rep-pass"
+        },
+        "2025": {
+          "buckets": {
+            "Event (Traditional)": {
+              "cpo": 26683,
+              "orders": 61,
+              "events": 7
+            },
+            "Service Event": {
+              "cpo": 241,
+              "orders": 1,
+              "events": 1
+            },
+            "Industry Event": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Realtor": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Mall": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Federal": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            }
+          },
+          "total_event": {
+            "cpo": 26924,
+            "orders": 62,
+            "events": 8
+          },
+          "source": "rep-pass"
+        },
+        "2026": {
+          "buckets": {
+            "Event (Traditional)": {
+              "cpo": 27433,
+              "orders": 64,
+              "events": 6
+            },
+            "Service Event": {
+              "cpo": 138,
+              "orders": 2,
+              "events": 2
+            },
+            "Industry Event": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Realtor": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Mall": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Federal": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            }
+          },
+          "total_event": {
+            "cpo": 27571,
+            "orders": 66,
+            "events": 8
+          },
+          "source": "rep-pass"
         }
       }
     },
@@ -13835,6 +16104,128 @@ window.DASHBOARD_DATA = {
             "cpo": 1120,
             "orders": 3
           }
+        }
+      },
+      "so_far": {
+        "2024": {
+          "buckets": {
+            "Event (Traditional)": {
+              "cpo": 38390,
+              "orders": 71,
+              "events": 3
+            },
+            "Service Event": {
+              "cpo": 7634,
+              "orders": 21,
+              "events": 3
+            },
+            "Industry Event": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Realtor": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Mall": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Federal": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            }
+          },
+          "total_event": {
+            "cpo": 46024,
+            "orders": 92,
+            "events": 6
+          },
+          "source": "rep-pass"
+        },
+        "2025": {
+          "buckets": {
+            "Event (Traditional)": {
+              "cpo": 42768.25,
+              "orders": 84,
+              "events": 4
+            },
+            "Service Event": {
+              "cpo": 7780,
+              "orders": 14,
+              "events": 3
+            },
+            "Industry Event": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Realtor": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Mall": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Federal": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            }
+          },
+          "total_event": {
+            "cpo": 50548.25,
+            "orders": 98,
+            "events": 7
+          },
+          "source": "rep-pass"
+        },
+        "2026": {
+          "buckets": {
+            "Event (Traditional)": {
+              "cpo": 24891,
+              "orders": 59,
+              "events": 2
+            },
+            "Service Event": {
+              "cpo": 2222,
+              "orders": 6,
+              "events": 2
+            },
+            "Industry Event": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Realtor": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Mall": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Federal": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            }
+          },
+          "total_event": {
+            "cpo": 27113,
+            "orders": 65,
+            "events": 4
+          },
+          "source": "rep-pass"
         }
       }
     },
@@ -14605,6 +16996,143 @@ window.DASHBOARD_DATA = {
             "qty": 3,
             "cpo": 1131,
             "orders": 3
+          }
+        }
+      },
+      "so_far": {
+        "2024": {
+          "buckets": {
+            "Event (Traditional)": {
+              "cpo": 5312.75,
+              "orders": 10,
+              "events": 3
+            },
+            "Service Event": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Industry Event": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Realtor": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Mall": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Federal": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            }
+          },
+          "total_event": {
+            "cpo": 5312.75,
+            "orders": 10,
+            "events": 3
+          },
+          "source": "division-pass",
+          "total_sales": {
+            "cpo": 11303.25,
+            "orders": 39,
+            "events": 0
+          }
+        },
+        "2025": {
+          "buckets": {
+            "Event (Traditional)": {
+              "cpo": 12445.75,
+              "orders": 26,
+              "events": 5
+            },
+            "Service Event": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Industry Event": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Realtor": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Mall": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Federal": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            }
+          },
+          "total_event": {
+            "cpo": 12445.75,
+            "orders": 26,
+            "events": 5
+          },
+          "source": "division-pass",
+          "total_sales": {
+            "cpo": 29577.5,
+            "orders": 66,
+            "events": 0
+          }
+        },
+        "2026": {
+          "buckets": {
+            "Event (Traditional)": {
+              "cpo": 0,
+              "orders": 0,
+              "events": 0
+            },
+            "Service Event": {
+              "cpo": 0,
+              "orders": 0,
+              "events": 0
+            },
+            "Industry Event": {
+              "cpo": 0,
+              "orders": 0,
+              "events": 0
+            },
+            "Realtor": {
+              "cpo": 0,
+              "orders": 0,
+              "events": 0
+            },
+            "Mall": {
+              "cpo": 0,
+              "orders": 0,
+              "events": 0
+            },
+            "Federal": {
+              "cpo": 0,
+              "orders": 0,
+              "events": 0
+            }
+          },
+          "total_event": {
+            "cpo": 0,
+            "orders": 0,
+            "events": 0
+          },
+          "source": "no-events",
+          "total_sales": {
+            "cpo": 5888.75,
+            "orders": 17,
+            "events": 0
           }
         }
       }
@@ -15396,6 +17924,143 @@ window.DASHBOARD_DATA = {
             "qty": 3,
             "cpo": 1131,
             "orders": 3
+          }
+        }
+      },
+      "so_far": {
+        "2024": {
+          "buckets": {
+            "Event (Traditional)": {
+              "cpo": 2142,
+              "orders": 3,
+              "events": 3
+            },
+            "Service Event": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Industry Event": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Realtor": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Mall": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Federal": {
+              "cpo": 6636.25,
+              "orders": 17,
+              "events": 1
+            }
+          },
+          "total_event": {
+            "cpo": 8778.25,
+            "orders": 20,
+            "events": 4
+          },
+          "source": "rep-pass",
+          "total_sales": {
+            "cpo": 10009,
+            "orders": 25,
+            "events": 0
+          }
+        },
+        "2025": {
+          "buckets": {
+            "Event (Traditional)": {
+              "cpo": 3285,
+              "orders": 3,
+              "events": 2
+            },
+            "Service Event": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Industry Event": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Realtor": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Mall": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Federal": {
+              "cpo": 10956.5,
+              "orders": 22,
+              "events": 1
+            }
+          },
+          "total_event": {
+            "cpo": 14241.5,
+            "orders": 25,
+            "events": 3
+          },
+          "source": "rep-pass",
+          "total_sales": {
+            "cpo": 16351.5,
+            "orders": 28,
+            "events": 0
+          }
+        },
+        "2026": {
+          "buckets": {
+            "Event (Traditional)": {
+              "cpo": 230,
+              "orders": 1,
+              "events": 1
+            },
+            "Service Event": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Industry Event": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Realtor": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Mall": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Federal": {
+              "cpo": 3691.5,
+              "orders": 15,
+              "events": 1
+            }
+          },
+          "total_event": {
+            "cpo": 3921.5,
+            "orders": 16,
+            "events": 2
+          },
+          "source": "rep-pass",
+          "total_sales": {
+            "cpo": 7975.25,
+            "orders": 20,
+            "events": 0
           }
         }
       }
@@ -16192,6 +18857,143 @@ window.DASHBOARD_DATA = {
             "qty": 5,
             "cpo": 754,
             "orders": 5
+          }
+        }
+      },
+      "so_far": {
+        "2024": {
+          "buckets": {
+            "Event (Traditional)": {
+              "cpo": 8609,
+              "orders": 24,
+              "events": 6
+            },
+            "Service Event": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Industry Event": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Realtor": {
+              "cpo": 1814,
+              "orders": 3,
+              "events": 1
+            },
+            "Mall": {
+              "cpo": 3963,
+              "orders": 12,
+              "events": 1
+            },
+            "Federal": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            }
+          },
+          "total_event": {
+            "cpo": 14386,
+            "orders": 39,
+            "events": 8
+          },
+          "source": "rep-pass",
+          "total_sales": {
+            "cpo": 26603.5,
+            "orders": 62,
+            "events": 0
+          }
+        },
+        "2025": {
+          "buckets": {
+            "Event (Traditional)": {
+              "cpo": 16197.25,
+              "orders": 48,
+              "events": 8
+            },
+            "Service Event": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Industry Event": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Realtor": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Mall": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Federal": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            }
+          },
+          "total_event": {
+            "cpo": 16197.25,
+            "orders": 48,
+            "events": 8
+          },
+          "source": "rep-pass",
+          "total_sales": {
+            "cpo": 32470.25,
+            "orders": 89,
+            "events": 0
+          }
+        },
+        "2026": {
+          "buckets": {
+            "Event (Traditional)": {
+              "cpo": 3774.75,
+              "orders": 5,
+              "events": 3
+            },
+            "Service Event": {
+              "cpo": 3050.25,
+              "orders": 4,
+              "events": 2
+            },
+            "Industry Event": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Realtor": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Mall": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            },
+            "Federal": {
+              "cpo": null,
+              "orders": null,
+              "events": null
+            }
+          },
+          "total_event": {
+            "cpo": 6825,
+            "orders": 9,
+            "events": 5
+          },
+          "source": "rep-pass",
+          "total_sales": {
+            "cpo": 19635,
+            "orders": 41,
+            "events": 0
           }
         }
       }
