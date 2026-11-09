@@ -787,6 +787,8 @@
   table.leaderboard tr.lb-missing td { color: var(--ink-faint); }
   table.leaderboard tr.lb-missing td.name { font-weight: 400; }
   .lb-why { display: block; font-size: 11px; font-weight: 400; color: var(--ink-faint); margin-top: 1px; }
+  /* a year-to-date figure from VectorConnect's standings: its own line, never ranked (2026-11-09) */
+  .st-ytd { font-style: italic; color: var(--ink-soft, var(--ink-faint)); }
   .lb-controls { align-items: center; }
   .lb-controls .ctl.active { border-color: var(--label); color: var(--label); font-weight: 600; }
 
@@ -1569,6 +1571,13 @@ const YEARS = META.years;              // [2024, 2025, 2026]
 const PENDING = META.pending_individual_total_sales || [];
 // Reps with an individual Total Sales report on file (manual/individual_total_sales.csv in the intake).
 const INDIVIDUAL = (META.intake && META.intake.individual_total_sales && META.intake.individual_total_sales.reps) || [];
+// VectorConnect's year CSP standings (intake 2026-11-09): a year-to-date Total CPO as of a tab week for the reps no Rising
+// Sun report covers (Jeremy Katen, Roman Earhart, Rob Lord; Craig Coker for C1 2026). Its own line (Alan's choice): shown
+// where their Total is pending, never ranked and never in a team total or a comparison, since it runs to the tab week
+// while every other figure ends with a month.
+const STANDINGS = META.standings || null;
+function repStandings(r, y) { const s = r && r.standings_ytd && r.standings_ytd[y]; return s && typeof s.cpo === 'number' ? s : null; }
+const stWeek = s => { const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec((s && s.week_date) || ''); return m ? `${['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'][+m[2] - 1]} ${+m[3]}` : `tab week ${s && s.tab_week}`; };
 
 // Campaigns present in data.js (written by the intake), e.g. ["2024-C1", …, "2026-C2"].
 const CAMPAIGNS_AVAILABLE = (META.campaigns_available || YEARS.map(y => `${y}-C1`)).map(s => {
@@ -2084,8 +2093,10 @@ function pendingNote() {
   if (!PENDING.length) return '';
   const thru = /^(\d{4})-C([123])$/.exec((META.intake && META.intake.total_sales_through) || '');
   const camp = thru ? ` for C${thru[2]} ${thru[1]}` : '';
+  const st = STANDINGS ? PENDING.filter(n => repStandings(REPS[n], STANDINGS.year)) : [];
   return ` Total Sales${camp} is pending for ${PENDING.join(', ')}.` +
-    (HELD_OUT.length ? ` Team totals leave out ${HELD_OUT.join(', ')} until theirs arrives.` : '');
+    (HELD_OUT.length ? ` Team totals leave out ${HELD_OUT.join(', ')} until theirs arrives.` : '') +
+    (st.length ? ` ${st.join(', ')} show${st.length === 1 ? 's' : ''} ${STANDINGS.year} year to date from VectorConnect's CSP standings (week of ${stWeek(STANDINGS)}) on the leaderboard and ${st.length === 1 ? 'their page' : 'their pages'}, outside every total.` : '');
 }
 
 // The footnote only names what is missing: a campaign with no Total Sales workbook, and who is pending.
@@ -2662,12 +2673,14 @@ function renderTotalLeaderboard() {
     </tr>`;
   });
   missing.forEach(x => {
-    const why = metricFamily(metric) !== 'sales' ? `no ${tlbLabel(metric)} in ${s.label}`
+    const st = metric === 'total_sales' ? repStandings(x.r, seasonY) : null;
+    const why = st ? `${seasonY} year to date, VectorConnect standings (week of ${stWeek(st)})`
+      : metricFamily(metric) !== 'sales' ? `no ${tlbLabel(metric)} in ${s.label}`
       : isAvgMetric(metric) && pSales(x.r, periods[seasonY]) ? 'no order count on file'
       : PENDING.includes(x.r.name) ? 'Total Sales pending' : `no ${tlbLabel(metric)} in ${s.label}`;
     html += `<tr class="lb-missing" data-rep="${x.r.name}" title="${x.r.name}: ${why}">
       <td class="rank">–</td><td class="name"><button type="button" class="rep-link">${x.r.name}</button><span class="lb-why">${why}</span></td><td class="bar-cell"></td>
-      ${cols.map(y => `<td class="num yr${y === seasonY ? '' : ' yr-old'}">${fmt(x.vals[y])}</td>`).join('')}
+      ${cols.map(y => `<td class="num yr${y === seasonY ? '' : ' yr-old'}">${y === seasonY && st ? `<span class="st-ytd">${fmt(st.cpo)}</span>` : fmt(x.vals[y])}</td>`).join('')}
       ${hasDelta ? `<td class="num dlt-abs"></td><td class="growth-cell"></td>` : ''}
     </tr>`;
   });
@@ -2868,7 +2881,9 @@ function glanceSentence(r, y, hero, cur) {
   if (cur === null) return `No ${y} sales on file yet.`;
   if (hero.fallback) {
     const miss = campaignsForYear(y).filter(n => !repTotalSales(r, y, n)).map(n => `C${n}`);
-    return `Your ${andList(miss)} Total Sales ${miss.length > 1 ? "haven't" : "hasn't"} come in yet, so this shows event sales.`;
+    const st = repStandings(r, y);
+    return `Your ${andList(miss)} Total Sales ${miss.length > 1 ? "haven't" : "hasn't"} come in yet, so this shows event sales.` +
+      (st ? ` VectorConnect's CSP standings have your ${y} Total so far at ${fmtCurrency(st.cpo)} (week of ${stWeek(st)}).` : '');
   }
   const prev = pSales(r, periodYear(y - 1));   // last year's Total CPO (its year-end figure once closed)
   if (yearClosed(y)) {
@@ -3200,7 +3215,9 @@ function renderRepSummary() {
   if (PENDING.includes(STATE.selectedRep)) {
     // All years adds up what is on file, so say which year it is missing.
     const gap = p.kind === 'all' ? p.years.filter(y => !pSales(r, periodYear(y)) && pEvent(r, periodYear(y))) : [];
-    if (!pSales(r, p)) callouts.push({ type: 'watch', title: 'Total Sales pending', body: `Your Total Sales for ${p.label} is pending individual upload. Total CPO and Non-Event CPO will render once it arrives.` });
+    const st = repStandings(r, p.year || STATE.season);
+    if (!pSales(r, p) && st) callouts.push({ type: 'watch', title: `${p.year || STATE.season} year to date: ${fmtMoneyFit(st.cpo)}`, body: `That is your Total on VectorConnect's CSP standings (week of ${stWeek(st)}). Your Total Sales by campaign is still pending, so Total CPO and Non-Event CPO here stay blank until it arrives; the standings keep no earlier years to compare with.` });
+    else if (!pSales(r, p)) callouts.push({ type: 'watch', title: 'Total Sales pending', body: `Your Total Sales for ${p.label} is pending individual upload. Total CPO and Non-Event CPO will render once it arrives.` });
     else if (gap.length) callouts.push({ type: 'watch', title: 'Total Sales pending', body: `Total CPO here leaves out ${gap.join(' and ')}: your Total Sales for ${gap.length > 1 ? 'those years' : 'that year'} is pending individual upload.` });
   }
 
